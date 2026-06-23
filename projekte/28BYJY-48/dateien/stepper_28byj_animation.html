@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>28BYJ-48 Schrittmotor Animation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        text-align: center;
+        margin: 0;
+        padding: 12px;
+    }
+
+    h1 {
+        font-size: 22px;
+        margin-bottom: 5px;
+    }
+
+    .hinweis {
+        margin-top: 0;
+        color: #555;
+        font-size: 14px;
+    }
+
+    .canvas-wrap {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    canvas {
+        background: white;
+        border: 2px solid #333;
+        border-radius: 10px;
+        margin-top: 10px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .steuerung {
+        margin-top: 12px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 8px 12px;
+        margin: 4px;
+        border-radius: 6px;
+        border: 1px solid #444;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #ddd;
+    }
+
+    .anzeige {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .codefeld {
+        font-family: monospace;
+        font-size: 20px;
+        background: #222;
+        color: #0f0;
+        padding: 5px 10px;
+        border-radius: 6px;
+        display: inline-block;
+        margin-left: 5px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>28BYJ-48 Schrittmotor</h1>
+<p class="hinweis">
+    Vereinfachtes Funktionsmodell: ESP32-Ausgänge → ULN2003 → 4 Spulen → Rotor
+</p>
+
+<div class="canvas-wrap">
+<canvas id="canvas" width="1000" height="620"></canvas>
+</div>
+
+<div class="steuerung">
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+    <button onclick="einzelschritt()">Einzelschritt</button>
+    <button onclick="richtungWechseln()">Richtung wechseln</button>
+    <button onclick="langsamer()">Langsamer</button>
+    <button onclick="schneller()">Schneller</button>
+</div>
+
+<div class="anzeige">
+    Schritt: <span id="schritt">0</span><br>
+    Bitmuster: <span id="bitmuster" class="codefeld">1000</span><br>
+    Richtung: <span id="richtung">rechts</span>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const schrittAnzeige = document.getElementById("schritt");
+const bitmusterAnzeige = document.getElementById("bitmuster");
+const richtungAnzeige = document.getElementById("richtung");
+
+let schrittIndex = 0;
+let timer = null;
+let intervall = 700;
+let richtung = 1;
+
+const halbSchritt = [
+    [1, 0, 0, 0],
+    [1, 1, 0, 0],
+    [0, 1, 0, 0],
+    [0, 1, 1, 0],
+    [0, 0, 1, 0],
+    [0, 0, 1, 1],
+    [0, 0, 0, 1],
+    [1, 0, 0, 1]
+];
+
+const spulen = [
+    { name: "Spule 1", in: "IN1", winkel: -90, x: 760, y: 160 },
+    { name: "Spule 2", in: "IN2", winkel:   0, x: 900, y: 300 },
+    { name: "Spule 3", in: "IN3", winkel:  90, x: 760, y: 440 },
+    { name: "Spule 4", in: "IN4", winkel: 180, x: 620, y: 300 }
+];
+
+const espPins = [
+    { name: "GPIO16 / IN1", x: 250, y: 180 },
+    { name: "GPIO17 / IN2", x: 250, y: 250 },
+    { name: "GPIO18 / IN3", x: 250, y: 320 },
+    { name: "GPIO19 / IN4", x: 250, y: 390 }
+];
+
+const motorPins = [
+    { x: 580, y: 180 },
+    { x: 580, y: 250 },
+    { x: 580, y: 320 },
+    { x: 580, y: 390 }
+];
+
+function gradZuRad(winkel) {
+    return winkel * Math.PI / 180;
+}
+
+function aktuellesMuster() {
+    return halbSchritt[schrittIndex];
+}
+
+function musterAlsText(muster) {
+    return muster.join("");
+}
+
+function zeichneRechteck(x, y, b, h, farbe, rand = "#333") {
+    ctx.fillStyle = farbe;
+    ctx.strokeStyle = rand;
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, b, h);
+    ctx.strokeRect(x, y, b, h);
+}
+
+function zeichneText(text, x, y, groesse = 16, farbe = "#000", align = "center") {
+    ctx.fillStyle = farbe;
+    ctx.font = groesse + "px Arial";
+    ctx.textAlign = align;
+    ctx.textBaseline = "middle";
+    ctx.fillText(text, x, y);
+}
+
+function zeichneLinie(x1, y1, x2, y2, aktiv) {
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.strokeStyle = aktiv ? "#e53935" : "#999";
+    ctx.lineWidth = aktiv ? 6 : 3;
+    ctx.stroke();
+}
+
+function zeichnePfeil(x1, y1, x2, y2, aktiv) {
+    zeichneLinie(x1, y1, x2, y2, aktiv);
+    if (!aktiv) return;
+
+    const winkel = Math.atan2(y2 - y1, x2 - x1);
+    const laenge = 12;
+
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(
+        x2 - laenge * Math.cos(winkel - Math.PI / 6),
+        y2 - laenge * Math.sin(winkel - Math.PI / 6)
+    );
+    ctx.lineTo(
+        x2 - laenge * Math.cos(winkel + Math.PI / 6),
+        y2 - laenge * Math.sin(winkel + Math.PI / 6)
+    );
+    ctx.closePath();
+    ctx.fillStyle = "#e53935";
+    ctx.fill();
+}
+
+function zeichneESP32(muster) {
+    zeichneRechteck(60, 120, 190, 330, "#d7ecff");
+    zeichneText("ESP32", 155, 145, 24, "#000");
+
+    zeichneRechteck(105, 440, 100, 28, "#bbb");
+    zeichneText("USB", 155, 455, 14);
+
+    for (let i = 0; i < 4; i++) {
+        const pin = espPins[i];
+        const aktiv = muster[i] === 1;
+
+        ctx.beginPath();
+        ctx.arc(pin.x, pin.y, 8, 0, 2 * Math.PI);
+        ctx.fillStyle = aktiv ? "#e53935" : "#777";
+        ctx.fill();
+        ctx.strokeStyle = "#333";
+        ctx.stroke();
+
+        zeichneText(pin.name, 80, pin.y, 15, "#000", "left");
+        zeichneText(aktiv ? "H" : "L", 280, pin.y, 16, aktiv ? "#e53935" : "#444");
+    }
+}
+
+function zeichneULN2003(muster) {
+    zeichneRechteck(360, 140, 140, 280, "#eee");
+    zeichneText("ULN2003", 430, 165, 22);
+    zeichneText("Treiber", 430, 190, 16, "#555");
+
+    for (let i = 0; i < 4; i++) {
+        const y = 210 + i * 50;
+        const aktiv = muster[i] === 1;
+
+        ctx.beginPath();
+        ctx.arc(375, y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = aktiv ? "#e53935" : "#777";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(485, y, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = aktiv ? "#e53935" : "#777";
+        ctx.fill();
+
+        zeichneText("IN" + (i + 1), 405, y, 14);
+        zeichneText("OUT" + (i + 1), 455, y, 14);
+    }
+}
+
+function zeichneLeitungen(muster) {
+    for (let i = 0; i < 4; i++) {
+        const aktiv = muster[i] === 1;
+        zeichneLinie(espPins[i].x, espPins[i].y, 360, 210 + i * 50, aktiv);
+        zeichnePfeil(500, 210 + i * 50, motorPins[i].x, motorPins[i].y, aktiv);
+    }
+}
+
+function zeichneMotor(muster) {
+    const cx = 760;
+    const cy = 300;
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 190, 0, 2 * Math.PI);
+    ctx.fillStyle = "#fafafa";
+    ctx.fill();
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    zeichneText("28BYJ-48", cx, cy - 210, 22);
+    zeichneText("vereinfachter Querschnitt", cx, cy + 215, 15, "#555");
+
+    for (let i = 0; i < 4; i++) {
+        const spule = spulen[i];
+        const aktiv = muster[i] === 1;
+        const farbe = aktiv ? "#ffcc80" : "#ddd";
+        const rand = aktiv ? "#e65100" : "#555";
+
+        ctx.save();
+        ctx.translate(spule.x, spule.y);
+        ctx.rotate(gradZuRad(spule.winkel));
+
+        zeichneRechteck(-35, -22, 70, 44, farbe, rand);
+
+        ctx.strokeStyle = aktiv ? "#e65100" : "#777";
+        ctx.lineWidth = 2;
+        for (let k = -25; k <= 25; k += 10) {
+            ctx.beginPath();
+            ctx.moveTo(k, -20);
+            ctx.lineTo(k + 10, 20);
+            ctx.stroke();
+        }
+
+        ctx.restore();
+
+        zeichneText(spule.in, spule.x, spule.y - 38, 15, aktiv ? "#e53935" : "#333");
+        zeichneText(spule.name, spule.x, spule.y + 38, 13, "#555");
+    }
+
+    const rotorWinkel = schrittIndex * 45;
+    zeichneRotor(cx, cy, rotorWinkel);
+
+    ctx.beginPath();
+    ctx.arc(cx, cy, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = "#111";
+    ctx.fill();
+}
+
+function zeichneRotor(cx, cy, winkelGrad) {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(gradZuRad(winkelGrad));
+
+    zeichneStabmagnet(0);
+
+    ctx.rotate(Math.PI / 2);
+    zeichneStabmagnet(1);
+
+    ctx.restore();
+}
+
+function zeichneStabmagnet(nummer) {
+    const laenge = 140;
+    const breite = 26;
+
+    ctx.fillStyle = nummer === 0 ? "#e53935" : "#ef9a9a";
+    ctx.fillRect(0, -breite / 2, laenge / 2, breite);
+
+    ctx.fillStyle = nummer === 0 ? "#1e88e5" : "#90caf9";
+    ctx.fillRect(-laenge / 2, -breite / 2, laenge / 2, breite);
+
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(-laenge / 2, -breite / 2, laenge, breite);
+
+    zeichneText("S", -45, 0, 16, "#fff");
+    zeichneText("N", 45, 0, 16, "#fff");
+}
+
+function zeichneSchrittTabelle() {
+    const x = 80;
+    const y = 520;
+
+    zeichneText("Halbschrittfolge", x + 140, y - 25, 18, "#000");
+
+    for (let i = 0; i < halbSchritt.length; i++) {
+        const aktiv = i === schrittIndex;
+
+        ctx.fillStyle = aktiv ? "#c8e6c9" : "#fff";
+        ctx.strokeStyle = "#444";
+        ctx.lineWidth = 1;
+
+        ctx.fillRect(x + i * 105, y, 95, 45);
+        ctx.strokeRect(x + i * 105, y, 95, 45);
+
+        zeichneText(i, x + i * 105 + 15, y + 15, 13, "#555");
+        zeichneText(musterAlsText(halbSchritt[i]), x + i * 105 + 50, y + 28, 18, aktiv ? "#1b5e20" : "#000");
+    }
+}
+
+function zeichneAlles() {
+    const muster = aktuellesMuster();
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    zeichneESP32(muster);
+    zeichneULN2003(muster);
+    zeichneLeitungen(muster);
+    zeichneMotor(muster);
+    zeichneSchrittTabelle();
+
+    schrittAnzeige.textContent = schrittIndex;
+    bitmusterAnzeige.textContent = musterAlsText(muster);
+    richtungAnzeige.textContent = richtung === 1 ? "rechts" : "links";
+}
+
+function naechsterSchritt() {
+    schrittIndex += richtung;
+
+    if (schrittIndex >= halbSchritt.length) {
+        schrittIndex = 0;
+    }
+
+    if (schrittIndex < 0) {
+        schrittIndex = halbSchritt.length - 1;
+    }
+
+    zeichneAlles();
+}
+
+function start() {
+    if (timer !== null) return;
+    timer = setInterval(naechsterSchritt, intervall);
+}
+
+function stop() {
+    if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+    }
+}
+
+function einzelschritt() {
+    naechsterSchritt();
+}
+
+function richtungWechseln() {
+    richtung *= -1;
+    zeichneAlles();
+}
+
+function langsamer() {
+    intervall += 100;
+
+    if (timer !== null) {
+        stop();
+        start();
+    }
+}
+
+function schneller() {
+    intervall -= 100;
+
+    if (intervall < 100) {
+        intervall = 100;
+    }
+
+    if (timer !== null) {
+        stop();
+        start();
+    }
+}
+
+zeichneAlles();
+</script>
+
+</body>
+</html>

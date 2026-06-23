@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Andreas Sigismund">
+<meta name="creator" content="Andreas Sigismund mit Unterstützung von ChatGPT">
+<meta name="publisher" content="AG Young Engineers, Martin-Rinckart-Gymnasium Eilenburg">
+<meta name="description" content="Animiertes Unterrichtsmodell zum Schrittmotor 28BYJ-48 mit Visualisierung von Halbschritt, Vollschritt, Rotorpolen, Statorzähnen und Phasenansteuerung.">
+<meta name="keywords" content="28BYJ-48, Schrittmotor, ESP32, ULN2003, Halbschritt, Vollschritt, Unterrichtsmodell, Animation">
+<title>Schrittmotor – erweitertes Motormodell mit N/S-Statorzähnen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body{
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    text-align:center;
+    margin:0;
+    padding:12px;
+  }
+  h1{
+    font-size:22px;
+    margin-bottom:6px;
+  }
+  .hinweis{
+    margin-top:0;
+    color:#555;
+    font-size:14px;
+    line-height:1.35;
+  }
+  .canvas-wrap{
+    width:100%;
+    overflow-x:auto;
+  }
+  canvas{
+    background:white;
+    border:2px solid #333;
+    border-radius:10px;
+    margin-top:10px;
+    max-width:100%;
+    height:auto;
+  }
+  .steuerung{
+    margin-top:12px;
+  }
+  button{
+    font-size:15px;
+    padding:8px 12px;
+    margin:4px;
+    border-radius:6px;
+    border:1px solid #444;
+    cursor:pointer;
+  }
+  button:hover{
+    background:#ddd;
+  }
+  .aktiv-button{
+    background:#c8e6c9;
+    font-weight:bold;
+  }
+  .anzeige{
+    margin-top:10px;
+    font-size:16px;
+    line-height:1.8;
+  }
+  .codefeld{
+    font-family: monospace;
+    font-size:20px;
+    background:#222;
+    color:#0f0;
+    padding:5px 10px;
+    border-radius:6px;
+    display:inline-block;
+    margin-left:5px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Schrittmotor – erweitertes Motormodell</h1>
+<p class="hinweis">
+  Links: ESP32 und ULN2003.<br>
+  Rechts: realistischeres Motormodell mit mehreren Rotorpolen und mehreren Statorzähnen pro Phase.<br>
+  Neu: Aktive Statorzähne sind zusätzlich mit <b>N</b> und <b>S</b> markiert.
+</p>
+
+<div class="canvas-wrap">
+  <canvas id="canvas" width="1100" height="760"></canvas>
+</div>
+
+<div class="steuerung">
+  <button onclick="start()">Start</button>
+  <button onclick="stop()">Stop</button>
+  <button onclick="einzelschritt()">Einzelschritt</button>
+  <button onclick="richtungWechseln()">Richtung wechseln</button>
+  <button onclick="langsamer()">Langsamer</button>
+  <button onclick="schneller()">Schneller</button>
+  <br>
+  <button id="btnHalb" class="aktiv-button" onclick="modusSetzen('halb')">Halbschritt</button>
+  <button id="btnVoll" onclick="modusSetzen('voll')">Vollschritt</button>
+  <br>
+  <button onclick="magneteWeniger()">weniger Magnetpaare</button>
+  <button onclick="magneteMehr()">mehr Magnetpaare</button>
+</div>
+
+<div class="anzeige">
+  Modus: <span id="modus">Halbschritt</span><br>
+  Rotor-Magnetpaare: <span id="magnete">2</span><br>
+  Rotorpole insgesamt: <span id="pole">4</span><br>
+  Statorzähne: <span id="zaehne">8</span><br>
+  Schritt: <span id="schritt">0</span><br>
+  Bitmuster: <span id="bitmuster" class="codefeld">1000</span><br>
+  Richtung: <span id="richtung">rechts</span>
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const schrittAnzeige = document.getElementById("schritt");
+const bitmusterAnzeige = document.getElementById("bitmuster");
+const richtungAnzeige = document.getElementById("richtung");
+const modusAnzeige = document.getElementById("modus");
+const magneteAnzeige = document.getElementById("magnete");
+const poleAnzeige = document.getElementById("pole");
+const zaehneAnzeige = document.getElementById("zaehne");
+const btnHalb = document.getElementById("btnHalb");
+const btnVoll = document.getElementById("btnVoll");
+
+let schrittIndex = 0;
+let timer = null;
+let intervall = 700;
+let richtung = 1;
+let modus = "halb";
+let magnetPaare = 2;
+
+const halbSchritt = [
+  [1, 0, 0, 0],
+  [1, 1, 0, 0],
+  [0, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 0, 1, 0],
+  [0, 0, 1, 1],
+  [0, 0, 0, 1],
+  [1, 0, 0, 1]
+];
+
+const vollSchritt = [
+  [1, 1, 0, 0],
+  [0, 1, 1, 0],
+  [0, 0, 1, 1],
+  [1, 0, 0, 1]
+];
+
+const phasenFarben = ["#e53935", "#43a047", "#1e88e5", "#fb8c00"];
+const phasenNamen = ["IN1 / Phase A", "IN2 / Phase B", "IN3 / Phase C", "IN4 / Phase D"];
+
+const espPins = [
+  { name: "GPIO16 / IN1", x: 250, y: 180 },
+  { name: "GPIO17 / IN2", x: 250, y: 250 },
+  { name: "GPIO18 / IN3", x: 250, y: 320 },
+  { name: "GPIO19 / IN4", x: 250, y: 390 }
+];
+
+const ulnIn = [
+  { x: 360, y: 210 },
+  { x: 360, y: 260 },
+  { x: 360, y: 310 },
+  { x: 360, y: 360 }
+];
+
+const ulnOut = [
+  { x: 500, y: 210 },
+  { x: 500, y: 260 },
+  { x: 500, y: 310 },
+  { x: 500, y: 360 }
+];
+
+function aktuelleFolge() {
+  return modus === "halb" ? halbSchritt : vollSchritt;
+}
+function aktuellesMuster() {
+  return aktuelleFolge()[schrittIndex];
+}
+function musterAlsText(muster) {
+  return muster.join("");
+}
+function rotorPole() {
+  return magnetPaare * 2;
+}
+function statorZaehne() {
+  return magnetPaare * 4;
+}
+function gradZuRad(w) {
+  return w * Math.PI / 180;
+}
+function zeichneText(text, x, y, groesse=16, farbe="#000", align="center") {
+  ctx.fillStyle = farbe;
+  ctx.font = groesse + "px Arial";
+  ctx.textAlign = align;
+  ctx.textBaseline = "middle";
+  ctx.fillText(text, x, y);
+}
+function zeichneRechteck(x, y, b, h, farbe, rand="#333") {
+  ctx.fillStyle = farbe;
+  ctx.strokeStyle = rand;
+  ctx.lineWidth = 2;
+  ctx.fillRect(x, y, b, h);
+  ctx.strokeRect(x, y, b, h);
+}
+function zeichneLinie(x1, y1, x2, y2, aktiv, farbeAktiv="#e53935") {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = aktiv ? farbeAktiv : "#999";
+  ctx.lineWidth = aktiv ? 6 : 3;
+  ctx.stroke();
+}
+function zeichnePfeil(x1, y1, x2, y2, aktiv, farbeAktiv="#e53935") {
+  zeichneLinie(x1, y1, x2, y2, aktiv, farbeAktiv);
+  if (!aktiv) return;
+  const winkel = Math.atan2(y2 - y1, x2 - x1);
+  const l = 12;
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - l * Math.cos(winkel - Math.PI / 6), y2 - l * Math.sin(winkel - Math.PI / 6));
+  ctx.lineTo(x2 - l * Math.cos(winkel + Math.PI / 6), y2 - l * Math.sin(winkel + Math.PI / 6));
+  ctx.closePath();
+  ctx.fillStyle = farbeAktiv;
+  ctx.fill();
+}
+function rotorWinkelBerechnen() {
+  if (modus === "halb") {
+    return schrittIndex * 45;
+  } else {
+    return 45 + schrittIndex * 90;
+  }
+}
+function statorPolLabel(toothIndex) {
+  // Vereinfachtes didaktisches Modell:
+  // Innerhalb einer Phase wechseln sich entlang des Rings Nord- und Südpol ab.
+  const gruppe = Math.floor(toothIndex / 4);
+  return (gruppe % 2 === 0) ? "N" : "S";
+}
+
+function zeichneESP32(muster) {
+  zeichneRechteck(60, 120, 190, 330, "#d7ecff");
+  zeichneText("ESP32", 155, 145, 24);
+  zeichneRechteck(105, 440, 100, 28, "#bbb");
+  zeichneText("USB", 155, 455, 14);
+
+  for (let i = 0; i < 4; i++) {
+    const pin = espPins[i];
+    const aktiv = muster[i] === 1;
+    ctx.beginPath();
+    ctx.arc(pin.x, pin.y, 8, 0, 2 * Math.PI);
+    ctx.fillStyle = aktiv ? phasenFarben[i] : "#777";
+    ctx.fill();
+    ctx.strokeStyle = "#333";
+    ctx.stroke();
+    zeichneText(pin.name, 80, pin.y, 15, "#000", "left");
+    zeichneText(aktiv ? "H" : "L", 280, pin.y, 16, aktiv ? phasenFarben[i] : "#444");
+  }
+}
+
+function zeichneULN2003(muster) {
+  zeichneRechteck(360, 140, 140, 280, "#eee");
+  zeichneText("ULN2003", 430, 165, 22);
+  zeichneText("Treiber", 430, 190, 16, "#555");
+
+  for (let i = 0; i < 4; i++) {
+    const y = 210 + i * 50;
+    const aktiv = muster[i] === 1;
+    ctx.beginPath();
+    ctx.arc(375, y, 6, 0, 2 * Math.PI);
+    ctx.fillStyle = aktiv ? phasenFarben[i] : "#777";
+    ctx.fill();
+
+    ctx.beginPath();
+    ctx.arc(485, y, 6, 0, 2 * Math.PI);
+    ctx.fillStyle = aktiv ? phasenFarben[i] : "#777";
+    ctx.fill();
+
+    zeichneText("IN" + (i + 1), 405, y, 14);
+    zeichneText("OUT" + (i + 1), 455, y, 14);
+  }
+}
+
+function zeichneLeitungen(muster, cx, cy, outerR) {
+  const nTeeth = statorZaehne();
+  const targetRadius = outerR - 10;
+
+  for (let i = 0; i < 4; i++) {
+    const aktiv = muster[i] === 1;
+
+    zeichneLinie(espPins[i].x, espPins[i].y, ulnIn[i].x, ulnIn[i].y, aktiv, phasenFarben[i]);
+
+    const zielIndices = [];
+    for (let t = 0; t < nTeeth; t++) {
+      if (t % 4 === i) zielIndices.push(t);
+    }
+
+    const midIndex = zielIndices[Math.floor(zielIndices.length / 2)];
+    const ang = -Math.PI / 2 + midIndex * 2 * Math.PI / nTeeth;
+    const x2 = cx + Math.cos(ang) * targetRadius;
+    const y2 = cy + Math.sin(ang) * targetRadius;
+
+    zeichnePfeil(ulnOut[i].x, ulnOut[i].y, x2, y2, aktiv, phasenFarben[i]);
+  }
+}
+
+function zeichneErweitertesModell(muster, cx, cy, outerR=190, innerR=138, rotorR=102) {
+  zeichneText("Erweitertes Motormodell", cx, cy - outerR - 38, 22);
+  zeichneText("Mehr Rotorpole  →  mehr Statorzähne", cx, cy - outerR - 14, 15, "#555");
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, outerR + 24, 0, 2 * Math.PI);
+  ctx.fillStyle = "#fafafa";
+  ctx.fill();
+  ctx.strokeStyle = "#333";
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, outerR, 0, 2 * Math.PI);
+  ctx.arc(cx, cy, innerR, 0, 2 * Math.PI, true);
+  ctx.fillStyle = "#eceff1";
+  ctx.fill();
+
+  const nTeeth = statorZaehne();
+  for (let i = 0; i < nTeeth; i++) {
+    const phase = i % 4;
+    const aktiv = muster[phase] === 1;
+    const ang = -Math.PI / 2 + i * 2 * Math.PI / nTeeth;
+    const toothWidth = Math.max(10, 20 - Math.floor(nTeeth / 8));
+    const toothLen = outerR - innerR + 16;
+
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(ang);
+
+    ctx.beginPath();
+    ctx.rect(-toothWidth / 2, -outerR, toothWidth, toothLen);
+    ctx.fillStyle = aktiv ? phasenFarben[phase] : "#b0bec5";
+    ctx.fill();
+    ctx.strokeStyle = "#455a64";
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+
+    // N/S-Markierung an aktiven Zähnen
+    if (aktiv) {
+      const pol = statorPolLabel(i);
+      ctx.save();
+      ctx.rotate(-ang);
+      const labelY = -outerR + toothLen * 0.55;
+      zeichneText(pol, 0, labelY, 13, "#ffffff");
+      ctx.restore();
+    }
+
+    ctx.restore();
+  }
+
+  const poles = rotorPole();
+  const startAngle = gradZuRad(rotorWinkelBerechnen()) - Math.PI / 2;
+  for (let i = 0; i < poles; i++) {
+    const a1 = startAngle + i * 2 * Math.PI / poles;
+    const a2 = startAngle + (i + 1) * 2 * Math.PI / poles;
+    const nord = (i % 2 === 0);
+
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, rotorR, a1, a2);
+    ctx.closePath();
+    ctx.fillStyle = nord ? "#e53935" : "#1e88e5";
+    ctx.fill();
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    const am = (a1 + a2) / 2;
+    const tx = cx + Math.cos(am) * rotorR * 0.62;
+    const ty = cy + Math.sin(am) * rotorR * 0.62;
+    zeichneText(nord ? "N" : "S", tx, ty, 15, "#fff");
+  }
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, 17, 0, 2 * Math.PI);
+  ctx.fillStyle = "#263238";
+  ctx.fill();
+
+  zeichneLegende(muster, 790, 470);
+}
+
+function zeichneLegende(muster, x, y) {
+  zeichneText("Phasen / Zahn-Gruppen", x + 90, y - 24, 18);
+  for (let i = 0; i < 4; i++) {
+    ctx.fillStyle = phasenFarben[i];
+    ctx.fillRect(x, y + i * 28, 20, 16);
+    ctx.strokeStyle = "#333";
+    ctx.strokeRect(x, y + i * 28, 20, 16);
+    const txt = phasenNamen[i] + (muster[i] ? "  aktiv" : "  inaktiv");
+    zeichneText(txt, x + 32, y + i * 28 + 8, 15, muster[i] ? "#000" : "#666", "left");
+  }
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(x, y + 128, 20, 16);
+  ctx.strokeStyle = "#333";
+  ctx.strokeRect(x, y + 128, 20, 16);
+  zeichneText("N/S an den Zähnen: vereinfachte Polung der aktiven Zahn-Gruppen", x + 32, y + 136, 14, "#555", "left");
+
+  zeichneText("Merksatz:", x, y + 166, 16, "#000", "left");
+  zeichneText("Mehr Rotorpole verlangen meist auch", x, y + 190, 15, "#555", "left");
+  zeichneText("mehr bzw. feiner verteilte Statorzähne.", x, y + 212, 15, "#555", "left");
+}
+
+function zeichneSchrittTabelle() {
+  const folge = aktuelleFolge();
+  const y = 650;
+  const breite = modus === "halb" ? 95 : 110;
+  const abstand = modus === "halb" ? 105 : 120;
+  const x = modus === "halb" ? 130 : 275;
+  const titel = modus === "halb" ? "Halbschrittfolge" : "Vollschrittfolge";
+
+  zeichneText(titel, 500, y - 25, 18, "#000");
+  for (let i = 0; i < folge.length; i++) {
+    const aktiv = i === schrittIndex;
+    ctx.fillStyle = aktiv ? "#c8e6c9" : "#fff";
+    ctx.strokeStyle = "#444";
+    ctx.lineWidth = 1;
+    ctx.fillRect(x + i * abstand, y, breite, 45);
+    ctx.strokeRect(x + i * abstand, y, breite, 45);
+    zeichneText(i, x + i * abstand + 15, y + 15, 13, "#555");
+    zeichneText(musterAlsText(folge[i]), x + i * abstand + breite / 2, y + 28, 18, aktiv ? "#1b5e20" : "#000");
+  }
+}
+
+function zeichneAlles() {
+  const muster = aktuellesMuster();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const motorCx = 770;
+  const motorCy = 295;
+  const motorOuterR = 185;
+
+  zeichneESP32(muster);
+  zeichneULN2003(muster);
+  zeichneLeitungen(muster, motorCx, motorCy, motorOuterR);
+  zeichneErweitertesModell(muster, motorCx, motorCy, motorOuterR, 136, 100);
+  zeichneSchrittTabelle();
+
+  schrittAnzeige.textContent = schrittIndex;
+  bitmusterAnzeige.textContent = musterAlsText(muster);
+  richtungAnzeige.textContent = richtung === 1 ? "rechts" : "links";
+  modusAnzeige.textContent = modus === "halb" ? "Halbschritt" : "Vollschritt";
+  magneteAnzeige.textContent = magnetPaare;
+  poleAnzeige.textContent = rotorPole();
+  zaehneAnzeige.textContent = statorZaehne();
+
+  btnHalb.classList.toggle("aktiv-button", modus === "halb");
+  btnVoll.classList.toggle("aktiv-button", modus === "voll");
+}
+
+function naechsterSchritt() {
+  const folge = aktuelleFolge();
+  schrittIndex += richtung;
+  if (schrittIndex >= folge.length) schrittIndex = 0;
+  if (schrittIndex < 0) schrittIndex = folge.length - 1;
+  zeichneAlles();
+}
+function start() {
+  if (timer !== null) return;
+  timer = setInterval(naechsterSchritt, intervall);
+}
+function stop() {
+  if (timer !== null) {
+    clearInterval(timer);
+    timer = null;
+  }
+}
+function einzelschritt() {
+  naechsterSchritt();
+}
+function richtungWechseln() {
+  richtung *= -1;
+  zeichneAlles();
+}
+function langsamer() {
+  intervall += 100;
+  if (timer !== null) {
+    stop();
+    start();
+  }
+}
+function schneller() {
+  intervall -= 100;
+  if (intervall < 100) intervall = 100;
+  if (timer !== null) {
+    stop();
+    start();
+  }
+}
+function modusSetzen(neuerModus) {
+  modus = neuerModus;
+  schrittIndex = 0;
+  zeichneAlles();
+}
+function magneteMehr() {
+  magnetPaare += 1;
+  if (magnetPaare > 6) magnetPaare = 6;
+  zeichneAlles();
+}
+function magneteWeniger() {
+  magnetPaare -= 1;
+  if (magnetPaare < 1) magnetPaare = 1;
+  zeichneAlles();
+}
+
+zeichneAlles();
+</script>
+</body>
+</html>
