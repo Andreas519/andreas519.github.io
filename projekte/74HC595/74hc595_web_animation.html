@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>74HC595 – Schieberegister Animation</title>
+<style>
+    :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --text: #14213d;
+        --muted: #5f6c7b;
+        --blue: #1d5fd1;
+        --green: #167a2f;
+        --red: #d62828;
+        --purple: #6a32a8;
+        --off: #aeb7c2;
+        --line: #c8d3e1;
+        --yellow: #fff3c4;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+    }
+
+    header {
+        text-align: center;
+        padding: 18px 12px 8px;
+    }
+
+    h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 48px);
+        color: #0b2f78;
+    }
+
+    header p {
+        margin: 6px 0 0;
+        font-size: 18px;
+        color: var(--muted);
+    }
+
+    main {
+        width: min(1280px, 96vw);
+        margin: 0 auto 20px;
+    }
+
+    .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(20, 33, 61, 0.08);
+        padding: 14px;
+    }
+
+    canvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: white;
+        border-radius: 12px;
+        border: 1px solid #d7e1ee;
+    }
+
+    .controls {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    button {
+        border: none;
+        border-radius: 9px;
+        padding: 7px 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        color: white;
+        background: #1f4c99;
+        transition: transform 0.05s ease, filter 0.1s ease;
+    }
+
+    button:active {
+        transform: scale(0.98);
+        filter: brightness(0.92);
+    }
+
+    .red { background: var(--red); }
+    .blue { background: var(--blue); }
+    .green { background: var(--green); }
+    .purple { background: var(--purple); }
+    .gray { background: #536475; }
+
+    .info {
+        margin-top: 12px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .status, .help {
+        border-radius: 12px;
+        padding: 10px 12px;
+        background: #eef4ff;
+        font-family: Consolas, 'Courier New', monospace;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .help {
+        background: var(--yellow);
+        font-family: Arial, Helvetica, sans-serif;
+        color: #443800;
+    }
+
+    .small {
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.35;
+    }
+
+    .timing-panel {
+        display: none;
+        margin-top: 14px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px;
+    }
+
+    .timing-panel.visible {
+        display: block;
+    }
+
+    .timing-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 8px;
+    }
+
+    .timing-header h2 {
+        margin: 0;
+        color: #0b2f78;
+        font-size: 22px;
+    }
+
+    .timing-header button {
+        width: auto;
+        padding: 6px 12px;
+        font-size: 13px;
+        background: #536475;
+    }
+
+    #timingCanvas {
+        display: block;
+        width: 100%;
+        height: auto;
+        background: white;
+        border-radius: 10px;
+        border: 1px solid #d7e1ee;
+    }
+</style>
+</head>
+<body>
+<header>
+    <h1>74HC595 – Schieberegister Animation</h1>
+    <p>Daten setzen → einschieben → latchen → Ausgänge aktualisieren</p>
+</header>
+
+<main>
+    <section class="panel">
+        <canvas id="canvas" width="1200" height="760"></canvas>
+
+        <div class="controls">
+            <button class="red" id="btnD">D: DS/SER ändern</button>
+            <button class="blue" id="btnS">S: einschieben</button>
+            <button class="green" id="btnL">L: Latch</button>
+            <button class="gray" id="btnR">R: Reset</button>
+            <button class="purple" id="btnA">A: Auto aus</button>
+            <button class="gray" id="btnO">O: OE aktiv</button>
+            <button class="blue" id="btnT">T: Takt-Diagramm</button>
+        </div>
+
+        <div class="info">
+            <div class="status" id="status"></div>
+            <div class="help">
+                Bedienung: <b>D</b> = DS/SER umschalten | <b>S</b> = aktuelles Bit einschieben | <b>L</b> = Latch übernehmen | <b>R</b> = Reset | <b>A</b> = Auto | <b>O</b> = OE | <b>T</b> = Takt-Diagramm | <b>ESC</b> = Animation stoppen
+            </div>
+            <div class="small">
+                Hinweis: Diese Webversion ist eine didaktische Simulation. Sie zeigt die Arbeitsweise des 74HC595 vereinfacht und bewusst sichtbar animiert.
+            </div>
+        </div>
+
+        <div class="timing-panel" id="timingPanel">
+            <div class="timing-header">
+                <h2>Takt-Diagramm der Ein-/Ausgänge</h2>
+                <button id="btnCloseTiming">Schließen</button>
+            </div>
+            <canvas id="timingCanvas" width="1200" height="560"></canvas>
+            <div class="small">
+                Das Diagramm zeigt die letzten Bedienaktionen. Data ist der Wert an DS/SER. SHIFT zeigt S/SH_CP-Pulse, LATCH zeigt L/ST_CP-Pulse. QA bis QH zeigen die gespeicherten Ausgangszustände.
+            </div>
+        </div>
+    </section>
+</main>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const statusEl = document.getElementById("status");
+const timingPanel = document.getElementById("timingPanel");
+const timingCanvas = document.getElementById("timingCanvas");
+const tctx = timingCanvas.getContext("2d");
+
+const COLORS = {
+    text: "#14213d",
+    muted: "#5f6c7b",
+    blue: "#1d5fd1",
+    green: "#167a2f",
+    red: "#d62828",
+    purple: "#6a32a8",
+    off: "#aeb7c2",
+    line: "#c8d3e1",
+    lightBlue: "#edf4ff",
+    lightGreen: "#eefaf0",
+    lightRed: "#fff0f0",
+    lightPurple: "#f5efff",
+    yellow: "#fff3c4"
+};
+
+class Leitung {
+    constructor(name, points, value = 0, colorOn = COLORS.red) {
+        this.name = name;
+        this.points = points;
+        this.value = value;
+        this.colorOn = colorOn;
+        this.flash = 0;
+    }
+
+    set(value) {
+        const newValue = value ? 1 : 0;
+        if (newValue !== this.value) this.flash = 12;
+        this.value = newValue;
+    }
+
+    pulse() {
+        this.flash = 18;
+    }
+
+    draw(ctx) {
+        ctx.save();
+        ctx.lineWidth = this.flash > 0 ? 7 : 4;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = this.value ? this.colorOn : COLORS.off;
+        if (this.flash > 0) {
+            ctx.shadowColor = this.value ? this.colorOn : "#777";
+            ctx.shadowBlur = 10;
+        }
+        ctx.beginPath();
+        ctx.moveTo(this.points[0][0], this.points[0][1]);
+        for (let i = 1; i < this.points.length; i++) {
+            ctx.lineTo(this.points[i][0], this.points[i][1]);
+        }
+        ctx.stroke();
+        ctx.restore();
+        if (this.flash > 0) this.flash--;
+    }
+}
+
+class HC595 {
+    constructor() {
+        this.ds = 0;
+        this.oe = 0;     // OE = 0 aktiv
+        this.mr = 1;     // MR = 1 normaler Betrieb
+        this.shift = Array(8).fill(0);   // QA-nah links in dieser Darstellung
+        this.store = Array(8).fill(0);
+        this.qhSerial = 0;
+        this.lastAction = "Start";
+    }
+
+    toggleDS() {
+        this.ds = this.ds ? 0 : 1;
+        this.lastAction = `DS/SER auf ${this.ds} gesetzt`;
+    }
+
+    shiftClock() {
+        this.qhSerial = this.shift[7];
+        for (let i = 7; i > 0; i--) {
+            this.shift[i] = this.shift[i - 1];
+        }
+        this.shift[0] = this.ds;
+        this.lastAction = `S: ${this.ds} eingeschoben`;
+        pulseShift = 16;
+    }
+
+    latchClock() {
+        this.store = this.shift.slice();
+        this.lastAction = "L: Schieberegister ins Ausgangsregister übernommen";
+        pulseLatch = 22;
+    }
+
+    reset() {
+        this.ds = 0;
+        this.shift = Array(8).fill(0);
+        this.store = Array(8).fill(0);
+        this.qhSerial = 0;
+        this.oe = 0;
+        this.mr = 1;
+        this.lastAction = "Reset";
+    }
+
+    toggleOE() {
+        this.oe = this.oe ? 0 : 1;
+        this.lastAction = this.oe ? "OE = 1: Ausgänge deaktiviert" : "OE = 0: Ausgänge aktiv";
+    }
+
+    shiftString() {
+        return this.shift.slice().reverse().join("");
+    }
+
+    storeString() {
+        return this.store.slice().reverse().join("");
+    }
+}
+
+const hc = new HC595();
+let autoMode = false;
+let autoTimer = 0;
+let running = true;
+let pulseShift = 0;
+let pulseLatch = 0;
+let timingVisible = false;
+const timingHistory = [];
+const MAX_HISTORY = 24;
+
+const bitX = [360, 440, 520, 600, 680, 760, 840, 920];
+const shiftY = 190;
+const storeY = 365;
+const cellW = 54;
+const cellH = 50;
+// ansis
+const leitungen = {
+    ds: new Leitung("DS/SER", [[210, shiftY], [250, shiftY], [315, shiftY]], hc.ds, COLORS.red),
+    shcp: new Leitung("SH_CP", [[210, 240], [295, 240], [295, 210], [295, 220]], 0, COLORS.blue),
+    stcp: new Leitung("ST_CP", [[210, 330], [295, 330], [295, storeY], [310, storeY]] , 0, COLORS.green),
+    qhSerial: new Leitung("QH'", [[bitX[7] + cellW, shiftY], [1070, shiftY]], 0, COLORS.purple)
+};
+
+function roundRect(ctx, x, y, w, h, r, fill, stroke, lineWidth = 2) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+    if (fill) {
+        ctx.fillStyle = fill;
+        ctx.fill();
+    }
+    if (stroke) {
+        ctx.strokeStyle = stroke;
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+function text(txt, x, y, size = 18, color = COLORS.text, align = "left", weight = "normal") {
+    ctx.save();
+    ctx.font = `${weight} ${size}px Arial, Helvetica, sans-serif`;
+    ctx.fillStyle = color;
+    ctx.textAlign = align;
+    ctx.textBaseline = "middle";
+    ctx.fillText(txt, x, y);
+    ctx.restore();
+}
+
+function arrow(x1, y1, x2, y2, color, width = 4) {
+    ctx.save();
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = width;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 14 * Math.cos(angle - Math.PI / 6), y2 - 14 * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - 14 * Math.cos(angle + Math.PI / 6), y2 - 14 * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+}
+
+function drawBitCell(x, y, bit, label, activeColor) {
+    const fill = bit ? "#ffffff" : "#f6f8fb";
+    const stroke = bit ? activeColor : COLORS.off;
+    roundRect(ctx, x, y, cellW, cellH, 8, fill, stroke, bit ? 4 : 2);
+    text(String(bit), x + cellW / 2, y + cellH / 2, 28, bit ? activeColor : "#657282", "center", "bold");
+    text(label, x + cellW / 2, y - 18, 14, COLORS.muted, "center", "bold");
+}
+
+function drawLed(x, y, value, label, disabled=false) {
+    const on = value && !disabled;
+    ctx.save();
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x, y - 28);
+    ctx.lineTo(x, y - 12);
+    ctx.stroke();
+
+    if (on) {
+        ctx.fillStyle = COLORS.red;
+        ctx.shadowColor = COLORS.red;
+        ctx.shadowBlur = 14;
+    } else {
+        ctx.fillStyle = disabled ? "#555" : "#e9edf3";
+        ctx.shadowBlur = 0;
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, 14, Math.PI, 0);
+    ctx.lineTo(x + 14, y + 12);
+    ctx.lineTo(x - 14, y + 12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "#222";
+    ctx.stroke();
+    ctx.fillStyle = "#222";
+    ctx.fillRect(x - 18, y + 12, 36, 5);
+
+    if (on) {
+        ctx.strokeStyle = COLORS.red;
+        ctx.lineWidth = 2;
+        for (let a = -70; a <= 70; a += 35) {
+            const rad = (a - 90) * Math.PI / 180;
+            ctx.beginPath();
+            ctx.moveTo(x + Math.cos(rad) * 20, y + Math.sin(rad) * 20);
+            ctx.lineTo(x + Math.cos(rad) * 32, y + Math.sin(rad) * 32);
+            ctx.stroke();
+        }
+    }
+    ctx.restore();
+    text(label, x, y - 55, 16, COLORS.purple, "center", "bold");
+    text(disabled ? "Z" : String(value), x, y + 38, 18, disabled ? COLORS.muted : COLORS.text, "center", "bold");
+}
+
+function drawTimingSketch(x, y) {
+    const w = 220;
+    const h = 135;
+    roundRect(ctx, x, y, w, h, 12, "#ffffff", COLORS.line, 2);
+    text("Takt-Skizze", x + 110, y + 18, 17, COLORS.text, "center", "bold");
+    text("klicken oder T", x + 110, y + 38, 12, COLORS.muted, "center");
+
+    const recent = timingHistory.slice(-8);
+    const colW = recent.length ? 120 / recent.length : 15;
+    const startX = x + 84;
+
+    text("Data", x + 20, y + 60, 13, COLORS.red, "left", "bold");
+    drawMiniStateWave(startX, y + 60, colW, recent.map(e => e.data), COLORS.red);
+
+    text("SHIFT", x + 20, y + 88, 13, COLORS.blue, "left", "bold");
+    drawMiniPulseWave(startX, y + 88, colW, recent.map(e => e.shift), COLORS.blue);
+
+    text("LATCH", x + 20, y + 116, 13, COLORS.green, "left", "bold");
+    drawMiniPulseWave(startX, y + 116, colW, recent.map(e => e.latch), COLORS.green);
+}
+
+function drawMiniStateWave(x, y, colW, values, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (!values.length) values = [0];
+    for (let i = 0; i < values.length; i++) {
+        const yy = values[i] ? y - 9 : y + 9;
+        const x1 = x + i * colW;
+        const x2 = x + (i + 1) * colW;
+        if (i === 0) ctx.moveTo(x1, yy);
+        else {
+            const py = values[i - 1] ? y - 9 : y + 9;
+            ctx.lineTo(x1, py);
+            ctx.lineTo(x1, yy);
+        }
+        ctx.lineTo(x2, yy);
+    }
+    ctx.stroke();
+    ctx.restore();
+}
+
+function drawMiniPulseWave(x, y, colW, values, color) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    if (!values.length) values = [0];
+    for (let i = 0; i < values.length; i++) {
+        const x1 = x + i * colW;
+        const x2 = x + (i + 1) * colW;
+        const base = y + 9;
+        const high = y - 9;
+        ctx.moveTo(x1, base);
+        if (values[i]) {
+            ctx.lineTo(x1 + colW * 0.25, base);
+            ctx.lineTo(x1 + colW * 0.25, high);
+            ctx.lineTo(x1 + colW * 0.75, high);
+            ctx.lineTo(x1 + colW * 0.75, base);
+            ctx.lineTo(x2, base);
+        } else {
+            ctx.lineTo(x2, base);
+        }
+    }
+    ctx.stroke();
+    ctx.restore();
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    text("74HC595 – Bewegung im Schieberegister", 600, 32, 34, "#0b2f78", "center", "bold");
+    text("D setzt das Eingangssignal. S erzeugt den Shift-Takt. L übernimmt alles gleichzeitig ins Ausgangsregister.", 600, 68, 18, COLORS.muted, "center");
+
+    // Linke Pin-Legende
+    roundRect(ctx, 30, 100, 245, 270, 14, "#f8fbff", COLORS.line, 2);
+    text("Signale", 52, 126, 22, COLORS.text, "left", "bold");
+    text("DS / SER", 52, 170, 19, COLORS.red, "left", "bold");
+    text(`Eingang = ${hc.ds}`, 52, 196, 16, COLORS.red, "left");
+    text("SH_CP / SRCLK", 52, 240, 19, COLORS.blue, "left", "bold");
+    text("Shift-Takt", 52, 266, 16, COLORS.blue, "left");
+    text("ST_CP / RCLK", 52, 310, 19, COLORS.green, "left", "bold");
+    text("Latch-Takt", 52, 336, 16, COLORS.green, "left");
+
+    roundRect(ctx, 30, 388, 245, 85, 14, COLORS.lightPurple, COLORS.line, 2);
+    text(`OE = ${hc.oe}  (${hc.oe ? "Ausgänge Z" : "aktiv"})`, 52, 418, 18, COLORS.purple, "left", "bold");
+    text(`MR = ${hc.mr}  (normaler Betrieb)`, 52, 448, 16, COLORS.text, "left");
+
+    drawTimingSketch(30, 500);
+
+    // Registerblöcke
+    roundRect(ctx, 315, 95, 700, 155, 16, COLORS.lightBlue, COLORS.blue, 3);
+    text("8-Bit-Schieberegister", 665, 120, 22, COLORS.blue, "center", "bold");
+    text("neu rein", 320, 164, 14, COLORS.red, "left", "bold");
+    text("QH'", 1055, 164, 18, COLORS.purple, "center", "bold");
+
+    roundRect(ctx, 315, 285, 700, 155, 16, COLORS.lightGreen, COLORS.green, 3);
+    text("8-Bit-Speicherregister / Ausgangsregister", 665, 310, 22, COLORS.green, "center", "bold");
+
+    // Leitungen
+    leitungen.ds.set(hc.ds);
+    leitungen.qhSerial.set(hc.qhSerial);
+    leitungen.shcp.set(pulseShift > 0 ? 1 : 0);
+    leitungen.stcp.set(pulseLatch > 0 ? 1 : 0);
+    Object.values(leitungen).forEach(l => l.draw(ctx));
+
+    // DS Bit Box
+    drawBitCell(232, shiftY - 25, hc.ds, "DS", COLORS.red);
+    // ansis
+    arrow(286, shiftY, 315, shiftY, COLORS.off, 4);
+    arrow(295, shiftY+20, 315, shiftY+20, COLORS.off, 4);
+    arrow(295, shiftY+175, 315, shiftY+175, COLORS.off, 4);
+
+    // Bitzellen Schieberegister und Pfeile
+    for (let i = 0; i < 8; i++) {
+// ansis        const label = i === 0 ? "QA" : i === 7 ? "QH" : `Q${i}`;
+         const label = `Q${String.fromCharCode(65 + i)}`;
+        drawBitCell(bitX[i], shiftY - 25, hc.shift[i], label, COLORS.blue);
+        if (i < 7) arrow(bitX[i] + cellW + 4, shiftY, bitX[i + 1] - 8, shiftY, pulseShift > 0 ? COLORS.blue : COLORS.line, 3);
+    }
+    arrow(bitX[7] + cellW + 4, shiftY, 1040, shiftY, hc.qhSerial ? COLORS.purple : COLORS.off, 4);
+
+    // Latch-Pfeile nach unten
+    for (let i = 0; i < 8; i++) {
+        arrow(bitX[i] + cellW / 2, shiftY + 35, bitX[i] + cellW / 2, storeY - 35,
+              pulseLatch > 0 ? COLORS.green : COLORS.line, pulseLatch > 0 ? 5 : 2);
+    }
+
+    for (let i = 0; i < 8; i++) {
+         const label = `Q${String.fromCharCode(65 + i)}`;
+        drawBitCell(bitX[i], storeY+2, hc.store[i], label, COLORS.green);
+    }
+
+    // Ausgangsanzeige jetzt zentral unter den Registern
+    roundRect(ctx, 315, 465, 855, 150, 16, COLORS.lightPurple, COLORS.purple, 3);
+    text("Ausgänge QA bis QH", 742, 485, 22, COLORS.purple, "center", "bold");
+    text(hc.oe === 1 ? "OE = 1: Ausgänge hochohmig (Z)" : "OE = 0: Ausgänge aktiv", 999, 485, 16, COLORS.muted, "center");
+    for (let i = 0; i < 8; i++) {
+        const x = 385 + i * 95;
+        const y = 565;
+        drawLed(x, y, hc.store[i], `Q${String.fromCharCode(65 + i)}`, hc.oe === 1);
+    }
+
+    // Erklärungskästen nach unten verschoben
+    roundRect(ctx, 30, 650, 1140, 42, 14, "#fffdf3", "#f2ca52", 2);
+    text("Merksatz:", 55, 675, 20, "#6b4e00", "left", "bold");
+    text("Mit jedem S / SH_CP-Takt rutschen die Bits weiter. Erst beim L / ST_CP-Takt erscheinen die neuen Zustände gleichzeitig an QA bis QH.", 165, 675, 17, COLORS.text, "left");
+
+    // Aktionsanzeige ebenfalls nach unten verschoben
+    roundRect(ctx, 30, 710, 1140, 40, 12, "#eef4ff", COLORS.line, 2);
+    text(`Letzte Aktion: ${hc.lastAction}`, 55, 730, 17, COLORS.text, "left", "bold");
+
+    if (pulseShift > 0) pulseShift--;
+    if (pulseLatch > 0) pulseLatch--;
+}
+
+function recordTiming(action, shiftPulseValue = 0, latchPulseValue = 0) {
+    timingHistory.push({
+        action,
+        data: hc.ds,
+        shift: shiftPulseValue ? 1 : 0,
+        latch: latchPulseValue ? 1 : 0,
+        outputs: hc.store.slice()
+    });
+    while (timingHistory.length > MAX_HISTORY) timingHistory.shift();
+    drawTimingDiagram();
+}
+
+function toggleTimingPanel(forceValue = null) {
+    timingVisible = forceValue === null ? !timingVisible : forceValue;
+    timingPanel.classList.toggle("visible", timingVisible);
+    if (timingVisible) {
+        drawTimingDiagram();
+        timingPanel.scrollIntoView({behavior: "smooth", block: "nearest"});
+    }
+}
+
+function drawDigitalStateWave(ctx2, x0, y, colW, values, color) {
+    const high = y - 12;
+    const low = y + 12;
+    ctx2.save();
+    ctx2.strokeStyle = color;
+    ctx2.lineWidth = 3;
+    ctx2.lineJoin = "round";
+    ctx2.beginPath();
+    if (!values.length) values = [0];
+    for (let i = 0; i < values.length; i++) {
+        const yy = values[i] ? high : low;
+        const x1 = x0 + i * colW;
+        const x2 = x0 + (i + 1) * colW;
+        if (i === 0) ctx2.moveTo(x1, yy);
+        else {
+            const py = values[i - 1] ? high : low;
+            ctx2.lineTo(x1, py);
+            ctx2.lineTo(x1, yy);
+        }
+        ctx2.lineTo(x2, yy);
+    }
+    ctx2.stroke();
+    ctx2.restore();
+}
+
+function drawPulseWave(ctx2, x0, y, colW, values, color) {
+    const high = y - 12;
+    const low = y + 12;
+    ctx2.save();
+    ctx2.strokeStyle = color;
+    ctx2.lineWidth = 3;
+    ctx2.lineJoin = "round";
+    ctx2.beginPath();
+    if (!values.length) values = [0];
+    for (let i = 0; i < values.length; i++) {
+        const x1 = x0 + i * colW;
+        const x2 = x0 + (i + 1) * colW;
+        ctx2.moveTo(x1, low);
+        if (values[i]) {
+            ctx2.lineTo(x1 + colW * 0.22, low);
+            ctx2.lineTo(x1 + colW * 0.22, high);
+            ctx2.lineTo(x1 + colW * 0.78, high);
+            ctx2.lineTo(x1 + colW * 0.78, low);
+            ctx2.lineTo(x2, low);
+        } else {
+            ctx2.lineTo(x2, low);
+        }
+    }
+    ctx2.stroke();
+    ctx2.restore();
+}
+
+function drawTimingDiagram() {
+    const ctx2 = tctx;
+    const W = timingCanvas.width;
+    const H = timingCanvas.height;
+    ctx2.clearRect(0, 0, W, H);
+    ctx2.fillStyle = "#ffffff";
+    ctx2.fillRect(0, 0, W, H);
+
+    ctx2.font = "bold 28px Arial, Helvetica, sans-serif";
+    ctx2.fillStyle = "#0b2f78";
+    ctx2.textAlign = "center";
+    ctx2.textBaseline = "middle";
+    ctx2.fillText("Takt-Diagramm: Data, SHIFT, LATCH und QA bis QH", W / 2, 30);
+
+    const hist = timingHistory.length ? timingHistory : [{action:"Start", data:0, shift:0, latch:0, outputs:Array(8).fill(0)}];
+    const x0 = 145;
+    const xRight = W - 30;
+    const colW = Math.max(32, Math.min(58, (xRight - x0) / hist.length));
+    const visibleWidth = colW * hist.length;
+    const rows = [
+        {name:"Data", type:"state", color:COLORS.red, values:hist.map(e => e.data)},
+        {name:"SHIFT", type:"pulse", color:COLORS.blue, values:hist.map(e => e.shift)},
+        {name:"LATCH", type:"pulse", color:COLORS.green, values:hist.map(e => e.latch)},
+        ...Array.from({length:8}, (_, i) => ({
+            name:`Q${i} / ${String.fromCharCode(65 + i)}${i === 0 ? "A" : ""}`.replace("AA", "A"),
+            type:"state",
+            color:COLORS.purple,
+            values:hist.map(e => e.outputs[i])
+        }))
+    ];
+
+    const startY = 80;
+    const rowH = 42;
+
+    ctx2.save();
+    ctx2.strokeStyle = "#e4ebf5";
+    ctx2.lineWidth = 1;
+    for (let i = 0; i <= hist.length; i++) {
+        const x = x0 + i * colW;
+        ctx2.beginPath();
+        ctx2.moveTo(x, startY - 20);
+        ctx2.lineTo(x, startY + rows.length * rowH - 4);
+        ctx2.stroke();
+    }
+    ctx2.restore();
+
+    rows.forEach((row, idx) => {
+        const y = startY + idx * rowH;
+        ctx2.save();
+        ctx2.font = "bold 16px Arial, Helvetica, sans-serif";
+        ctx2.fillStyle = row.color;
+        ctx2.textAlign = "right";
+        ctx2.textBaseline = "middle";
+        let displayName = row.name;
+        if (row.name.startsWith("Q")) {
+            const n = Number(row.name[1]);
+            displayName = `Q${n} / ${String.fromCharCode(65 + n)}`;
+        }
+        ctx2.fillText(displayName, x0 - 18, y);
+        ctx2.restore();
+        if (row.type === "pulse") drawPulseWave(ctx2, x0, y, colW, row.values, row.color);
+        else drawDigitalStateWave(ctx2, x0, y, colW, row.values, row.color);
+    });
+
+    ctx2.save();
+    ctx2.font = "12px Arial, Helvetica, sans-serif";
+    ctx2.fillStyle = COLORS.muted;
+    ctx2.textAlign = "center";
+    ctx2.textBaseline = "top";
+    hist.forEach((e, i) => {
+        const x = x0 + i * colW + colW / 2;
+        ctx2.fillText(String(i), x, H - 62);
+        const label = e.action.length > 8 ? e.action.slice(0, 8) + "…" : e.action;
+        ctx2.fillText(label, x, H - 44);
+    });
+    ctx2.textAlign = "left";
+    ctx2.font = "14px Arial, Helvetica, sans-serif";
+    ctx2.fillText("Spalte = Bedienaktion. Pulse sind die Takte, Zustandslinien zeigen 0/1 nach der Aktion.", 24, H - 20);
+    ctx2.restore();
+}
+
+function updateStatus() {
+    statusEl.textContent = `Zustand: DS/SER = ${hc.ds} | Schieberegister QH...QA = ${hc.shiftString()} | Ausgangsregister QH...QA = ${hc.storeString()} | QH' = ${hc.qhSerial} | OE = ${hc.oe}`;
+    document.getElementById("btnA").textContent = autoMode ? "A: Auto an" : "A: Auto aus";
+    document.getElementById("btnO").textContent = hc.oe ? "O: OE aus" : "O: OE aktiv";
+}
+
+function doD() { hc.toggleDS(); recordTiming("D", 0, 0); updateStatus(); }
+function doS() { hc.shiftClock(); recordTiming("S", 1, 0); updateStatus(); }
+function doL() { hc.latchClock(); recordTiming("L", 0, 1); updateStatus(); }
+function doR() { hc.reset(); recordTiming("Reset", 0, 0); updateStatus(); }
+function doA() { autoMode = !autoMode; hc.lastAction = autoMode ? "Auto-Modus eingeschaltet" : "Auto-Modus ausgeschaltet"; recordTiming("Auto", 0, 0); updateStatus(); }
+function doO() { hc.toggleOE(); recordTiming("OE", 0, 0); updateStatus(); }
+function doT() { toggleTimingPanel(); }
+
+window.addEventListener("keydown", (event) => {
+    const k = event.key.toLowerCase();
+    if (k === "d") doD();
+    else if (k === "s" || event.code === "Space") doS();
+    else if (k === "l") doL();
+    else if (k === "r") doR();
+    else if (k === "a") doA();
+    else if (k === "o") doO();
+    else if (k === "t") doT();
+    else if (event.key === "Escape") running = false;
+});
+
+document.getElementById("btnD").addEventListener("click", doD);
+document.getElementById("btnS").addEventListener("click", doS);
+document.getElementById("btnL").addEventListener("click", doL);
+document.getElementById("btnR").addEventListener("click", doR);
+document.getElementById("btnA").addEventListener("click", doA);
+document.getElementById("btnO").addEventListener("click", doO);
+document.getElementById("btnT").addEventListener("click", doT);
+document.getElementById("btnCloseTiming").addEventListener("click", () => toggleTimingPanel(false));
+canvas.addEventListener("click", (event) => {
+    const rect = canvas.getBoundingClientRect();
+    const x = (event.clientX - rect.left) * (canvas.width / rect.width);
+    const y = (event.clientY - rect.top) * (canvas.height / rect.height);
+    if (x >= 30 && x <= 250 && y >= 500 && y <= 635) toggleTimingPanel(true);
+});
+
+function animate(timestamp) {
+    if (autoMode) {
+        autoTimer++;
+        if (autoTimer > 90) {
+            hc.ds = Math.random() < 0.5 ? 0 : 1;
+            hc.shiftClock();
+            recordTiming("Auto-S", 1, 0);
+            if (Math.random() < 0.25) {
+                hc.latchClock();
+                recordTiming("Auto-L", 0, 1);
+            }
+            updateStatus();
+            autoTimer = 0;
+        }
+    }
+    draw();
+    if (running) requestAnimationFrame(animate);
+}
+
+recordTiming("Start", 0, 0);
+updateStatus();
+requestAnimationFrame(animate);
+</script>
+</body>
+</html>
