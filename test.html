@@ -5,24 +5,7 @@
     <title>My Web Page</title>
     <!-- Link to external CSS below -->
     <link rel="stylesheet" href="css/test.css">
-    <script>
-function ladeDatei(datei, elementId) {
-  fetch(datei)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error("HTTP-Fehler " + response.status);
-      }
-      return response.text();
-    })
-    .then(text => {
-      document.getElementById(elementId).textContent = text;
-    })
-    .catch(error => {
-      document.getElementById(elementId).textContent =
-        "Datei konnte nicht geladen werden: " + datei;
-    });
-}
-</script>
+    <script src="js/script.js"></script>
 </head>
 
 <body>
@@ -30,7 +13,7 @@ function ladeDatei(datei, elementId) {
 
 <section>
   <h2>Quelltext: main.py im Codefenster-gross</h2>
-  <iframe src="main.py" class="codefenster codefenster-gross"></iframe>
+  <iframe src="projekte/main.py" class="codefenster codefenster-gross"></iframe>
   <p>externer Quelltext im Codefenster</p>
   <iframe
     src="main.py"
