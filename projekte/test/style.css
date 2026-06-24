@@ -1,6 +1,33 @@
+
+/* Kommentar in CSS-Datei
+.testklasse { }  
+#testID { }  
+
+Merke: Klassen können mehrfach verwendet werden, IDs sollten eindeutig sein.
+
+<p class="testklasse">Klasse: kann mehrfach verwendet werden</p>
+<p id="test">ID: sollte eindeutig sein</p>
+
+<meinblock>
+  Das ist mein eigener Block.
+</meinblock>
+
+im CSS:
+
+.testklasse {color: red;}
+#testID {color: blue;}
+meinblock {
+  color: red;
+  font-size: 20px;
+}
+*/
+
 body {
     background-color: #f4f4f4;
 }
 h1 {
     color: #333333;
+}
+#lastModifiedl {
+    font-style: italic; font-size: 0.9em; font-family: Arial, sans-serif; color: #666666;
 }

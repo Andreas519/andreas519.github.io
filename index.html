@@ -11,54 +11,29 @@
 <meta name="school" content="Martin-Rinckart-Gymnasium Eilenburg">
 <meta name="description" content="Öffentliche Sammlung überarbeiteter Technik-, Informatik- und Physikprojekte von Andreas Sigismund für die AG Young Engineers am Martin-Rinckart-Gymnasium Eilenburg.">
 <meta name="keywords" content="Andreas Sigismund, Young Engineers, Martin-Rinckart-Gymnasium Eilenburg, Technik, Informatik, Physik, ESP32, MicroPython, Arduino, GitHub Pages, Unterrichtsmodell">
-<style>
-:root {
-  --bg:#f4f7fb; --card:#fff; --text:#1f2933; --muted:#5f6c7b;
-  --accent:#2563eb; --accent-dark:#1e40af; --border:#d8dee9;
-}
-* { box-sizing:border-box; }
-body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-header { background:linear-gradient(135deg,#1e40af,#2563eb); color:white; padding:10px 10px; text-align:center; }
-header h1 { margin:0; font-size:clamp(2rem,5vw,3.2rem); }
-header p { margin:12px auto 0; max-width:850px; font-size:1.1rem; opacity:.95; }
-main { max-width:1050px; margin:0 auto; padding:28px 18px 48px; }
-section { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin:18px 0; box-shadow:0 4px 14px rgba(0,0,0,.04); }
-h2 { margin-top:0; color:var(--accent-dark); }
-.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
-.project-card { border:1px solid var(--border); border-radius:12px; padding:18px; background:#fbfdff; }
-.project-card h3 { margin-top:0; margin-bottom:8px; }
-a { color:var(--accent); text-decoration:none; font-weight:bold; }
-a:hover { text-decoration:underline; }
-.status { display:inline-block; padding:3px 9px; border-radius:999px; background:#e0ecff; color:#1e40af; font-size:.85rem; font-weight:bold; }
-footer { border-top:1px solid var(--border); color:var(--muted); text-align:center; padding:24px 18px; font-size:.55rem; }
-.note { color:var(--muted); }
-</style>
+<link rel="stylesheet" href="css/my.css">
 </head>
 <body>
 <header>
-  <h3>Andreas Sigismund</h3>
   <p>Sammlung von Projekte aus dem Umfeld der AG <strong>Young Engineers</strong> am Martin-Rinckart-Gymnasium Eilenburg.</p>
 </header>
 <main>
   <h2>Öffentliche Projekte</h2>
   <div class="grid">
     <article class="project-card">
-      <h3>28BYJ-48 Schrittmotor</h3>
-      <p>Animiertes Unterrichtsmodell zur Ansteuerung eines Schrittmotors mit ESP32, ULN2003, Halbschritt, Vollschritt, Rotorpolen und Statorzähnen.</p>
-      <p><span class="status">in Arbeit / Präsentationsversion</span></p>
-      <p><a href="projekte/28BYJY-48">Projekt öffnen</a></p>
+      <h3><a href="projekte/28BYJY-48">28BYJ-48 Schrittmotor</a></h3>
+      <p>Animiertes Modell zur Ansteuerung eines Schrittmotors </p>
+      <!-- <p><span class="status">in Arbeit / Präsentationsversion</span></p> -->
     </article>
     <article class="project-card">
-      <h3>74HC595 Schieberegister</h3>
+      <h3><a href="projekte/74HC595/">Schieberegister 74HC595</a></h3>
       <p>Visualisierung der seriellen Datenübertragung und parallelen Ausgabe mit Schieberegister und Mikrocontroller.</p>
-      <p><span class="status">geplant / folgt</span></p>
-      <p><a href="projekte/74HC595/">Projekt öffnen</a></p>
+      <!-- <p><span class="status">geplant / folgt</span></p> -->
     </article>
     <article class="project-card">
-      <h3>ESP32 Web-Projekte</h3>
+      <h3><a href="projekte/ESP32-WLAN-Programmauswahl/">ESP32 Web-Projekte</a></h3>
       <p>Beispiele zu ESP32-Webservern, Messwertdarstellung, Steuerung über Browser und MicroPython.</p>
-      <p><span class="status">geplant / folgt</span></p>
-      <p><a href="projekte/ESP32-WLAN-Programmauswahl/">Projekt öffnen</a></p>
+      <!-- <p><span class="status">geplant / folgt</span></p> -->
     </article>
   </div>
         <p><a href="projekte/index.html">weitere Projekte öffnen</a></p>
@@ -78,14 +53,17 @@ footer { border-top:1px solid var(--border); color:var(--muted); text-align:cent
   <p>Die bereitgestellten Materialien sind als Unterrichts- und AG-Materialien gedacht. Viele Darstellungen sind bewusst didaktisch vereinfacht, damit grundlegende Zusammenhänge leichter sichtbar werden.</p>
   <p>Bitte die jeweilige Projektbeschreibung und mögliche Lizenzhinweise im zugehörigen Repository beachten.</p>
 </section>
+<section>
+<a href="https://github.com/Andreas519/andreas519.github.io">Dieses Repository auf GitHub öffnen</a> 
+    / <a href="https://developer.mozilla.org/de/docs/Learn_web_development/Howto/Tools_and_setup/Using_GitHub_pages">
+      Wie verwende ich GitHub Pages?</a> 
+
+</section>
 </main>
 <footer>
-  <p><a href="https://github.com/Andreas519/andreas519.github.io">Dieses Repository auf GitHub öffnen</a> 
-    / <a href="https://developer.mozilla.org/de/docs/Learn_web_development/Howto/Tools_and_setup/Using_GitHub_pages">
-      Wie verwende ich GitHub Pages?</a></p>   
-  <p>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br />
-  Erstellt und weiterentwickelt mit Unterstützung von ChatGPT.</p>
-  
+  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="../js/test.js"></script>
 </footer>
 </body>
 </html>

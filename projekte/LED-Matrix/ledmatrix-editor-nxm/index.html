@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LED-Matrix Editor n×m</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>LED-Matrix Editor n×m</h1>
+    <p>Erstelle per Mausklick ein Pixelbild und exportiere es als Python- oder C-Array.</p>
+</header>
+
+<main>
+    <section class="card">
+        <h2>Matrixgröße</h2>
+
+        <div class="eingabezeile">
+            <label for="rowsInput">Zeilen n:</label>
+            <input id="rowsInput" type="number" min="2" max="11" value="8">
+
+            <label for="colsInput">Spalten m:</label>
+            <input id="colsInput" type="number" min="2" max="19" value="8">
+
+            <button id="resizeButton" type="button">Matrix neu erstellen</button>
+        </div>
+
+        <p class="kleiner-hinweis">
+            Erlaubt: 2 bis 11 Zeilen und 2 bis 19 Spalten.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Matrix</h2>
+
+        <div id="matrix" class="matrix" aria-label="LED-Matrix"></div>
+
+        <div class="buttonzeile">
+            <button id="clearButton" type="button">Alles löschen</button>
+            <button id="fillButton" type="button">Alles setzen</button>
+            <button id="invertButton" type="button">Invertieren</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Ausgabeformat</h2>
+
+        <div class="formatwahl">
+            <label>
+                <input type="radio" name="format" value="python" checked>
+                Python / MicroPython
+            </label>
+
+            <label>
+                <input type="radio" name="format" value="c">
+                C / Arduino
+            </label>
+        </div>
+
+        <h2>Bitmuster</h2>
+        <pre id="output"></pre>
+    </section>
+
+    <section class="hinweis">
+        <h2>Zuordnung</h2>
+        <p>
+            Eine Zeile der Matrix entspricht einer Bitfolge.
+            Links steht das höchstwertige Bit, rechts das niederwertige Bit.
+        </p>
+
+        <pre id="bitInfo"></pre>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

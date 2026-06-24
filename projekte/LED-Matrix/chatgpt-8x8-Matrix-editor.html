@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>8x8 LED-Matrix Editor</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f7fb;
+        color: #1f2933;
+        text-align: center;
+        margin: 0;
+        padding: 30px;
+    }
+
+    h1 {
+        color: #1e40af;
+    }
+
+    .matrix {
+        display: grid;
+        grid-template-columns: repeat(8, 40px);
+        grid-template-rows: repeat(8, 40px);
+        gap: 6px;
+        justify-content: center;
+        margin: 30px auto;
+    }
+
+    .led {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #d1d5db;
+        border: 2px solid #9ca3af;
+        cursor: pointer;
+        box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    .led.on {
+        background: #ef4444;
+        border-color: #b91c1c;
+        box-shadow: 0 0 12px #ef4444;
+    }
+
+    button {
+        margin: 8px;
+        padding: 10px 18px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        background: #2563eb;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #1e40af;
+    }
+
+    pre {
+        display: inline-block;
+        text-align: left;
+        background: #ffffff;
+        border: 1px solid #d8dee9;
+        border-radius: 10px;
+        padding: 16px 24px;
+        font-size: 18px;
+        min-width: 300px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>8×8 LED-Matrix Editor</h1>
+
+<p>Klicke auf die LEDs, um ein Bild zu erzeugen.</p>
+
+<div id="matrix" class="matrix"></div>
+
+<div>
+    <button onclick="clearMatrix()">Alles löschen</button>
+    <button onclick="fillMatrix()">Alles setzen</button>
+    <button onclick="invertMatrix()">Invertieren</button>
+</div>
+
+<h2>Bitmuster für MicroPython / Arduino</h2>
+
+<pre id="output"></pre>
+
+<script>
+const matrixElement = document.getElementById("matrix");
+const outputElement = document.getElementById("output");
+
+// 8 Zeilen mit je 8 Spalten
+let matrix = [
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0]
+];
+
+function createMatrix() {
+    matrixElement.innerHTML = "";
+
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            const led = document.createElement("div");
+            led.className = "led";
+            led.dataset.row = row;
+            led.dataset.col = col;
+
+            led.addEventListener("click", function() {
+                toggleLed(row, col);
+            });
+
+            matrixElement.appendChild(led);
+        }
+    }
+
+    updateDisplay();
+}
+
+function toggleLed(row, col) {
+    matrix[row][col] = matrix[row][col] ? 0 : 1;
+    updateDisplay();
+}
+
+function updateDisplay() {
+    const leds = document.querySelectorAll(".led");
+
+    leds.forEach(led => {
+        const row = Number(led.dataset.row);
+        const col = Number(led.dataset.col);
+
+        if (matrix[row][col]) {
+            led.classList.add("on");
+        } else {
+            led.classList.remove("on");
+        }
+    });
+
+    updateOutput();
+}
+
+function updateOutput() {
+    let text = "bild = [\n";
+
+    for (let row = 0; row < 8; row++) {
+        let bits = matrix[row].join("");
+        text += "    0b" + bits;
+
+        if (row < 7) {
+            text += ",";
+        }
+
+        text += "\n";
+    }
+
+    text += "]";
+
+    outputElement.textContent = text;
+}
+
+function clearMatrix() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            matrix[row][col] = 0;
+        }
+    }
+
+    updateDisplay();
+}
+
+function fillMatrix() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            matrix[row][col] = 1;
+        }
+    }
+
+    updateDisplay();
+}
+
+function invertMatrix() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 8; col++) {
+            matrix[row][col] = matrix[row][col] ? 0 : 1;
+        }
+    }
+
+    updateDisplay();
+}
+
+createMatrix();
+</script>
+
+</body>
+</html>

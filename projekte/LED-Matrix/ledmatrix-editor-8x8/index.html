@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8x8 LED-Matrix Editor</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>8×8 LED-Matrix Editor</h1>
+    <p>Erstelle per Mausklick ein Pixelbild und exportiere es als Python- oder C-Array.</p>
+</header>
+
+<main>
+    <section class="card">
+        <h2>Matrix</h2>
+
+        <div id="matrix" class="matrix" aria-label="8 mal 8 LED-Matrix"></div>
+
+        <div class="buttonzeile">
+            <button id="clearButton" type="button">Alles löschen</button>
+            <button id="fillButton" type="button">Alles setzen</button>
+            <button id="invertButton" type="button">Invertieren</button>
+        </div>
+    </section>
+
+    <section class="card">
+        <h2>Ausgabeformat</h2>
+
+        <div class="formatwahl">
+            <label>
+                <input type="radio" name="format" value="python" checked>
+                Python / MicroPython
+            </label>
+
+            <label>
+                <input type="radio" name="format" value="c">
+                C / Arduino
+            </label>
+        </div>
+
+        <h2>Bitmuster</h2>
+        <pre id="output"></pre>
+    </section>
+
+    <section class="hinweis">
+        <h2>Zuordnung</h2>
+        <p>
+            Eine Zeile der Matrix entspricht einem Byte.
+            Links steht das höchstwertige Bit, rechts das niederwertige Bit.
+        </p>
+
+        <pre>Spalte:   0 1 2 3 4 5 6 7
+Bitwert:  7 6 5 4 3 2 1 0</pre>
+    </section>
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
