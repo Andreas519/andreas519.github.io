@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>28BYJ – Young Engineers Projekt</title>
+<title>74HC595 – Young Engineers Projekt</title>
 <meta name="author" content="Andreas Sigismund">
 <meta name="creator" content="Andreas Sigismund mit Unterstützung von ChatGPT">
 <meta name="publisher" content="Andreas Sigismund">
 <meta name="project" content="AG Young Engineers">
 <meta name="school" content="Martin-Rinckart-Gymnasium Eilenburg">
-<meta name="description" content="Öffentliche Sammlung überarbeiteter Technik-, Informatik- und Physikprojekte von Andreas Sigismund für die AG Young Engineers am Martin-Rinckart-Gymnasium Eilenburg.">
+<meta name="description" content="">
 <meta name="keywords" content="Andreas Sigismund, Young Engineers, Martin-Rinckart-Gymnasium Eilenburg, Technik, Informatik, Physik, ESP32, MicroPython, Arduino, GitHub Pages, Unterrichtsmodell">
 <style>
 :root {
@@ -18,7 +18,7 @@
 }
 * { box-sizing:border-box; }
 body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-header { background:linear-gradient(135deg,#1e40af,#2563eb); color:white; padding:48px 20px; text-align:center; }
+header { background:linear-gradient(135deg,#1e40af,#2563eb); color:white; padding:10px 20px; text-align:center; }
 header h1 { margin:0; font-size:clamp(2rem,5vw,3.2rem); }
 header p { margin:12px auto 0; max-width:850px; font-size:1.1rem; opacity:.95; }
 main { max-width:1050px; margin:0 auto; padding:28px 18px 48px; }
@@ -37,12 +37,10 @@ footer { border-top:1px solid var(--border); color:var(--muted); text-align:cent
 <body>
 <header>
   <h3>Schiebregister 74HC595</h3>
-  <p>Wandlung </p>
 </header>
 <main>
 <p>Die Anzahl der Ausgänge eines Microkontollers(MC) ist begrenzt.<br>
-  Abhilfe kann hier ein Schieberegister vom Typ 74HC595 schaffen.<br>
-  Seit Mitte der 1970er-Jahre gibt es diese Schaltungsarchitektur.
+  Abhilfe kann hier ein Schieberegister vom Typ 74HC595 schaffen. Diese Schaltungsarchitektur gibt es seit Mitte der 1970er-Jahre.
 </p>
 
 <P>Mit diesem IC lassen sich serielle Daten in parallele Ausgangssignale umwandeln.  
@@ -56,27 +54,23 @@ So können mit nur drei Steuerleitungen viele zusätzliche Ausgänge angesteuert
 Mehrere 74HC595 können kaskadiert werden, um noch mehr Ausgänge zu erhalten.<br>
 <br>
 Die mögliche Arbeitsfrequenz hängt vom Hersteller, der Versorgungsspannung und der Schaltung ab. <br> 
-Für Unterrichts- und Mikrocontroller-Anwendungen ist der 74HC595 in der Regel mehr als schnell genug.</P>
-
-
-
-
-
-  <h2>Animiertes modell zur Ansteuerung eines Schrittmotors mit ESP32 und ULN2003-Treiber</h2>
-  <h1 i   d="schiebregister-74hc595-web-animation">Schiebregister 74HC595 WEB-Animation</h1>
-  # Schieberegister 74HC595
-
-
+Für Unterrichts- und Mikrocontroller-Anwendungen ist der 74HC595 in der Regel mehr als schnell genug.</p>
 <ul>
-<li><p><a href="dateien/74hc595_web_animation.html">Schieberegister 74HC595 Webanimation</a><br />
+ 
+<li><a href="dateien/74hc595_web_animation.html">Schieberegister 74HC595 Webanimation</a><br />li>
 
-<li><p><a href="https://Andreas519/projekte/74HC595/74hc595_web_animation.html">Webanimation</a></p>
+<li>
+  <a href="https://Andreas519/projekte/74HC595/74hc595_web_animation.html">Webanimation</a>
 </li>
-<li><p><a href="https://wokwi.com/projects/466831756158444545">WOKWI: Handbetrieb-74HC595 Schieberegister</a></p>
+<li>
+  <a href="https://wokwi.com/projects/466831756158444545">WOKWI: Handbetrieb-74HC595 Schieberegister</a></p>
 </li>
-<li><p><a href="https://wokwi.com/projects/336610572759990866">Wokwi: Ansteuern eine LED-Zeile über das Schieberegister 74HC595</a></p>
+<li>
+  <a href="https://wokwi.com/projects/336610572759990866">Wokwi: Ansteuern eine LED-Zeile über das Schieberegister 74HC595</a></p>
 </li>
-<li><p><a href="https://www.tinkercad.com/things/iNBnJWktUh7-schieberegister-595-neu/editel?returnTo=%2Fdashboard%2Fdesigns%2Fcircuits&amp;sharecode=ArkCTayfBa8SnaN5Mnt05xuaX3bjzvgPKnCyKYyJAsg">TinkerCAD: Schieberegister 74HC595</a></p>
+<li>
+  <a href="https://www.tinkercad.com/things/iNBnJWktUh7-schieberegister-595-neu/editel?returnTo=%2Fdashboard%2Fdesigns%2Fcircuits&amp;sharecode=ArkCTayfBa8SnaN5Mnt05xuaX3bjzvgPKnCyKYyJAsg">
+    TinkerCAD: Schieberegister 74HC595</a>  
 </li>
 </ul>
 
