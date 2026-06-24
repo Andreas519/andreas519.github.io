@@ -16,5 +16,38 @@
 </head>
 <body>
     <h1>Hello World from Projekte</h1>
+
+    
+<section>
+  <h2>main.py intern</h2>
+
+  <pre><code>from machine import Pin
+import time
+
+led = Pin(2, Pin.OUT)
+
+while True:
+    led.value(not led.value())
+    time.sleep(0.5)
+</code></pre>
+</section>
+
+<section>
+  <h2>main.py</h2>
+
+  <pre><code id="code-main">Lade Datei...</code></pre>
+</section>
+
+<script>
+fetch("main.py")
+  .then(response => response.text())
+  .then(text => {
+    document.getElementById("code-main").textContent = text;
+  })
+  .catch(error => {
+    document.getElementById("code-main").textContent =
+      "Datei konnte nicht geladen werden.";
+  });
+</script>
 </body>
 </html>

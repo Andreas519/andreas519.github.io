@@ -6,3 +6,17 @@ h1 {
     color: red;
     text-align: center;
 }
+
+pre {
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 16px;
+  border-radius: 12px;
+  overflow-x: auto;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+}
