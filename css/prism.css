@@ -69,7 +69,7 @@ p code {
 
 /* Codefenster insgesamt */
 pre.codebereich.line-numbers {
-  line-height: 1.5;
+  line-height: 0.5;
   max-height: 15em;
   overflow: auto;
 
@@ -98,6 +98,6 @@ pre.codebereich.line-numbers .line-numbers-rows > span:before {
 
 /* Code selbst nicht über die Linie laufen lassen */
 pre.codebereich.line-numbers > code {
-  padding-left: 14.4em;
+  padding-left: 2.4em;
   white-space: pre;
 }
