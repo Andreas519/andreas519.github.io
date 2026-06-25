@@ -1,0 +1,12 @@
+import time
+from machine import Pin, PWM
+
+led = PWM( Pin(2), freq=50, duty=128 ); time.sleep(3)
+led.duty(1023); time.sleep(3) # volle Helligkeit
+led.duty( 256); time.sleep(3)  # geringe Helligkeit
+
+# Blinkfrequenz 2 Hz, Verhältnis AUS:EIN = 1:1
+led.freq(2); led.duty(512); time.sleep(10)
+# Blinkfrequenz 1 Hz, Verhältnis AUS:EIN = 1:7
+led.duty(128); led.freq(1); time.sleep(20)
+led.deinit()	# Pin 2 wieder freigeben

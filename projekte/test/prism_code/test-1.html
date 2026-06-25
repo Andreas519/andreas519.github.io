@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Python-Code mit Syntaxhighlighting und Scrollbereich</title>
 
-  <link rel="stylesheet" href="style.css"> <!-- Prism Grunddesign -->
+  <link rel="stylesheet" href="../../../css/prims.css"> <!-- Prism Grunddesign -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css"> <!-- Prism Zeilennummern -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
 </head>
@@ -17,15 +17,25 @@
 </header>
 
 <main>
-  <section class="karte">
-    <h2>main.py</h2>
-    <p>
-      In diesem Bereich werden ungefähr 10 Zeilen angezeigt.
-      Längere Dateien bleiben scrollbar.
-    </p>
+<h2>1. LED blinken</h2>
 
-    <pre class="line-numbers codebereich"><code id="codefenster" class="language-python"></code></pre>
-  </section>
+<pre class="line-numbers codebereich">
+  <code class="language-python" data-src="blink.py.txt"></code>
+</pre>
+
+
+<h2>2. PWM</h2>
+
+<pre class="line-numbers codebereich">
+  <code class="language-python" data-src="pwm.py.txt"></code>
+</pre>
+
+
+<h2>3. ADC</h2>
+
+<pre class="line-numbers codebereich">
+  <code class="language-python" data-src="adc.py.txt"></code>
+</pre>
 </main>
 
 <!-- Prism -->
@@ -36,7 +46,7 @@
 <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
 
 <!-- eigenes Script -->
-<script src="script.js"></script>
+<script src="../../../js/prism.js"></script>
 
 </body>
 </html>
