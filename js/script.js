@@ -29,3 +29,32 @@ function ladeDatei(datei, elementId) {
 
 
 
+  <script>
+    async function ladeMarkdown(datei) {
+      const bereich = document.getElementById("markdown-inhalt");
+      bereich.textContent = "Markdown wird geladen ...";
+
+      try {
+        const antwort = await fetch(datei);
+
+        if (!antwort.ok) {
+          throw new Error("Datei nicht gefunden: " + datei);
+        }
+
+        const markdownText = await antwort.text();
+
+        // Markdown -> HTML
+        const html = marked.parse(markdownText);
+
+        // HTML bereinigen und einfügen
+        bereich.innerHTML = DOMPurify.sanitize(html);
+
+      } catch (fehler) {
+        bereich.innerHTML = "<p><strong>Fehler:</strong> Markdown-Datei konnte nicht geladen werden.</p>";
+        console.error(fehler);
+      }
+    }
+
+    // Startdatei laden
+   
+  </script> -->

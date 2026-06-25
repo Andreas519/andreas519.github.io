@@ -1,0 +1,101 @@
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #5f6c7b;
+  --accent: #2563eb;
+  --accent-dark: #1e40af;
+  --border: #d8dee9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: system-ui, Arial, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+header {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: white;
+  padding: 36px 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0 0 8px;
+}
+
+header p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+main {
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.buttonzeile {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+button {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-dark);
+}
+
+article {
+  background: var(--card);
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+article h1,
+article h2,
+article h3 {
+  line-height: 1.25;
+}
+
+article h1 {
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 8px;
+}
+
+pre {
+  background: #111827;
+  color: #e5e7eb;
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+:not(pre) > code {
+  background: #eef2ff;
+  padding: 2px 5px;
+  border-radius: 5px;
+}
