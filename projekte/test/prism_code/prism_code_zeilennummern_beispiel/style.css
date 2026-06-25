@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #1f2933;
+}
+
+header {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: white;
+  padding: 36px 24px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0 0 10px 0;
+}
+
+header p {
+  margin: 0;
+}
+
+main {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+pre.line-numbers {
+  padding: 16px 16px 16px 56px;
+  border-radius: 8px;
+  overflow-x: auto;
+  border: 1px solid #d8dee9;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 15px;
+}

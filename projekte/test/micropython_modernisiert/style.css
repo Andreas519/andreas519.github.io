@@ -1,0 +1,131 @@
+/* Modernisierte Unterrichtsseite für ESP32 / MicroPython */
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #1f2933;
+  --muted: #5f6c7b;
+  --accent: #2563eb;
+  --accent-dark: #1e40af;
+  --border: #d8dee9;
+}
+
+* { box-sizing: border-box; }
+
+html { min-height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.45;
+}
+
+.seitenkopf {
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+  color: white;
+  padding: 34px 24px;
+  text-align: center;
+}
+
+.seitenkopf h1 {
+  margin: 0 0 8px 0;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.seitenkopf p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.div-hauptcontainer,
+body > div {
+  max-width: 1180px;
+  margin: 24px auto;
+  padding: 0 18px;
+}
+
+h2, h3 {
+  margin: 28px 0 14px;
+  color: #111827;
+}
+
+p { margin: 10px 0; }
+a { color: var(--accent-dark); }
+a:hover { text-decoration-thickness: 2px; }
+
+.box_links,
+.box_rechts,
+.programmkopf,
+.programmcode {
+  float: left;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+  margin: 0.5%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.box_links { width: 24%; min-height: 160px; }
+.box_rechts { width: 48%; min-height: 160px; }
+.box_clear { clear: both; height: 0; width: 0; margin: 0; }
+
+.programmkopf {
+  width: 32.333%;
+  min-height: 76px;
+  font-size: 0.98rem;
+}
+
+.programmcode {
+  width: 32.333%;
+  min-height: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+pre.codebereich {
+  line-height: 1.5;
+  max-height: 15em;      /* etwa 10 sichtbare Codezeilen */
+  overflow: auto;
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 0.92rem;
+}
+
+pre.codebereich code {
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.code-status {
+  color: var(--muted);
+  font-family: Consolas, "Courier New", monospace;
+}
+
+.code-download {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+p code, li code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #eef2f7;
+  font-family: Consolas, "Courier New", monospace;
+}
+
+@media (max-width: 900px) {
+  .box_links,
+  .box_rechts,
+  .programmkopf,
+  .programmcode {
+    width: 100%;
+    margin: 8px 0;
+  }
+}

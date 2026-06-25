@@ -1,0 +1,67 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  color: #1f2933;
+}
+
+header {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  color: white;
+  padding: 36px 24px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0 0 10px 0;
+}
+
+header p {
+  margin: 0;
+}
+
+main {
+  max-width: 1000px;
+  margin: 32px auto;
+  padding: 0 20px;
+}
+
+.karte {
+  background: white;
+  border: 1px solid #d8dee9;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.karte h2 {
+  margin-top: 0;
+}
+
+/*
+  Codebereich:
+  line-height: 1.5
+  max-height: 15em entspricht ungefähr 10 sichtbaren Zeilen.
+  Der Rest wird scrollbar.
+*/
+pre.codebereich {
+  line-height: 1.5;
+  max-height: 15em;
+  overflow: auto;
+
+  padding: 16px 16px 16px 56px;
+  border-radius: 8px;
+  border: 1px solid #d8dee9;
+}
+
+code {
+  font-family: Consolas, "Courier New", monospace;
+  font-size: 15px;
+}
+
+/* Inline-Code im Fließtext */
+p code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: #eef2f7;
+}

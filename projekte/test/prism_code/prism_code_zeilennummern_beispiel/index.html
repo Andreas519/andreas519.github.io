@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Python-Code mit Syntaxhighlighting</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Prism Grunddesign -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
+
+  <!-- Prism Zeilennummern -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Python-Quelltext anzeigen</h1>
+  <p>Der Code wird aus einer externen Datei geladen und mit Syntaxhighlighting dargestellt.</p>
+</header>
+
+<main>
+  <h2>main.py</h2>
+
+  <pre class="line-numbers"><code id="codefenster" class="language-python"></code></pre>
+</main>
+
+<!-- Prism -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+
+<!-- Prism Plugin für Zeilennummern -->
+<script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+
+<!-- eigenes Script -->
+<script src="script.js"></script>
+
+</body>
+</html>

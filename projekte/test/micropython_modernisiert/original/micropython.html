@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>MicroPython ESP32 D1 R32/mini </title>
+  <link rel="stylesheet" type="text/css" href="../../mystyle.css">
+  <link rel="stylesheet" type="text/css" href="../../tools/prism/my_prism.css">
+  <script type="text/javascript" src="../../tools/prism/prismload.js" id="prismload.js"></script>
+</head>
+
+<body>
+  <div class=div-hauptcontainer>
+	<div id=div-container1>
+		<h3>ESP 32 NodeMCU D1 R32 Board (Uno-Format)/ ESP32 D mini</h3>
+		<div>
+			<div class="box_links">
+			
+			    <a href="D1-R32-Ansicht.jpg" target="_blank"><img src="D1-R32-Ansicht-100.jpg"></a>
+				<a href="D1-R32-Pinlayout.jpg" target="_blank"><img src="D1-R32-Pinlayout-100.jpg"></a> 
+				<br> - <a href="https://mrge.de/lehrer/sigismund/Young-Engineers/_eBooks_/ebooks/D1%20R32%20Board%20Datenblatt%20AZ-Delivery%20Vertriebs%20GmbH.pdf" target="_blank">
+				Datenblatt</a><br>
+				- <a href="https://mrge.de/lehrer/sigismund/Young-Engineers/_eBooks_/ebooks/D1_R32_ENG.pdf" target="_blank">Einführung (D1_R32_ENG.pdf)</a> 
+
+			</div>
+			<div class="box_links">
+			 <a href="ESP32-D1-mini-ansicht.png" target="_blank">
+			 <img src="ESP32-D1-mini-bild-100.png">
+			  <a href="https://mrge.de/lehrer/sigismund/Young-Engineers/_eBooks_/ebooks/esp32-d1-mini.pdf" target="_blank">
+			   <img src="ESP32-D1-mini-100.png">
+			  </a>
+			 <br>
+			 - <a href="https://docs.micropython.org/en/latest/esp32/quickref.html" target="_blank">Quick reference for the ESP32</a> 
+			 <br>
+			 - <a href="https://www.az-delivery.de/pages/search-results-page?q=esp32" target="_blank">ESP32 Modelle bei AZ Delivery</a><br>
+			 &nbsp;&nbsp;-	<a href="https://cdn.shopify.com/s/files/1/1509/1638/files/AZ279_A_20-2_DE_B08BTRQNB3_ce62a8e3-7660-4833-92e1-38b834b4845d.pdf?v=1721128718" target="_blank">E-Book von AZ-Delivry</a>
+			</div>			
+			<div class="box_rechts">
+				Ab Juli 2022 stehen uns diese Boards zur Verfügung. Oscar hat das Modul im 
+				<a href="https://www.amazon.de/-/en/AZDelivery-NodeMCU-Development-Bluetooth-Compatible/dp/B08BV3L92G?th=1" target="_blank">
+				Online Shop von AZ Delivery</a> gefunden.<br> Sie haben mehrere ADC-Pins, 
+				können <b>ESP Now</b> und <b>TFT-Farbdisplay</b>'s unter <b>Micropython</b>.<br>
+				Am Pin D02/GPIO2 ist eine <b>Onboard-LED</b> angeschlossen.<br>
+				Das Board 'ESP32 D1 Mini' nutzen wir seit September 2024.<br>
+				&nbsp;<br>
+				<b>Robot Car mit MicroPython:</b> 
+				<a href="../micropython/MicroPython-robotcar_mcp_d1.pdf" target="_blank">Teil 1</a> | 
+				<a href="../micropython/MicroPython-robotcar_mcp_d2.pdf" target="_blank">Teil 2</a> | 
+				<a href="../micropython/MicroPython-robotcar_mcp_d3.pdf" target="_blank">Teil 3</a> || 
+				<br>
+				<b>MicroPython mit dem ESP32/ESP8266: </b>
+				<a href="../micropython/MicroPython1_ESP8266_ESP32.pdf" target="_blank">Teil 1</a>  | 
+				<a href="../micropython/MicroPython2_ESP8266_ESP32.pdf" target="_blank">Teil 2</a>  | 
+				<a href="../micropython/Micropython_mit_dem_ESP32_teil3.pdf" target="_blank">Teil 3</a>  | 
+				<a href="../micropython/Micropython_mit_dem_ESP32_teil4.pdf" target="_blank">Teil 4</a>  | 
+				<a href="../micropython/Micropython_mit_dem_ESP32_und_ESP8266_teil5.pdf" target="_blank">Teil 5</a>  | 
+				<a href="../micropython/Micropython_mit_dem_ESP32_und_ESP8266_teil6.pdf" target="_blank">Teil 6</a> ||
+				<br>
+				<a href=" https://www.az-delivery.de/blogs/azdelivery-blog-fur-arduino-und-raspberry-pi/micropython-und-esp32-esp8266-als-datenlogger" target="_blank">
+				Datenlogger</a>  |
+				<a href="../micropython/Putty+ESP8266+Micropython.pdf" target="_blank">Putty und ESP-Module</a>   || 
+				<a href="../micropython/ESP8266+WebREPL.pdf" target="_blank">WebRepl</a> || 
+				<a href="../micropython/Webrepl auf dem ESP aktivieren und konfigurieren.pdf" target="_blank">WebRepl - Notizen</a>
+			</div>
+			<div class="box_clear"></div>
+			</div>
+		</div>
+	</div>
+	<div> <!-- Grundprograme 1-->
+	<div id="div-container1"> 
+		<h2>Grundprogramme</h2>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>1. Onboard Led blinkt</b> - Ausgang definieren</b>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>2. PWM</b> - LED dimmen  
+			(<a href="zeige_code.php?hl=PWM&d=pwm.py.txt&md=pwm.md" target="_blank">mehr</a>)
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>3. INPUT / OUTPUT</b> digitale Ein- und Ausgänge definieren
+		</div>
+		<div class="box_clear">
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="blink.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="pwm.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="ein-aus.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div class="box_clear">
+		</div>
+	</div>
+	</div>
+		<div> <!-- Grundprograme 2-->
+	<div id="div-container1"> 
+
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>4. ADC</b> - am Joystick Spannungen messen und 
+			<a href="zeige_code.php?hl=ADC&d=adc-1.py.txt&md=adc.md" target="_blank">mehr</a>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>5. DAC</b> - variable Gleichspannung ausgeben 
+			(<a href="zeige_code.php?hl=DAC&d=dac-1.py.txt&md=dac.md" target="_blank">mehr</a>)
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>6. Blinken</b> mehrerer LEDs mit unterschiedlichen Frequenzen
+		</div>
+		<div class="box_clear">
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="adc.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="dac.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="blink-asynchron.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div class="box_clear">
+		</div>
+	</div>
+	
+	<div> <!-- Grundprograme 3-->
+	 <div id="div-container1"> 
+
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>7. Capacitive touch</b> - Touch Sensor Pins testen: 
+			(<a href="zeige_code.php?hl=Touch-Pins nutzen&d=touch-auswerten.py.txt&md=touch.md" target="_blank">a</a>) 
+			(<a href="zeige_code.php?hl=Touch-Pins nutzen 1&d=touch-auswerten-1.py.txt&md=touch-auswerten-1.md" target="_blank">b</a>)
+			(<a href="zeige_code.php?hl=Touch-Pins nutzen 2&d=touch-auswerten-2.py.txt&md=touch-auswerten-2.md" target="_blank">c</a>)
+			(<a href="zeige_code.php?hl=Touch-Pins nutzen 3&d=touch-auswerten-3.py.txt&md=touch-auswerten-3.md" target="_blank">d</a>)
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>8. Timer Interupt</b> - xxxxxxxxx 
+			(<a href="zeige_code.php?hl=leer&d=leer.py.txt&md=leer.md" target="_blank">mehr</a>)
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>9. GPIO Interupt</b> xxxxxxxxxxxxxxx xxxxx
+		</div>
+		<div class="box_clear">
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 380px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="touch.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 370px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="leer.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 370px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="leer.py.txt" data-download-link data-download-link-label="Download"></pre>
+		</div>
+		<div class="box_clear">
+		</div>
+	</div>
+	</div>
+	<div> <!-- Grundprograme 333-->
+	 <div id="div-container1"> <!-- Grundprograme 333-->
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>10. WLAN</b> scannen (<a href="zeige_code.php?hl=WLAN Scanner&d=wlan-scan-1.py.txt&md=wlan.md" target="_blank">mehr</a>)
+			| <a href="../D1-uno/mac-adresse-bestimmen-1.py" target="_blank">MAC bestimmen</a> | 
+			<a href="wlan.html" target="_blank">WLAN und Webserver</a>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>11. I2C</b> scannen und 
+			<a href="zeige_code.php?hl=I2C&d=gy-521-testen.py.txt&md=i2c.md" target="_blank">mehr</a>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>12. ESP Now</b> nutzen und 
+			<a href="zeige_code.php?hl=ESP Now starten&d=espnow-1.py.txt&md=espnow.md" target="_blank">mehr</a>
+		</div>
+		<div class="box_clear"></div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="wlan-scan.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="i2c-scan.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="espnow.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		<div class="box_clear"></div>
+     </div>  
+	</div>
+
+	<div> <!-- Grundprograme 444-->
+	 <div id="div-container1"> 
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>13. UART</b> nutzen (serielle Komunikation) und 
+			<a href="zeige_code.php?hl=UART&d=uart-1a.py.txt&md=uart-1.md" target="_blank">mehr</a>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>14. ...</b> .... und 
+			<a href="zeige_code.php?hl=leer&d=leer.py.txt&md=leer.md" target="_blank">mehr</a>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 40px; padding: 10px; box-sizing: border-box;">
+			<b>15. ...</b> ... und 
+			<a href="zeige_code.php?hl=ESP Now starten&d=espnow-1.py.txt&md=espnow.md" target="_blank">mehr</a>
+		</div>
+		<div class="box_clear"></div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="uart-1.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="leer.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		<div style="overflow: auto; float: left; width: 33%;  height: 350px; padding: 10px; box-sizing: border-box;">
+			<pre class="line-numbers language-Python" data-src="leer.py.txt" data-download-link data-download-link-label="Download">
+			</pre>
+		</div>
+		<div class="box_clear"></div>
+	 </div>  
+	</div><!-- Grundprograme 444-->
+
+<hr><h3>Verbindung mit Modulen</h3>
+
+	<div> <!-- Grundprograme xxxxxxxx-->	
+	<div id=div-container1>
+	 <div class="box_links">
+	 <center>
+		<b>1.77" TFT-Display</b> 128x160Pixel, SPI</b><br>und später mehr<br>
+			<a href="../D1-uno/TFT-1.77Zoll-SPI.jpg" target="_blank"> <img src="../D1-uno/TFT-1.77Zoll-SPI-100.jpg"></a>
+			<br>
+		<a href="ST7735.py.txt" target="_blank">ST7735.py</a> / 
+		<a href="ST7735-Textdemo.py.txt" target="_blank">Textdemo</a> /
+		<a href="ST7735-Grafikdemo.py.txt" target="_blank">Grafikdemo</a>
+		<br>
+		...
+		</center>
+	 </div>
+	<div class="box_links"><center>
+	  <b>TM1638-Display mit LED&Key-Modul</b><br> und später mehr<br>
+		<a href="../D1-uno/led&key-modul.jpg" target="_blank"> <img src="../D1-uno/led&key-modul-100.jpg"></a><br>
+		<a href="tm1638-display-demo.py.txt" target="_blank" title="1. Demo Display">Display-Demo</a> | 
+		<a href="tm1638-led&key-demo.py.txt" target="_blank" title="1. Demo Ausgabe">LED&Key-Demo</a> | 
+		<a href="../D1_uno/tm1638.py.txt" target="_blank" title="2. Bibliothek tm1638.py">tm1638.py</a> | 
+		<br>
+		... 
+	  </center>
+   </div>
+
+	<div class="box_links"><center>
+	<b>Arduino LCD Keypad Shield </b> <br>
+	mehr<br>
+	<a href="https://mrge.de/lehrer/sigismund/Young-Engineers/shields/lcd-keypadshield/bild.jpg" target="_blank"> 
+				<img src="https://mrge.de/lehrer/sigismund/Young-Engineers/shields/lcd-keypadshield/logo.jpg" width="" height="100"></a><br>
+			<a href="../D1-uno/LCD1602/lcd-1602-test.py.txt" target="_blank" title="lcd-1602-test.py">Demo</a> |
+			<a href="../D1-uno/LCD1602/esp_gpio_lcd.py.txt" target="_blank" title ="esp_gpio_lcd.py">esp_gpio_lcd</a> |
+			<a href="../D1-uno/LCD1602/lcd_api.py.txt" target="_blank" title ="lcd_api.py">lcd_api</a> |<br>
+			Wokwi-Projekte: 
+			<a href="https://mrge.de/lehrer/sigismund/wokwi/LCD-1602-Keypad-Shield.pdf" target="_blank" title="Liesmich: LCD-1602-Keypad-Shield">1</a> 
+			<a href="https://wokwi.com/projects/336877506411889236" target="_blank" title="Teil 1">2</a> 
+			<a href="https://wokwi.com/projects/336573719687201364" target="_blank" title="Teil 2">3</a>
+			<br>
+			</a>
+	  </center>
+	</div>
+
+	<div class="box_links">
+	 <center>
+		<b>OLED mit SSD306 und I2C in Micropython</b><br>
+		...<br>
+		<a href="../D1-uno/oled-i2c-0.96-128x64.jpg" target="_blank"> <img src="../D1-uno/oled-i2c-0.96-128x64-100.jpg"></a>
+		<br>
+		<a href="https://wokwi.com/projects/305568836183130690" target="_blank" title=" 1. WokWi: ESP32+MicroPython+OLED-Display">1</a>
+		<a href="https://randomnerdtutorials.com/micropython-oled-display-esp32-esp8266/" target="_blank" title=" 2. OLED Display with ESP32 and ESP8266">2</a>
+		
+		<br><a href="ssd1306-demo.py.txt" target="_blank">ssd1306-demo.py</a> und 
+			   <a href="../D1-uno/ssd1306.py.txt" target="_blank">ssd1306.py</a>
+	  </center>			   
+	 </div>
+	<div class="box_clear"></div>
+		
+		
+
+		<!-- <div class="box_links"> -->
+					<!-- <b><br> -->
+					<!-- <!-- -->
+					<!-- <a href="../D1-uno/TFT-1.77Zoll-SPI.jpg" target="_blank"> <img src="../D1-uno/TFT-1.77Zoll-SPI-100.jpg"></a><br> -->
+					<!-- ... -->
+					<!-- <a href="../D1-uno/st7735-demo.py.txt" target="_blank" title="1. Demo Ausgabe">demo.py</a> |   -->
+					<!-- <a href="../D1-uno/tm1638.py.txt" target="_blank" title="2. Bibliothek st7735.py">tm1638.py</a> |  -->
+					<!-- --> 
+		<!-- </div> -->
+		<div class="box_clear"></div>
+	 </div>	
+	</div>
+ </div> <!-- Hauptcontainer -->
+</body>
+</html>
