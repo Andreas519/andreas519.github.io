@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown in HTML laden</title>
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Markdown-Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- Sicherheit: erzeugtes HTML bereinigen -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <h1>Markdown-Datei eingebettet</h1>
+    <p>Eine .md-Datei wird geladen und als HTML angezeigt.</p>
+  </header>
+
+  <main>
+    <nav class="buttonzeile">
+      <button onclick="ladeMarkdown('texte/einleitung.md')">Einleitung</button>
+    </nav>
+
+    <article id="markdown-inhalt">
+      Markdown wird geladen ...
+    </article>
+  </main>
+
+  <script>
+    async function ladeMarkdown(datei) {
+      const bereich = document.getElementById("markdown-inhalt");
+      bereich.textContent = "Markdown wird geladen ...";
+
+      try {
+        const antwort = await fetch(datei);
+
+        if (!antwort.ok) {
+          throw new Error("Datei nicht gefunden: " + datei);
+        }
+
+        const markdownText = await antwort.text();
+
+        // Markdown -> HTML
+        const html = marked.parse(markdownText);
+
+        // HTML bereinigen und einfügen
+        bereich.innerHTML = DOMPurify.sanitize(html);
+
+      } catch (fehler) {
+        bereich.innerHTML = "<p><strong>Fehler:</strong> Markdown-Datei konnte nicht geladen werden.</p>";
+        console.error(fehler);
+      }
+    }
+
+    // Startdatei laden
+    ladeMarkdown("texte/einleitung.md");
+  </script>
+</body>
+</html>
