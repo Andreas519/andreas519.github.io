@@ -27,9 +27,6 @@ function ladeDatei(datei, elementId) {
       minute: "2-digit"
     }) + " Uhr";
 
-
-
-  <script>
     async function ladeMarkdown(datei) {
       const bereich = document.getElementById("markdown-inhalt");
       bereich.textContent = "Markdown wird geladen ...";
@@ -54,7 +51,4 @@ function ladeDatei(datei, elementId) {
         console.error(fehler);
       }
     }
-
-    // Startdatei laden
    
-  </script> -->
