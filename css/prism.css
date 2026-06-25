@@ -78,7 +78,7 @@ pre.codebereich.line-numbers {
   padding-bottom: 16px;
 
   /* Abstand links: schmaler als Prism-Standard */
-  padding-left: 3.2em;
+  padding-left: 5.2em;
 
   border-radius: 8px;
   border: 1px solid #d8dee9;
@@ -87,7 +87,7 @@ pre.codebereich.line-numbers {
 /* Breite der Zeilennummern-Spalte */
 pre.codebereich.line-numbers .line-numbers-rows {
   left: -3.2em;
-  width: 2.5em;
+  width: 2.0em;
   border-right: 1px solid #999;
 }
 
@@ -98,6 +98,6 @@ pre.codebereich.line-numbers .line-numbers-rows > span:before {
 
 /* Code selbst nicht über die Linie laufen lassen */
 pre.codebereich.line-numbers > code {
-  padding-left: 1.4em;
+  padding-left: 0.4em;
   white-space: pre;
 }
