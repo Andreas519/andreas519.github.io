@@ -1,7 +1,4 @@
 # Dein ist mein ganzezs Glück ...
 ## wenn es am schönsten ist ..
 
-* dsad
-* cccccccccccccc
-
-** sdsd
+Endlich wieder was geschafft. Auch wieder dank ChatGPT
