@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <title>Zeichnen mit pygame</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="dateien/mystyle.css">
+  <link rel="stylesheet" type="text/css" href="dateien/prism.css">
+  <script src="dateien/prism.js" defer></script>
+</head>
+<body>
+  <h2>Zeichnen mit Pygame für Python</h2>
+
+  <p>Beginnen wir mit dem Zeichnen von Linien.</p>
+
+  <ol>
+    <li>
+      Vervollständige das Programm, um ein Rechteck mit seinen beiden Diagonalen zu zeichnen.
+      <br>
+
+      <p><a href="dateien/zeichnen-01.py.txt" download>Programmcode herunterladen</a></p>
+
+      <div style="overflow: auto; float: left; width: 60%; height: 400px; padding: 10px; box-sizing: border-box;">
+<pre class="line-numbers"><code class="language-python">import pygame, time
+width = 800; height = 600
+#Farbnamen definieren - RGB-Farbmodell
+white = (255, 255, 255)
+red = (255,0,0); green = (0,255,0); blue = (0,0,255)
+yellow = (255,255,0)
+# Grafikfenster wird geöffnet
+screen = pygame.display.set_mode((width, height)) 
+screen.fill(yellow)   
+pygame.draw.line(screen, blue, (200, 100), (600, 500), 5)
+# ... weitere Grafikobjekte
+pygame.display.update() # Bildschirm aktualisieren
+time.sleep(5)  # Wartet 5 Sekunden
+pygame.quit()  # Grafikfenster wird geschlossen</code></pre>
+      </div>
+
+      <div style="overflow: auto; height: 400px; width: 40%; padding: 20px; box-sizing: border-box;">
+        <img src="dateien/zeichnen-01.gif" alt="Ausgabe des pygame-Programms">
+      </div>
+    </li>
+  </ol>
+</body>
+</html>
