@@ -1,28 +1,5 @@
 #  [Weiter auf GitHub Pages](https://andreas519.github.io/) 
 
-
----
-title: "Andreas Sigismund – Young Engineers Projekte"
-author: "Andreas Sigismund"
-creator: "Andreas Sigismund mit Unterstützung von ChatGPT"
-publisher: "Andreas Sigismund"
-project: "AG Young Engineers"
-school: "Martin-Rinckart-Gymnasium Eilenburg"
-status: "public presentation repository"
-description: "Öffentliche Sammlung überarbeiteter Technik-, Informatik- und Physikprojekte von Andreas Sigismund für die AG Young Engineers am Martin-Rinckart-Gymnasium Eilenburg."
-keywords:
-  - Andreas Sigismund
-  - Young Engineers
-  - Martin-Rinckart-Gymnasium Eilenburg
-  - Technik
-  - Informatik
-  - Physik
-  - ESP32
-  - MicroPython
-  - Arduino
-  - GitHub Pages
----
-
 # Andreas Sigismund – Young Engineers Projekte
 
 Dieses Repository dient als öffentliche Präsentationsfläche für ausgewählte und überarbeitete Technik-, Informatik- und Physikprojekte.
@@ -89,6 +66,27 @@ andreas519.github.io
 
 trägt und GitHub Pages aktiviert ist, ist die Startseite erreichbar unter:
 
-```text
-https://andreas519.github.io/
+```
+---
+title: "Andreas Sigismund – Young Engineers Projekte"
+author: "Andreas Sigismund"
+creator: "Andreas Sigismund mit Unterstützung von ChatGPT"
+publisher: "Andreas Sigismund"
+project: "AG Young Engineers"
+school: "Martin-Rinckart-Gymnasium Eilenburg"
+status: "public presentation repository"
+description: "Öffentliche Sammlung überarbeiteter Technik-, Informatik- und Physikprojekte von Andreas Sigismund für die AG Young Engineers am Martin-Rinckart-Gymnasium Eilenburg."
+keywords:
+  - Andreas Sigismund
+  - Young Engineers
+  - Martin-Rinckart-Gymnasium Eilenburg
+  - Technik
+  - Informatik
+  - Physik
+  - ESP32
+  - MicroPython
+  - Arduino
+  - GitHub Pages
+---
+
 ```
