@@ -1,0 +1,78 @@
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP32 - Young Engineeers</title>
+<meta name="author" content="Andreas Sigismund">
+<meta name="publisher" content="Andreas Sigismund">
+<meta name="project" content="AG Young Engineers">
+
+<link rel="stylesheet" href="../../css/my.css">
+</head>
+<body>
+<header>
+  <h3>ESP32 Modellübersicht</h3>
+</header>
+<main>
+  <section>
+<ul>
+  <li>
+    Es gibt verschiedene <strong>ESP32-Modelle</strong> – siehe
+    <a href="https://de.wikipedia.org/wiki/ESP32" target="_blank">Wikipedia</a>.<br>
+    Beispiele: ESP32, ESP32-C3, ESP32-C6, ESP32-S3 usw.
+    Gemeint ist dabei zunächst der eigentliche ESP32-Chip.
+  </li>
+
+  <li>
+    Zu diesen Chipmodellen gibt es unterschiedliche <strong>ESP32-Module</strong>.<br>
+    Auf einem Modul befinden sich neben dem ESP32-Chip meist auch
+    Flash-Speicher, Quarz, Antenne und die notwendige Funkbeschaltung.<br>
+    Beispiele: ESP32-WROOM, ESP32-WROVER, ESP32-PICO usw.<br>
+    WROOM ist ein typisches Standardmodul. WROVER besitzt zusätzlich PSRAM
+    und eignet sich daher besser für speicherintensive Anwendungen.
+    ESP32-PICO ist ein besonders kompaktes SiP-Modul
+    (<em>System in Package</em>).
+  </li>
+
+  <li>
+    Diese Module werden wiederum auf verschiedenen <strong>ESP32-Development-Boards</strong>
+    oder <strong>ESP32-Entwicklungsboards</strong> verwendet.<br>
+    Ein ESP32-Devboard enthält meist ein ESP32-Modul, einen USB-Anschluss,
+    einen Spannungsregler, Taster und Stiftleisten.
+    Es gibt unterschiedliche Bauformen, die sich in der Anzahl der Pins pro Seite,
+    dem Abstand zwischen den beiden Pinreihen und in der Anordnung der Bauelemente
+    unterscheiden.
+    Deshalb passen manche Boards gut auf ein Breadboard, andere verdecken mehrere
+    Kontaktreihen oder passen nicht in vorhandene Breakoutboards.
+  </li>
+
+  <li>
+    Ein <strong>Breakoutboard</strong> dient als Adapterplatine für ein
+    ESP32-Devboard.<br>
+    Dadurch werden die Anschlüsse übersichtlicher, robuster oder über
+    Schraubklemmen leichter nutzbar.
+    Nicht jedes ESP32-Devboard hat dieselbe Form.
+    Pinanzahl und Pinabstand müssen zum Breakoutboard passen.
+  </li>
+</ul>
+</section>
+
+ <section>
+  <p class="hinweis">
+  Der Begriff <strong>NodeMCU</strong> wird uneinheitlich verwendet.
+  Ursprünglich bezeichnete er eine Firmware für ESP8266-Module.
+  Heute wird er oft auch für verschiedene ESP8266- oder ESP32-Boards benutzt.
+  Um Verwechslungen zu vermeiden, verwenden wir hier die genaueren Begriffe
+  <strong>ESP32-Modul</strong> und <strong>ESP32-Devboard</strong>.
+  </p>
+  </section>
+</main>
+
+<footer>
+  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="/js/script.js"></script>
+</footer>
+</body>
+</html>

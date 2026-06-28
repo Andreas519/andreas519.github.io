@@ -1,0 +1,52 @@
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CH34x Treiberproblem</title>
+<meta name="author" content="Andreas Sigismund">
+<meta name="publisher" content="Andreas Sigismund">
+<meta name="project" content="AG Young Engineers">
+
+<link rel="stylesheet" href="../../css/my.css">
+</head>
+<body>
+<header>
+  <h3>CH340 Treiber-Problem</h3>
+</header>
+<main>
+  <section>
+    <ul>
+      <li>
+        Unsere ESP32-D1-Uno-Boards verwenden einen CH340/CH341-USB-Seriell-Wandler.
+        Unter Windows 11 und 10 ist ein Trieber notwendig. 
+        Download vom Hersteller: <a href="https://www.wch-ic.com/downloads/CH341SER_EXE.html">CH341SER_EXE</a> bzw. 
+        <a href="https://www.wch-ic.com/downloads/ch341ser_zip.html">ch341ser_zip</a> 
+      </li>
+      
+      <li>
+        Wenn kein COM-Port erscheint, zuerst USB-Datenkabel, USB-Port und Geräte-Manager
+        prüfen. Der ESP32 selbst ist dabei meist nicht das Problem, sondern die
+        USB-Seriell-Verbindung.
+      </li>
+
+    <li>
+      Für CH340/CH341 sollte nach Möglichkeit der offizielle WCH-Treiber
+      CH341SER verwendet werden. Bei Problemen mit neueren Treiberversionen kann
+      ein Zurücksetzen oder Neuinstallieren des Treibers helfen.
+    </li>
+
+     <li> <a href="https://mrge.de/lehrer/sigismund/Young-Engineers/themen/Windows-CH340-Driver.zip">Windows-CH340-Driver.zip</a> - ein alter Treiber, der läuft, aber hin und wieder durch Windows ersetzt wird.</li>
+     <li> ... wird fortgesetzt ...</li>
+
+  </ul>
+
+</main>
+
+<footer>
+  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="/js/script.js"></script>
+</footer>
+</body>
+</html>
