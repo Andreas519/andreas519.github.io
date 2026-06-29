@@ -28,3 +28,11 @@ code { font-family: Consolas, "Courier New", monospace; }
 main li {
   margin-bottom: 0.6em;
 }
+.project-card table {  border-collapse: collapse;  width: 100%;  margin: 12px 0;}
+
+.project-card th,
+.project-card td { border: 1px solid var(--border);  padding: 8px 10px;  text-align: left;}
+
+.project-card th {  background: #eef4ff; }
+
+.merkbox {   background: #f1f7ff;   border-left: 5px solid var(--accent);   padding: 10px 14px;   border-radius: 8px; }

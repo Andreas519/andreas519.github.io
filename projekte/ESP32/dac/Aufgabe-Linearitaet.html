@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>DAC & ESP32 - A1</title>
+  <link rel="stylesheet" href="../../../css/my.css"> <!-- Prism Grunddesign -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css"> <!-- Prism Zeilennummern -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+</head>
+
+<body>
+<header>  <h3>Aufgabe zum DAC-Ausgang des ESP32</h3> 
+</header>
+
+<main>
+  <section>
+<section class="project-card">
+  <h2>DAC – Digital-Analog-Wandler</h2>
+
+  <h3>Aufgabe: Linearität von DAC und ADC am ESP32 untersuchen</h3>
+
+  <p>
+    Der ESP32 besitzt beim klassischen ESP32-WROOM zwei DAC-Ausgänge. Ein DAC wandelt einen digitalen Zahlenwert in eine analoge Spannung um. In dieser Aufgabe soll untersucht werden, wie linear der Zusammenhang zwischen dem eingestellten DAC-Wert und dem gemessenen ADC-Wert ist.
+  </p>
+
+  <h4>Versuchsaufbau</h4>
+
+  <p>Verbinde den DAC-Ausgang mit einem ADC-Eingang des ESP32.</p>
+
+  <p><strong>Empfohlene Verbindung:</strong></p>
+
+  <pre><code>GPIO25  → DAC1-Ausgang
+GPIO34  → ADC-Eingang
+
+GPIO25 ── 1 kΩ ── GPIO34
+GND    ────────── GND</code></pre>
+
+  <p>Der Widerstand dient als einfacher Schutzwiderstand.</p>
+
+  <h4>Messung</h4>
+
+  <p>Schreibe ein MicroPython-Programm, das nacheinander DAC-Werte ausgibt und den zugehörigen ADC-Wert misst.</p>
+
+  <p>Verwende zum Beispiel DAC-Werte in 8er-Schritten:</p>
+
+  <pre><code>0, 8, 16, 24, ..., 248</code></pre>
+
+  <p>Zu jedem DAC-Wert soll der ADC-Wert mehrfach gemessen und anschließend gemittelt werden.</p>
+
+  <p>Die Messwerte sollen in folgender Form ausgegeben werden:</p>
+
+  <pre><code>DAC_Wert;ADC_Wert
+0;0.0
+8;71.6
+16;189.9
+...</code></pre>
+
+  <h4>Auswertung</h4>
+
+  <ol>
+    <li>Stelle die Messwerte in einem Diagramm dar. Auf der x-Achse steht der DAC-Wert, auf der y-Achse der ADC-Wert.</li>
+    <li>Berechne eine lineare Ausgleichsgerade der Form:</li>
+  </ol>
+
+  <pre><code>ADC = m · DAC + b</code></pre>
+
+  <ol start="3">
+    <li>Bestimme die Steigung <code>m</code> und den Achsenabschnitt <code>b</code>.</li>
+    <li>Vergleiche die gemessenen ADC-Werte mit den Werten der Ausgleichsgeraden.</li>
+    <li>Beurteile, ob der Zusammenhang zwischen DAC-Wert und ADC-Wert linear ist.</li>
+  </ol>
+
+  <h4>Hinweise zur Berechnung</h4>
+
+  <p>Die Steigung der Ausgleichsgeraden berechnet sich mit:</p>
+
+  <pre><code>m = Σ((xᵢ - x̄) · (yᵢ - ȳ)) / Σ((xᵢ - x̄)²)</code></pre>
+
+  <p>Der Achsenabschnitt ergibt sich aus:</p>
+
+  <pre><code>b = ȳ - m · x̄</code></pre>
+
+  <p>Dabei gilt:</p>
+
+  <pre><code>xᵢ = DAC-Wert
+yᵢ = ADC-Wert
+x̄ = Mittelwert aller DAC-Werte
+ȳ = Mittelwert aller ADC-Werte</code></pre>
+
+  <h4>Wichtiger Hinweis</h4>
+
+  <p>
+    Bei diesem Versuch wird nicht nur die Linearität des DAC gemessen. Da der DAC-Ausgang mit einem ADC-Eingang desselben ESP32 gemessen wird, enthält das Ergebnis auch Fehler und Nichtlinearitäten des ADC.
+  </p>
+
+  <p>Die Messung untersucht also das Gesamtsystem:</p>
+
+  <pre><code>DAC-Ausgang → Verbindung → ADC-Eingang</code></pre>
+
+  <h4>Zusatzaufgabe</h4>
+
+  <p>Untersuche besonders den oberen Bereich der Messwerte. Prüfe, ob die ADC-Werte dort noch gleichmäßig ansteigen oder ob eine deutliche Abweichung von der Ausgleichsgeraden sichtbar wird.</p>
+
+</section>
+
+</main>
+
+<footer>  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="../../Tools/prism/dateien/prism.js"></script>
+  <script src="../../../js/script.js"></script>
+</footer>
+
+</body>
+</html>

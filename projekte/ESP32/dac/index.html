@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>DAC & ESP32</title>
+  <link rel="stylesheet" href="../../../css/my.css"> <!-- Prism Grunddesign -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css"> <!-- Prism Zeilennummern -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+</head>
+
+<body>
+<header>  <h3>DAC - Digital analog Converter ESP</h3> 
+</header>
+
+<main>
+  <section>
+<section class="project-card">
+  <h2>DAC – Digital-Analog-Wandler</h2>
+
+  <p>
+    Ein <strong>DAC</strong> wandelt einen digitalen Zahlenwert in eine
+    analoge Ausgangsspannung um. DAC bedeutet
+    <strong>Digital-Analog-Converter</strong>.
+  </p>
+
+  <h3>Grundprinzip</h3>
+  <p>
+    Der Mikrocontroller gibt intern eine Zahl vor. Der DAC erzeugt daraus
+    eine passende Spannung am Ausgang.
+  </p>
+  <pre><code>0     → ca. 0 V
+128   → ca. halbe Betriebsspannung
+255   → ca. maximale Ausgangsspannung</code></pre>
+
+  <p>
+    Beim klassischen ESP32 arbeitet der DAC mit <strong>8 Bit</strong>.
+    Dadurch sind <strong>256 Spannungsstufen</strong> möglich.
+  </p>
+
+  <h3>DAC-Pins beim klassischen ESP32</h3>
+
+  <ul>
+    <li><strong>GPIO25</strong> → DAC1</li>
+    <li><strong>GPIO26</strong> → DAC2</li>
+  </ul>
+
+  <p>
+    Achtung: Nicht alle ESP32-Varianten besitzen einen DAC.
+    Viele neuere Typen wie ESP32-C3, ESP32-C6 oder ESP32-S3 haben
+    keinen klassischen DAC-Ausgang.
+  </p>
+  <p>
+  Beim klassischen ESP32 liegen die DAC-Ausgänge auf GPIO25 und GPIO26.
+  Der DAC funktioniert grundsätzlich, kann aber bei erneutem Programmstart
+  in Thonny den Fehler <code>OSError: (-259, 'ESP_ERR_INVALID_STATE')</code>
+  erzeugen. In der verwendeten MicroPython-Firmware besitzt das DAC-Objekt
+  keine Methode <code>deinit()</code>. Deshalb hilft bei diesem Fehler meist
+  ein Reset des ESP32.
+</p>
+
+  <h3>MicroPython-Beispiel</h3>
+
+  <pre class="line-numbers"><code class="language-python">from machine import Pin, DAC
+import time
+
+dac = DAC(Pin(25))   # DAC1 beim klassischen ESP32
+
+while True:
+    dac.write(0)     # ca. 0 V
+    time.sleep(1)
+
+    dac.write(128)   # ca. halbe Spannung
+    time.sleep(1)
+
+    dac.write(255)   # ca. maximale Spannung
+    time.sleep(1)</code></pre>
+
+  <h3>Wichtiger Hinweis</h3>
+  <p>
+    Der DAC-Ausgang kann nur wenig Strom liefern. Er eignet sich gut für
+    hochohmige Eingänge oder Messzwecke, aber nicht zum direkten Betreiben
+    größerer Lasten wie Lautsprechern, Motoren oder hellen LEDs.
+  </p>
+</section>
+<section  class="project-card"> <h3>Unterschied zu PWM und ADC</h3>
+  <table>
+    <tr>
+      <th>Begriff</th>
+      <th>Richtung</th>
+      <th>Aufgabe</th>
+    </tr>
+    <tr>
+      <td>ADC</td>
+      <td>analog → digital</td>
+      <td>misst eine Spannung</td>
+    </tr>
+    <tr>
+      <td>DAC</td>
+      <td>digital → analog</td>
+      <td>erzeugt eine Spannung</td>
+    </tr>
+    <tr>
+      <td>PWM</td>
+      <td>digital → scheinbar analog</td>
+      <td>schaltet sehr schnell ein und aus</td>
+    </tr>
+  </table>
+
+  <h3>Merksatz</h3>
+  <p class="merkbox">
+    <strong>ADC misst Spannung.</strong><br>
+    <strong>DAC erzeugt Spannung.</strong><br>
+    <strong>PWM täuscht eine analoge Spannung durch schnelles Schalten vor.</strong>
+  </p>
+
+</section>
+
+</main>
+
+<footer>  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="../../Tools/prism/dateien/prism.js"></script>
+  <script src="../../../js/script.js"></script>
+</footer>
+
+</body>
+</html>
