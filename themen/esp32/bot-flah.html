@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ESP32 Booten & Flashen</title>
+<link rel="stylesheet" href="../../css/my.css">
+</head>
+<body>
+<header>
+  <h3>ESP32: Booten &amp; Flashen</h3>
+</header>
+<main>
+  <section>
+    <h2>Einführung</h2>
+    <p>Diese Seite erklärt die üblichen Verfahren, um ein ESP32-Board in den Bootloader-Modus zu versetzen und Firmware zu flashen. Die grundsätzlichen Schritte sind bei den meisten ESP32-Entwicklungsboards ähnlich.</p>
+
+    <h2>Boot-Modi kurz</h2>
+    <ul>
+      <li><strong>Normaler Modus:</strong> Das Modul startet die ausgelegte Anwendung.</li>
+      <li><strong>Bootloader / Flash-Modus:</strong> Der ESP32 wartet auf neue Firmware (erreicht durch IO0 low beim Reset oder durch automatische Signale vom USB‑UART-Adapter).</li>
+    </ul>
+
+    <h2>Methoden, um in den Flash-Modus zu gelangen</h2>
+    <ol>
+      <li><strong>Manuell mit Tasten:</strong> IO0 (Boot) nach GND ziehen und gleichzeitig EN (Reset) kurz drücken. Falls das Board keine IO0‑Leitung herausgeführt hat, ist diese Methode nicht möglich.</li>
+      <li><strong>Automatisch über USB‑UART (RTS/DTR):</strong> Viele USB‑Seriell‑Adapter steuern die EN/IO0-Leitungen automatisch, so dass Tools wie esptool oder die Arduino-IDE das Board ohne manuelles Drücken in den Flash-Modus bringen.</li>
+      <li><strong>Programmieradapter / ISP:</strong> In speziellen Setups kann ein externes Programmer-Board genutzt werden.</li>
+    </ol>
+
+    <h2>Gängige Tools</h2>
+    <ul>
+      <li><strong>esptool.py</strong> — Kommandozeilen-Werkzeug zum Flashen.</li>
+      <li><strong>Arduino IDE</strong> — integriert automatische Boot‑Sequenz für viele Boards.</li>
+      <li><strong>PlatformIO</strong> — komfortables Build- und Flash‑System in VS Code.</li>
+    </ul>
+
+    <h2>Beispiel: Firmware mit esptool.py flashen</h2>
+    <p>Beispielbefehle (Windows, ersetze <code>COM3</code> und <code>firmware.bin</code> durch deine Werte):</p>
+
+    <pre><code class="language-bash">python -m pip install esptool
+esptool.py --chip esp32 --port COM3 --baud 460800 write_flash -z 0x1000 firmware.bin
+</code></pre>
+
+    <p>Wenn dein Adapter RTS/DTR unterstützt, kümmert sich <code>esptool</code> normalerweise um das Umschalten in den Bootloader.</p>
+
+    <h2>Häufige Probleme</h2>
+    <ul>
+      <li>Kein Bootloader-Response: Prüfe, ob IO0 verfügbar ist oder der Adapter RTS/DTR steuert.</li>
+      <li>Port nicht gefunden: Richtiger COM-Port wählen und Treiber installiert?</li>
+      <li>Baud-Rate-Probleme: Bei niedriger Baud-Rate probieren (z. B. 115200).</li>
+    </ul>
+
+    <h2>Tipps</h2>
+    <ul>
+      <li>Hast du kein IO0 nach außen geführt, nutze einen USB‑TTL‑Adapter mit automatischer RTS/DTR‑Unterstützung oder löte ein Kabel an IO0.</li>
+      <li>Sichere wichtige Daten, bevor du flashst.</li>
+      <li>Bei Problemen: Seriellen Monitor öffnen, Reset drücken und Ausgaben beobachten.</li>
+    </ul>
+
+    <p>Siehe auch die allgemeine Übersicht: <a href="esp32-devboard.html">ESP32 Devboard</a>.</p>
+  </section>
+
+<footer>
+  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg
+</footer>
+</main>
+</body>
+</html>

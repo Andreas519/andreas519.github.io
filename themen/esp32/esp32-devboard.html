@@ -16,55 +16,82 @@
 </header>
 <main>
   <section>
-    <li>
-      <a href="bilder/esp32-mini-ansicht.png" target="_blank">
-        <img src="bilder/esp32-mini-ansicht.png" width="400" alt="ESP32 Mini">
-      </a>
-      <a href="bilder/esp32-mini-pinlayout.png" target="_blank">
-        <img src="bilder/esp32-mini-pinlayout.png" width="400" alt="ESP32 Mini">
-      </a>
-      <br>
-      <a href="bilder/esp32-d1-mini.pdf" target="_blank">esp32-d1-mini.pdf</a>  
-
-    </li>
-    <li>
-  <strong>ESP32 Mini</strong> bezeichnet ein kompaktes ESP32-Devboard
-  in der D1-mini-Bauform. Es ist kein eigener ESP32-Chip, sondern ein
-  fertiges Entwicklungsboard mit ESP32-Modul, USB-Anschluss,
+   Wir verfügen über verschiedenste <strong>ESP32 Devboards</strong>. die sich in Pinanzahl, Abstand der Pinreihen, Anordung der Bauteile und Beschriftung unterscheiden.
   Spannungsregler und Stiftleisten.
-</li>
+    <div class="image-row">
+      <a href="bilder/esp32-devboard-30-pins.jpg" target="_blank"> 
+        <img src="bilder/esp32-devboard-30-pins.jpg" height="200" alt="ESP32 30 Pin">
+      </a>
+      <a href="bilder/esp32-devboard-38-pins.jpg" target="_blank"> 
+        <img src="bilder/esp32-devboard-38-pins.jpg" height="200" alt="ESP32 38 Pin">
+      </a>
+    </div>
+    <div class="image-row">
+      <a href="bilder/esp32-devboard-pinout-30pins.jpg" target="_blank"> 
+        <img src="bilder/esp32-devboard-pinout-30pins.jpg" height="200" alt="ESP32 30 Pin Pinout">
+      </a>
+      <a href="bilder/esp32-pinout-38 pins.jpeg" target="_blank">
+        <img src="bilder/esp32-pinout-38 pins.jpeg" height="200" alt="ESP32 38 Pin Pinout">
+      </a>
+    </div>
 
-<li>
-  Die Bauform stammt ursprünglich aus der ESP8266-Welt. Deshalb können
-  D1-mini-Zubehörteile teilweise passen. Die Pinbelegung und die elektrische
-  Verträglichkeit müssen aber immer mit dem konkreten ESP32-D1-Mini-Board
-  geprüft werden.
-</li>
+    <h2>ESP32 Devboard Varianten</h2>
+    <p>Die hier gezeigten Boards verwenden meist ein <strong>ESP32-WROOM-32</strong> Modul. Das ist ein weit verbreitetes ESP32-Modul mit WLAN/Bluetooth, das auf vielen günstigen Entwicklungsboards eingesetzt wird.</p>
+    <p>Typische Komponenten dieser Boards:</p>
+    <ul>
+      <li><strong>ESP32-WROOM-32</strong> Modul mit Dual-Core-MCU.</li>
+      <li><strong>USB-Serial-Bridge</strong> (z. B. CH340, CP2102, FT232), damit das Board über USB programmiert werden kann.</li>
+      <li><strong>Spannungsregler</strong> für 5V/USB auf 3,3V.</li>
+      <li><strong>Reset-Taste</strong> (EN) und oft eine <strong>Boot-Taste</strong> für den Flash-Modus.</li>
+      <li><strong>Stiftleisten</strong> mit GPIO-Zugriff und Signalbeschriftungen.</li>
+    </ul>
+    <p>Der wichtigste Unterschied liegt in der Anzahl der Stiftleisten-Pins:</p>
+    <ul>
+      <li><strong>30-Pin-Board</strong>: kompakter, niedrigere Gesamtbreite, oft einfacher in Steckbretter einzupassen.</li>
+      <li><strong>38-Pin-Board</strong>: mehr GPIO-Pins nach außen geführt, besser geeignet für mehrere Sensoren, Displays oder Shields.</li>
+    </ul>
+    <p>Beide Varianten haben üblicherweise folgende Anschlüsse:</p>
+    <ul>
+      <li><strong>3V3</strong> für die 3,3‑V-Versorgung</li>
+      <li><strong>GND</strong> als Masseanschluss</li>
+      <li><strong>EN</strong> für den Reset des ESP32</li>
+      <li><strong>TX0(GPIO1)</strong> und <strong>RX0(GPIO2)</strong> für die serielle USB-Kommunikation</li>
+      <li><strong>SCL(GPIO22)</strong> und <strong>SCL(GPIO21)</strong> für die I2C-Kommunikation</li>
+      <li><strong>ADC</strong>-fähige Pins für analoge Sensoren</li>
+    </ul>
 
-<li>
-  Die aufgedruckten Bezeichnungen D1, D2 usw. sind nicht automatisch
-  identisch mit den GPIO-Nummern. Für Programme wird beim ESP32 meist die
-  tatsächliche GPIO-Nummer verwendet.
-</li>
+    <h2>Tipps für den Einsatz</h2>
+    <ol>
+      <li>Verbinde das Board mit USB-C oder Micro-USB (je nach Modell), um die 5‑V‑Versorgung bereitzustellen.</li>
+      <li>Achte auf die Beschriftung der Pins, insbesondere wenn das Board nur einseitig gekennzeichnet ist.</li>
+      <li>Nutze die Pinout-Bilder als Referenz, bevor du Kabel anschließt.</li>
+      <li>Verschaffe die für den von dir verwendeten ESP ein entsprechendes Pinout.<br>
+      Achte auf die Anordnung der Teile auf dem Board und auf die Beschiftung.</li>
+      <li>
+         Dokumentiere die Bezeichnungen der verwendeten Pins ausführlich im Programmquelltext. Beispiele:
+         <pre><code>// Arduino (C++) - Beispiel
+  // i2c-Modul SDA  --- gelb --- D21 - GPIO21 - SDA
+  // i2c-Modul SCL  --- grün --- D22 - GPIO22 - SCL
+  const int I2C_SDA = 21; // gelb, D21
+  const int I2C_SCL = 22; // grün, D22
+
+  # MicroPython - Beispiel
+  # i2c-Modul SDA  --- gelb --- D21 - GPIO21 - SDA
+  # i2c-Modul SCL  --- grün --- D22 - GPIO22 - SCL
+  # from machine import Pin, I2C
+  # i2c = I2C(0, scl=Pin(22), sda=Pin(21))
+  </code></pre>
+        </li>
+        
+    </ol>
+
+    <p>Mit der richtigen Pinbelegung lassen sich WLAN, Bluetooth, Sensoren und Aktoren schnell in Projekte integrieren.</p>
+    <p>Mehr zum Thema Booten und Flashen: <a href="bot-flah.html">Booten &amp; Flashen</a>.</p>
   </section>
-  <section>
-<ul>
-
-  <li>bisher 
-    <a href="https://mrge.de/lehrer/sigismund/nodemcu/ESP32-D1-R32/micropython.html" target="_blank">ESP32 Grundlagen Micropython</a>
-  </li>
-
-  <li>
-    
-   </li>
-   </ul> 
- </section>
-
-
 
 <footer>
   © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
-  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span> 
   <script src="/js/script.js"></script>
 </footer>
 </body>

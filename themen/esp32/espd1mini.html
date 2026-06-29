@@ -46,6 +46,23 @@
   identisch mit den GPIO-Nummern. Für Programme wird beim ESP32 meist die
   tatsächliche GPIO-Nummer verwendet.
 </li>
+<li>Unser ESP32-mini-Board besitzt einen **USB-C-Anschluss**.
+Über diesen Anschluss wird das Board mit Spannung versorgt und mit dem Computer verbunden. 
+Die serielle Verbindung zum ESP32 erfolgt über den auf dem Board verbauten **CP210x-USB-Seriell-Wandler**.
+Wichtig: USB-C beschreibt hier nur die **Bauform des Steckers**. Das Board arbeitet trotzdem wie ein normales USB-Seriell-Gerät und erscheint unter Windows als **COM-Port**.
+</li>
+<li>Der bei unseren ESP32-mini-Boards verwendete USB-Seriell-Wandler ist ein **CP210x**.
+
+Unter Windows erscheint das Board nach erfolgreicher Treiberinstallation als **COM-Port** im Geräte-Manager. 
+Falls das Board nicht erkannt wird, sollte der passende **Silicon-Labs-CP210x-Treiber** installiert werden.<br>
+<a href="https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers" target="_blank">
+  Silicon Labs CP210x USB-to-UART Bridge VCP-Treiber
+</a>
+
+Der CP210x übernimmt die Umsetzung zwischen USB am Computer und der seriellen Schnittstelle des ESP32. Für die Programmierung mit Thonny, Arduino IDE oder anderen Entwicklungsumgebungen muss der richtige COM-Port ausgewählt werden.
+
+</li>
+
   </section>
   <section>
 <ul>
@@ -65,7 +82,7 @@
 <footer>
   © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
   Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
-  <script src="/js/script.js"></script>
+  <script src="../../js/script.js"></script>
 </footer>
 </body>
 </html>
