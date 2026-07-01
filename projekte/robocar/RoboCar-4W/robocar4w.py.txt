@@ -1,0 +1,111 @@
+#    Robocar 4 Wheels - Grundgerüst - 2023-01-01
+
+import machine, time
+
+# hintere Brücke - steuert hinteren Motoren
+hr_ena_pin = 26; hr_in1_pin = 25; hr_in2_pin = 17;  # OK
+hl_enb_pin = 14; hl_in3_pin = 27; hl_in4_pin = 16;  # OK
+
+# vordere Brücke - steuert vorderen Motoren
+vr_ena_pin = 12; vr_in1_pin = 13; vr_in2_pin =  5;  # OK
+vl_enb_pin = 18; vl_in3_pin = 19; vl_in4_pin = 23;  # OK
+
+hr_ena =  machine.PWM(machine.Pin(hr_ena_pin));     hr_ena.duty(0) 
+hr_in1 =  machine.Pin(hr_in1_pin, machine.Pin.OUT); hr_in1.off()
+hr_in2 =  machine.Pin(hr_in2_pin, machine.Pin.OUT); hr_in2.off()
+
+hl_enb =  machine.PWM(machine.Pin(hl_enb_pin));     hl_enb.duty(0) 
+hl_in3 =  machine.Pin(hl_in3_pin, machine.Pin.OUT); hl_in3.off()
+hl_in4 =  machine.Pin(hl_in4_pin, machine.Pin.OUT); hl_in4.off()
+
+vr_ena =  machine.PWM(machine.Pin(vr_ena_pin));     vr_ena.duty(0) 
+vr_in1 =  machine.Pin(vr_in1_pin, machine.Pin.OUT); vr_in1.off()
+vr_in2 =  machine.Pin(vr_in2_pin, machine.Pin.OUT); vr_in2.off()
+
+vl_enb =  machine.PWM(machine.Pin(vl_enb_pin));     vl_enb.duty(0) 
+vl_in3 =  machine.Pin(vl_in3_pin, machine.Pin.OUT); vl_in3.off()
+vl_in4 =  machine.Pin(vl_in4_pin, machine.Pin.OUT); hl_in4.off()
+
+def motor_hr(dv):   # OK
+    print("hinten rechts   :", dv)
+    if dv>=0:
+        hr_in1.on(); hr_in2.off(); hr_ena.duty(dv)
+    else:
+        hr_in1.off(); hr_in2.on(); hr_ena.duty(-dv)    
+
+def motor_hl(dv):   # OK
+    print("hinten links   :", dv)
+    if dv>=0:
+        hl_in3.on(); hl_in4.off(); hl_enb.duty(dv)
+    else:
+        hl_in3.off(); hl_in4.on(); hl_enb.duty(-dv)    
+
+def motor_vr(dv):   # ok
+    print("vorn rechts   :", dv)
+    if dv>=0:
+        vr_in1.on(); vr_in2.off(); vr_ena.duty(dv)
+    else:
+        vr_in1.off(); vr_in2.on(); vr_ena.duty(-dv)    
+
+def motor_vl(dv):   # ok
+    print("vorn links   :", dv)
+    if dv>=0:
+        vl_in4.on(); vl_in3.off(); vl_enb.duty(dv)
+    else:
+        vl_in4.off(); vl_in3.on(); vl_enb.duty(-dv)    
+
+def motor_l(dv):
+    motor_vl(dv); motor_hl(dv)
+    
+def motor_r(dv):
+    motor_vr(dv); motor_hr(dv)    
+
+def halt():
+    dv=0
+    hr_ena.duty(dv)
+    hl_enb.duty(dv)
+    vr_ena.duty(dv)
+    vl_enb.duty(dv)
+    
+def fahre(*args):
+    l = len(args)
+    if l==0:
+        pass
+    elif l==1:
+        dv = int(args[0])
+        if abs(dv)<1024:
+            motor_l(dv); motor_r(dv)
+        else:
+            print("-1023 ... 1023")
+    elif l==2:
+        dvl = int(args[0]); dvr = int(args[1])
+        if abs(dvl)<1024 and abs(dvr)<1024 :
+            motor_l(dvl); motor_r(dvr)
+        else:
+            print("-1023 ... 1023")
+    elif l==4:
+        dv_vl = int(args[0]); dv_vr = int(args[1])
+        dv_hl = int(args[2]); dv_hr = int(args[3])
+        if abs(dv_vl)<1024 and abs(dv_vr)<1024 and abs(dv_hl)<1024 and abs(dv_hr)<1024 :
+            motor_vl(dv_vl); motor_vr(dv_vr)
+            motor_hl(dv_hl); motor_hr(dv_hr)
+        else:
+            print("-1023 ... 1023")        
+    else:
+        print("falsche Parameterzahl")          
+# --- Ende fahren() ---
+
+print("Befehle aus robocar4w:")
+print("pwm_duty_wert von -1023 ... 1023")   
+print("  motor_vl(pwm_duty_wert)")
+print("  motor_vr(pwm_duty_wert)")
+print("  motor_hl(pwm_duty_wert)")
+print("  motor_hr(pwm_duty_wert)")
+print("  motor_l(pwm_duty_wert)")
+print("  motor_r(pwm_duty_wert)")
+print("  fahre(pwm)")
+print("  fahre(pwm_linke_Seite, pwm_rechte_Seite)")
+print("  fahre(pwm_vl, pwm_vr, pwm_hl, pwm_hr, )")
+print("  halt()")
+
+

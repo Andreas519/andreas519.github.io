@@ -1,0 +1,23 @@
+void zeichenfolge_auswerten() {
+  string_to_array(zeile); // --> strs[] , strs_length  
+  if (strs[0]=="m") {
+    ausgabe("Motor");
+    if (strs_length==2) {
+      motor_links(-strs[1].toInt()); //linker Motor
+      motor_rechts( strs[1].toInt());
+    } else if (strs_length==3) {
+      motor_links(-strs[1].toInt()); //linker Motor
+      motor_rechts(strs[2].toInt());
+    }
+  } else if (strs[0]=="ml") {           // Motor links
+    ausgabe("motor links");
+    motor_links( -strs[1].toInt() );
+  } else if (strs[0]=="mr") {           // Motor rechts
+    ausgabe("motor rechts");
+    motor_rechts( strs[1].toInt() );
+  } else if (strs[0]=="w") {           /// RGB-LEDs
+      if (strs_length==2) {
+        servo_richtung( strs[1].toInt() );
+      }  
+  } 
+} // Ende zeichenfolge_auswerten() 

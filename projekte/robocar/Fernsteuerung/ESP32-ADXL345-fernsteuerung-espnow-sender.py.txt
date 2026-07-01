@@ -1,0 +1,55 @@
+# ESP32-ADXL345-rohdaten-sender.py
+from machine import Pin,I2C
+import ADXL345, network, espnow, time
+import time
+# ESP32                ADXL345
+# SDA 21     gelb        SDA 
+# SDL 22     orange      SDL
+# 3.3V       rot         VCC
+# Gnd        blau        GND
+i2c = I2C(scl=Pin(21),sda=Pin(22), freq=10000)
+adx = ADXL345.ADXL345(i2c)
+
+wlan_sta = network.WLAN(network.STA_IF)
+wlan_sta.active(True)
+
+e = espnow.ESPNow()
+e.active(True)
+peer = b'\xff\xff\xff\xff\xff\xff'
+e.add_peer(peer)
+
+led = Pin(2, Pin.OUT)
+
+
+#      'f -1023 -1023', 'f -1023 -1023', 'f -1023 -1023', 'f -1023 -1023', 'f -1023 -1023', 'f -1023 -1023', 'f -1023 -1023'
+#             -3               -2               -1                0                1                2                3
+fw =[ ['f 700 1023',    'f 850 1023',    'f 950 1023',    'f 1023',        'f 1023 950',    'f 1023 850',    'f 1023 700'], 
+      ['f 650 900',     'f 750  900',    'f 850 900',     'f 850',         'f 900 950',     'f 900 850',     'f 900 700'],
+      ['f 600 800',     'f 700  800',    'f 750 800',     'f 700',         'f 800 750',     'f 800 700',     'f 800 650'],
+      ['f  0 -800 ',    'f 0 -750',      'f 0 -666',      'f 0',           'f 666 0',       'f 750 0',       'f 850 0'],
+      ['f -600 -800',   'f -700  -800',  'f -750 -800',   'f -700',        'f -800 -750',   'f -800 -700',   'f -800 -650'],
+      ['f -650 -900',   'f -750  -900',  'f -850 -900',   'f -850',        'f -900 -850',   'f -900 -800',   'f -900 -650'],
+      ['f -700 -1000',  'f -800  -1000', 'f -850 -1000',  'f -1000',       'f -1000 -850',  'f -1000 -800',  'f -1000 -700']
+    ]
+
+kennung = "ADXL345-x"
+cnt = 0
+while True:
+    cnt += 1
+    acc_x = adx.xValue
+    acc_y = adx.yValue
+    acc_z = adx.zValue
+
+    dw  = 100
+    spa = (acc_x+dw//2)//dw
+    zei = (acc_y+dw//2)//dw
+    
+    befehl = fw[3-zei][3+spa]
+    
+    print(f'{acc_x:6}, {acc_y:6}, {acc_z:6}, {zei:2}, {spa:2}, {befehl}')
+
+    msg = f'{kennung},{str(cnt)},{befehl}'
+    e.send(peer, msg)
+    time.sleep_ms(500)
+    led.value(not led.value())
+

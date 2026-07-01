@@ -1,0 +1,51 @@
+### fernsteuerung seriell erweitert - 2022-12-12
+
+from robocar2w import *
+halt()
+
+ende = False
+while not ende:
+    eingabe = input("Befehle: ")
+    
+    if eingabe == "e":
+        ende = True
+        
+    elif eingabe == "h":
+        halt()
+        
+    elif eingabe == "X":
+        print("Schalte Licht an!")
+        
+    elif eingabe =="x":
+        print("Schalte Licht aus!")                  
+
+    else:
+        werte = eingabe.split(" ")
+        befehl = werte[0]
+        if befehl=="l":
+            print(werte[1])
+            motor_l(int(werte[1]) )
+        elif befehl=="r":
+            print(werte[1])
+            motor_r(int(werte[1]) )
+        elif befehl=="f":
+            if len(werte[1:]) == 1:
+                fahre( int(werte[1]) )
+            elif len(werte[1:]) == 2:
+                fahre( int(werte[1]), int(werte[2]) )
+            else:
+                print("fahre() - falsche Parameterzahl")
+        elif befehl == "w":
+            sek = float(werte[1])
+            print(f'Warten {sek} Sekunden!')
+            time.sleep(sek)    
+        else:
+            print(f'Mit "{befehl}" kann ich nichts anfangen')
+
+                
+# --- Ende While not ende ---
+halt()
+print("Programm beendet!")
+
+
+

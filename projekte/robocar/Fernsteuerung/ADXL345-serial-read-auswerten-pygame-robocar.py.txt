@@ -1,0 +1,62 @@
+# ADXL345-serial-read-auswerten-pygame-robocar.py
+import serial, pygame, time
+port_='COM7'; baudrate_=9600
+
+width = 800; height = 600
+#     -3   -2   -1   0     1    2    3
+fw =[ ['f 700 1023'  , 'f 850 1023',    'f 950 1023',   'f 1023',  'f 1023 950',   'f 1023 850',   'f 1023 700'],
+      ['f 650 900'   , 'f 750  900',    'f 850 900',    'f 900',   'f 900 950',    'f 900 850',    'f 900 700'],
+      ['f 650 800'   , 'f 700  800',    'f 750 800',    'f 800',   'f 800 750',    'f 800 700',    'f 800 650'],
+      ['f 0 900'     , 'f 0 800',       'f 0 700',      'f 0',     'f 700 0',      'f 800 0',      'f 900 0'],
+      ['f -650 -800' , 'f -700  -800',  'f -750 -800',  'f -800',  'f -800 -750',  'f -800 -700',  'f -800 -650'],
+      ['f -700 -900' , 'f -750  -900',  'f -850 -900',  'f -900',  'f -900 -850',  'f -900 -800',  'f -900 -700'],
+      ['f -700 -1000', 'f -750  -1000', 'f -850 -1000', 'f -1000', 'f -1000 -850', 'f -1000 -800', 'f -1000 -700']
+    ]
+#Farbnamen definieren - RGB-Farbmodell
+white = (255, 255, 255)
+red = (255,0,0); green = (0,255,0); blue = (0,0,255)
+yellow = (255,255,0)
+# Grafikfenster wird geöffnet
+screen = pygame.display.set_mode((width, height))
+screen.fill(yellow)
+
+ser = serial.Serial(port=port_, baudrate=baudrate_, bytesize=serial.EIGHTBITS, 
+    parity=serial.PARITY_NONE, timeout=1)
+ser.flushInput()
+txt = ser.readline().decode()  #
+
+xo = width//2; yo = height//2
+ende = False
+while not ende:
+    txt = ser.readline().decode().rstrip()
+    tmp = txt.split(",")
+    if len(tmp)!=5:
+        print(".", end="")
+        continue
+    #ADXL345b,68, 15, -20, 281
+    kennung = tmp[0]
+    cnt     = int(tmp[1])
+    ac_x    = int(tmp[2])
+    ac_y    = int(tmp[3])
+    ac_z    = int(tmp[4])
+    # formatierte Ausgabe mit der f'-Strings
+    print(f'{ac_x:6}, {ac_y:6}, {ac_z:6}')
+    screen.fill(yellow)
+    dw = 100
+    spa = (ac_x+dw//2)//dw; zei = (ac_y+dw//2)//dw
+    x = (ac_x+dw//2)//dw*dw; y = (ac_y+dw//2)//dw*dw
+    
+
+    print(ac_x, ac_y, ac_z, zei, spa, fw[3-zei][3+spa])
+    
+    pygame.draw.line(screen, blue, (xo,yo), (xo+x, yo-y), 5)
+
+    pygame.display.update() # Bildschirm aktualisieren
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            ende = True
+    if event.type == pygame.KEYDOWN and event.key==pygame.K_ESCAPE:
+        ende = True                 
+
+pygame.quit()
+

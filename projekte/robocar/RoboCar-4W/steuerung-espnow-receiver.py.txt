@@ -1,0 +1,63 @@
+#'steuerung-espnow-receiver.py' - Fernsteuerung des RoboCars per ESP Now - Receiver - 2022-12-12
+
+import network, espnow
+
+from robocar4w import *
+halt()
+
+led = machine.Pin(2,machine.Pin.OUT)  
+wlan_sta = network.WLAN(network.STA_IF)
+
+wlan_sta.active(True)
+mac = wlan_sta.config('mac')
+
+e = espnow.ESPNow()
+e.active(True)
+
+peer = b'\xff' * 6             # Broadcast-Adresse für alle - funktioniert
+e.add_peer(peer)
+
+ende = False
+print("Warte auf nachricht")
+while not ende:
+    host, msg = e.irecv(1000)     # ms bis timeout  
+    if msg:
+        print(host, msg)
+#         if host != b'\xc0I\xef\xf9\x19\x9c':
+#             print("Falscher Sender")
+#             continue
+        tmp = msg.decode()
+        print("Empfangen: ", tmp)
+        kennung, cnt, eingabe = tmp.split(",")
+        if kennung != "RoboCar-max":
+            #continue
+            pass
+        print(kennung, cnt, eingabe)
+        if eingabe=="":
+            print("Nix passiert!")
+            continue 
+        elif eingabe == "e":
+            print("'Ende' wird eingeleitet!")
+            ende = True
+        elif eingabe == "h":
+            halt()
+        else:
+            werte = eingabe.split(" ")
+            l = len(werte)
+            print( "werte: ", werte )
+            if werte[0]=="f":
+                if l==2:
+                    fahre( int(werte[1]) )
+                elif l==3:
+                    fahre( int(werte[1]), int(werte[2]))
+                elif l==5:
+                    fahre( int(werte[1]), int(werte[2]),  int(werte[3]), int(werte[4]) )
+                else:
+                    pass        
+               
+# --- Ende While not ende ---
+halt()
+print("Programm beendet!")
+
+
+
