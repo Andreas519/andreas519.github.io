@@ -52,4 +52,56 @@ function ladeDatei(datei, elementId) {
       }
     }
    
+    function openFileInPrismTab(fileUrl, language = 'python', title = 'Code anzeigen') {
+  const resolvedUrl = new URL(fileUrl, window.location.href).href;
+  const tab = window.open('about:blank', '_blank');
+  if (!tab) {
+    alert('Neuer Tab blockiert. Erlaube Popups für diese Seite.');
+    return;
+  }
+
+  const html = `
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>${title}</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+  <style>
+    body { margin: 1rem; font-family: sans-serif; background: #f5f5f5; }
+    .line-numbers { white-space: pre-wrap; word-break: break-word; }
+  </style>
+</head>
+<body>
+  <pre class="line-numbers"><code id="codeblock" class="language-${language}">Lade Datei …</code></pre>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-${language}.min.js"></script>
+  <script>
+    fetch(${JSON.stringify(resolvedUrl)})
+      .then(response => {
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        return response.text();
+      })
+      .then(code => {
+        const codeEl = document.getElementById('codeblock');
+        codeEl.textContent = code;
+        if (window.Prism) {
+          Prism.highlightElement(codeEl);
+        }
+      })
+      .catch(error => {
+        document.getElementById('codeblock').textContent =
+          'Fehler beim Laden der Datei: ' + error;
+      });
+  </script>
+</body>
+</html>
+`;
+
+  tab.document.write(html);
+  tab.document.close();
+}
 // Marker

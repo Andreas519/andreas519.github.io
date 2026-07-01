@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelly+1-01 · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Shelley Plus 1-01: Einbindung in WLAN und Steuerung über Weboberfläche
+  </header>
+
+  <main>
+    <section>
+      <p>Vorbereitung: <br>
+        Shelly Plus wird durch ein Reset auf Werkseinstellungen zurückgesetzt. <br>
+        Danach wird das WLAN des Shelly Plus aktiviert.<BR>
+        Wie wird reset durchgeführt? Mindestens 10 Sekunden den Reset-Taster gedrückt halten.<br>
+        Danach stellt der Shelly Plus ein eigenes WLAN bereit, das mit einem Smartphone oder PC verbunden werden kann.<br>
+        Verbinde dich mit dem WLAN des Shelly Plus und öffne die Weboberfläche des Shelly Plus im Browser. <br>
+        Dazu rufe in deinem Browser die URL http://192.168.33.1 auf.<br>
+        Hier kannst du das Relay des Shelly Plus ein- und ausschalten, die WLAN-Einstellungen ändern und weitere Einstellungen vornehmen. 
+        </p>
+    </section>
+    <section>
+        Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN des Shelly Plus und öffne die Weboberfläche des Shelly Plus im Browser. <br>
+        Ein PC kann wegen fehlender WLAN-Funktionalität nicht verwendet werden. <br>
+        Rufe in deinem Browser die URL http://192.168.33.1 auf.<br>
+        Hier kannst du das Relay des Shelly Plus ein- und ausschalten, die WLAN-Einstellungen ändern und weitere Einstellungen vornehmen.<br>
+        Über die URL http://192.168.33.1/rpc kannst du das Relay des Shelly Plus auch über HTTP-Requests steuern. <br>
+        Beispiel: http://192.168.33.1/rpc/Switch.Set?turn=on schaltet das Relay ein, http://192.168.33.1/rpc/Switch.Set?turn=off schaltet das Relay aus.
+    </section>
+    <section>
+        <ul>
+           
+        </ul>    
+    </section>
+    <section>Aufgabe:
+        
+        <ul>
+            <li>Finde heraus, wie man einen Shelly 1 oder Shelly 2.5 in ein WLAN einbindet und über die Weboberfläche steuert.</li>
+            
+        </ul>    
+    </section>
+
+    <section>
+      <figure>
+        <img src="shelly-anschluss.svg" alt="Shelly Anschlussdiagramm" style="max-width:100%;height:auto;border:1px solid #ccc;border-radius:8px;" />
+        <figcaption>Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N.</figcaption>
+      </figure>
+    </section>
+</main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

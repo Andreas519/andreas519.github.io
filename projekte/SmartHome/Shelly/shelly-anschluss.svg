@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f7f9fc"/>
+      <stop offset="100%" stop-color="#e6ecf4"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="800" height="500" rx="24" ry="24" fill="url(#bg)"/>
+  <rect x="120" y="100" width="560" height="280" rx="30" ry="30" fill="#ffffff" stroke="#21314e" stroke-width="4"/>
+  <g font-family="Verdana, Arial, sans-serif" font-size="24" fill="#1f2c45" text-anchor="middle">
+    <text x="400" y="148" font-size="28" font-weight="700">Shelly Anschluss</text>
+  </g>
+  <g stroke="#21314e" stroke-width="4" fill="#f4f7fb">
+    <circle cx="220" cy="220" r="28"/>
+    <circle cx="310" cy="220" r="28"/>
+    <circle cx="400" cy="220" r="28"/>
+    <circle cx="490" cy="220" r="28"/>
+    <circle cx="580" cy="220" r="28"/>
+    <circle cx="670" cy="220" r="28"/>
+  </g>
+  <g font-family="Verdana, Arial, sans-serif" font-size="22" fill="#16243d" text-anchor="middle">
+    <text x="220" y="225">0</text>
+    <text x="310" y="225">I</text>
+    <text x="400" y="225">SW</text>
+    <text x="490" y="225">12V</text>
+    <text x="580" y="225">L</text>
+    <text x="670" y="225">N</text>
+  </g>
+  <g stroke="#21314e" stroke-width="4" fill="none">
+    <path d="M 160 220 L 70 220"/>
+    <path d="M 390 248 L 390 340 L 520 340"/>
+    <path d="M 500 220 L 580 120"/>
+    <path d="M 660 220 L 740 220"/>
+  </g>
+  <g fill="#16243d" font-family="Verdana, Arial, sans-serif" font-size="20">
+    <text x="50" y="210" text-anchor="start">240 V~</text>
+    <text x="50" y="240" text-anchor="start">Lampe</text>
+    <text x="520" y="372" text-anchor="middle">12 V Gleichspannung</text>
+    <text x="625" y="110" text-anchor="middle">GND</text>
+    <text x="770" y="220" text-anchor="end">L / N</text>
+  </g>
+  <g stroke="#21314e" stroke-width="4" fill="#beccd9">
+    <rect x="120" y="130" width="560" height="20" rx="10"/>
+    <rect x="120" y="340" width="560" height="20" rx="10"/>
+  </g>
+</svg>

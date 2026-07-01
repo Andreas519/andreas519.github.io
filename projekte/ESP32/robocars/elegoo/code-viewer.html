@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Viewer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+  <style>
+    :root {
+      color-scheme: light;
+      color: #1c2330;
+      background: #eef2f7;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #e7edf8 0%, #f6f8fb 100%);
+    }
+
+    a { color: #1b6cd1; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    header,
+    footer {
+      background: #162d4e;
+      color: #f2f7ff;
+    }
+
+    header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: grid;
+      gap: 0.2rem;
+    }
+
+    .brand a { color: #f8fbff; font-weight: 700; font-size: 1.1rem; }
+    .brand small { color: #b8c7e3; }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      font-size: 0.95rem;
+    }
+
+    nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.45rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      color: #edf4ff;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 3rem;
+    }
+
+    .content {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid rgba(39, 88, 167, 0.12);
+      border-radius: 1.1rem;
+      box-shadow: 0 20px 80px rgba(22, 45, 78, 0.08);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 1.6rem 2rem;
+      border-bottom: 1px solid rgba(27, 108, 209, 0.12);
+      background: linear-gradient(180deg, rgba(26, 72, 139, 0.05), rgba(255,255,255,0));
+    }
+
+    .card-header h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+      letter-spacing: -0.02em;
+    }
+
+    .meta {
+      display: grid;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      color: #4b5d7b;
+      font-size: 0.95rem;
+    }
+
+    .meta strong { color: #1c2330; }
+
+    .card-body {
+      padding: 1.75rem 2rem 2rem;
+    }
+
+    .code-panel {
+      border-radius: 1rem;
+      overflow: hidden;
+      border: 1px solid #dde5ef;
+      background: #f8fbff;
+    }
+
+    pre {
+      margin: 0;
+      padding: 1.5rem;
+      min-height: 320px;
+      background: transparent;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .markdown {
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      border-radius: 0.95rem;
+      background: #f9fbff;
+      border: 1px solid #dbe5f5;
+    }
+
+    .markdown h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+    }
+
+    footer {
+      padding: 1rem 1.5rem;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #c9d6f5;
+    }
+
+    footer a { color: #bed0ff; }
+
+    .error {
+      color: #c23c3c;
+      font-weight: 700;
+    }
+
+    @media (max-width: 780px) {
+      .header-inner,
+      .card-body {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+      nav {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <a href="../../index.html">Young Engineers</a>
+        <small>ESP32 RoboCars · Elegoo</small>
+      </div>
+      <nav>
+        <a href="../../index.html">ESP32</a>
+        <a href="../index.html">RoboCars</a>
+        <a href="index.html">Elegoo</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="content">
+      <section class="card">
+        <div class="card-header">
+          <h1 id="title">Code anzeigen</h1>
+          <div class="meta">
+            <span id="info">Datei wird geladen …</span>
+            <span id="file-path"></span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="code-panel">
+            <pre class="line-numbers"><code id="codeblock" class="language-none">Lade Datei …</code></pre>
+          </div>
+
+          <section id="markdown-section" class="markdown" style="display: none;">
+            <h2>Zusätzliche Dokumentation</h2>
+            <div id="markdown-content"></div>
+          </section>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer>
+    <p>Code Viewer mit Prism.js &amp; Markdown | <a href="index.html">Zurück zur Elegoo-Seite</a></p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const file = params.get('file');
+    const language = params.get('lang') || 'none';
+    const title = params.get('title') || 'Code anzeigen';
+    const titleEl = document.getElementById('title');
+    const infoEl = document.getElementById('info');
+    const filePathEl = document.getElementById('file-path');
+    const codeEl = document.getElementById('codeblock');
+    const markdownSection = document.getElementById('markdown-section');
+    const markdownContent = document.getElementById('markdown-content');
+
+    document.title = title;
+    titleEl.textContent = title;
+    codeEl.className = 'language-' + language;
+
+    function getMarkdownFile(filePath) {
+      return filePath.toLowerCase().endsWith('.txt')
+        ? filePath.slice(0, -4) + '.md'
+        : filePath + '.md';
+    }
+
+    function loadMarkdown(filePath) {
+      const markdownFile = getMarkdownFile(filePath);
+      const markdownUrl = new URL(markdownFile, window.location.href).href;
+
+      fetch(markdownUrl)
+        .then(response => {
+          if (!response.ok) {
+            if (response.status === 404) return null;
+            throw new Error('HTTP ' + response.status + ' beim Laden von ' + markdownFile);
+          }
+          return response.text();
+        })
+        .then(md => {
+          if (!md) return;
+          markdownSection.style.display = 'block';
+          markdownContent.innerHTML = DOMPurify.sanitize(marked.parse(md));
+        })
+        .catch(error => {
+          console.warn('Markdown nicht geladen:', error);
+        });
+    }
+
+    if (!file) {
+      infoEl.innerHTML = '<span class="error">Keine Datei angegeben.</span>';
+      codeEl.textContent = '';
+      filePathEl.textContent = '';
+    } else {
+      const fileUrl = new URL(file, window.location.href).href;
+      infoEl.innerHTML = 'Lade <strong>' + file + '</strong> …';
+      filePathEl.textContent = fileUrl;
+
+      fetch(fileUrl)
+        .then(response => {
+          if (!response.ok) throw new Error('HTTP ' + response.status + ' beim Laden von ' + file);
+          return response.text();
+        })
+        .then(code => {
+          codeEl.textContent = code;
+          infoEl.innerHTML = 'Fertig: <strong>' + file + '</strong>';
+          Prism.highlightElement(codeEl);
+          loadMarkdown(file);
+        })
+        .catch(error => {
+          infoEl.innerHTML = '<span class="error">Fehler beim Laden der Datei:</span>';
+          codeEl.textContent = error;
+          filePathEl.textContent = fileUrl;
+        });
+    }
+  </script>
+</body>
+</html>
