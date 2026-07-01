@@ -1,0 +1,34 @@
+// elegoo.ino
+//  siehe https://mrge.de/lehrer/sigismund/Young-Engineers/projekte/robocar/elegoo/
+//              ESP32 seriell mit Arduino auf dem Elegoo  koppeln
+
+#include "my_elegoo.h"  // entspricht etwa robocar2w.py
+
+const byte max_strs = 10; // max. Anzahl der Teile eines Befehls
+String strs[max_strs];    // Array für die Teile eines Befehls
+int strs_length;          // aktuelle Anzahl der Teile eines Befehls
+String zeile;             // enthält den seriell übermittelten Befehl
+boolean ausgabe_erlauben = true;
+void setup() { 
+  Serial.begin(115200);   Serial.println("Elegoo startet");  
+  setup_elegoo();
+  // servo_test(0);
+  motor_links(155);   delay(500); 
+  motor_rechts(155);  delay(500); 
+  fahre(0);      delay(500); 
+} 
+
+void loop() {
+ if (Serial.available()) {
+    zeile = Serial.readStringUntil('\n');
+    zeile.trim();  // entfernt \r, falls vorhanden
+    ausgabe("Eingabe: " + String(zeile.length()) + " Zeichen  |  " + zeile);
+    if (zeile.length()==1) { //genau ein Zeichen
+      zeichen_auswerten();
+    } else {                 // mehr als ein Zeichen
+      zeichenfolge_auswerten();
+    }  
+  } // if (Serial.available...)
+  Serial.println( String(millis()) + " " + String(linesensor()) + " " + String(servo_winkel) + " " + String(entfernung()) ); 
+  delay(1000);
+}

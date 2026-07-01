@@ -1,0 +1,75 @@
+"""
+    Robocar 2 Wheels - Grundgerüst vom 2022-12-12
+"""
+import machine, time
+
+print("   ##### RoboCar 2 Wheels #####")
+
+# hintere Brücke - steuert zwei Motoren
+# linker Motor
+#       brown             black            white
+ml_ena_pin = 26; ml_in1_pin = 25; ml_in2_pin = 17;  # OK
+
+# rechter Motor
+#        grey             purple           brown
+mr_enb_pin = 14; mr_in3_pin = 27; mr_in4_pin = 16;  # OK
+
+ml_ena =  machine.PWM(machine.Pin(ml_ena_pin));     ml_ena.duty(0) 
+ml_in1 =  machine.Pin(ml_in1_pin, machine.Pin.OUT); ml_in1.off()
+ml_in2 =  machine.Pin(ml_in2_pin, machine.Pin.OUT); ml_in2.off()
+
+mr_enb =  machine.PWM(machine.Pin(mr_enb_pin));     mr_enb.duty(0) 
+mr_in3 =  machine.Pin(mr_in3_pin, machine.Pin.OUT); mr_in3.off()
+mr_in4 =  machine.Pin(mr_in4_pin, machine.Pin.OUT); mr_in4.off()
+
+def motor_l(dv):   # OK
+    print("links   :", dv)
+    if dv>=0:
+        ml_in2.on(); ml_in1.off(); ml_ena.duty(dv)
+    else:
+        ml_in2.off(); ml_in1.on(); ml_ena.duty(-dv)    
+
+def motor_r(dv):   # OK
+    print("rechts   :", dv)
+    if dv>=0:
+        mr_in3.on(); mr_in4.off(); mr_enb.duty(dv)
+    else:
+        mr_in3.off(); mr_in4.on(); mr_enb.duty(-dv)    
+
+
+def halt():
+    print("halt()")
+    dv=0
+    ml_ena.duty(dv)
+    mr_enb.duty(dv)
+    
+def fahre(*args):
+    if len(args)==0:
+        pass  
+    elif len(args)==1:
+        dv = int(args[0])
+        if abs(dv)<1024:
+            motor_l(dv); motor_r(dv)
+        else:
+            print("-1023 ... 1023")
+    elif len(args)==2:
+        dvl = int(args[0]); dvr = int(args[1])
+        if abs(dvl)<1024 and abs(dvr)<1024 :
+            motor_l(dvl); motor_r(dvr)
+        else:
+            print("-1023 ... 1023")
+    else:
+        print("falsche Parameterzahl")
+    
+# --- Ende fahren() ---
+
+print("Befehle aus robocar2w:")
+print("pwm_duty_wert von -1023 ... 1023")
+print("  motor_l(888)")                     # vor mit 888 von 1023
+print("  motor_r(-888)")                    # rück mit 888 von 1023
+print("  fahre(888) ")                    # vor mit 888 von 1023
+print("  fahre(-888, 888)")             # links rück und rechts vor mit 888
+print("  halt()")
+
+
+

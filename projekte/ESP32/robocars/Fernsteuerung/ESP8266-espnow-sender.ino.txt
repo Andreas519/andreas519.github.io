@@ -1,0 +1,36 @@
+// ESP8266+espnow-sender.ino
+#include <ESP8266WiFi.h>
+#include <espnow.h>
+uint8_t receiverAddress[] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+
+typedef struct struct_message {
+  char nachricht[32];
+} struct_message;
+
+struct_message myData;
+
+void OnDataSent(uint8_t *mac_addr, uint8_t sendStatus) {
+ if (sendStatus != 0) 
+   Serial.println("Delivery success");
+}
+ 
+void setup() {
+  Serial.begin(9600);
+  WiFi.mode(WIFI_STA);
+  while (esp_now_init() != 0) {
+    Serial.println("Error initializing ESP-NOW");
+    delay(1000); 
+  }
+  esp_now_set_self_role(ESP_NOW_ROLE_CONTROLLER);
+  esp_now_register_send_cb(OnDataSent);
+  esp_now_add_peer(receiverAddress, ESP_NOW_ROLE_SLAVE, 1, NULL, 0);
+}
+
+void loop() {
+  strcpy(myData.nachricht, "Ich bin der ESP8266 Sender");
+  byte result = esp_now_send(receiverAddress, (uint8_t *) &myData, sizeof(myData));
+  if (result != 0) {
+    Serial.println("\n Sending error");
+  } 
+  delay(1000);
+}

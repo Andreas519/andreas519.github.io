@@ -1,0 +1,25 @@
+void hilfe() {
+  Serial.println("### mBot-serial-steuern.ino ###");
+  Serial.println("###       2023-01-15        ###");
+  Serial.println("###       Hilfe             ###");
+}
+void ausgabe(String txt) {
+  if (ausgabe_erlauben) Serial.println(txt);
+}
+
+void string_to_array(String str) {
+  strs_length = 0;
+  while (str.length() > 0)  {
+    int index = str.indexOf(' ');
+    if (strs_length == max_strs) {
+      ausgabe("Fehler: Parameterzahl zu gross");
+      break;
+    } else if (index == -1)  { // No;space found
+      strs[strs_length++] = str;
+      break;
+    } else {
+      strs[strs_length++] = str.substring(0, index);
+      str = str.substring(index+1);
+    }
+  }
+}

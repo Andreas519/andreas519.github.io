@@ -1,0 +1,8 @@
+# serial-ports-list.py
+##  Serielle Ports unter Windows ## 
+
+import serial.tools.list_ports
+
+for p in list(serial.tools.list_ports.comports()):
+  print(str(p).split(" - "))
+  

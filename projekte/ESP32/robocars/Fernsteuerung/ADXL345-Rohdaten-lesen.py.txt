@@ -1,0 +1,24 @@
+# ADXL345-Rohdaten-lesen.py
+import serial, time
+port_ = 'COM7'   # Hier ist ESP8266+ADXL345 angeschlossen
+baudrate_ = 9600
+ser = serial.Serial( port_, baudrate_, bytesize=serial.EIGHTBITS, 
+                     parity=serial.PARITY_NONE, timeout=1 )
+ser.flushInput()
+txt = ser.readline().decode("UTF-8")
+
+while True:
+    txt = ser.readline().decode().rstrip()
+    tmp = txt.split(",")
+    if len(tmp)!=5:
+        print(".", end="")
+        continue
+    #ADXL345b,68, 15, -20, 281
+    kennung = tmp[0]
+    cnt     = int(tmp[1])
+    ac_x    = int(tmp[2])
+    ac_y    = int(tmp[3])
+    ac_z    = int(tmp[4])
+    # formatierte Ausgabe mit der f'-Strings
+    print(f'{ac_x:6}, {ac_y:6}, {ac_z:6}')
+

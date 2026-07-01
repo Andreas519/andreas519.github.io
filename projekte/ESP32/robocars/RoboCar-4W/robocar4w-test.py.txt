@@ -1,0 +1,31 @@
+# robocar4w-testen.py
+
+import robocar4w
+
+halt()
+
+dv = 1023  # maximal 1023, von 0 bis 1023 sind das 1024 verschiedene Werte
+
+motor_hr(dv);   time.sleep(dt)  # hinten rechts
+motor_hr(dv//2); time.sleep(dt)
+halt()
+
+motor_hl(dv);   time.sleep(dt)  # hinten rechts
+motor_hl(dv//2); time.sleep(dt)
+halt()
+
+motor_vr(dv);    time.sleep(dt)  # hinten rechts
+motor_vr(dv//2); time.sleep(dt)
+halt()
+
+motor_vl(dv);    time.sleep(dt)  # hinten rechts
+motor_vl(dv//2); time.sleep(dt)
+
+fahre(dv);       time.sleep(dt)
+
+fahre(dv,-dv);   time.sleep(dt)
+
+fahre(dv,-dv,dv,-dv);       time.sleep(dt)
+
+halt()
+# -----------------   ENDE   ----------

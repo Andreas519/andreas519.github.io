@@ -1,0 +1,20 @@
+void zeichen_auswerten() {
+  // ausgabe("Zeichen_auswerten");
+  char zeichen = zeile[0];
+  switch (zeichen) {  // Zeichen mÃ¼ssen alphaptisch sortiert sein
+    case 'h': 
+      // ausgabe("Halt");  
+      fahre(0);  break; 
+    case 'f': 
+      fahre(155);  break; 
+    case 'l': 
+      motor_links(155);  break; 
+    case 'r': 
+      motor_rechts(155);  break; 
+    case 'w': 
+      servo_richtung(90);  break;   
+    default:
+     ausgabe("NIX");
+     break;
+  } // switch
+}  // Ende zeichen_auswerten()

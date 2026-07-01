@@ -1,0 +1,21 @@
+# ESP32-SoftwareSerial-Arduino-testen.py
+# GPIO16 / U2RX / IO16  <---   orange  <---  ...  <---  TX / 1
+# GPIO17 / U2TX / IO17   --->  green    ---> ...   ---> DX / 0
+
+import machine, time
+
+uart2 = machine.UART(2, 115200) 
+uart2.init()
+cnt = 0
+while True:
+    cnt += 1
+    while uart2.any():
+        nachricht = uart2.readline().decode()
+        print(nachricht)
+    time.sleep(2.1)
+    if cnt%2 == 0:
+        nachricht = "w 70"
+    else:
+        nachricht = "w 100"
+    print("Sende: " + nachricht)
+    uart2.write(nachricht)

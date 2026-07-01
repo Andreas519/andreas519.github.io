@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elegoo RoboCar 4W · Young Engineers</title>
+  <link rel="stylesheet" href="../../../../css/my.css">
+</head>
+<body>
+  <header> Elegoo RoboCar 4W miot einen ESP32 erweitern
+  </header>
+  <main>
+    <section>
+      <h2>Programme auf dem Arduino des Elegoo</h2>
+      <p>Die folgenden Programme sind in einen Ordner "elegoo" zu speichern 
+      und dann ist das Programm "elegoo.ino" mit der Arduino IDE zu öffnen und auf den Arduino des Elegoo zu übertragen.</p>
+	 <ol type="a">
+		<li>
+		  <!-- <a href="../../../../tools/zeige_code.php?hl=Elegoo-serial-steuern&d=xfunktionen.ino.txt&md=elegoo-serial.md" target="_blank"> -->
+		  <a href="../../../../tools/zeige_code.php?hl=Elegoo-serial-steuern&d=elegoo.ino.txt&md=elegoo-serail.md" target="_blank">
+			elegoo.ino</a> 
+		  (<a href="elegoo.ino.txt" target="_blank">x</a>)
+		</li>
+		<li>
+		  <a href="../../../../tools/zeige_code.php?hl=my_elegoo.h&d=my_elegoo.h&md=leer.md" target="_blank">
+			my_elegoo.h</a> 
+		  (<a href="xfunktionen.ino.txt" target="_blank">x</a>)
+		</li>
+		<li>
+		  <a href="../../../../tools/zeige_code.php?hl=elegoo-xfunktionen&d=xfunktionen.ino.txt&md=leer.md" target="_blank">
+			xfunktionen.ino</a> 
+		  (<a href="xfunktionen.ino.txt" target="_blank">x</a>)
+		</li>
+		<li>
+		  <a href="../../../../tools/zeige_code.php?hl=elegoo-zeichen_auswerten&d=zeichen_auswerten.ino.txt&md=leer.md" target="_blank">
+			zeichen_auswerten.ino</a> 
+		  (<a href="zeichen_auswerten.ino.txt" target="_blank">x</a>)
+		</li>
+		<li>
+		 <a href="../../../../tools/zeige_code.php?hl=mBot-zeichenfolge_auswerten&d=zeichenfolge_auswerten.ino.txt&md=leer.md" target="_blank">
+			zeichenfolge_auswerten.ino</a>  
+		 (<a href="zeichenfolge_auswerten.ino.txt" target="_blank">x</a>)
+		</li>
+		<!-- <li><a href="mBot-serial-steuern/liesmich.md" target="_blank">liesmich.md</a></li> -->
+		<!-- <li><a href="mBot-serial-steuern/Pin Mapping.md" target="_blank">Pin Mapping.md</a></li>	 -->
+	 </ol>
+	 	 <p>Das Testen des Programms kann über den "Seriellen Monitor" der Arduino IDE erfolgen.<br>
+	 z. Bsp.: 'h' für Halt, 'w" für "Servo auf 90°", "w 120" für "drehe den Servo auf 120°", "ml -111" für "linke Seite rückwärts"
+	 und "m 255" für "alle Motoren mit Vollgas vorwärts".</p>
+	 <p>Das Testen kann ohne und mit eingeschaltem Akku-Pack erfolgen.</p>
+	 <p>Danach wird Elegoo vom USB-Kabel getrennt, um dessen serielle Schnittstelle freizugeben und wie nachfolgend beschrieben mit dem ESP32-Modul verbunden.</p>
+      <h2>Programme auf dem ESP32-Modul</h2>
+
+      <p>Die Verbindung zwischen dem Arduino und dem ESP-32 erfolgt über die Pins:<br/>
+	    <code>&emsp; GPIO16 / U2RX / IO16  ----- &emsp;&emsp;   Level-  &emsp;&emsp;  ----- &emsp;&emsp;  TX / 1<br/>
+        &emsp; GPIO17 / U2TX / IO17  ----- &emsp; converter  &emsp;----- &emsp;&emsp;  Dx / 0<br/>
+        &emsp; &emsp; &emsp; &emsp; &emsp;&emsp; GND &emsp; &emsp; &emsp; &emsp; ------------------------&emsp;&emsp;&emsp;&emsp; Gnd</code></br>
+
+	    mit Level Konverter in beiden Verbindungen<br> oder nur einem Spannungsteiler zwischen RX des ESP32 (3.3V Eingang) und dem TX (5V Ausgang) des Arduino.</p>
+		<p>Das Programm auf dem Arduino wurde, auch bezüglich der seriellen Kommunikation, ausführlich getestet.<br>
+		   Die serielle Verbindung mit dem PC muss geschlossen oder das USB-Kabel entfernt werden.
+		   <br>Die Stromversorgung des Elegoo wird über den eingeschaltenen Akku-Pack gewährleistet.<br>
+		   Alternativ geht es auch mit angestecktem USB-Kabel, wobei dadurch die Stromversorgung der Motoren nicht gewährleistet wird.
+		   <br>Der Arduino darf sich nicht mit einem Programm auf dem PC seriell verbinden!</p>
+		   <p>Lade das folgende Programm auf einen ESP32 D1 R32 und stelle die Verbindung zwischen dem ESP32 und dem Arduino sicher.<br>
+		   Nach Programmstart können die getestenen Befehle, wie "w 123", "m 255" oder "h" über die Kommandozeile von Thonny eingegeben 
+		   werden und die Sensordaten des Elegoo werden angezeigt.
+		   </p>
+   	  <ol type="a">
+	   <li>
+	    <a href="../../../../tools/zeige_python.php?hl=ESP32-SoftwareSerial-testen&d=ESP32-SoftwareSerial-Arduino-testen.py.txt&md=ESP32-SoftwareSerial-Arduino-testen.md" target="_blank">
+			ESP32-SoftwareSerial-Arduino-testen.py.txt</a> 
+	        (<a href="ESP32-SoftwareSerial-Arduino-testen.py.txt" target="_blank">x</a>)
+	   </li>
+	   <li>
+	    <a href="../../../../tools/zeige_python.php?hl=ESP32-SoftwareSerial-testen-1&d=ESP32-SoftwareSerial-Arduino-testen-1.py.txt&md=ESP32-SoftwareSerial-Arduino-testen-1.md" target="_blank">
+			ESP32-SoftwareSerial-Arduino-testen-1.py.txt</a> 
+	        (<a href="ESP32-SoftwareSerial-Arduino-testen.py.txt" target="_blank">x</a>)
+	   </li>	   
+	   <p>Im nächsten Schritt wird das Programm auf dem ESP-Modul als Sender und Receiver für ESP-Now erweitert.</p>
+    </ol>
+    </section>
+  </main>
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
+ 
