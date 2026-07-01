@@ -1,0 +1,51 @@
+// ESP32 Arduino IDE
+// Analogdaten als CSV über Serial ausgeben
+const int LedPin = 2;
+const int analogPin = 4;        // z.B. GPIO4
+const int sampleDelay_us = 000; // 1000 µs warten zwischen zwei Messungen
+const int N = 100;
+uint16_t adcValues[N];       // ADC-Werte 0...4095
+uint32_t timeValues[N];      // Zeitstempel in µs
+byte cnt = 0;
+void setup() {
+  Serial.begin(1000000);  //   9600:  1333 ms
+                          // 115200:  114 ms 
+                          //    
+  pinMode(LedPin, OUTPUT);
+  digitalWrite(LedPin, HIGH);
+  Serial.println("Speicheroszilloskop_ser-01.ino");
+  delay(1000);
+
+  analogReadResolution(12);     // 0 ... 4095
+  analogSetAttenuation(ADC_11db); // Messbereich grob bis ca. 3.3 V
+
+  Serial.println("nr,time_us,adc");
+}
+
+void loop() {
+  digitalWrite(LedPin, LOW);
+  cnt++;
+  unsigned long t0 = micros();
+  Serial.println(String(cnt)+". Messung");
+  for (int i = 0; i < N; i++) {
+    int adc = analogRead(analogPin);
+    timeValues[i] = micros() - t0;
+    adcValues[i] = analogRead(analogPin);
+    delayMicroseconds(sampleDelay_us);
+  }  // 100 Messungen,  108351 µs bei 100,
+  Serial.println(String(N)+" Messungen beendet nach "+String(micros()-t0) + String(" µs"));
+  Serial.println("Daten werden seriell zum PC übertragen");
+  t0=millis();
+  for (int i = 0; i < N; i++) {
+    Serial.printf("%lu,%lu,%d\n", i, timeValues[i], adcValues[i]); //
+  }
+  Serial.println("Daten uebertragen nach "+String(millis()-t0) + String(" ms"));
+  digitalWrite(LedPin, HIGH);
+  
+  delay(1111);
+  Serial.println("Weiter mit beliebiger Taste");
+  while (Serial.available()==0) {};
+  
+  String antw = Serial.readStringUntil('\n');
+
+}
