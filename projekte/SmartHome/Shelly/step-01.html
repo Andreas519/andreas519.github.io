@@ -41,20 +41,18 @@
     </section>
        
     <section>mögliche Aufgabenstellungen:<br>
-      <section>
-        <p>Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN des Shelly-Moduls, 
-        welches sich mit "ShellyPlus1-XXXXXX" zu erkennen gibt.<br>
-        Die PC in der Schule können wegen fehlender WLAN-Funktionalität nicht verwendet werden.</p>
-        <p>Rufe in deinem Browser die URL <code> http://192.168.33.1 </code> auf.<br>
-        Hier kannst du das Relais des Shelly-Moduls ein- und ausschalten, die WLAN-Einstellungen ändern und 
-        weitere Einstellungen vornehmen.</p>
-        <p>Über die URL's:<br>
-          <code> http://192.168.33.1/rpc/Shelly.GetStatus </code>  -  Zustand des Moduls<br>
-          <code>http://192.168.33.1/rpc/Switch.Set?turn=false</code> - Relais ausschalten<br>
-          <code>http://192.168.33.1/rpc/Switch.Set?turn=true</code> - Relais einschalten<br>
-        hast du über HTTP-Requests zugriff auf das Modul.
-        </p>
-        <p>Welche Inforamtionen werden über die drei gegebenen URL's abgerufen? </p>
+      <section>Aufgabe:
+        <ol>
+          <li>Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN ShellyPlus1-XXXXXX.</li>
+          <li>Öffne im Browser http://192.168.33.1.</li>
+          <li>Schalte das Relais über die Weboberfläche ein und aus.</li>
+          <li>Rufe die Statusinformationen über http://192.168.33.1/rpc/Shelly.GetStatus ab.</li>
+          <li>Schalte das Relais mit HTTP-Requests:<br>
+            - EIN: http://192.168.33.1/rpc/Switch.Set?id=0&on=true<br>
+            - AUS: http://192.168.33.1/rpc/Switch.Set?id=0&on=false
+          </li>
+          <li>Notiere, welche Informationen im JSON-Format angezeigt werden.</li>
+        </ol> 
       </section>
       <section>
         Finde heraus, wie man einen Shelly Plus 1 in ein WLAN einbindet und über die Weboberfläche steuert.
