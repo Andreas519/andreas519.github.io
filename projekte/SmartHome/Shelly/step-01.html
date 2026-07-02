@@ -14,36 +14,51 @@
   </header>
 
   <main>
-    <section>
-      <p>Vorbereitung: <br>
-        Shelly Plus wird durch ein Reset auf Werkseinstellungen zurückgesetzt. <br>
-        Danach wird das WLAN des Shelly Plus aktiviert.<BR>
-        Wie wird reset durchgeführt? Mindestens 10 Sekunden den Reset-Taster gedrückt halten.<br>
-        Danach stellt der Shelly Plus ein eigenes WLAN bereit, das mit einem Smartphone oder PC verbunden werden kann.<br>
-        Verbinde dich mit dem WLAN des Shelly Plus und öffne die Weboberfläche des Shelly Plus im Browser. <br>
-        Dazu rufe in deinem Browser die URL http://192.168.33.1 auf.<br>
-        Hier kannst du das Relay des Shelly Plus ein- und ausschalten, die WLAN-Einstellungen ändern und weitere Einstellungen vornehmen. 
+    <section><h3>Vorbereitung:</h3>
+      <p>Das Modul "Shelly Plus 1" wird durch ein Reset auf Werkseinstellungen zurückgesetzt.<br>
+        Dazu das Modul an die Stromversorgung anschließen. (GND an L, +12V an +12V,  
+        <a href="https://kb.shelly.cloud/__attachments/a_5cb35de028df63533cf6a9bf6bca76b664e052dfea53bea1e16145a751542224/Plus%201-12V-RC-Snubber-wiring-diagram.png?cb=e619423bf5d0403b0ab53d69208a3279">Bild</a>)
+        und den Reset-Taster mindestens 10 Sekunden gedrückt halten.<br>
         </p>
+        <p>Mit dem Reset wird das "Shelly Plus 1" als Access Point aktiviert.<BR>
+        Mit "ShellyPlus1-XXXXXX" per WLAN Verbinden.<br>
+        Im Browser wird über http://192.168.33.1 die Weboberfläche aufgerufen.<br>
+        Hier können <br>
+        - das Relais des Shelly-Moduls ein- und ausschalten, <br>
+        - der Status des Eingangs "SW" abfragen, <br>
+        - die WLAN-Einstellungen geändern<br>
+        - und weitere Einstellungen vornehmen<br>
+        werden. 
+        </p>
+        <p> Beispiel: In den folgenden Ausgaben sollte oben links "Quelltextformatierung" aktiviert sein, damit die Ausgabe im JSON-Format übersichtlich dargestellt wird. <br>"
+          <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
+          <a href="http://192.168.33.1/rpc/Switch.Set?turn=true" target="_blank">Relais ein</a><br>
+          <a href="http://192.168.33.1/rpc/Switch.Set?turn=false" target="_blank">Relais aus</a><br>
+          <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
+          <a href="http://192.168.33.1/rpc/Input.GetStatus?id=0" target="_blank">Eingang Status</a><br>
+         </p>
+         <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
     </section>
-    <section>
-        Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN des Shelly Plus und öffne die Weboberfläche des Shelly Plus im Browser. <br>
-        Ein PC kann wegen fehlender WLAN-Funktionalität nicht verwendet werden. <br>
-        Rufe in deinem Browser die URL http://192.168.33.1 auf.<br>
-        Hier kannst du das Relay des Shelly Plus ein- und ausschalten, die WLAN-Einstellungen ändern und weitere Einstellungen vornehmen.<br>
-        Über die URL http://192.168.33.1/rpc kannst du das Relay des Shelly Plus auch über HTTP-Requests steuern. <br>
-        Beispiel: http://192.168.33.1/rpc/Switch.Set?turn=on schaltet das Relay ein, http://192.168.33.1/rpc/Switch.Set?turn=off schaltet das Relay aus.
-    </section>
-    <section>
-        <ul>
-           
-        </ul>    
-    </section>
-    <section>Aufgabe:
-        
-        <ul>
-            <li>Finde heraus, wie man einen Shelly 1 oder Shelly 2.5 in ein WLAN einbindet und über die Weboberfläche steuert.</li>
-            
-        </ul>    
+       
+    <section>Aufgabenstellungen:<br>
+      <section>
+        <p>Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN des Shelly-Moduls, 
+        welches sich mit "ShellyPlus1-XXXXXX" zu erkennen gibt.<br>
+        Die PC in der Schule können wegen fehlender WLAN-Funktionalität nicht verwendet werden.</p>
+        <p>Rufe in deinem Browser die URL <code> http://192.168.33.1 </code> auf.<br>
+        Hier kannst du das Relais des Shelly-Moduls ein- und ausschalten, die WLAN-Einstellungen ändern und 
+        weitere Einstellungen vornehmen.</p>
+        <p>Über die URL's:<br>
+          <code> http://192.168.33.1/rpc/Shelly.GetStatus </code>  -  Zustand des Moduls<br>
+          <code>http://192.168.33.1/rpc/Switch.Set?turn=false</code> - Relais ausschalten<br>
+          <code>http://192.168.33.1/rpc/Switch.Set?turn=true</code> - Relais einschalten<br>
+        hast du über HTTP-Requests zugriff auf das Modul.
+        </p>
+        <p>Welche Inforamtionen werden über die drei gegebenen URL's abgerufen? </p>
+      </section>
+      <section>
+        Finde heraus, wie man einen Shelly Plus 1 in ein WLAN einbindet und über die Weboberfläche steuert.
+      </section>              
     </section>
 
     <section>

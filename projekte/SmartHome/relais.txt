@@ -1,0 +1,38 @@
+Ich habe dir ein Relais-Codeschloss mit Zifferntastatur als Schaltbild rekonstruiert. 
+
+Annahme: Code 1–2–3, drei Relaisstufen mit Selbsthaltung, Ausgang über K3.
+
+Downloads:
+
+Schaltbild als PDF
+Schaltbild als PNG
+Schaltbild als SVG
+
+Die Grundidee:
+
+Taste 1 zieht Relais K1 an.
+K1 hält sich selbst und gibt Stufe 2 frei.
+Taste 2 kann erst danach Relais K2 anziehen.
+K2 hält sich selbst und gibt Stufe 3 frei.
+Taste 3 zieht K3 an.
+K3 schaltet dann z. B. Summer, Lampe, Türöffner oder Motor.
+
+Falsche Tasten können über einen RESET-Öffner alle Selbsthaltungen unterbrechen. 
+Für eine reale AG-Schaltung würde ich unbedingt Freilaufdioden antiparallel zu den Relaisspulen ergänzen,
+ besonders wenn später ein Transistor oder Mikrocontroller beteiligt ist. ⚠️
+
+ Ich habe dir das Codeschloss 1-2-3 zusätzlich als Logikgatter-Schaltbild erstellt.
+
+Logikgatter-Schaltbild als PDF
+Logikgatter-Schaltbild als PNG
+Logikgatter-Schaltbild als SVG
+
+Die Zuordnung zur Relais-Schaltung ist unten im Bild enthalten:
+
+AND = Kontakte in Reihe
+OR = Kontakte parallel
+NOT = Öffnerkontakt
+S1/S2/S3 = Speicherstufen, also Relais mit Selbsthaltung
+
+Damit kannst du schön zeigen: 
+Das Relais-Codeschloss ist im Grunde schon digitale Logik zum Anfassen.
