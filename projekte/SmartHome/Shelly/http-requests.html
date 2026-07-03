@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart-Home-Projekte · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Getestet HTTP-Requests an Shelly Plus 1 
+  </header>
+
+  <main> <a href="https://chatgpt.com/share/6a46deaf-0be4-83ed-a227-bb8f700b2c39">ChatGPT-Chat Shelly - HTTP-Requests</a
+    <section>Netzwerk
+        <p><code>http://192.168.33.1/rpc/WiFi.Scan</code> – WLAN-Scan</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"DEIN_PASSWORT","enable":true},"ap":{"enable":true}}</code> – WLAN-Konfiguration</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspery","abcd1234":"DEIN_PASSWORT","enable":true},"ap":{"enable":true}}</code> – WLAN-Konfiguration</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":false}}</code> – STA deaktivieren</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"enable":false}}</code> – STA1 deaktivieren</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
+        <p><code>http://192.168.33.1/rpc/BLE.GetConfig</code> – BLE-Konfiguration abfragen</p>
+        <p><code>http://192.168.33.1/rpc/BLE.SetConfig?config={"rpc":{"enable":true}}</code> – BLE-Konfiguration aktivieren</p>
+    </section>
+    <section>einordnen ...
+        <p><code>http://192.168.33.1/rpc/WiFi.Scan</code> – WLAN-Scan</p>
+        <p><code>http://192.168.33.1/rpc/Shelly.GetStatus</code> – Statusabfrage</p>
+        <p><code>http://192.168.33.1/rpc/Switch.GetStatus?id=0</code> – Schalterstatus abfragen</p>
+        <p><code>http://192.168.33.1/rpc/Switch.Set?id=0&on=false</code> – Schalter ausschalten</p>
+        <p><code>http://192.168.33.1/rpc/Shelly.Reboot</code> – Reboot</p>
+    </section>
+</main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

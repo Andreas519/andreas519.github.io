@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelly+1-01 · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Shelley Plus 1-01: Einbindung in WLAN und Steuerung über Weboberfläche
+  </header>
+
+  <main>
+    <section><h3>Vorbereitung:</h3>
+      <p>Das Modul "Shelly Plus 1" wird durch ein Reset auf Werkseinstellungen zurückgesetzt.<br>
+        Dazu das Modul an die Stromversorgung anschließen. (GND an L, +12V an +12V,  
+        <a href="https://kb.shelly.cloud/__attachments/a_5cb35de028df63533cf6a9bf6bca76b664e052dfea53bea1e16145a751542224/Plus%201-12V-RC-Snubber-wiring-diagram.png?cb=e619423bf5d0403b0ab53d69208a3279">Bild</a>)
+        und den Reset-Taster mindestens 10 Sekunden gedrückt halten.<br>
+        </p>
+        <p>Mit dem Reset wird das "Shelly Plus 1" als Access Point aktiviert.<BR>
+        Mit "ShellyPlus1-XXXXXX" per WLAN Verbinden.<br>
+        Im Browser wird über http://192.168.33.1 die Weboberfläche aufgerufen.<br>
+        Hier können <br>
+        - das Relais des Shelly-Moduls ein- und ausschalten, <br>
+        - der Status des Eingangs "SW" abfragen, <br>
+        - die WLAN-Einstellungen geändern<br>
+        - und weitere Einstellungen vornehmen<br>
+        werden. 
+        </p>
+        <p> Beispiel: In den folgenden Ausgaben sollte oben links "Quelltextformatierung" aktiviert sein, 
+          damit die Ausgabe im JSON-Format übersichtlich dargestellt wird. <br>
+          <code> http://192.168.33.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=true </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=true" target="_blank">Relais ein</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=false </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">Relais aus</a><br>
+          <code> http://192.168.33.1/rpc/Switch.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
+          <code> http://192.168.33.1/rpc/Input.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Input.GetStatus?id=0" target="_blank">Eingang Status</a><br>
+         </p>
+         <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
+    </section>
+       
+    <section><h3>Mögliche Aufgabenstellungen:</h3>
+      <section>Variante 1:
+        <ol>
+          <li>Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN ShellyPlus1-XXXXXX.</li>
+          <li>Öffne im Browser http://192.168.33.1.</li>
+          <li>Schalte das Relais über die Weboberfläche ein und aus.</li>
+          <li>Rufe die Statusinformationen über http://192.168.33.1/rpc/Shelly.GetStatus ab.</li>
+          <li>Schalte das Relais mit HTTP-Requests:<br>
+            - EIN: http://192.168.33.1/rpc/Switch.Set?id=0&on=true<br>
+            - AUS: http://192.168.33.1/rpc/Switch.Set?id=0&on=false
+          </li>
+          <li>Notiere, welche Informationen im JSON-Format angezeigt werden.</li>
+        </ol> 
+      </section>
+      <section>Variante 2:
+        <ol>
+          <li>Verbinde dein Handy mit dem WLAN ShellyPlus1-XXXXXX.</li>
+          <li>Öffne im Browser http://192.168.33.1.</li>
+          <li>Schalte das Relais über die Weboberfläche ein und aus.</li>
+          <li>Rufe die Statusinformationen über http://192.168.33.1/rpc/Shelly.GetStatus ab.</li>
+          <li>Notiere, welche Informationen im JSON-Format angezeigt werden.</li>
+        </ol> 
+      </section>
+      <section>Variante 3:
+        <ol>
+          <li>Verbinde dein Smartphone, Tablet oder Laptop mit dem WLAN ShellyPlus1-XXXXXX.</li>
+          <li>Notiere, welche Informationen im JSON-Format angezeigt werden.</li>          
+          <li>Finde die Steuerungsoptionen für das Relais und teste diese.</li>
+          <li>Öffne im Browser http://192.168.33.1.</li>
+          <li>Rufe die Statusinformationen über http://192.168.33.1/rpc/Shelly.GetStatus ab.</li>
+          <li>Versuche diese Gerät mit Bluetooth zu erreichen.</li>
+        </ol> 
+      </section>
+      <section>Variante 4:
+        Finde heraus, wie man einen Shelly Plus 1 in ein WLAN einbindet und über die Weboberfläche steuert.
+      </section>              
+    </section>
+
+    <section>Hinweise: 
+       Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N.<br>
+       ACHTUNG: Wir arbeiten nicht mit 220V! Bitte nur mit 12V Gleichspannung arbeiten. <br>
+      <img src="https://kb.shelly.cloud/__attachments/a_5cb35de028df63533cf6a9bf6bca76b664e052dfea53bea1e16145a751542224/Plus%201-12V-RC-Snubber-wiring-diagram.png?cb=e619423bf5d0403b0ab53d69208a3279" style="max-width:100%;height:auto;border:1px solid #ccc;border-radius:8px;" label="Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N." />
+    </section>
+</main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

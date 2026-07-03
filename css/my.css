@@ -36,3 +36,63 @@ main li {
 .project-card th {  background: #eef4ff; }
 
 .merkbox {   background: #f1f7ff;   border-left: 5px solid var(--accent);   padding: 10px 14px;   border-radius: 8px; }
+
+nav[aria-label="Shelly Schritt Navigation"] {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  margin: 18px 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .04);
+}
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+nav li {
+  margin: 0;
+}
+nav a {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #eef4ff;
+  color: var(--accent);
+  font-weight: 600;
+}
+nav a:hover {
+  background: linear-gradient(135deg, #e0ecff, #cfe6ff);
+  text-decoration: none;
+}
+article {
+  margin-bottom: 24px;
+}
+aside {
+  background: #f5f9ff;
+  border-left: 4px solid var(--accent);
+  padding: 16px 18px;
+  border-radius: 12px;
+  margin: 18px 0;
+}
+figure {
+  margin: 20px 0;
+}
+figcaption {
+  font-size: 0.95rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 10px;
+}
+ul > li,
+ol > li {
+  margin-bottom: 0.7rem;
+}
+@media (max-width: 720px) {
+  nav ul {
+    flex-direction: column;
+  }
+}
