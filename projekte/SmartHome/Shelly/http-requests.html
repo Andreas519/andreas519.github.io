@@ -13,14 +13,54 @@
     Getestet HTTP-Requests an Shelly Plus 1 
   </header>
 
-  <main> <a href="https://chatgpt.com/share/6a46deaf-0be4-83ed-a227-bb8f700b2c39">ChatGPT-Chat Shelly - HTTP-Requests</a
-    <section>Netzwerk
+  <main> <a href="https://chatgpt.com/share/6a46deaf-0be4-83ed-a227-bb8f700b2c39">ChatGPT-Chat Shelly - HTTP-Requests</a>
+
+    <section><h4>Netzwerkinformationen des Shelly-Moduls abfragen:</h4>
+
         <p><code>http://192.168.33.1/rpc/WiFi.Scan</code> – WLAN-Scan</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"DEIN_PASSWORT","enable":true},"ap":{"enable":true}}</code> – WLAN-Konfiguration</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspery","abcd1234":"DEIN_PASSWORT","enable":true},"ap":{"enable":true}}</code> – WLAN-Konfiguration</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.GetConfig</code> – WLAN-Konfiguration abfragen</p>
+        <p><code>http://192.168.33.1/rpc/WiFi.GetStatus</code> – WLAN-Status abfragen</p>
+      </section>
+      <section>Merke:<br>
+        
+        <p>"sta" = primäres WLAN   -   "sta1" = zweites / alternatives WLAN<br>
+          "ssid" = Name des WLANs, ohne Sonderzeichen   -   "pass" = Passwort des WLANs, ohne Sonderzeichen</p>
+        </section>
+
+      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+          <code>
+            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}
+          </code> – WLAN-Konfiguration<br>
+          Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "mrge-bu-46" zu verbinden. Falls das WLAN nicht erreichbar ist, 
+          wird das Shelly-Modul den Access Point "ShellyPlus1-XXXXXX" aktivieren. Diese WLAN-Verbindung muss neu eingestellt werden,
+          um das Shelly-Modul wieder zu erreichen.
+        </p>
+        </section>
+      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+        <code>
+            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspi","pass":"abcd1234","enable":true},"ap":{"enable":true}}
+          </code>
+          <p>
+          Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "raspi" zu verbinden. Falls das WLAN nicht erreichbar ist, 
+          wird das Shelly-Modul die Verbindung zum WLAN "mrge-ap-bu46" herzustellen.
+          Die Verbindin zum Acces Point muss bei Bedafr wieder neu eingestellt werden, um das Shelly-Modul wieder zu erreichen.
+          Diese WLAN-Verbindung muss neu eingestellt werden,
+          um das Shelly-Modul wieder zu erreichen.</p>
+        </section>
+      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+          <code>
+            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":true},"sta1":{"enable":false},"ap":{"enable":true}}
+          </code>
+          <p>WLAN-Konfigurationen erlauben / nicht erlauben</p>
+        </section>
+      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+       
+        
         <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
         <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":false}}</code> – STA deaktivieren</p>
         <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"enable":false}}</code> – STA1 deaktivieren</p>
+         
+
         <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
         <p><code>http://192.168.33.1/rpc/BLE.GetConfig</code> – BLE-Konfiguration abfragen</p>
         <p><code>http://192.168.33.1/rpc/BLE.SetConfig?config={"rpc":{"enable":true}}</code> – BLE-Konfiguration aktivieren</p>

@@ -1,0 +1,5 @@
+
+
+http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"meineWlanSSID","pass":"MeinWlanPasswortohneSonderzeichen","enable":true}}
+
+http://192.168.137.33/rpc/WiFi.SetConfig?config=%7B%22sta%22:%7B%22ssid%22:%22mrge-bu-46%22,%22pass%22:%22%22,%22enable%22:true%7D,%22ap%22:%7B%22enable%22:true%7D%7D

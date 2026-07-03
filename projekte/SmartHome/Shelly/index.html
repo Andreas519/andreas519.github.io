@@ -15,22 +15,28 @@
 
   <main>
     <section>
-        <p>Shelly-Geräte sind kleine Smart-Home-Module, die elektrische Verbraucher schalten, messen und automatisieren können. Sie werden meist per WLAN eingebunden und lassen sich über App, Weboberfläche, HTTP/API oder MQTT steuern.
+<!--         <p>Shelly-Geräte sind kleine Smart-Home-Module, die elektrische Verbraucher schalten, messen und automatisieren können. Sie werden meist per WLAN eingebunden und lassen sich über App, Weboberfläche, HTTP/API oder MQTT steuern.
         </p>
         <p>Für Schüler kurz:<br>Shelly = fertiges Smart-Home-Modul mit Relais, WLAN und manchmal Leistung
         Ein Shelly ist ein fertiger Mini-Computer für die Hausautomation. Er kann Lampen, Motoren oder andere Verbraucher schalten und oft auch den Energieverbrauch messen.
         </p>
         <p>Noch kürzer:<br>Shelly = fertiges Smart-Home-Modul mit Relais, WLAN und manchmal Leistungsmessung.
-        </p>
+        </p> -->
         <p>Shelly-Geräte sind kompakte Smart-Home-Module für die Hausautomation. 
         Sie können Verbraucher schalten, Messwerte erfassen und über WLAN mit 
-        App, Browser oder anderen Geräten wie einem ESP32 kommunizieren.
+        App, Browser oder anderen Geräten wie einem ESP32 kommunizieren.<br>
+        <img src="dateien/1PM-1PM-mini.jpg" alt="Shelly 1 PMs" height="150" />
+        <img src="dateien/shelly-relais-1-gen4.png" alt="Shelly Relais 1 Gen. 4" height="150"/>
         </p>
     </section>
-    <section>Aufgabenstellung:<br>
+    <section>Vorbereitung / Aufgabenstellung für "Shelly Plus 1"<br>
       <ol>
+        
+        <li>Modul vorbereiten kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys testen<br>  
+          <a href="step-00.html">Vorbereitung</a>
+        </li>
         <li> Shelly Plus 1  ·  Modul kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys<br>  
-          <a href="step-01-vorher.html">step-01-vorher.html</a>a> /
+          <a href="step-01-vorher.html">step-01-vorher.html</a>  /
           <a href="step-01.html">step-01.html</a> von ChatGPT überarbeitet
         </li>
         <li> Shelly Plus 1  ·  in ein lokales WLAN einbinden, Steuerung über Weboberfläche und RPC-API<br>
@@ -39,7 +45,8 @@
     </section>
 
     <section>
-        <ul>  <a href="http-request.html">Sammlung von HTTP-Anfragen für "Shelly Plus 1"</a>
+        <ul> 
+          <li><a href="https://www.shelly.com/de" target="_blank">Shelly Official Website</a></li>
             <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>
             <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>
             <li><a href="https://kb.shelly.cloud/knowledge-base/devices" target="_blank">Shelly - Devices</a></li>
@@ -48,27 +55,14 @@
             <li><a href="https://github.com/ALLTERCO/shelly-script-examples" target="_blank">Shelly Script Examples auf GitHub</a></li>  
             <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1-web-interface-guide" target="_blank">Shelly Plus 1 Web Interface Guide</a></li> 
             <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-smart-control-guide" target="_blank">Shelly Smart Control Guide</a></li>
-           
         </ul>    
     </section>
-    <section>Aufgabe:
-        
-        <ul>
-            <li>Finde heraus, wie man einen Shelly 1 oder Shelly 2.5 in ein WLAN einbindet und über die Weboberfläche steuert.</li>
-
-
-    </section>
-
     <section>
-      <figure>
-        <img src="shelly-anschluss.svg" alt="Shelly Anschlussdiagramm" style="max-width:100%;height:auto;border:1px solid #ccc;border-radius:8px;" />
-        <figcaption>Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N.</figcaption>
-      </figure>
+       <a href="http-request.html">Sammlung von HTTP-Anfragen für "Shelly Plus 1"</a>
     </section>
 </main>
 
-  <footer>
-    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../../../js/script.js"></script>
   </footer>
