@@ -17,60 +17,68 @@
 
     <section><h4>Netzwerkinformationen des Shelly-Moduls abfragen:</h4>
 
-        <p><code>http://192.168.33.1/rpc/WiFi.Scan</code> – WLAN-Scan</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.GetConfig</code> – WLAN-Konfiguration abfragen</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.GetStatus</code> – WLAN-Status abfragen</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.Scan" target="_blank">http://192.168.33.1/rpc/WiFi.Scan</a></code> – WLAN-Scan</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/rpc/WiFi.GetConfig</a></code> – WLAN-Konfiguration abfragen</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.GetStatus" target="_blank">http://192.168.33.1/rpc/WiFi.GetStatus</a></code> – WLAN-Status abfragen</p>
+    </section>
+    
+    <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+      <section>Merke:<br>  
+        <pre>
+        "sta"  = primäres WLAN                           "sta1" = zweites / alternatives WLAN
+        "ssid" = Name des WLANs, ohne Sonderzeichen      "pass" = Passwort des WLANs, ohne Sonderzeichen
+        </pre>
+        Das Modul kann gleichzeitig über den Access Point und über das primäre WLAN (sta) angesprochen werden.<br>
+        Das zweite WLAN (sta1) wird nur genutzt, wenn das primäre WLAN nicht erreichbar ist.  
       </section>
-      <section>Merke:<br>
-        
-        <p>"sta" = primäres WLAN   -   "sta1" = zweites / alternatives WLAN<br>
-          "ssid" = Name des WLANs, ohne Sonderzeichen   -   "pass" = Passwort des WLANs, ohne Sonderzeichen</p>
-        </section>
-
-      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
-          <code>
-            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}
-          </code> – WLAN-Konfiguration<br>
-          Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "mrge-bu-46" zu verbinden. Falls das WLAN nicht erreichbar ist, 
-          wird das Shelly-Modul den Access Point "ShellyPlus1-XXXXXX" aktivieren. Diese WLAN-Verbindung muss neu eingestellt werden,
-          um das Shelly-Modul wieder zu erreichen.
-        </p>
-        </section>
-      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+      <section>
         <code>
-            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspi","pass":"abcd1234","enable":true},"ap":{"enable":true}}
-          </code>
-          <p>
-          Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "raspi" zu verbinden. Falls das WLAN nicht erreichbar ist, 
-          wird das Shelly-Modul die Verbindung zum WLAN "mrge-ap-bu46" herzustellen.
-          Die Verbindin zum Acces Point muss bei Bedafr wieder neu eingestellt werden, um das Shelly-Modul wieder zu erreichen.
-          Diese WLAN-Verbindung muss neu eingestellt werden,
-          um das Shelly-Modul wieder zu erreichen.</p>
-        </section>
-      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
+          <a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}</a>
+        </code> – WLAN-Konfiguration für Client-Verbindung
+          <p>Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "mrge-bu-46" zu verbinden.<br>
+             Die IP-Adresse der WLAN-Verbindung muss kann mittels IP-Scanner festgestellt werden.<br>
+             Gleichzeitig ist das Shelly-Modul über Access Point "ShellyPlus1-XXXXXX" erreichbar, nachdem die Verbindung erneut hergestellt wurde.<br>
+            <code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/rpc/WiFi.GetConfig</a></code> – Ausleden der IP-Adresse</p>
+            <pre>{"sta_ip":"192.168.137.207","status":"got ip","ssid":"mrge_ap_bu46","rssi":-55}</pre>
+            </p>
+      </section>
+      <section>
+        <code>
+            <a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspi","pass":"abcd1234","enable":true},"ap":{"enable":true}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"raspi","pass":"abcd1234","enable":true},"ap":{"enable":true}}</a>
+        </code>
+        <p>
+          Nach dem Aufruf wird das Shelly-Modul versuchen, sich mit dem WLAN "raspi" zu verbinden. Falls dieses WLAN nicht erreichbar ist, 
+          wird das Shelly-Modul die Verbindung zum WLAN "mrge-ap-bu46" herzustellen.<br>
+          Die IP-Adresse der WLAN-Verbindung kann mittels IP-Scanner festgestellt werden.<br>
+        </p>
+          Die Verbindung zum Access Point kann bei Bedarf wieder neu hergestellt werden.<br>
+          Dazu muß die Verbindung zum Access Point wieder hergestellt werden.<br
+>     </section>  
+        </p>
+      </section>
+      <section>
           <code>
-            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":true},"sta1":{"enable":false},"ap":{"enable":true}}
+            <a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":true},"sta1":{"enable":false},"ap":{"enable":true}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":true},"sta1":{"enable":false},"ap":{"enable":true}}</a>
           </code>
           <p>WLAN-Konfigurationen erlauben / nicht erlauben</p>
-        </section>
-      <section><h4>Netzwerkkonfiguration des Shelly-Moduls ändern:</h4>
-       
-        
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":false}}</code> – STA deaktivieren</p>
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"enable":false}}</code> – STA1 deaktivieren</p>
+      </section>
+      <section>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</a></code> – AP deaktivieren</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":false}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"enable":false}}</a></code> – STA deaktivieren</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"enable":false}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"enable":false}}</a></code> – STA1 deaktivieren</p>
          
 
-        <p><code>http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</code> – AP deaktivieren</p>
-        <p><code>http://192.168.33.1/rpc/BLE.GetConfig</code> – BLE-Konfiguration abfragen</p>
-        <p><code>http://192.168.33.1/rpc/BLE.SetConfig?config={"rpc":{"enable":true}}</code> – BLE-Konfiguration aktivieren</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}" target="_blank">http://192.168.33.1/rpc/WiFi.SetConfig?config={"ap":{"enable":false}}</a></code> – AP deaktivieren</p>
+        <p><code><a href="http://192.168.33.1/rpc/BLE.GetConfig" target="_blank">http://192.168.33.1/rpc/BLE.GetConfig</a></code> – BLE-Konfiguration abfragen</p>
+      </section>
     </section>
     <section>einordnen ...
-        <p><code>http://192.168.33.1/rpc/WiFi.Scan</code> – WLAN-Scan</p>
-        <p><code>http://192.168.33.1/rpc/Shelly.GetStatus</code> – Statusabfrage</p>
-        <p><code>http://192.168.33.1/rpc/Switch.GetStatus?id=0</code> – Schalterstatus abfragen</p>
-        <p><code>http://192.168.33.1/rpc/Switch.Set?id=0&on=false</code> – Schalter ausschalten</p>
-        <p><code>http://192.168.33.1/rpc/Shelly.Reboot</code> – Reboot</p>
+      <p><code><a href="http://192.168.33.1/rpc/BLE.SetConfig?config={"rpc":{"enable":true}}" target="_blank">http://192.168.33.1/rpc/BLE.SetConfig?config={"rpc":{"enable":true}}</a></code> – BLE-Konfiguration aktivieren</p>
+        <p><code><a href="http://192.168.33.1/rpc/WiFi.Scan" target="_blank">http://192.168.33.1/rpc/WiFi.Scan</a></code> – WLAN-Scan</p>
+        <p><code><a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">http://192.168.33.1/rpc/Shelly.GetStatus</a></code> – Statusabfrage</p>
+        <p><code><a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">http://192.168.33.1/rpc/Switch.GetStatus?id=0</a></code> – Schalterstatus abfragen</p>
+        <p><code><a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">http://192.168.33.1/rpc/Switch.Set?id=0&on=false</a></code> – Schalter ausschalten</p>
+        <p><code><a href="http://192.168.33.1/rpc/Shelly.Reboot" target="_blank">http://192.168.33.１/rpc/Shelly.Reboot</a></code> – Reboot</p>
     </section>
 </main>
 

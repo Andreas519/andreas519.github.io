@@ -15,10 +15,18 @@
   </header>
 
   <main>
-    <section><h3>Vorbereitung für Ersteinsatz</h3>
+    <nav aria-label="Shelly Schritt Navigation">
+      <ul>
+        <li><a href="#ap">Erstvorbereitung alsAccess Point</a></li>
+        <li><a href="#client">Verbindung als WEB-Client</a></li>
+        <li><a href="#tasks">12V-Stromversorgung</a></li>
+        
+      </ul>
+    </nav>
+    <section><h3 id="ap">Vorbereitung AP</h3>
       <p>Das Modul "Shelly Plus 1" wird durch ein Reset auf Werkseinstellungen zurückgesetzt.<br>
         Dazu das Modul an die Stromversorgung anschließen. (GND an L, +12V an +12V,  
-        <a href="#hinweis">Abbildung</a>)
+        <a href="#tasks">Abbildung</a>)
         und den Reset-Taster mindestens 10 Sekunden gedrückt halten.<br>
         </p>
         <p>Mit dem Reset wird das "Shelly Plus 1" als Access Point aktiviert.<BR>
@@ -33,7 +41,7 @@
         </p>
         <p> Beispiel: In den folgenden Ausgaben sollte oben links "Quelltextformatierung" aktiviert sein, 
           damit die Ausgabe im JSON-Format übersichtlich dargestellt wird. <br>
-          <code> http://192.168.33.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
+          <code> http://192.168.133.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
           <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=true </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=true" target="_blank">Relais ein</a><br>
           <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=false </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">Relais aus</a><br>
           <code> http://192.168.33.1/rpc/Switch.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
@@ -42,21 +50,35 @@
          <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
     </section>
 
-    <section><h3>Vorbereitung für Einsatz als WEB-Client</h3>
+    <section><h3 id="client">Vorbereitung für Einsatz als WEB-Client</h3>
       <p>Verbindung mit dem Access Point "ShellyPlus1-XXXXXX" des Shelly-Moduls per WLAN herstellen</p>
-      <p>Folgenden WEB-Request anpassen und im Browser aufrufen:<br>
-          
-          <code> http://192.168.33.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
-          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=true </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=true" target="_blank">Relais ein</a><br>
-          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=false </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">Relais aus</a><br>
-          <code> http://192.168.33.1/rpc/Switch.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
-          <code> http://192.168.33.1/rpc/Input.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Input.GetStatus?id=0" target="_blank">Eingang Status</a><br>
-         </p>
+      <p>Folgenden WEB-Request anpassen und im Browser aufrufen:</p>
+      <section> – WLAN-Konfiguration für "sta" setzen:
+        <code>
+          <p>
+          <a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}" target="_blank">
+            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}</a>
+        </code>
+        </p>
+        <p>Nach dem Aufruf wird das Shelly-Modul die Verbindung zum Access Point abbrechen und versuchen sich mit dem WLAN "mrge-bu-46" zu verbinden.<br>
+         Die IP-Adresse dieser WLAN-Verbindung kann mittels IP-Scanner festgestellt werden.<br>
+        </p>
+        <p>Gleichzeitig ist das Shelly-Modul über Access Point "ShellyPlus1-XXXXXX" erreichbar, 
+          wenn die Verbindung zum Access Point erneut hergestellt wurde. Die IP-Adresse der WLAN-Verbindung zu "mrge-bu-46" so leicht zu ermitteln:<br>
+          <code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/GetConfig</a>
+          </code>
+          <pre>{"sta_ip":"10.126.137.207","status":"got ip","ssid":"mrge_ap_bu46","rssi":-55}</pre>
+        </section>
+        <section>
+        <code> http://192.168.xxx.xxx/</code> Shelly Webinterface<br>
+        <code> http://192.168.xxx.xxx/rpc/Switch.Set?id=0&on=true </code> -Relais ein</a><br>
+        </section>
+      
          <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
     </section>
 
 
-    <section id="hinweis">
+    <section id="tasks">
       <h3>Hinweise:</h3>
       <p>Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N.<br>
       ACHTUNG: Wir arbeiten nicht mit 220V! <bold>Nur mit 12V Gleichspannung arbeiten.</bold> <br>
