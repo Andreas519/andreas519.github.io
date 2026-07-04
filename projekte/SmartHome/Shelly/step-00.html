@@ -17,10 +17,9 @@
   <main>
     <nav aria-label="Shelly Schritt Navigation">
       <ul>
-        <li><a href="#ap">Erstvorbereitung alsAccess Point</a></li>
-        <li><a href="#client">Verbindung als WEB-Client</a></li>
+        <li><a href="#ap">Als Access Point</a></li>
+        <li><a href="#client">Als WEB-Client</a></li>
         <li><a href="#tasks">12V-Stromversorgung</a></li>
-        
       </ul>
     </nav>
     <section><h3 id="ap">Vorbereitung AP</h3>
@@ -65,13 +64,13 @@
         </p>
         <p>Gleichzeitig ist das Shelly-Modul über Access Point "ShellyPlus1-XXXXXX" erreichbar, 
           wenn die Verbindung zum Access Point erneut hergestellt wurde. Die IP-Adresse der WLAN-Verbindung zu "mrge-bu-46" so leicht zu ermitteln:<br>
-          <code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/GetConfig</a>
+          <code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/rpc/WiFi.GetConfig</a>
           </code>
           <pre>{"sta_ip":"10.126.137.207","status":"got ip","ssid":"mrge_ap_bu46","rssi":-55}</pre>
         </section>
         <section>
-        <code> http://192.168.xxx.xxx/</code> Shelly Webinterface<br>
-        <code> http://192.168.xxx.xxx/rpc/Switch.Set?id=0&on=true </code> -Relais ein</a><br>
+        <code> http://10.126.137.207/</code> Shelly Webinterface<br>
+        <code> http://10.126.137.207/rpc/Switch.Set?id=0&on=true </code> -Relais ein</a><br>
         </section>
       
          <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
