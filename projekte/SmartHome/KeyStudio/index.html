@@ -7,17 +7,260 @@
   <meta name="author" content="Andreas Sigismund">
   <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
   <link rel="stylesheet" href="../../../css/my.css">
+  <link rel="icon" href="../../../favicon.ico">
+  <link rel="stylesheet" href="../../../css/print.css" media="print">  
+  <script src="../../../js/script.js"></script>
 </head>
 <body>
   <header>
-    KeyStudio · Smart-Home-Projekt
+    KeyStudio KS0085 - Smart Home Kit for Arduino
   </header>
 
   <main>
     <section>
-      <a href="https://mrge.de/lehrer/sigismund/Young-Engineers/projekte/keystudio/KS0085/" target="_blank">Osoyoo Smart-Home-Projekt</a>
-   </section>
-</main>
+      <strong>
+        Modell eines Smart Homes <br>zur Einführung in Sensoren, Aktoren und Mikrocontroller-Programmierung.
+      </strong>
+
+      <nav aria-label="Abschnittsnavigation">
+        <ul>
+          <li><a href="#kapitel-1">1. Kurzbeschreibung</a></li>
+          <li><a href="#kapitel-2">2. Ziel des Kits</a></li>
+          <li><a href="#kapitel-3">3. Wichtige Bestandteile</a></li>
+          <li><a href="#kapitel-4">4. Controller und Anschlüsse</a></li>
+          <li><a href="#kapitel-5">5. Unterrichtsreihenfolge</a></li>
+          <li><a href="#kapitel-6">6. Smart-Home-Funktionen</a></li>
+          <li><a href="#kapitel-7">7. Software</a></li>
+          <li><a href="#kapitel-8">8. Stärken</a></li>
+          <li><a href="#kapitel-9">9. Schwächen</a></li>
+          <li><a href="#kapitel-10">10. Unterrichtsideen</a></li>
+          <li><a href="#kapitel-11">11. Einschätzung</a></li>
+        </ul>
+      </nav>
+
+      <hr>
+
+      <section id="kapitel-1">
+        <h2>1. Kurzbeschreibung</h2>
+        <p>Das <strong>Keyestudio KS0085 Smart Home Kit for Arduino</strong> ist ein Lernbaukasten, mit dem ein kleines Smart-Home-Modell aufgebaut wird. Es basiert auf einem Arduino-kompatiblen Keyestudio-Controller und einem Sensor-Shield.</p>
+        <p>Mit dem Kit lassen sich typische Smart-Home-Funktionen nachbilden:</p>
+        <ul>
+          <li>Beleuchtung</li>
+          <li>Bewegungserkennung</li>
+          <li>Türsteuerung</li>
+          <li>Lüftung</li>
+          <li>Alarmfunktionen</li>
+          <li>Feuchtigkeitsmessung</li>
+          <li>Bluetooth-Steuerung</li>
+        </ul>
+        <p><strong>Datenquelle:</strong> Offizielle Keyestudio-Dokumentation und Keyestudio-Wiki zum KS0085.</p>
+      </section>
+
+      <section id="kapitel-2">
+        <h2>2. Ziel des Kits</h2>
+        <p>Das Kit eignet sich gut, um Schülern das Zusammenspiel von <strong>Sensoren</strong>, <strong>Aktoren</strong> und einem <strong>Mikrocontroller</strong> anschaulich zu zeigen.</p>
+        <table>
+          <thead>
+            <tr><th>Thema</th><th>Beispiel im Kit</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Digitale Ausgänge</td><td>LED, Relais, Summer</td></tr>
+            <tr><td>Digitale Eingänge</td><td>Taster, PIR-Bewegungssensor</td></tr>
+            <tr><td>Analoge Eingänge</td><td>Helligkeit, Gas, Bodenfeuchte, Wasserdampf</td></tr>
+            <tr><td>Aktoren</td><td>Servo, Lüfter, Relais</td></tr>
+            <tr><td>Anzeige</td><td>LCD1602</td></tr>
+            <tr><td>Kommunikation</td><td>Bluetooth HM-10</td></tr>
+            <tr><td>Programmierung</td><td>Arduino C/C++, teilweise auch blockbasierte Programmierung</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-3">
+        <h2>3. Wichtige Bestandteile</h2>
+        <table>
+          <thead>
+            <tr><th>Bauteil</th><th>Funktion im Smart Home</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Keyestudio PLUS Control Board</td><td>Arduino-kompatible Hauptplatine</td></tr>
+            <tr><td>Sensor Shield V5.2</td><td>Einfache Steckanschlüsse für Sensoren und Aktoren</td></tr>
+            <tr><td>LCD1602 Display</td><td>Anzeige von Statuswerten, Passwort oder Sensorwerten</td></tr>
+            <tr><td>Photocell Sensor</td><td>Helligkeitserkennung, z. B. Nachtlicht</td></tr>
+            <tr><td>PIR Motion Sensor</td><td>Bewegungserkennung</td></tr>
+            <tr><td>MQ-2 Gas Sensor</td><td>Erkennung brennbarer Gase oder Rauchsimulation</td></tr>
+            <tr><td>Steam Sensor</td><td>Wasser-, Regen- oder Feuchtigkeitserkennung</td></tr>
+            <tr><td>Soil Humidity Sensor</td><td>Bodenfeuchtigkeit, z. B. Pflanzensimulation</td></tr>
+            <tr><td>Button Sensor</td><td>Eingabe, z. B. Passwort oder manuelle Steuerung</td></tr>
+            <tr><td>White LED / Yellow LED</td><td>Beleuchtung oder Statusanzeige</td></tr>
+            <tr><td>Passive Buzzer</td><td>Alarm oder einfache Tonausgabe</td></tr>
+            <tr><td>Relay Module</td><td>Schaltmodul für Lasten im Modell</td></tr>
+            <tr><td>Fan Module</td><td>Lüfter, Klimaanlage oder Rauchabzug im Modell</td></tr>
+            <tr><td>Servo Motor</td><td>Tür, Fenster oder Vorhang bewegen</td></tr>
+            <tr><td>Bluetooth HM-10</td><td>Steuerung per Smartphone oder App</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-4">
+        <h2>4. Controller und Anschlüsse</h2>
+        <p>Das Keyestudio PLUS Control Board ist Arduino-kompatibel. Die Module werden meist über einfache Steckleitungen mit dem Sensor-Shield verbunden.</p>
+        <table>
+          <thead>
+            <tr><th>Anschlussart</th><th>Typische Pins</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Digitale Ein- und Ausgänge</td><td>D2 bis D13</td></tr>
+            <tr><td>PWM-Ausgänge</td><td>D3, D5, D6, D9, D10, D11</td></tr>
+            <tr><td>Analoge Eingänge</td><td>A0 bis A5</td></tr>
+            <tr><td>I²C</td><td>A4 = SDA, A5 = SCL</td></tr>
+            <tr><td>Serielle Schnittstelle / Bluetooth</td><td>D0 = RX, D1 = TX</td></tr>
+          </tbody>
+        </table>
+        <p>Viele Keyestudio-Module sind mit <strong>G</strong>, <strong>V</strong> und <strong>S</strong> beschriftet.</p>
+        <table>
+          <thead>
+            <tr><th>Beschriftung</th><th>Bedeutung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>G</td><td>GND / Masse</td></tr>
+            <tr><td>V</td><td>Versorgungsspannung</td></tr>
+            <tr><td>S</td><td>Signal</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-5">
+        <h2>5. Sinnvolle Reihenfolge für den Unterricht</h2>
+        <p>Für Schüler ist es besser, nicht sofort das komplette Smart Home zu bauen. Sinnvoller ist eine schrittweise Einführung.</p>
+        <table>
+          <thead>
+            <tr><th>Schritt</th><th>Projekt</th><th>Lerninhalt</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>LED blinkt</td><td><code>digitalWrite()</code>, <code>delay()</code>, Ausgang</td></tr>
+            <tr><td>2</td><td>Taster schaltet LED</td><td><code>digitalRead()</code>, if-Abfrage</td></tr>
+            <tr><td>3</td><td>Summer</td><td>Tonausgabe, Alarm</td></tr>
+            <tr><td>4</td><td>Lichtsensor</td><td><code>analogRead()</code>, Schwellwert</td></tr>
+            <tr><td>5</td><td>PIR-Sensor</td><td>Bewegung erkennen</td></tr>
+            <tr><td>6</td><td>Servo</td><td>Winkelsteuerung</td></tr>
+            <tr><td>7</td><td>Lüftermodul</td><td>Motorsteuerung</td></tr>
+            <tr><td>8</td><td>LCD1602</td><td>Werte anzeigen</td></tr>
+            <tr><td>9</td><td>MQ-2, Steam Sensor, Bodenfeuchte</td><td>Umweltdaten erfassen</td></tr>
+            <tr><td>10</td><td>Bluetooth</td><td>Fernsteuerung</td></tr>
+            <tr><td>11</td><td>Gesamtmodell</td><td>Sensoren und Aktoren kombinieren</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-6">
+        <h2>6. Typische Smart-Home-Funktionen</h2>
+        <table>
+          <thead>
+            <tr><th>Smart-Home-Funktion</th><th>Benutzte Module</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Automatisches Licht</td><td>Photocell Sensor, PIR Sensor, LED</td></tr>
+            <tr><td>Türschloss mit Passwort</td><td>Taster, LCD, Servo</td></tr>
+            <tr><td>Fenster bei Regen schließen</td><td>Steam Sensor, Servo</td></tr>
+            <tr><td>Gasalarm</td><td>MQ-2 Sensor, Buzzer</td></tr>
+            <tr><td>Pflanzenüberwachung</td><td>Bodenfeuchtesensor, Buzzer oder Anzeige</td></tr>
+            <tr><td>Lüftung / Klimaanlage</td><td>Fan Module</td></tr>
+            <tr><td>Fernbedienung</td><td>Bluetooth HM-10</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-7">
+        <h2>7. Software</h2>
+        <p>Die Programmierung erfolgt typischerweise mit der <strong>Arduino IDE</strong>. Keyestudio stellt Beispielprogramme und Bibliotheken bereit.</p>
+        <table>
+          <thead>
+            <tr><th>Software / Datei</th><th>Zweck</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Arduino IDE</td><td>Programme schreiben, kompilieren und hochladen</td></tr>
+            <tr><td>Beispielprogramme</td><td>Einzelne Module testen</td></tr>
+            <tr><td>Bibliotheken</td><td>z. B. für Servo und LCD</td></tr>
+            <tr><td>Bluetooth-App</td><td>Steuerung per Smartphone</td></tr>
+            <tr><td>Mixly / Scratch</td><td>Blockbasierte Alternativen, wenn verfügbar</td></tr>
+          </tbody>
+        </table>
+        <p><strong>Empfehlung:</strong> Für eine AG würde ich die Originalbeispiele didaktisch reduzieren und zunächst kurze Einzelprogramme verwenden.</p>
+      </section>
+
+      <section id="kapitel-8">
+        <h2>8. Stärken für den Unterricht</h2>
+        <table>
+          <thead>
+            <tr><th>Stärke</th><th>Warum hilfreich?</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Komplettes Hausmodell</td><td>Schüler sehen einen realen Zusammenhang.</td></tr>
+            <tr><td>Viele verschiedene Sensorarten</td><td>Digitale, analoge, serielle und I²C-Komponenten können verglichen werden.</td></tr>
+            <tr><td>Einfache Steckverkabelung</td><td>Weniger Fehler als bei reinem Steckbrettaufbau.</td></tr>
+            <tr><td>Gute Projektfolge</td><td>Vom Einzelmodul zum Gesamtsystem.</td></tr>
+            <tr><td>Hohe Motivation</td><td>Smart Home ist alltagsnah und anschaulich.</td></tr>
+            <tr><td>Mechanik und Elektronik</td><td>Servos, Lüfter und Sensoren machen das Modell lebendig.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="kapitel-9">
+        <h2>9. Schwächen und Stolperstellen</h2>
+        <table>
+          <thead>
+            <tr><th>Problem</th><th>Einschätzung</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Viele Kabel</td><td>Auch mit Sensor-Shield sind Verdrahtungsfehler möglich.</td></tr>
+            <tr><td>Bluetooth HM-10</td><td>Kann je nach Smartphone und App etwas nervig sein.</td></tr>
+            <tr><td>MQ-2 Sensor</td><td>Braucht Aufwärmzeit; Werte sind eher qualitativ.</td></tr>
+            <tr><td>Steam- und Bodenfeuchtesensor</td><td>Nicht dauerhaft nass betreiben.</td></tr>
+            <tr><td>Servos</td><td>Vor Montage auf Mittelstellung bringen, sonst kann die Mechanik klemmen.</td></tr>
+            <tr><td>Beispielcode</td><td>Teilweise lang und für Anfänger schwer lesbar.</td></tr>
+            <tr><td>Relais</td><td>Im Unterricht nur mit Kleinspannung verwenden.</td></tr>
+          </tbody>
+        </table>
+        <blockquote>
+          <p><strong>Sicherheit:</strong> Das Relais sollte im Schulkontext nicht mit 230 V verwendet werden. Für Schülerprojekte nur Kleinspannung einsetzen.</p>
+        </blockquote>
+      </section>
+
+      <section id="kapitel-10">
+        <h2>10. Unterrichtsideen</h2>
+        <h3>Einstieg: Das Haus reagiert auf seine Umgebung</h3>
+        <ol>
+          <li>LED blinkt.</li>
+          <li>Taster schaltet LED.</li>
+          <li>Helligkeit steuert LED.</li>
+          <li>Bewegung schaltet Licht.</li>
+          <li>Servo öffnet eine Tür.</li>
+          <li>LCD zeigt einen Sensorwert.</li>
+          <li>Alarm bei Gas, Wasser oder trockener Erde.</li>
+          <li>Mehrere Funktionen werden kombiniert.</li>
+        </ol>
+
+        <h3>Beispielaufgabe</h3>
+        <p>Baue eine automatische Haustür:</p>
+        <blockquote>
+          <p>Wenn der richtige Tastencode eingegeben wurde, öffnet sich die Tür mit dem Servo. Auf dem LCD erscheint <code>OPEN</code>. Nach fünf Sekunden schließt die Tür wieder.</p>
+        </blockquote>
+
+        <h3>Fortgeschrittene Aufgabe</h3>
+        <p>Erweitere das Haus so, dass nachts bei Bewegung automatisch das Licht eingeschaltet wird. Tagsüber bleibt das Licht aus.</p>
+      </section>
+
+      <section id="kapitel-11">
+        <h2>11. Einschätzung</h2>
+        <p>Das KS0085 ist ein brauchbares und anschauliches Arduino-Lernkit für den Einstieg in Sensoren, Aktoren und einfache Automatisierung.</p>
+        <p>Es sollte aber nicht als echtes Smart Home verkauft werden, sondern besser als:</p>
+        <blockquote>
+          <p><strong>Modell eines Smart Homes zur Einführung in Sensoren, Aktoren und Mikrocontroller-Programmierung.</strong></p>
+        </blockquote>
+        <p>Für eine AG ist das Kit gut geeignet, wenn die Beispiele didaktisch reduziert werden und nicht direkt mit dem großen Gesamtprogramm begonnen wird.</p>
+      </section>
+    </section>
+  </main>
 
   <footer>
     © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
