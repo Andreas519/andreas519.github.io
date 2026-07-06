@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>  <title>AP vorbereiten Shelly+1</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Shelley Plus 1 vorbereiten
+  </header>
+
+  <main>
+    <h3>Vorbereitung AP</h3>
+    <section>
+      <p>Das Modul "Shelly Plus 1" durch ein Reset auf Werkseinstellungen zurücksetzten:<br>
+        Dazu wird das Modul an die Stromversorgung angeschlossen. (GND an L, +12V an +12V,  
+        <a href="#tasks">Abbildung</a>) und den Reset-Taster mindestens 10 Sekunden gedrückt halten.<br>
+      </p>
+      <p>Mit dem Reset wird das "Shelly Plus 1" als Access Point aktiviert.<BR>
+        Verbindung mit "ShellyPlus1-XXXXXX" per WLAN herstellen.<br>
+        Im Browser über http://192.168.33.1 die Weboberfläche aufrufen.<br>
+        Hier können <br>
+        - das Relais des Shelly-Moduls ein- und ausschalten, <br>
+        - der Status des Eingangs "SW" abfragen, <br>
+        - die WLAN-Einstellungen geändern<br>
+        - und weitere Einstellungen vornehmen<br>
+        werden. 
+        </p>
+        <p> Beispiel: In den folgenden Ausgaben sollte oben links "Quelltextformatierung" aktiviert sein, 
+          damit die Ausgabe im JSON-Format übersichtlich dargestellt wird. <br>
+          <code> http://192.168.133.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=true </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=true" target="_blank">Relais ein</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=false </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">Relais aus</a><br>
+          <code> http://192.168.33.1/rpc/Switch.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
+          <code> http://192.168.33.1/rpc/Input.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Input.GetStatus?id=0" target="_blank">Eingang Status</a><br>
+         </p>
+         <p>Das Shelly-Modul ist bereit für den Einsatz im AP-Modus.</p>
+    </section>
+
+    <section><h3 id="client">Vorbereitung für Einsatz als WEB-Client</h3>
+      <p>Verbindung mit dem Access Point "ShellyPlus1-XXXXXX" des Shelly-Moduls per WLAN herstellen</p>
+      <p>Folgenden WEB-Request anpassen und im Browser aufrufen:</p>
+      <section> – WLAN-Konfiguration für "sta" setzen:
+        <code>
+          <p>
+          <a href="http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}" target="_blank">
+            http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"mrge-bu-46","pass":"","enable":true},"ap":{"enable":true}}</a>
+        </code>
+        </p>
+        <p>Nach dem Aufruf wird das Shelly-Modul die Verbindung zum Access Point abbrechen und versuchen sich mit dem WLAN "mrge-bu-46" zu verbinden.<br>
+         Die IP-Adresse dieser WLAN-Verbindung kann mittels IP-Scanner festgestellt werden.<br>
+        </p>
+        <p>Gleichzeitig ist das Shelly-Modul über Access Point "ShellyPlus1-XXXXXX" erreichbar, 
+          wenn die Verbindung zum Access Point erneut hergestellt wurde. Die IP-Adresse der WLAN-Verbindung zu "mrge-bu-46" so leicht zu ermitteln:<br>
+          <code><a href="http://192.168.33.1/rpc/WiFi.GetConfig" target="_blank">http://192.168.33.1/rpc/WiFi.GetConfig</a>
+          </code>
+          <pre>{"sta_ip":"10.126.137.207","status":"got ip","ssid":"mrge_ap_bu46","rssi":-55}</pre>
+        </section>
+        <section>
+        <code> http://10.126.137.207/</code> Shelly Webinterface<br>
+        <code> http://10.126.137.207/rpc/Switch.Set?id=0&on=true </code> -Relais ein</a><br>
+        </section>
+      
+         <p>Das Shelly-Modul ist bereit für den Einsatz.</p>
+    </section>
+
+
+    <section id="tasks">
+      <h3>Hinweise:</h3>
+      <p>Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N.<br>
+      ACHTUNG: Wir arbeiten nicht mit 220V! <bold>Nur mit 12V Gleichspannung arbeiten.</bold> <br>
+      Der Schaler an "SW" muß nicht eingebaut werden, wenn der Eingang nicht genutzt wird.</p>
+      <p>
+      <img src="dateien/Plus 1-12V-wiring.png" label="Typischer Anschluss eines Shelly-Moduls: 0, I, SW, 12V, L und N." />
+      </p>
+      Die Anschlüsse des Shelly-Moduls:<br>
+        <ul>
+          <li>0 = Relais-Ausgang</li>
+          <li>I = Relais-Ausgang</li>
+          <li>SW = Eingang für Taster oder Schalter</li>
+          <li>12V = 12V Gleichspannung der Spannungsversorgung</li>
+          <li>L = GND / 0V der Spannungsversorgung</li>
+          <li>N = +++ bleibt frei +++</li>
+        </ul>
+    </section>
+  </main>
+
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

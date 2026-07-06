@@ -3,18 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart-Home-Projekte · Young Engineers</title>
+  <title>Shelly · Smart-Home-Projekt</title>
   <meta name="author" content="Andreas Sigismund">
   <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
   <link rel="stylesheet" href="../../../css/my.css">
 </head>
 <body>
   <header>
-    Shelly Smart-Home-Projekte
+    Übersicht Shelly · Smart-Home-Projekte
   </header>
 
-  <main>
-    <section>
+  <main> 
+    <section>Shelly-Geräte sind kompakte Smart-Home-Module für die Hausautomation.<br> 
+        Sie können Verbraucher schalten, Messwerte erfassen und über WLAN mit einer App, Weboberfläche oder anderen Geräten wie einem ESP32 kommunizieren.  
+        <p>Für den Einsatz in der AG kommen nur Modelle in Frage, deren Versorgungsspannung 12 V bzw. 24-48 V beträgt.</p>
+        <p>Neben dem Shelly Plus 1 haben wir Shelly Plus 2PM und Shelly Plus Add-on zur Verfügung.<br>
+        <img src="dateien/1PM-1PM-mini.jpg" alt="Shelly 1 PMs" height="150" />
+        <img src="dateien/shelly-relais-1-gen4.png" alt="Shelly Relais 1 Gen. 4" height="150"/>
+        <img src="dateien/shelly-plus-add-on.png" alt="Shelly Plus Add-on" height="150"/>
+        </p>
+        <p>Am Beispiel des Shelly Plus 1 werden die Funktionen und Möglichkeiten der Geräts erklärt.</p>
+            
 <!--         <p>Shelly-Geräte sind kleine Smart-Home-Module, die elektrische Verbraucher schalten, messen und automatisieren können. Sie werden meist per WLAN eingebunden und lassen sich über App, Weboberfläche, HTTP/API oder MQTT steuern.
         </p>
         <p>Für Schüler kurz:<br>Shelly = fertiges Smart-Home-Modul mit Relais, WLAN und manchmal Leistung
@@ -22,29 +31,40 @@
         </p>
         <p>Noch kürzer:<br>Shelly = fertiges Smart-Home-Modul mit Relais, WLAN und manchmal Leistungsmessung.
         </p> -->
-        <p>Shelly-Geräte sind kompakte Smart-Home-Module für die Hausautomation. 
-        Sie können Verbraucher schalten, Messwerte erfassen und über WLAN mit 
-        App, Browser oder anderen Geräten wie einem ESP32 kommunizieren.<br>
-        <img src="dateien/1PM-1PM-mini.jpg" alt="Shelly 1 PMs" height="150" />
-        <img src="dateien/shelly-relais-1-gen4.png" alt="Shelly Relais 1 Gen. 4" height="150"/>
-        </p>
+
     </section>
-    <section>Vorbereitung / Aufgabenstellung für "Shelly Plus 1"<br>
+    <section>
+      <p>Mögliche Themen im Rahmen der AG:</p>
       <ol>
-        
-        <li>Modul vorbereiten kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys testen<br>  
-          <a href="step-00.html">Vorbereitung</a>
+       <li><a href="ap-modus-vorbereitung.html">Shelly im Access Point-Modus</a>
+         <br>
+          Modul vorbereiten, Vorbereitung für Access Point-Modus, Weboberfläche des Shellys kennenlernen<br>  
+          
         </li>
-        <li> Shelly Plus 1  ·  Modul kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys<br>  
+        <li><a href="station-modus-vorbereitung.html">Shelly im Station-Modus</a>
+          <br>
+          Station-Modus aktivieren und testen, Probleme beim gleichzeiigen Betrieb in diesen Modi<br>  
+        </li>        
+        <li><a href="web-interface.html">Weboberfläche des Shellys</a>
+          <br>Die Einstellungen des Shelly können über die **Weboberfläche** vorgenommen werden.
+
+        </li>
+        <li><a href="scripting.html">Scripting mit Shelly</a>
+          <br>Das Scripting-Framework von Shelly kennenlernen und anwenden.
+        </li>
+        <li><a href="shelly-esp.html">Kommunikation mit Shelly über ESP32</a>
+          <br>Ein ESP32 kommuniziert mit dem Shelly über HTTP-Requests und kann so das Relais schalten und den Status abfragen.
+        </li>                
+<!--         <li> Shelly Plus 1  ·  Modul kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys<br>  
           <a href="step-01-vorher.html">step-01-vorher.html</a>  /
           <a href="step-01.html">step-01.html</a> von ChatGPT überarbeitet
         </li>
         <li> Shelly Plus 1  ·  in ein lokales WLAN einbinden, Steuerung über Weboberfläche und RPC-API<br>
-          <a href="step-02.html">step-02.html</a>
+          <a href="step-02.html">step-02.html</a> -->
       </ol>
     </section>
 
-    <section>
+    <section>Quelle und weiterführende Links:
         <ul> 
           <li><a href="https://www.shelly.com/de" target="_blank">Shelly Official Website</a></li>
             <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>

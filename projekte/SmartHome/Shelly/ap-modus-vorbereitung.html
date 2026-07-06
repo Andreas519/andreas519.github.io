@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>  <title>AP vorbereiten Shelly+1</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Shelley Plus 1 vorbereiten
+  </header>
+
+  <main>
+    <h3 id="ap">Vorbereitung AP</h3>
+    <section>
+      <p>Das Modul "Shelly Plus 1" durch ein Reset auf Werkseinstellungen zurücksetzten:<br>
+        Dazu wird das Modul an die Stromversorgung angeschlossen. (GND an L, +12V an +12V,  
+        <a href="#tasks">Abbildung</a>) und den Reset-Taster mindestens 10 Sekunden gedrückt halten.<br>
+      </p>
+      <p>Mit dem Reset wird das "Shelly Plus 1" als Access Point aktiviert.<BR>
+        - Verbindung mit "ShellyPlus1-XXXXXX" per WLAN herstellen.<br>
+        - Im Browser über http://192.168.33.1 die Weboberfläche aufrufen.<br>
+        - hier das Relais des Shelly-Moduls ein- und ausschalten und den Status des Eingangs "SW" abfragen
+      </p>
+      <p> Nach dem Aufruf der folgenden URLs sollte in den sich öffnente Tabs oben links "Quelltextformatierung" aktiviert werden, 
+          damit die Ausgabe im JSON-Format übersichtlich dargestellt wird. <br>
+          <code> http://192.168.133.1/rpc/Shelly.GetStatus </code> - <a href="http://192.168.33.1/rpc/Shelly.GetStatus" target="_blank">Shelly Status</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=true </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=true" target="_blank">Relais ein</a><br>
+          <code> http://192.168.33.1/rpc/Switch.Set?id=0&on=false </code> - <a href="http://192.168.33.1/rpc/Switch.Set?id=0&on=false" target="_blank">Relais aus</a><br>
+          <code> http://192.168.33.1/rpc/Switch.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Switch.GetStatus?id=0" target="_blank">Relais Status</a><br>
+          <code> http://192.168.33.1/rpc/Input.GetStatus?id=0 </code> - <a href="http://192.168.33.1/rpc/Input.GetStatus?id=0" target="_blank">Eingang Status</a><br>
+        </p>
+        <p>Das Shelly-Modul ist bereit für den Einsatz im AP-Modus.</p>
+    </section>
+  </main>
+
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
