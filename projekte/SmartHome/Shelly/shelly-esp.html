@@ -8,19 +8,358 @@
   <meta name="author" content="Andreas Sigismund">
   <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
   <link rel="stylesheet" href="../../../css/my.css">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
 </head>
 <body>
   <header>
     Shelley Plus 1 kommuniziert mit eine ESP32
   </header>
+  <nav class="home-menu" aria-label="Hauptnavigation">
+    <ul>
+      <li><a href="#kapitel-1">Start</a></li>
+      <li><a href="#kapitel-2">Browser-Test</a></li>
+      <li><a href="#kapitel-3">ESP32 schaltet Shelly ein</a></li>
+      <li><a href="#kapitel-4">ESP32 schaltet Shelly aus</a></li>
+      <li><a href="#kapitel-5">Shelly umschalten - Toggle</a></li>
+      <li><a href="#kapitel-6">Zustand des Shelly abfragen</a></li>
+      <li><a href="#kapitel-7">Nur Relaisstatus abfragen</a></li>
+      <li><a href="#kapitel-8">ESP32-Taster schaltet Shelly</a></li>
+      <li><a href="#kapitel-9">Shelly schaltet ESP32 per HTTP</a></li>
+      <li><a href="#kapitel-10">ESP32 fragt Shelly regelmäßig ab</a></li>
+      <li><a href="#kapitel-11">Sicheres Einschalten mit Auto-Aus</a></li>
+      <li><a href="#kapitel-12">Didaktische Reihenfolge für die AG</a></li>
+      <li><a href="#kapitel-13">Merksatz</a></li>
+      <li><a href="#kapitel-14">Quellen und Dokumentation</a></li>
+    </ul>
+  </nav>
 
   <main>
-    <h3>.....</h3>
-    <section>
-    </section>
+
+  <section id="kapitel-1"><h2>1. Grundidee</h2>
+    <p>Der <strong>Shelly Plus 1</strong> kann über seine lokale Web-API angesprochen werden. Für einfache Projekte ist die Kommunikation über <strong>HTTP/RPC</strong> am übersichtlichsten.</p>
+
+    <div class="diagram">ESP32  ----- WLAN ----- Router ----- WLAN ----- Shelly Plus 1
+                                      IP: 192.168.178.55</div>
+
+    <p>Ein einfacher HTTP-Aufruf zum Einschalten des Relais sieht so aus:</p>
+
+<pre><code class="language-markup">http://192.168.178.55/rpc/Switch.Set?id=0&amp;on=true</code></pre>
+
+    <div class="info-box note">
+      <strong>Merke:</strong> Beim Shelly Plus 1 ist das Relais normalerweise <code>switch:0</code>. Die wichtigsten RPC-Befehle sind <code>Switch.Set</code>, <code>Switch.Toggle</code>, <code>Switch.GetStatus</code> und <code>Shelly.GetStatus</code>.
+    </div>
+  </section>
+
+  <section id="kapitel-2"><h2>2. Browser-Test vor dem Programmieren</h2>
+    <p>Bevor der ESP32 ins Spiel kommt, sollten die Befehle im Browser getestet werden. Das vermeidet viele kleine Fehler mit großer Wirkung.</p>
+
+<pre><code class="language-markup">http://SHELLY-IP/rpc/Shelly.GetStatus
+http://SHELLY-IP/rpc/Switch.Set?id=0&amp;on=true
+http://SHELLY-IP/rpc/Switch.Set?id=0&amp;on=false
+http://SHELLY-IP/rpc/Switch.Toggle?id=0
+http://SHELLY-IP/rpc/Switch.GetStatus?id=0</code></pre>
+  </section>
+
+  <section id="kapitel-3"><h2>3. ESP32 schaltet Shelly ein</h2>
+
+<pre><code class="language-python">import network
+import urequests
+import time
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+
+SHELLY_IP = "192.168.178.55"
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde mit WLAN...")
+    time.sleep(0.5)
+
+print("Verbunden:", wlan.ifconfig())
+
+url = "http://{}/rpc/Switch.Set?id=0&amp;on=true".format(SHELLY_IP)
+
+response = urequests.get(url)
+print(response.text)
+response.close()</code></pre>
+  </section>
+
+  <section id="kapitel-4"><h2>4. ESP32 schaltet Shelly aus</h2>
+
+<pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Switch.Set?id=0&amp;on=false".format(SHELLY_IP)
+
+response = urequests.get(url)
+print(response.text)
+response.close()</code></pre>
+  </section>
+
+  <section id="kapitel-5"><h2>5. Shelly umschalten - Toggle</h2>
+    <p>Dieser Befehl ist besonders praktisch für Taster: Jeder Aufruf wechselt den Schaltzustand.</p>
+
+<pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Switch.Toggle?id=0".format(SHELLY_IP)
+
+response = urequests.get(url)
+print(response.text)
+response.close()</code></pre>
+  </section>
+
+  <section id="kapitel-6"> <h2>6. Zustand des Shelly abfragen</h2>
+    <p>Mit <code>Shelly.GetStatus</code> kann man den Gesamtstatus des Shelly abrufen.</p>
+
+<pre><code class="language-python">import urequests
+import json
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Shelly.GetStatus".format(SHELLY_IP)
+
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print(data)
+
+# Relaiszustand auslesen
+relais_an = data["switch:0"]["output"]
+
+print("Relais ist an:", relais_an)</code></pre>
+
+    <p>Typischer Ausschnitt aus der Antwort:</p>
+
+<pre><code class="language-json">{
+  "switch:0": {
+    "id": 0,
+    "output": true
+  },
+  "input:0": {
+    "id": 0,
+    "state": false
+  }
+}</code></pre>
+  </section>
+
+  <section id="kapitel-7"><h2>7. Nur Relaisstatus abfragen</h2>
+
+<pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Switch.GetStatus?id=0".format(SHELLY_IP)
+
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print("Antwort:", data)
+print("Relais an:", data["output"])</code></pre>
+  </section>
+
+  <section id="kapitel-8"><h2>8. ESP32-Taster schaltet Shelly</h2>
+    <p>Schülerfreundliches Beispiel: Ein Taster am ESP32 löst einen HTTP-Request aus, der das Shelly-Relais umschaltet.</p>
+
+<pre><code class="language-python">import network
+import urequests
+import time
+from machine import Pin
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+
+SHELLY_IP = "192.168.178.55"
+
+button = Pin(14, Pin.IN, Pin.PULL_UP)
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde mit WLAN...")
+    time.sleep(0.5)
+
+print("ESP32 verbunden:", wlan.ifconfig())
+
+alter_zustand = 1
+
+while True:
+    zustand = button.value()
+
+    # Taster gedrückt: Wechsel von 1 nach 0
+    if alter_zustand == 1 and zustand == 0:
+        print("Taster gedrückt - Shelly wird umgeschaltet")
+
+        try:
+            url = "http://{}/rpc/Switch.Toggle?id=0".format(SHELLY_IP)
+            response = urequests.get(url)
+            print(response.text)
+            response.close()
+        except Exception as e:
+            print("Fehler:", e)
+
+        time.sleep(0.3)   # Entprellen
+
+    alter_zustand = zustand
+    time.sleep(0.05)</code></pre>
+  </section>
+
+  <section><h2>9. Shelly schaltet ESP32 per HTTP</h2>
+    <p>Die Kommunikation kann auch umgekehrt laufen: Der Shelly ruft eine Adresse auf dem ESP32 auf.</p>
+
+    <div class="diagram">Shelly Plus 1  ----- HTTP-Request -----&gt;  ESP32-Webserver</div>
+
+    <h3>ESP32 als einfacher Webserver</h3>
+
+<pre><code class="language-python">import network
+import socket
+from machine import Pin
+import time
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+
+led = Pin(2, Pin.OUT)
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde mit WLAN...")
+    time.sleep(0.5)
+
+print("ESP32 IP:", wlan.ifconfig()[0])
+
+addr = socket.getaddrinfo("0.0.0.0", 80)[0][-1]
+
+s = socket.socket()
+s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+s.bind(addr)
+s.listen(1)
+
+print("Webserver läuft...")
+
+while True:
+    cl, addr = s.accept()
+    request = cl.recv(1024).decode()
+    print(request)
+
+    if "/led/on" in request:
+        led.on()
+        antwort = "LED eingeschaltet"
+    elif "/led/off" in request:
+        led.off()
+        antwort = "LED ausgeschaltet"
+    else:
+        antwort = "ESP32 bereit"
+
+    cl.send("HTTP/1.1 200 OK\r\n")
+    cl.send("Content-Type: text/plain\r\n")
+    cl.send("Connection: close\r\n\r\n")
+    cl.send(antwort)
+    cl.close()</code></pre>
+
+    <p>Test im Browser, wenn der ESP32 zum Beispiel die IP <code>192.168.178.60</code> hat:</p>
+
+<pre><code class="language-markup">http://192.168.178.60/led/on
+http://192.168.178.60/led/off</code></pre>
+
+    <p>Im Shelly kann dann eine Action beziehungsweise ein Webhook eingerichtet werden, der diese URL aufruft.</p>
+  </section>
+
+  <section id="kapitel-10"><h2>10. ESP32 fragt Shelly regelmäßig ab</h2>
+    <p>Damit kann der ESP32 zum Beispiel mit einer LED anzeigen, ob das Shelly-Relais gerade eingeschaltet ist.</p>
+
+<pre><code class="language-python">import network
+import urequests
+import time
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+
+SHELLY_IP = "192.168.178.55"
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde...")
+    time.sleep(0.5)
+
+while True:
+    try:
+        url = "http://{}/rpc/Switch.GetStatus?id=0".format(SHELLY_IP)
+        response = urequests.get(url)
+        data = response.json()
+        response.close()
+
+        print("Shelly Relais:", data["output"])
+
+    except Exception as e:
+        print("Fehler bei Abfrage:", e)
+
+    time.sleep(5)</code></pre>
+  </section>
+
+  <section id="kapitel-11"><h2>11. Sicheres Einschalten mit Auto-Aus</h2>
+    <p>Für Pumpen, Magnetventile oder Experimente ist ein automatisches Ausschalten sinnvoll.</p>
+
+<pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Switch.Set?id=0&amp;on=true&amp;toggle_after=10".format(SHELLY_IP)
+
+response = urequests.get(url)
+print(response.text)
+response.close()</code></pre>
+
+    <div class="info-box warning">
+      <strong>Wichtig:</strong> Bei 230-V-Schaltungen nur mit sicherem Aufbau, geeigneten Gehäusen und klarer Trennung zwischen Niederspannung und Netzspannung arbeiten. Für Schülerprojekte empfiehlt sich zuerst ein ungefährlicher Testaufbau ohne Netzspannung.
+    </div>
+  </section>
+
+  <section id="kapitel-12"><h2>12. Didaktische Reihenfolge für die AG</h2>
+    <ol class="task-list">
+      <li><strong>Browser-Test:</strong> Shelly-IP herausfinden und RPC-Befehle im Browser testen.</li>
+      <li><strong>ESP32 sendet HTTP-Requests:</strong> ESP32 steuert den Shelly.</li>
+      <li><strong>Tasterprojekt:</strong> Taster am ESP32 schaltet Shelly-Relais.</li>
+      <li><strong>Statusabfrage:</strong> ESP32 liest den Relaiszustand aus.</li>
+      <li><strong>Rückrichtung:</strong> Shelly ruft ESP32-Webserver per HTTP auf.</li>
+      <li><strong>Sicherheitslogik:</strong> Automatisches Ausschalten mit <code>toggle_after</code>.</li>
+    </ol>
+  </section>
+
+  <section  id="kapitel-13"><h2>13. Merksatz</h2>
+    <div class="info-box note">
+      Der Shelly Plus 1 ist nicht nur ein Relais. Er ist ein kleines WLAN-Gerät mit Web-API. Der ESP32 kann diese Web-API mit HTTP-Requests benutzen.
+    </div>
+  </section>
+
+  <section><h2>14. Quellen und Dokumentation</h2>
+    <ul>
+      <li><a href="https://shelly-api-docs.shelly.cloud/gen2/Devices/ShellyPlus1/">Shelly API Docs - Shelly Plus 1</a></li>
+      <li><a href="https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Switch/">Shelly API Docs - Switch-Komponente</a></li>
+      <li><a href="https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Shelly/">Shelly API Docs - Shelly-Komponente</a></li>
+      <li><a href="https://shelly-api-docs.shelly.cloud/gen2/ComponentsAndServices/Input/">Shelly API Docs - Input-Komponente</a></li>
+      <li><a href="https://prismjs.com/">Prism.js - Syntaxhighlighting</a></li>
+    </ul>
+  </section>
   </main>
 
-  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  <footer>© Andreas Sigismund & ChatGPT· AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../../../js/script.js"></script>
   </footer>

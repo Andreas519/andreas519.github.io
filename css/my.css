@@ -9,6 +9,18 @@ body { margin:0; font-family:Arial, Helvetica, sans-serif; background:var(--bg);
 header { background: linear-gradient(135deg, #00529b, #f5cf46); color: white;  padding: 5px 10px;  text-align: center; }
 header h1 { margin:0; font-size:clamp(2rem,5vw,3.2rem); }
 header p { margin:12px auto 0; max-width:850px; font-size:1.1rem; opacity:.95; }
+.home-menu {
+  max-width: 1050px;
+  margin: 18px auto 0;
+  padding: 0 18px;
+}
+.home-menu ul {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .04);
+}
 main { max-width:1050px; margin:0 auto; padding:28px 18px 48px; }
 section { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin:18px 0; box-shadow:0 4px 14px rgba(0,0,0,.04); }
 h2 { margin-top:0; color:var(--accent-dark); }
@@ -94,6 +106,9 @@ ol > li {
 @media (max-width: 720px) {
   nav ul {
     flex-direction: column;
+  }
+  .home-menu {
+    margin-top: 12px;
   }
 }
 
