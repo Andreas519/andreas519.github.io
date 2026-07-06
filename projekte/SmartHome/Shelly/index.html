@@ -15,14 +15,44 @@
 
   <main> 
     <section>Shelly-Geräte sind kompakte Smart-Home-Module für die Hausautomation.<br> 
-        Sie können Verbraucher schalten, Messwerte erfassen und über WLAN mit einer App, Weboberfläche oder anderen Geräten wie einem ESP32 kommunizieren.  
+        Sie können Verbraucher schalten, Messwerte erfassen und über WLAN mit einer App, Weboberfläche sowie mit Modulen und Geräten, wie einem ESP32, kommunizieren.<br>
+        Auf BLE wird nicht eingegangen.
+        <section>
         <p>Für den Einsatz in der AG kommen nur Modelle in Frage, deren Versorgungsspannung 12 V bzw. 24-48 V beträgt.</p>
         <p>Neben dem Shelly Plus 1 haben wir Shelly Plus 2PM und Shelly Plus Add-on zur Verfügung.<br>
-        <img src="dateien/1PM-1PM-mini.jpg" alt="Shelly 1 PMs" height="150" />
-        <img src="dateien/shelly-relais-1-gen4.png" alt="Shelly Relais 1 Gen. 4" height="150"/>
-        <img src="dateien/shelly-plus-add-on.png" alt="Shelly Plus Add-on" height="150"/>
-        </p>
-        <p>Am Beispiel des Shelly Plus 1 werden die Funktionen und Möglichkeiten der Geräts erklärt.</p>
+          <div class="grid">
+    <article class="project-card">
+      <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1" target="_blank">
+        <img src="dateien/shelly-relais-1-gen4.png" alt="Shelly Relais 1 Gen. 4" height="250"/>
+      </a>
+      <br>
+      Shelly Plus 1
+    </article>
+    <article class="project-card">
+      <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-2pm" target="_blank">
+        <img src="dateien/shelly-plus-2pm.png" alt="Shelly Plus 2PM" height="250" />
+      </a>      
+      <br>
+      Shelly Plus 2 PM
+    </article>
+    <article class="project-card">
+      <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-add-on" target="_blank">
+        <img src="dateien/shelly-plus-add-on.png" alt="Shelly Plus Add-on" height="250"/>
+      </a>
+      <br>
+      Shelly Plus Add On
+    </article>
+    </div>  
+    </section>
+    <section> Beide Module können mit 24 V Gleichspannung betrieben und so sicher in der AG eingesetzt werden.<br>
+      <strong>220 V Wechselspannung ist verboten.</strong>
+        <p>
+          <img src="dateien/Plus 1 24V-wiring.png" alt="Shelly Plus 1 24V Wiring" height="500"/>
+          <img src="dateien/Plus 2PM 24V-wiring.png" alt="Shelly Plus Add-on" height="500"/>
+        </p>  
+    </section>
+    <section>
+        <p>Am Beispiel des Shelly Plus 1 werden Funktionen und Möglichkeiten der Module gezeigt.</p>
             
 <!--         <p>Shelly-Geräte sind kleine Smart-Home-Module, die elektrische Verbraucher schalten, messen und automatisieren können. Sie werden meist per WLAN eingebunden und lassen sich über App, Weboberfläche, HTTP/API oder MQTT steuern.
         </p>
@@ -31,9 +61,6 @@
         </p>
         <p>Noch kürzer:<br>Shelly = fertiges Smart-Home-Modul mit Relais, WLAN und manchmal Leistungsmessung.
         </p> -->
-
-    </section>
-    <section>
       <p>Mögliche Themen im Rahmen der AG:</p>
       <ol>
        <li><a href="ap-modus-vorbereitung.html">Shelly im Access Point-Modus</a>
@@ -55,26 +82,22 @@
         <li><a href="shelly-esp.html">Kommunikation mit Shelly über ESP32</a>
           <br>Ein ESP32 kommuniziert mit dem Shelly über HTTP-Requests und kann so das Relais schalten und den Status abfragen.
         </li>                
-<!--         <li> Shelly Plus 1  ·  Modul kennenlernen, Verbindung per WLAN, Weboberfläche des Shellys<br>  
-          <a href="step-01-vorher.html">step-01-vorher.html</a>  /
-          <a href="step-01.html">step-01.html</a> von ChatGPT überarbeitet
-        </li>
-        <li> Shelly Plus 1  ·  in ein lokales WLAN einbinden, Steuerung über Weboberfläche und RPC-API<br>
-          <a href="step-02.html">step-02.html</a> -->
       </ol>
     </section>
 
     <section>Quelle und weiterführende Links:
         <ul> 
           <li><a href="https://www.shelly.com/de" target="_blank">Shelly Official Website</a></li>
-            <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>
-            <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>
-            <li><a href="https://kb.shelly.cloud/knowledge-base/devices" target="_blank">Shelly - Devices</a></li>
-            <li> - <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1" target="_blank">Shelly Pus 1</a></li>
-            <li><a href="https://shelly-api-docs.shelly.cloud/" target="_blank">Shelly - API Docs</a></li>    
-            <li><a href="https://github.com/ALLTERCO/shelly-script-examples" target="_blank">Shelly Script Examples auf GitHub</a></li>  
-            <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1-web-interface-guide" target="_blank">Shelly Plus 1 Web Interface Guide</a></li> 
-            <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-smart-control-guide" target="_blank">Shelly Smart Control Guide</a></li>
+          <li><a href="https://kb.shelly.cloud/knowledge-base/" target="_blank">Shelly Knowledge Base!</a></li>
+          <li><a href="https://kb.shelly.cloud/knowledge-base/devices" target="_blank">Shelly - Devices</a></li>
+          <li> - <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1" target="_blank">Shelly Plus 1</a></li>
+          <li> - <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-2pm" target="_blank">Shelly Plus 2PM</a></li>
+          <li> - <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-add-on" target="_blank">Shelly Plus Add On</a></li>
+          <li><a href="https://shelly-api-docs.shelly.cloud/" target="_blank">Shelly - API Docs</a></li>    
+          <li><a href="https://github.com/ALLTERCO/shelly-script-examples" target="_blank">Shelly Script Examples auf GitHub</a></li>  
+          <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1-web-interface-guide" target="_blank">Shelly Plus 1 Web Interface Guide</a></li> 
+          <li><a href="https://kb.shelly.cloud/knowledge-base/shelly-smart-control-guide" target="_blank">Shelly Smart Control Guide</a></li>
+          
         </ul>    
     </section>
     <section>
