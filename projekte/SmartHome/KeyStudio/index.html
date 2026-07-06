@@ -31,15 +31,9 @@
           <li><a href="#kapitel-5">5. Unterrichtsreihenfolge</a></li>
           <li><a href="#kapitel-6">6. Smart-Home-Funktionen</a></li>
           <li><a href="#kapitel-7">7. Software</a></li>
-          <li><a href="#kapitel-8">8. Stärken</a></li>
-          <li><a href="#kapitel-9">9. Schwächen</a></li>
-          <li><a href="#kapitel-10">10. Unterrichtsideen</a></li>
-          <li><a href="#kapitel-11">11. Einschätzung</a></li>
         </ul>
       </nav>
-
       <hr>
-
       <section id="kapitel-1">
         <h2>1. Kurzbeschreibung</h2>
         <p>Das <strong>Keyestudio KS0085 Smart Home Kit for Arduino</strong> ist ein Lernbaukasten, mit dem ein kleines Smart-Home-Modell aufgebaut wird. Es basiert auf einem Arduino-kompatiblen Keyestudio-Controller und einem Sensor-Shield.</p>
@@ -172,94 +166,16 @@
 
       <section id="kapitel-7">
         <h2>7. Software</h2>
+       
+      <section id="kapitel-7">
+        <h2>7. Software</h2>
         <p>Die Programmierung erfolgt typischerweise mit der <strong>Arduino IDE</strong>. Keyestudio stellt Beispielprogramme und Bibliotheken bereit.</p>
-        <table>
-          <thead>
-            <tr><th>Software / Datei</th><th>Zweck</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Arduino IDE</td><td>Programme schreiben, kompilieren und hochladen</td></tr>
-            <tr><td>Beispielprogramme</td><td>Einzelne Module testen</td></tr>
-            <tr><td>Bibliotheken</td><td>z. B. für Servo und LCD</td></tr>
-            <tr><td>Bluetooth-App</td><td>Steuerung per Smartphone</td></tr>
-            <tr><td>Mixly / Scratch</td><td>Blockbasierte Alternativen, wenn verfügbar</td></tr>
-          </tbody>
-        </table>
-        <p><strong>Empfehlung:</strong> Für eine AG würde ich die Originalbeispiele didaktisch reduzieren und zunächst kurze Einzelprogramme verwenden.</p>
+        <p>
+          <a href="https://wiki.keyestudio.com/KS0085_Keyestudio_Smart_Home_Kit_for_Arduino#Instruction" target="_blank">Schrittweise Anleitung</a> 
+          auf <a href="https://wiki.keyestudio.com/Main_Page" target=""_blank">Keyestudio-Wiki</a> (englisch).
+        </p>
       </section>
 
-      <section id="kapitel-8">
-        <h2>8. Stärken für den Unterricht</h2>
-        <table>
-          <thead>
-            <tr><th>Stärke</th><th>Warum hilfreich?</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Komplettes Hausmodell</td><td>Schüler sehen einen realen Zusammenhang.</td></tr>
-            <tr><td>Viele verschiedene Sensorarten</td><td>Digitale, analoge, serielle und I²C-Komponenten können verglichen werden.</td></tr>
-            <tr><td>Einfache Steckverkabelung</td><td>Weniger Fehler als bei reinem Steckbrettaufbau.</td></tr>
-            <tr><td>Gute Projektfolge</td><td>Vom Einzelmodul zum Gesamtsystem.</td></tr>
-            <tr><td>Hohe Motivation</td><td>Smart Home ist alltagsnah und anschaulich.</td></tr>
-            <tr><td>Mechanik und Elektronik</td><td>Servos, Lüfter und Sensoren machen das Modell lebendig.</td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section id="kapitel-9">
-        <h2>9. Schwächen und Stolperstellen</h2>
-        <table>
-          <thead>
-            <tr><th>Problem</th><th>Einschätzung</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Viele Kabel</td><td>Auch mit Sensor-Shield sind Verdrahtungsfehler möglich.</td></tr>
-            <tr><td>Bluetooth HM-10</td><td>Kann je nach Smartphone und App etwas nervig sein.</td></tr>
-            <tr><td>MQ-2 Sensor</td><td>Braucht Aufwärmzeit; Werte sind eher qualitativ.</td></tr>
-            <tr><td>Steam- und Bodenfeuchtesensor</td><td>Nicht dauerhaft nass betreiben.</td></tr>
-            <tr><td>Servos</td><td>Vor Montage auf Mittelstellung bringen, sonst kann die Mechanik klemmen.</td></tr>
-            <tr><td>Beispielcode</td><td>Teilweise lang und für Anfänger schwer lesbar.</td></tr>
-            <tr><td>Relais</td><td>Im Unterricht nur mit Kleinspannung verwenden.</td></tr>
-          </tbody>
-        </table>
-        <blockquote>
-          <p><strong>Sicherheit:</strong> Das Relais sollte im Schulkontext nicht mit 230 V verwendet werden. Für Schülerprojekte nur Kleinspannung einsetzen.</p>
-        </blockquote>
-      </section>
-
-      <section id="kapitel-10">
-        <h2>10. Unterrichtsideen</h2>
-        <h3>Einstieg: Das Haus reagiert auf seine Umgebung</h3>
-        <ol>
-          <li>LED blinkt.</li>
-          <li>Taster schaltet LED.</li>
-          <li>Helligkeit steuert LED.</li>
-          <li>Bewegung schaltet Licht.</li>
-          <li>Servo öffnet eine Tür.</li>
-          <li>LCD zeigt einen Sensorwert.</li>
-          <li>Alarm bei Gas, Wasser oder trockener Erde.</li>
-          <li>Mehrere Funktionen werden kombiniert.</li>
-        </ol>
-
-        <h3>Beispielaufgabe</h3>
-        <p>Baue eine automatische Haustür:</p>
-        <blockquote>
-          <p>Wenn der richtige Tastencode eingegeben wurde, öffnet sich die Tür mit dem Servo. Auf dem LCD erscheint <code>OPEN</code>. Nach fünf Sekunden schließt die Tür wieder.</p>
-        </blockquote>
-
-        <h3>Fortgeschrittene Aufgabe</h3>
-        <p>Erweitere das Haus so, dass nachts bei Bewegung automatisch das Licht eingeschaltet wird. Tagsüber bleibt das Licht aus.</p>
-      </section>
-
-      <section id="kapitel-11">
-        <h2>11. Einschätzung</h2>
-        <p>Das KS0085 ist ein brauchbares und anschauliches Arduino-Lernkit für den Einstieg in Sensoren, Aktoren und einfache Automatisierung.</p>
-        <p>Es sollte aber nicht als echtes Smart Home verkauft werden, sondern besser als:</p>
-        <blockquote>
-          <p><strong>Modell eines Smart Homes zur Einführung in Sensoren, Aktoren und Mikrocontroller-Programmierung.</strong></p>
-        </blockquote>
-        <p>Für eine AG ist das Kit gut geeignet, wenn die Beispiele didaktisch reduziert werden und nicht direkt mit dem großen Gesamtprogramm begonnen wird.</p>
-      </section>
-    </section>
   </main>
 
   <footer>
