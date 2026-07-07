@@ -1,5 +1,0 @@
-
-
-http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta":{"ssid":"meineWlanSSID","pass":"MeinWlanPasswortohneSonderzeichen","enable":true}}
-
-http://192.168.33.1/rpc/WiFi.SetConfig?config={"sta1":{"ssid":"WLAN-QE6FWC","pass":"1267308176492817","enable":true}}
