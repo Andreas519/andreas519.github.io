@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelly Plus Add-on - Werte per HTTP-Request abfragen</title>
+  <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#f4f7fb; --card:#ffffff; --text:#1f2933; --muted:#5f6c7b;
+      --accent:#2563eb; --accent-dark:#1e40af; --border:#d8dee9;
+      --code-bg:#f6f8fa;
+    }
+    body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+    main { max-width: 980px; margin: 0 auto; padding: 28px 18px 48px; }
+    header { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color:white; padding:26px 28px; border-radius:18px; box-shadow:0 8px 24px rgba(37,99,235,.18); }
+    h1 { margin:0 0 8px; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height:1.15; }
+    h2 { margin-top:34px; padding-bottom:6px; border-bottom:2px solid var(--border); color:#172033; }
+    h3 { margin-top:24px; color:#172033; }
+    .subtitle { margin:0; color:#e7eefc; font-size:1.05rem; }
+    .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-top:18px; box-shadow:0 2px 10px rgba(15,23,42,.04); }
+    .note { border-left:5px solid var(--accent); background:#eef5ff; padding:12px 14px; border-radius:10px; }
+    code:not(pre code) { background:#eef2f7; border:1px solid #dde5ef; padding:.1rem .35rem; border-radius:6px; }
+    pre { background:var(--code-bg); border:1px solid var(--border); border-radius:12px; padding:14px; overflow:auto; }
+    table { width:100%; border-collapse:collapse; margin:14px 0 22px; background:white; }
+    th, td { border:1px solid var(--border); padding:9px 10px; vertical-align:top; }
+    th { background:#eef2f7; text-align:left; }
+    .small { color:var(--muted); font-size:.95rem; }
+    .checklist li { margin:.4rem 0; }
+    footer { margin-top:34px; color:var(--muted); font-size:.92rem; }
+    a { color:var(--accent-dark); }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Shelly Plus Add-on: Werte per HTTP-Request abfragen</h1>
+    <p class="subtitle">Kurzübersicht für Shelly Plus 1 / Shelly Gen2-RPC-Kommandos</p>
+  </header>
+
+  <section class="card">
+    <h2>Grundidee</h2>
+    <p>Das <strong>Shelly Plus Add-on</strong> erscheint nicht als ein einzelnes Messgerät mit einem eigenen Statusbefehl. Die angeschlossenen Sensoren und Eingänge werden als normale Shelly-RPC-Komponenten angezeigt, zum Beispiel als <code>temperature:100</code>, <code>humidity:100</code>, <code>input:100</code> oder <code>voltmeter:100</code>.</p>
+    <p class="note"><strong>Wichtig:</strong> Die ID ist nicht immer <code>100</code>. Am zuverlässigsten ist zuerst eine Gesamtabfrage mit <code>Shelly.GetStatus</code> oder eine Peripherie-Abfrage mit <code>SensorAddon.GetPeripherals</code>.</p>
+  </section>
+
+  <section class="card">
+    <h2>Wichtigster Sammel-Befehl</h2>
+    <pre><code class="language-text">http://&lt;IP-DES-SHELLY&gt;/rpc/Shelly.GetStatus</code></pre>
+    <p>Beispiel im Access-Point-Modus:</p>
+    <pre><code class="language-text">http://192.168.33.1/rpc/Shelly.GetStatus</code></pre>
+    <p>Dieser Befehl liefert den Status aller vorhandenen Komponenten, zum Beispiel:</p>
+    <pre><code class="language-json">{
+  "switch:0": { ... },
+  "input:0": { ... },
+  "temperature:100": { ... },
+  "humidity:100": { ... },
+  "voltmeter:100": { ... }
+}</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>Typische HTTP-Abfragen</h2>
+    <table>
+      <thead>
+        <tr><th>Messwert / Funktion</th><th>HTTP-Request</th><th>Wichtige Rückgabewerte</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Temperatur, z. B. DS18B20 oder DHT22</td><td><code>Temperature.GetStatus?id=100</code></td><td><code>tC</code> Temperatur in °C<br><code>tF</code> Temperatur in °F<br><code>errors</code> Fehlerliste</td></tr>
+        <tr><td>Luftfeuchtigkeit, z. B. DHT22 / AM2301</td><td><code>Humidity.GetStatus?id=100</code></td><td><code>rh</code> relative Luftfeuchtigkeit in %<br><code>errors</code> Fehlerliste</td></tr>
+        <tr><td>Digitaler Eingang</td><td><code>Input.GetStatus?id=100</code></td><td><code>state: true</code> Eingang aktiv<br><code>state: false</code> Eingang inaktiv</td></tr>
+        <tr><td>Analoger Eingang</td><td><code>Input.GetStatus?id=100</code></td><td><code>percent</code> analoger Wert in %<br><code>xpercent</code> umgerechneter Wert, falls eingerichtet</td></tr>
+        <tr><td>Spannungsmessung / Voltmeter</td><td><code>Voltmeter.GetStatus?id=100</code></td><td><code>voltage</code> gemessene Spannung in Volt<br><code>errors</code> Fehlerliste</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Einzelbeispiele</h2>
+    <h3>Temperatur abfragen</h3>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/Temperature.GetStatus?id=100</code></pre>
+    <pre><code class="language-json">{
+  "id": 100,
+  "tC": 22.5,
+  "tF": 72.5
+}</code></pre>
+
+    <h3>Luftfeuchtigkeit abfragen</h3>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/Humidity.GetStatus?id=100</code></pre>
+    <pre><code class="language-json">{
+  "id": 100,
+  "rh": 48.3
+}</code></pre>
+
+    <h3>Digitalen Eingang abfragen</h3>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/Input.GetStatus?id=100</code></pre>
+    <pre><code class="language-json">{
+  "id": 100,
+  "state": true
+}</code></pre>
+
+    <h3>Voltmeter abfragen</h3>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/Voltmeter.GetStatus?id=100</code></pre>
+    <pre><code class="language-json">{
+  "id": 100,
+  "voltage": 3.27
+}</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>Add-on-Verwaltung</h2>
+    <p>Welche Sensoren und Eingänge am Add-on eingerichtet sind, lässt sich mit folgendem RPC-Befehl prüfen:</p>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/SensorAddon.GetPeripherals</code></pre>
+    <p>Für 1-Wire-Sensoren, zum Beispiel DS18B20, ist außerdem ein Scan möglich:</p>
+    <pre><code class="language-text">http://&lt;IP&gt;/rpc/SensorAddon.OneWireScan</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>Praktische Test-Reihenfolge</h2>
+    <ol class="checklist">
+      <li>Gesamtstatus öffnen: <code>http://&lt;IP&gt;/rpc/Shelly.GetStatus</code></li>
+      <li>Im Ergebnis nach <code>temperature:</code>, <code>humidity:</code>, <code>input:</code> und <code>voltmeter:</code> suchen.</li>
+      <li>Die gefundene ID übernehmen, zum Beispiel <code>temperature:100</code> → <code>id=100</code>.</li>
+      <li>Danach gezielt mit <code>Temperature.GetStatus</code>, <code>Humidity.GetStatus</code>, <code>Input.GetStatus</code> oder <code>Voltmeter.GetStatus</code> abfragen.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>Kurzfazit</h2>
+    <p>Für den Unterricht und die Fehlersuche ist <code>Shelly.GetStatus</code> der beste Einstieg. Danach werden die gefundenen Komponenten einzeln abgefragt. Die häufigste Stolperfalle ist die ID: Nicht blind <code>id=100</code> verwenden, sondern zuerst im Status nachsehen.</p>
+  </section>
+
+  <footer>
+    <p><strong>Quellen / Dokumentation:</strong></p>
+    <ul>
+      <li>Shelly Plus 1 Knowledge Base: <a href="https://kb.shelly.cloud/knowledge-base/shelly-plus-1">https://kb.shelly.cloud/knowledge-base/shelly-plus-1</a></li>
+      <li>Shelly Gen2 API-Dokumentation: Shelly.GetStatus, Temperature, Humidity, Input, Voltmeter, SensorAddon.</li>
+    </ul>
+  </footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-json.min.js"></script>
+</body>
+</html>

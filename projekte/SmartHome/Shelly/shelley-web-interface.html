@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>  <title>Shelly-Webinterface</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Shelly Plus 1 Webinterface">
+  <link rel="stylesheet" href="../../../css/my.css">
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+</head>
+<body>
+  <header>
+    Shelley Plus Webinterface kennelernen
+  </header>
+  <nav class="home-menu" aria-label="Hauptnavigation">
+    <ul>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#addon">Add-on</a></li>
+      <li><a href="#scripts">Scripts</a></li>
+      <li><a href="#actions">Actions</a></li>
+      <li><a href="#advanced">Advanced</a></li>
+      <li><a href="#timer">Timer</a></li>
+      <li><a href="#schedules">Schedules</a></li>
+      <li><a href="#diagnostic">Diagnostic</a></li>
+  </nav>
+
+  <main>
+    <section id="vor"><h2>Voraussetzungen zur Nutzung der lokalen Weboberfläche des Shelly-Moduls</h2>
+     Für die Nutzung der lokalen Weboberfläche eines Shelly-Moduls wird weder eine Internetverbindung noch die Shelly Cloud.
+     Die einzige Voraussetzung ist, dass sich Ihr Browser im selben WLAN-Netzwerk wie das Shelly-Modul befindet.<br>
+     <a href="https://shelly.cloud/de/support/knowledge-base/local-web-interface/" target="_blank">
+      Weitere Informationen zum Webinterface der Sehelly Plus 1 - Module</a>  
+     </section>
+
+  <section id="home"><h2>1. Startseite - Informationen über alle Ein- und Ausgänge</h2>
+    Hier werden alle Ein- und Ausgänge des Shelly-Moduls und gegebenfalls des Add-on-Modules angezeigt.
+    Ein Ausgang wird mit einem Schalter dargestellt, der den aktuellen Zustand anzeigt.<br>
+    Über diesen Schalter kann der Ausgang ein- und ausgeschaltet werden. 
+    <p>
+    Für eine Ausgang werden neben "Overview" noch "Settings", "Scripts", "Actions", "Shedules" und "Timer"   angezeigt.
+    Ein Eingang hat neben "Overview" noch "Settings" und "Actions" zur Auswahl. <br>
+    </p>
+
+  </section>
+
+  <section id="addon"><h2>Add-on</h2>
+    Hier sind Netzwerk-, Konnektivitäts- und Geräteeinstellungen zu finden.
+
+    
+  </section>
+
+  <section id="script"><h2>Scripts</h2>
+    Eigene Skripte können hier erstellt, bearbeitet, getestet und gelöscht werden. <br>
+    Die Reaktionen des Scripts werden protokolliert.<br>
+    Skripte können die Gerätefunktionalität an die spezifischen Bedürfnisse des Benutzers anzupassen und zu erweitern.
+    Diese Skripte können den Gerätestatus berücksichtigen, mit anderen Geräten kommunizieren oder Daten von externen Diensten wie Wettervorhersagen abrufen. Ein Skript ist ein Programm, das in einer Teilmenge von JavaScript geschrieben ist. In der Web-Benutzeroberfläche finden Sie im Menü „Skripte“ die vorhandenen Skripte. 
+    Unter "Library" sind <a href="https://raw.githubusercontent.com/ALLTERCO/shelly-script-examples/main/examples-manifest.json" target="_blank">hier </a> die Beispiele zu finden,
+    die   direkt eingefügt werden können.<br>
+  </section>
+  <section id="actions"><h2>Actions</h2>
+    Hier können Aktionen erstellt, bearbeitet, getestet und gelöscht werden. <br>
+    Die Reaktionen der Aktionen werden protokolliert.<br>
+    Aktionen sind vordefinierte Reaktionen auf bestimmte Ereignisse oder Bedingungen. 
+    Sie ermöglichen es dem Shelly-Modul, automatisch auf bestimmte Situationen zu reagieren, 
+    ohne dass der Benutzer manuell eingreifen muss. <br>
+  </section>  
+  <section id="tomer"><h2>Timer</h2>
+    Das Verhalten eine Ausgangs kann über einen Timer gesteuert werden. <br>
+    Es können mehrere Timer gleichzeitig aktiv sein. <br>
+  </section>
+  <section id="settings"><h2>Settings</h2>
+    Hier sind Netzwerk-, Konnektivitäts- und Geräteeinstellungen zu finden.
+  </section>
+  <section id="settings"><h2>Shedules</h2>
+    Hier ist das Einrichten einfacher und fortgeschrittener Zeitpläne möglich. <br>
+    Es können mehrere Zeitpläne gleichzeitig aktiv sein.
+    <p>Die erweiterte Zeitplanfunktion verwendet Cron, um Jobs mit einem einzigen Zeitplan auszuführen,
+      anstatt einige wenige einfache Zeitpläne zu verwenden.</p>
+  </section>
+  <section id="advanced"><h2>Advanced</h2>
+    KVS - Hier kann ein kleiner Werte-Speicher (Key-Value Storage) konfiguriert und ausgelesen werden.  
+    <br>
+    Diagnistic - Hier werden alle Aktionen protkolliert und es kann ein Log-Dateien heruntergeladen werden.
+  </section>
+  </main>
+
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
