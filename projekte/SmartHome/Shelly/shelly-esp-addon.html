@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shelly Plus Add-on Messwerte mit ESP32 abfragen</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="HTTP- und RPC-Beispiele, um Messwerte des Shelly Plus Add-on mit einem ESP32 abzufragen.">
+  <link rel="stylesheet" href="../../../css/my.css">
+  <link rel="stylesheet" href="../../../css/prism.css">
+</head>
+<body>
+  <header>
+    Shelly Plus Add-on Messwerte mit ESP32 abfragen
+  </header>
+
+  <main>
+    <section>
+      <h2>Überblick</h2>
+      <p>Diese Seite zeigt praktische HTTP- und RPC-Abfragen für Messwerte des Shelly Plus Add-on. Die Beispiele decken Temperatur, Luftfeuchte, Analogwert, Spannung und Eingangszustand ab.</p>
+      <p>Das Shelly Plus Add-on ist kein eigenständiges WLAN-Gerät. Es erweitert den Shelly Plus 1 um Sensoranschlüsse. Der ESP32 fragt deshalb immer den <strong>Shelly Plus 1</strong> ab, nicht direkt das Add-on.</p>
+      <p>Die Add-on-Messwerte erscheinen in der Shelly-API als zusätzliche Komponenten, meistens mit IDs ab <code>100</code>, zum Beispiel <code>temperature:100</code>, <code>humidity:100</code>, <code>input:100</code> oder <code>voltmeter:100</code>.</p>
+    </section>
+
+    <nav aria-label="Shelly Schritt Navigation">
+      <ul>
+        <li><a href="#vorbereitung">Vorbereitung</a></li>
+        <li><a href="#rpc-adressen">RPC-Adressen</a></li>
+        <li><a href="#peripherie">Peripherie</a></li>
+        <li><a href="#temperatur">Temperatur</a></li>
+        <li><a href="#dht22">DHT22</a></li>
+        <li><a href="#gesamtstatus">Gesamtstatus</a></li>
+        <li><a href="#beispiele">ESP32-Beispiele</a></li>
+        <li><a href="#fehlersuche">Fehlersuche</a></li>
+      </ul>
+    </nav>
+
+    <section id="vorbereitung">
+      <h2>1. Vorbereitung am Shelly</h2>
+      <ol>
+        <li>Shelly Plus Add-on auf den Shelly Plus 1 stecken.</li>
+        <li>Sensor anschließen, zum Beispiel DS18B20, DHT22, Reedkontakt, LDR-Spannungsteiler oder analogen Sensor.</li>
+        <li>Im Webinterface des Shelly das Add-on aktivieren.</li>
+        <li>Passenden Sensor als Peripheral hinzufügen.</li>
+        <li>Shelly neu starten, falls die Oberfläche oder API das verlangt.</li>
+      </ol>
+      <p>Erst wenn die Messwerte im Shelly-Webinterface sichtbar sind, lohnt sich die Abfrage mit dem ESP32.</p>
+    </section>
+
+    <section id="rpc-adressen">
+      <h2>2. Wichtige RPC-Adressen im Browser testen</h2>
+      <p>Die folgenden Adressen kann man zuerst direkt im Browser testen. Ersetze <code>SHELLY_IP</code> durch die IP-Adresse deines Shelly Plus 1.</p>
+      <pre><code class="language-text">http://SHELLY_IP/rpc/Shelly.GetStatus
+http://SHELLY_IP/rpc/SensorAddon.GetPeripherals
+http://SHELLY_IP/rpc/SensorAddon.OneWireScan
+http://SHELLY_IP/rpc/Temperature.GetStatus?id=100
+http://SHELLY_IP/rpc/Humidity.GetStatus?id=100
+http://SHELLY_IP/rpc/Input.GetStatus?id=100
+http://SHELLY_IP/rpc/Voltmeter.GetStatus?id=100</code></pre>
+      <p>Beginne am besten immer mit <code>Shelly.GetStatus</code>. Diese Antwort zeigt sehr schnell, welche Komponenten wirklich vorhanden sind.</p>
+    </section>
+
+    <section id="peripherie">
+      <h2>3. Add-on-Peripherie auflisten</h2>
+      <p>Damit findest du heraus, welche Sensoren der Shelly dem Add-on zugeordnet hat.</p>
+      <pre><code class="language-python">import network
+import urequests
+import time
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+SHELLY_IP = "192.168.178.55"
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde mit WLAN ...")
+    time.sleep(0.5)
+
+url = "http://{}/rpc/SensorAddon.GetPeripherals".format(SHELLY_IP)
+
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print(data)</code></pre>
+      <p>Mögliche Antwort, stark vereinfacht:</p>
+      <pre><code class="language-json">{
+  "ds18b20": [
+    {
+      "temperature:100": {
+        "addr": "28ff641e2c2304a1"
+      }
+    }
+  ],
+  "dht22": [],
+  "analog_in": [],
+  "voltmeter": []
+}</code></pre>
+    </section>
+
+    <section id="temperatur">
+      <h2>4. DS18B20-Temperatur abfragen</h2>
+      <p>Ein DS18B20 wird als Temperatur-Komponente eingebunden. Beim Add-on ist die ID häufig <code>100</code>.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+TEMP_ID = 100
+
+url = "http://{}/rpc/Temperature.GetStatus?id={}".format(SHELLY_IP, TEMP_ID)
+
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print("Antwort:", data)
+print("Temperatur:", data["tC"], "°C")</code></pre>
+      <p>Typische Antwort:</p>
+      <pre><code class="language-json">{
+  "id": 100,
+  "tC": 22.8,
+  "tF": 73.0
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>5. Mehrere DS18B20-Sensoren abfragen</h2>
+      <p>Bei mehreren Temperaturfühlern werden meist mehrere Temperatur-Komponenten angelegt, zum Beispiel <code>temperature:100</code>, <code>temperature:101</code>, <code>temperature:102</code>.</p>
+      <pre><code class="language-python">import urequests
+import time
+
+SHELLY_IP = "192.168.178.55"
+TEMP_IDS = [100, 101, 102]
+
+while True:
+    for sensor_id in TEMP_IDS:
+        try:
+            url = "http://{}/rpc/Temperature.GetStatus?id={}".format(SHELLY_IP, sensor_id)
+            response = urequests.get(url)
+            data = response.json()
+            response.close()
+
+            temperatur = data.get("tC")
+            print("Sensor", sensor_id, ":", temperatur, "°C")
+
+        except Exception as e:
+            print("Fehler bei Sensor", sensor_id, ":", e)
+
+    print("---")
+    time.sleep(5)</code></pre>
+    </section>
+
+    <section id="dht22">
+      <h2>6. DHT22: Temperatur und Luftfeuchte abfragen</h2>
+      <p>Ein DHT22 liefert zwei Komponenten: eine Temperatur-Komponente und eine Luftfeuchte-Komponente.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+TEMP_ID = 100
+HUM_ID = 100
+
+def rpc(method, sensor_id):
+    url = "http://{}/rpc/{}?id={}".format(SHELLY_IP, method, sensor_id)
+    response = urequests.get(url)
+    data = response.json()
+    response.close()
+    return data
+
+temp = rpc("Temperature.GetStatus", TEMP_ID)
+hum = rpc("Humidity.GetStatus", HUM_ID)
+
+print("Temperatur:", temp.get("tC"), "°C")
+print("Luftfeuchte:", hum.get("rh"), "%")</code></pre>
+      <p>Typische Antworten:</p>
+      <pre><code class="language-json">{
+  "id": 100,
+  "tC": 23.1,
+  "tF": 73.6
+}
+
+{
+  "id": 100,
+  "rh": 48.5
+}</code></pre>
+    </section>
+
+    <section id="gesamtstatus">
+      <h2>7. Alle Messwerte über Shelly.GetStatus holen</h2>
+      <p>Das ist für den Unterricht oft die robusteste Variante: Der ESP32 holt einmal den Gesamtstatus und sucht dann die vorhandenen Komponenten.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+url = "http://{}/rpc/Shelly.GetStatus".format(SHELLY_IP)
+response = urequests.get(url)
+status = response.json()
+response.close()
+
+for key, value in status.items():
+    if key.startswith("temperature:"):
+        print(key, "=", value.get("tC"), "°C")
+
+    if key.startswith("humidity:"):
+        print(key, "=", value.get("rh"), "%")
+
+    if key.startswith("voltmeter:"):
+        print(key, "=", value.get("voltage"), "V")
+
+    if key.startswith("input:"):
+        if "percent" in value:
+            print(key, "=", value.get("percent"), "%")
+        else:
+            print(key, "=", value.get("state"))</code></pre>
+      <p>Vorteil: Man muss die IDs nicht vorher sicher kennen. Der ESP32 zeigt, was wirklich vorhanden ist.</p>
+    </section>
+
+    <section>
+      <h2>8. Analogwert des Add-on abfragen</h2>
+      <p>Ein analoger Eingang wird über <code>Input.GetStatus</code> abgefragt. Der Messwert erscheint als <code>percent</code>, also 0 bis 100 Prozent.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+INPUT_ID = 100
+
+url = "http://{}/rpc/Input.GetStatus?id={}".format(SHELLY_IP, INPUT_ID)
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print("Antwort:", data)
+print("Analogwert:", data.get("percent"), "%")</code></pre>
+      <p>Typische Antwort:</p>
+      <pre><code class="language-json">{
+  "id": 100,
+  "percent": 37.4
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>9. Spannung über Voltmeter abfragen</h2>
+      <p>Wenn der Eingang als Voltmeter angelegt wurde, wird die Spannung mit <code>Voltmeter.GetStatus</code> abgefragt.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+VOLT_ID = 100
+
+url = "http://{}/rpc/Voltmeter.GetStatus?id={}".format(SHELLY_IP, VOLT_ID)
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print("Spannung:", data.get("voltage"), "V")</code></pre>
+      <p>Typische Antwort:</p>
+      <pre><code class="language-json">{
+  "id": 100,
+  "voltage": 2.73
+}</code></pre>
+    </section>
+
+    <section>
+      <h2>10. Digitalen Eingang abfragen</h2>
+      <p>Ein Reedkontakt, Schwimmerschalter oder anderer digitaler Kontakt kann als Eingang erscheinen.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+INPUT_ID = 100
+
+url = "http://{}/rpc/Input.GetStatus?id={}".format(SHELLY_IP, INPUT_ID)
+response = urequests.get(url)
+data = response.json()
+response.close()
+
+print("Eingangszustand:", data.get("state"))</code></pre>
+      <p>Typische Antwort:</p>
+      <pre><code class="language-json">{
+  "id": 100,
+  "state": false
+}</code></pre>
+    </section>
+
+    <section id="beispiele">
+      <h2>11. Beispiel: Temperaturgrenze schaltet ESP32-LED</h2>
+      <p>Der ESP32 fragt regelmäßig den Shelly ab. Wenn die Temperatur über 28 °C liegt, wird eine LED eingeschaltet.</p>
+      <pre><code class="language-python">import network
+import urequests
+import time
+from machine import Pin
+
+WIFI_SSID = "DEIN_WLAN"
+WIFI_PASS = "DEIN_PASSWORT"
+SHELLY_IP = "192.168.178.55"
+TEMP_ID = 100
+GRENZE = 28.0
+
+led = Pin(2, Pin.OUT)
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect(WIFI_SSID, WIFI_PASS)
+
+while not wlan.isconnected():
+    print("Verbinde mit WLAN ...")
+    time.sleep(0.5)
+
+while True:
+    try:
+        url = "http://{}/rpc/Temperature.GetStatus?id={}".format(SHELLY_IP, TEMP_ID)
+        response = urequests.get(url)
+        data = response.json()
+        response.close()
+
+        t = data.get("tC")
+        print("Temperatur:", t, "°C")
+
+        if t is not None and t &gt; GRENZE:
+            led.on()
+        else:
+            led.off()
+
+    except Exception as e:
+        print("Fehler:", e)
+        led.off()
+
+    time.sleep(5)</code></pre>
+    </section>
+
+    <section>
+      <h2>12. Beispiel: Shelly-Relais abhängig vom Add-on-Messwert schalten</h2>
+      <p>Das ist technisch möglich, aber mit Vorsicht zu behandeln: Das Shelly-Relais kann reale 230-V-Verbraucher schalten. Für Experimente zuerst nur ungefährliche Kleinspannung oder eine Testlampe verwenden.</p>
+      <pre><code class="language-python">import urequests
+import time
+
+SHELLY_IP = "192.168.178.55"
+TEMP_ID = 100
+EIN_AB = 30.0
+AUS_UNTER = 28.0
+
+relais_an = False
+
+while True:
+    try:
+        url = "http://{}/rpc/Temperature.GetStatus?id={}".format(SHELLY_IP, TEMP_ID)
+        response = urequests.get(url)
+        data = response.json()
+        response.close()
+
+        t = data.get("tC")
+        print("Temperatur:", t, "°C")
+
+        if t is not None:
+            if not relais_an and t &gt;= EIN_AB:
+                url = "http://{}/rpc/Switch.Set?id=0&amp;on=true".format(SHELLY_IP)
+                response = urequests.get(url)
+                response.close()
+                relais_an = True
+                print("Relais EIN")
+
+            elif relais_an and t &lt;= AUS_UNTER:
+                url = "http://{}/rpc/Switch.Set?id=0&amp;on=false".format(SHELLY_IP)
+                response = urequests.get(url)
+                response.close()
+                relais_an = False
+                print("Relais AUS")
+
+    except Exception as e:
+        print("Fehler:", e)
+
+    time.sleep(5)</code></pre>
+      <p>Die zwei Schaltschwellen bilden eine einfache Hysterese. Dadurch klappert das Relais nicht ständig um den Grenzwert herum.</p>
+    </section>
+
+    <section>
+      <h2>13. Kleine Hilfsfunktion für Unterrichtsprojekte</h2>
+      <p>Diese Funktion macht die Beispiele übersichtlicher.</p>
+      <pre><code class="language-python">import urequests
+
+SHELLY_IP = "192.168.178.55"
+
+def shelly_rpc(method, params=""):
+    if params:
+        url = "http://{}/rpc/{}?{}".format(SHELLY_IP, method, params)
+    else:
+        url = "http://{}/rpc/{}".format(SHELLY_IP, method)
+
+    response = urequests.get(url)
+    data = response.json()
+    response.close()
+    return data
+
+# Beispiele:
+print(shelly_rpc("Shelly.GetStatus"))
+print(shelly_rpc("Temperature.GetStatus", "id=100"))
+print(shelly_rpc("Humidity.GetStatus", "id=100"))
+print(shelly_rpc("Input.GetStatus", "id=100"))
+print(shelly_rpc("Voltmeter.GetStatus", "id=100"))</code></pre>
+    </section>
+
+    <section id="fehlersuche">
+      <h2>Fehlersuche</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Problem</th>
+            <th>Mögliche Ursache</th>
+            <th>Test</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>404</code> oder Methode nicht gefunden</td>
+            <td>Falscher RPC-Name oder Add-on nicht aktiviert</td>
+            <td><code>/rpc/Shelly.GetStatus</code> testen</td>
+          </tr>
+          <tr>
+            <td><code>temperature:100</code> fehlt</td>
+            <td>Sensor nicht eingerichtet oder Neustart fehlt</td>
+            <td>Webinterface und <code>SensorAddon.GetPeripherals</code> prüfen</td>
+          </tr>
+          <tr>
+            <td><code>tC</code> ist <code>null</code></td>
+            <td>Sensor kann nicht gelesen werden</td>
+            <td>Verdrahtung, Sensoradresse, Pullup prüfen</td>
+          </tr>
+          <tr>
+            <td>ESP32 bekommt keine Antwort</td>
+            <td>Falsche IP, anderes WLAN, Shelly nicht erreichbar</td>
+            <td>Adresse zuerst im Browser testen</td>
+          </tr>
+          <tr>
+            <td>Analogwert falsch skaliert</td>
+            <td>Peripheral als Analog Input statt Voltmeter oder falscher Bereich</td>
+            <td>Konfiguration im Shelly-Webinterface prüfen</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Merksatz</h2>
+      <div class="merkbox">Der ESP32 fragt nicht den Sensor direkt ab. Er fragt den Shelly Plus 1 ab. Der Shelly Plus 1 stellt die Messwerte des Add-on als RPC-Komponenten bereit.</div>
+    </section>
+
+    <section>
+      <h2>Quellen</h2>
+      <ul>
+        <li>Shelly Technical Documentation: Shelly Sensor Add-On - IDs der Add-on-Komponenten und unterstützte Peripheral-Typen.</li>
+        <li>Shelly Technical Documentation: Temperature - <code>Temperature.GetStatus</code>, <code>tC</code>, <code>tF</code>.</li>
+        <li>Shelly Technical Documentation: Humidity - <code>Humidity.GetStatus</code>, <code>rh</code>.</li>
+        <li>Shelly Technical Documentation: Voltmeter - <code>Voltmeter.GetStatus</code>, <code>voltage</code>.</li>
+        <li>Shelly Technical Documentation: Input - <code>Input.GetStatus</code>, <code>state</code>, <code>percent</code>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <a href="index.html">Zurück zur Shelly-Übersicht</a>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  </footer>
+
+  <script src="../../../js/prism-core.js"></script>
+  <script src="../../../js/script.js"></script>
+</body>
+</html>

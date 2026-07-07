@@ -27,6 +27,72 @@ function ladeDatei(datei, elementId) {
       minute: "2-digit"
     }) + " Uhr";
 
+  document.querySelectorAll('pre > code[class*="language-"]').forEach((codeElement, index) => {
+    const preElement = codeElement.parentElement;
+
+    if (!preElement || preElement.dataset.codeEnhanced === "true") {
+      return;
+    }
+
+    preElement.dataset.codeEnhanced = "true";
+    preElement.classList.add("codeblock");
+
+    const codeText = codeElement.textContent.replace(/\n$/, "");
+    const lineCount = codeText === "" ? 1 : codeText.split("\n").length;
+    const lineNumbers = document.createElement("span");
+    lineNumbers.className = "line-numbers-rows";
+
+    for (let lineIndex = 0; lineIndex < lineCount; lineIndex += 1) {
+      lineNumbers.appendChild(document.createElement("span"));
+    }
+
+    preElement.appendChild(lineNumbers);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "codeblock-wrapper";
+
+    const toolbar = document.createElement("div");
+    toolbar.className = "codeblock-toolbar";
+
+    const label = document.createElement("span");
+    label.className = "codeblock-language";
+    const languageClass = Array.from(codeElement.classList).find(cssClass => cssClass.startsWith("language-")) || "language-text";
+    const languageName = languageClass.replace("language-", "");
+    label.textContent = languageName.toUpperCase();
+
+    const downloadButton = document.createElement("a");
+    downloadButton.className = "codeblock-download";
+    downloadButton.textContent = "Download";
+
+    const extensionMap = {
+      python: "py",
+      json: "json",
+      javascript: "js",
+      js: "js",
+      html: "html",
+      css: "css",
+      text: "txt",
+      txt: "txt",
+      bash: "sh",
+      shell: "sh"
+    };
+    const fileExtension = extensionMap[languageName] || "txt";
+    const fileName = `codebeispiel-${String(index + 1).padStart(2, "0")}.${fileExtension}`;
+    downloadButton.download = fileName;
+    downloadButton.href = URL.createObjectURL(new Blob([codeText], { type: "text/plain;charset=utf-8" }));
+
+    toolbar.appendChild(label);
+    toolbar.appendChild(downloadButton);
+
+    preElement.parentNode.insertBefore(wrapper, preElement);
+    wrapper.appendChild(toolbar);
+    wrapper.appendChild(preElement);
+
+    if (window.Prism) {
+      Prism.highlightElement(codeElement);
+    }
+  });
+
     async function ladeMarkdown(datei) {
       const bereich = document.getElementById("markdown-inhalt");
       bereich.textContent = "Markdown wird geladen ...";

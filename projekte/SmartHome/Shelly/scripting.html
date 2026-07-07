@@ -9,7 +9,6 @@
   <meta name="description" content="Übersicht über RoboCar- und Steuerungsprojekte rund um ESP32, MicroPython und Sensorik.">
   <link rel="stylesheet" href="../../../css/my.css">
   <link rel="stylesheet" href="../../../css/prism.css">
-  <link rel="script" href="../../../js/prism.css">
 </head>
 <body>
   <header>
@@ -41,9 +40,9 @@
     <section id="start">
       <h2>1. Script starten</h2>
       <p>In der Weboberfläche des Shelly:</p>
-      <pre><code>http://IP-DES-SHELLY</code></pre>
+      <pre><code class="language-text">http://IP-DES-SHELLY</code></pre>
       <p>Dann:</p>
-      <pre><code>Scripts → Create Script → Code einfügen → Save → Start</code></pre>
+      <pre><code class="language-text">Scripts → Create Script → Code einfügen → Save → Start</code></pre>
       <div class="note">
         Für dauerhaften Betrieb nach einem Neustart sollte <strong>Run on startup</strong> aktiviert werden.
       </div>
@@ -52,7 +51,7 @@
     <section id="test">
       <h2>2. Einfacher Funktionstest</h2>
       <p>Dieses Script prüft, ob die Script-Umgebung läuft und gibt Geräteinformationen in der Console aus.</p>
-      <pre><code>// Shelly Plus 1 - einfacher Test
+      <pre><code class="language-javascript">// Shelly Plus 1 - einfacher Test
 
 console.log("Script gestartet");
 
@@ -66,7 +65,7 @@ console.log("Firmware:", info.ver);</code></pre>
       <p>Der Shelly Plus 1 besitzt einen Relaisausgang. Dieser hat die ID <code>0</code>.</p>
 
       <h3>Relais einschalten</h3>
-      <pre><code>// Relais einschalten
+      <pre><code class="language-javascript">// Relais einschalten
 
 Shelly.call("Switch.Set", {
   id: 0,
@@ -74,7 +73,7 @@ Shelly.call("Switch.Set", {
 });</code></pre>
 
       <h3>Relais ausschalten</h3>
-      <pre><code>// Relais ausschalten
+      <pre><code class="language-javascript">// Relais ausschalten
 
 Shelly.call("Switch.Set", {
   id: 0,
@@ -85,7 +84,7 @@ Shelly.call("Switch.Set", {
     <section id="timer">
       <h2>4. Relais für 5 Sekunden einschalten</h2>
       <p>Das Relais wird eingeschaltet und nach 5 Sekunden automatisch wieder ausgeschaltet.</p>
-      <pre><code>// Relais 5 Sekunden einschalten, dann automatisch aus
+      <pre><code class="language-javascript">// Relais 5 Sekunden einschalten, dann automatisch aus
 
 Shelly.call("Switch.Set", {
   id: 0,
@@ -104,7 +103,7 @@ Timer.set(5000, false, function () {
     <section id="input">
       <h2>5. Eingang abfragen und Relais entsprechend setzen</h2>
       <p>Das Script prüft jede Sekunde den Zustand des Eingangs und schaltet das Relais entsprechend.</p>
-      <pre><code>// Eingang lesen und Relais entsprechend schalten
+      <pre><code class="language-javascript">// Eingang lesen und Relais entsprechend schalten
 
 function checkInput() {
   let input = Shelly.getComponentStatus("input:0");
@@ -123,7 +122,7 @@ Timer.set(1000, true, checkInput);</code></pre>
     <section id="toggle">
       <h2>6. Tastendruck schaltet Relais um</h2>
       <p>Bei einer Änderung am Eingang wird das Relais umgeschaltet.</p>
-      <pre><code>// Bei Änderung am Eingang Relais umschalten
+      <pre><code class="language-javascript">// Bei Änderung am Eingang Relais umschalten
 
 Shelly.addStatusHandler(function (event) {
   if (event.component === "input:0") {
@@ -142,7 +141,7 @@ Shelly.addStatusHandler(function (event) {
     <section id="schutz">
       <h2>7. Sicherheit: maximale Laufzeit begrenzen</h2>
       <p>Wenn das Relais eingeschaltet wird, schaltet es sich nach einer festgelegten Zeit automatisch wieder aus.</p>
-      <pre><code>// Wenn Relais eingeschaltet wird, nach 30 Sekunden automatisch ausschalten
+      <pre><code class="language-javascript">// Wenn Relais eingeschaltet wird, nach 30 Sekunden automatisch ausschalten
 
 let maxLaufzeit = 30000; // 30 Sekunden
 
@@ -170,7 +169,7 @@ Shelly.addStatusHandler(function (event) {
     <section id="pumpe">
       <h2>8. Pumpe per Taster für 10 Sekunden starten</h2>
       <p>Ein Tastendruck startet die Pumpe für 10 Sekunden. Mehrfaches Drücken während der Laufzeit startet keinen zweiten Timer.</p>
-      <pre><code>// Taster startet Pumpe für 10 Sekunden
+      <pre><code class="language-javascript">// Taster startet Pumpe für 10 Sekunden
 
 let laufzeit = 10000; // 10 Sekunden
 let pumpeLaeuft = false;
@@ -213,7 +212,7 @@ Shelly.addStatusHandler(function (event) {
     <section id="http">
       <h2>9. HTTP-Request an anderes Gerät senden</h2>
       <p>Der Shelly kann lokal einen HTTP-Request an einen ESP32, einen zweiten Shelly oder einen kleinen Webserver senden.</p>
-      <pre><code>// HTTP-Request an anderes Gerät senden
+      <pre><code class="language-javascript">// HTTP-Request an anderes Gerät senden
 
 let url = "http://192.168.178.50/status?pumpe=ein";
 
@@ -231,7 +230,7 @@ Shelly.call("HTTP.GET", {
     <section id="status">
       <h2>10. Status regelmäßig ausgeben</h2>
       <p>Dieses Diagnose-Script gibt alle 5 Sekunden den Zustand von Eingang und Relais aus.</p>
-      <pre><code>// Alle 5 Sekunden Status anzeigen
+      <pre><code class="language-javascript">// Alle 5 Sekunden Status anzeigen
 
 function statusAusgeben() {
   let input = Shelly.getComponentStatus("input:0");
@@ -245,7 +244,7 @@ Timer.set(5000, true, statusAusgeben);</code></pre>
 
     <section>
       <h2>Wichtige Grundbefehle</h2>
-      <pre><code>// Gerätedaten
+      <pre><code class="language-javascript">// Gerätedaten
 Shelly.getDeviceInfo();
 
 // Status einer Komponente
@@ -290,6 +289,7 @@ Timer.set(1000, true, function () {
 
   <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/prism-core.js"></script>
     <script src="../../../js/script.js"></script>
   </footer>
 </body>
