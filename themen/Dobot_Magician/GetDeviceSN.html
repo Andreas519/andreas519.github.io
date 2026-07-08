@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dobot Magician · GetDeviceSN</title>
+	<meta name="author" content="Andreas Sigismund">
+	<meta name="description" content="Dobot Magician: Kommunikation per USB-Serial am Beispiel GetDeviceSN">
+	<link rel="stylesheet" href="../../css/my.css">
+	<link rel="stylesheet" href="../../css/prism.css">
+	<style>
+		.api-blockquote {
+			margin-left: 0;
+			padding-left: 1rem;
+			border-left: 0.25rem solid #999;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<strong>Der Roboter Dobot Magician</strong> - GetDeviceSN per USB-Serial.
+	</header>
+
+	<main>
+		<nav aria-label="Navigation">
+			<a href="projekte.html">Zurück zu Projekte</a>
+		</nav>
+
+		<section id="api"> <h2>Dobot Magician: Kommunikation per USB-Serial</h2>
+			<h3>Ausgangsfrage</h3>
+			<p>Es ging um die Frage, wie Anfragen an den <strong>Dobot Magician</strong> über den <strong>USB-to-Serial-Port</strong> gesendet werden.</p>
+			<p>Als Beispiel diente der Befehl:</p>
+			<pre><code class="language-text">GetDeviceSN</code></pre>
+			<p>Quelle der Information war das offizielle Kommunikationsprotokoll:</p>
+			<p><a href="https://download.dobot.cc/product-manual/dobot-magician/pdf/en/Dobot-Communication-Protocol-V1.1.5.pdf" target="_blank" rel="noopener noreferrer">Dobot Communication Protocol V1.1.5</a></p>
+
+			<h3>Grundprinzip</h3>
+			<p>Der Dobot Magician erwartet über die serielle Schnittstelle <strong>keine Klartextbefehle</strong>.</p>
+			<p>Man sendet also nicht:</p>
+			<pre><code class="language-text">GetDeviceSN</code></pre>
+			<p>sondern ein <strong>binäres Datenpaket</strong>.</p>
+			<p>Der Befehlsname <code>GetDeviceSN</code> ist nur die lesbare Bezeichnung aus der Dokumentation.</p>
+
+			<h3>Serielle Verbindung</h3>
+			<p>Typische Einstellungen für die Verbindung:</p>
+			<pre><code class="language-text">Baudrate: 115200
+Datenbits: 8
+Stoppbits: 1
+Parität: keine</code></pre>
+
+			<h3>Allgemeiner Paketaufbau</h3>
+			<p>Ein Befehlspaket hat folgenden Aufbau:</p>
+			<pre><code class="language-text">AA AA  LEN  ID  CTRL  PARAMS...  CHECKSUM</code></pre>
+			<table>
+				<thead>
+					<tr>
+						<th>Teil</th>
+						<th>Bedeutung</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code>AA AA</code></td>
+						<td>Header / Startkennung</td>
+					</tr>
+					<tr>
+						<td><code>LEN</code></td>
+						<td>Länge des Payloads</td>
+					</tr>
+					<tr>
+						<td><code>ID</code></td>
+						<td>Befehls-ID</td>
+					</tr>
+					<tr>
+						<td><code>CTRL</code></td>
+						<td>Steuerbyte</td>
+					</tr>
+					<tr>
+						<td><code>PARAMS</code></td>
+						<td>Parameter, falls vorhanden</td>
+					</tr>
+					<tr>
+						<td><code>CHECKSUM</code></td>
+						<td>Prüfsumme</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>Beispiel: GetDeviceSN</h3>
+			<p>Für den Befehl <code>GetDeviceSN</code> gilt:</p>
+			<table>
+				<thead>
+					<tr>
+						<th>Teil</th>
+						<th>Wert</th>
+						<th>Bedeutung</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Header</td>
+						<td><code>AA AA</code></td>
+						<td>Startkennung</td>
+					</tr>
+					<tr>
+						<td>LEN</td>
+						<td><code>02</code></td>
+						<td>Payload besteht aus <code>ID</code> und <code>CTRL</code></td>
+					</tr>
+					<tr>
+						<td>ID</td>
+						<td><code>00</code></td>
+						<td>Befehls-ID für <code>GetDeviceSN</code></td>
+					</tr>
+					<tr>
+						<td>CTRL</td>
+						<td><code>00</code></td>
+						<td>Lesen, nicht queued</td>
+					</tr>
+					<tr>
+						<td>PARAMS</td>
+						<td>keine</td>
+						<td>Der Befehl benötigt keine Parameter</td>
+					</tr>
+					<tr>
+						<td>CHECKSUM</td>
+						<td><code>00</code></td>
+						<td>Prüfsumme</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>Das vollständige Paket lautet:</p>
+			<pre><code class="language-text">AA AA 02 00 00 00</code></pre>
+
+			<h3>Bedeutung des Control-Bytes</h3>
+			<p>Das Control-Byte enthält unter anderem Informationen darüber, ob ein Befehl gelesen oder geschrieben wird und ob er in die Queue gestellt werden soll.</p>
+			<p>Für <code>GetDeviceSN</code>:</p>
+			<pre><code class="language-text">CTRL = 00</code></pre>
+			<p>Bedeutung:</p>
+			<pre><code class="language-text">rw = 0
+isQueued = 0</code></pre>
+			<p>Das heißt:</p>
+			<ul>
+				<li>Es handelt sich um eine Leseanfrage.</li>
+				<li>Der Befehl wird nicht in die Bewegungs-Queue gestellt.</li>
+			</ul>
+
+			<h3>Berechnung der Checksumme</h3>
+			<p>Die Checksumme wird über den Payload berechnet.</p>
+			<p>Beim Beispiel <code>GetDeviceSN</code> ist der Payload:</p>
+			<pre><code class="language-text">00 00</code></pre>
+			<p>Also:</p>
+			<pre><code class="language-text">ID   = 00
+CTRL = 00</code></pre>
+			<p>Die Summe ist:</p>
+			<pre><code class="language-text">00 + 00 = 00</code></pre>
+			<p>Die Checksumme ist das Zweierkomplement dieser Summe:</p>
+			<pre><code class="language-python">checksum = (-sum(payload)) &amp; 0xFF</code></pre>
+			<p>Für dieses Beispiel ergibt sich:</p>
+			<pre><code class="language-text">CHECKSUM = 00</code></pre>
+
+			<h3>Einfachstes Python-Beispiel</h3>
+			<pre><code class="language-python">import serial
+
+PORT = "COM5"
+BAUDRATE = 115200
+
+with serial.Serial(PORT, BAUDRATE, bytesize=8, parity="N", stopbits=1, timeout=1) as ser:
+    ser.write(bytes.fromhex("AA AA 02 00 00 00"))
+    answer = ser.read(100)
+
+print(answer.hex(" "))</code></pre>
+
+			<h3>Besseres Python-Beispiel mit Paketfunktion</h3>
+			<pre><code class="language-python">import serial
+
+PORT = "COM5"
+BAUDRATE = 115200
+
+def checksum(payload: bytes) -> int:
+    return (-sum(payload)) &amp; 0xFF
+
+def make_packet(cmd_id: int, rw: int = 0, is_queued: int = 0, params: bytes = b"") -> bytes:
+    ctrl = (rw &amp; 0x01) | ((is_queued &amp; 0x01) &lt;&lt; 1)
+    payload = bytes([cmd_id, ctrl]) + params
+    length = len(payload)
+    return bytes([0xAA, 0xAA, length]) + payload + bytes([checksum(payload)])
+
+packet = make_packet(cmd_id=0, rw=0, is_queued=0)
+
+print("Sende:", packet.hex(" "))
+
+with serial.Serial(PORT, BAUDRATE, bytesize=8, parity="N", stopbits=1, timeout=1) as ser:
+    ser.write(packet)
+    answer = ser.read(100)
+
+print("Antwort:", answer.hex(" "))</code></pre>
+
+			<h3>Merksatz</h3>
+			<p>Der Befehl <code>GetDeviceSN</code> wird nicht als Text gesendet.</p>
+			<p>Stattdessen wird dieses Bytepaket gesendet:</p>
+			<pre><code class="language-text">AA AA 02 00 00 00</code></pre>
+			<p>In Python:</p>
+			<pre><code class="language-python">ser.write(bytes.fromhex("AA AA 02 00 00 00"))</code></pre>
+
+			<h3>Didaktischer Hinweis</h3>
+			<p>Dieses Beispiel eignet sich gut, um Schülern den Unterschied zwischen folgenden zwei Ebenen zu zeigen:</p>
+			<ol>
+				<li><strong>Befehlsname in der Dokumentation</strong><br><pre><code class="language-text">GetDeviceSN</code></pre></li>
+				<li><strong>Tatsächlich gesendete Bytes auf der seriellen Schnittstelle</strong><br><pre><code class="language-text">AA AA 02 00 00 00</code></pre></li>
+			</ol>
+			<blockquote class="api-blockquote">
+				<p>Bei der Kommunikation mit dem Dobot Magician werden binäre Telegramme gesendet, keine Klartextbefehle.</p>
+			</blockquote>
+		</section>
+	</main>
+
+	<footer>
+		© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+		Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+		<script src="../../js/prism-core.js"></script>
+		<script src="../../js/script.js"></script>
+	</footer>
+</body>
+</html>

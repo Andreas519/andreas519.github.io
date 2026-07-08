@@ -1,0 +1,6530 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1400"
+   height="980"
+   viewBox="0 0 1400 980"
+   version="1.1"
+   id="svg5692"
+   sodipodi:docname="lochrasterplatte_40x26.svg"
+   inkscape:version="1.0.2-2 (e86c870879, 2021-01-15)">
+  <metadata
+     id="metadata5696">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     id="namedview5694"
+     showgrid="false"
+     inkscape:zoom="0.86142857"
+     inkscape:cx="700"
+     inkscape:cy="397.13101"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs3555">
+    <marker
+       id="arrow"
+       viewBox="0 0 10 10"
+       refX="5"
+       refY="5"
+       markerWidth="8"
+       markerHeight="8"
+       orient="auto-start-reverse">
+      <path
+         d="M 0 0 L 10 5 L 0 10 z"
+         fill="#1f4ea8"
+         id="path3550" />
+    </marker>
+    <style
+       id="style3553">
+      .title { font: 700 28px Arial, Helvetica, sans-serif; fill: #111; }
+      .label { font: 600 18px Arial, Helvetica, sans-serif; fill: #1f4ea8; }
+      .small { font: 500 16px Arial, Helvetica, sans-serif; fill: #1f4ea8; }
+      .plate { fill: #fafafa; stroke: #222; stroke-width: 2; }
+      .hole { fill: #111; }
+      .dim { stroke: #1f4ea8; stroke-width: 2; fill: none; marker-start: url(#arrow); marker-end: url(#arrow); }
+      .ext { stroke: #1f4ea8; stroke-width: 1.5; }
+      .note { font: 600 20px Arial, Helvetica, sans-serif; fill: #222; }
+      .note-small { font: 500 18px Arial, Helvetica, sans-serif; fill: #222; }
+    </style>
+  </defs>
+  <!-- Title -->
+  <text
+     x="700"
+     y="48"
+     text-anchor="middle"
+     class="title"
+     id="text3557">Lochrasterplatte 40 × 26 Löcher (Raster 16 mm)</text>
+  <!-- Geometry setup: plate 700 x 500 mm scaled by 1.6 px/mm -->
+  <!-- plate origin -->
+  <!-- x=140, y=120, width=1120, height=800 -->
+  <rect
+     x="140"
+     y="120"
+     rx="14"
+     ry="14"
+     width="1120"
+     height="800"
+     class="plate"
+     id="rect3559" />
+  <!-- Holes: margins to outer hole centers are equal: 38 mm horizontally, 50 mm vertically -->
+  <!-- scale = 1.6 px/mm, pitch 16 mm => 25.6 px -->
+  <g
+     id="holes">
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3561" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3563" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3565" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3567" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3569" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3571" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3573" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3575" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3577" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3579" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3581" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3583" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3585" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3587" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3589" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3591" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3593" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3595" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3597" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3599" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3601" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3603" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3605" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3607" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3609" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3611" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3613" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3615" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3617" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3619" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3621" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3623" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3625" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3627" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3629" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="200.0"
+       r="4.6"
+       id="circle3631" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="200.0"
+       r="4.6"
+       id="circle3633" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="200.0"
+       r="4.6"
+       id="circle3635" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="200.0"
+       r="4.6"
+       id="circle3637" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="200.0"
+       r="4.6"
+       id="circle3639" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3641" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3643" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3645" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3647" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3649" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3651" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3653" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3655" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3657" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3659" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3661" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3663" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3665" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3667" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3669" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3671" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3673" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3675" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3677" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3679" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3681" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3683" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3685" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3687" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3689" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3691" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3693" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3695" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3697" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3699" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3701" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3703" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3705" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3707" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3709" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="225.6"
+       r="4.6"
+       id="circle3711" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="225.6"
+       r="4.6"
+       id="circle3713" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="225.6"
+       r="4.6"
+       id="circle3715" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="225.6"
+       r="4.6"
+       id="circle3717" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="225.6"
+       r="4.6"
+       id="circle3719" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3721" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3723" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3725" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3727" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3729" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3731" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3733" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3735" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3737" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3739" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3741" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3743" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3745" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3747" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3749" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3751" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3753" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3755" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3757" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3759" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3761" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3763" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3765" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3767" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3769" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3771" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3773" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3775" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3777" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3779" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3781" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3783" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3785" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3787" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3789" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="251.2"
+       r="4.6"
+       id="circle3791" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="251.2"
+       r="4.6"
+       id="circle3793" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="251.2"
+       r="4.6"
+       id="circle3795" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="251.2"
+       r="4.6"
+       id="circle3797" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="251.2"
+       r="4.6"
+       id="circle3799" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3801" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3803" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3805" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3807" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3809" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3811" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3813" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3815" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3817" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3819" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3821" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3823" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3825" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3827" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3829" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3831" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3833" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3835" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3837" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3839" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3841" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3843" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3845" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3847" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3849" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3851" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3853" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3855" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3857" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3859" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3861" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3863" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3865" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3867" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3869" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="276.8"
+       r="4.6"
+       id="circle3871" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="276.8"
+       r="4.6"
+       id="circle3873" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="276.8"
+       r="4.6"
+       id="circle3875" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="276.8"
+       r="4.6"
+       id="circle3877" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="276.8"
+       r="4.6"
+       id="circle3879" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3881" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3883" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3885" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3887" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3889" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3891" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3893" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3895" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3897" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3899" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3901" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3903" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3905" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3907" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3909" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3911" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3913" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3915" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3917" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3919" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3921" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3923" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3925" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3927" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3929" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3931" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3933" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3935" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3937" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3939" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3941" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3943" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3945" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3947" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3949" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="302.4"
+       r="4.6"
+       id="circle3951" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="302.4"
+       r="4.6"
+       id="circle3953" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="302.4"
+       r="4.6"
+       id="circle3955" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="302.4"
+       r="4.6"
+       id="circle3957" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="302.4"
+       r="4.6"
+       id="circle3959" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="328.0"
+       r="4.6"
+       id="circle3961" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="328.0"
+       r="4.6"
+       id="circle3963" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="328.0"
+       r="4.6"
+       id="circle3965" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="328.0"
+       r="4.6"
+       id="circle3967" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="328.0"
+       r="4.6"
+       id="circle3969" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="328.0"
+       r="4.6"
+       id="circle3971" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="328.0"
+       r="4.6"
+       id="circle3973" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="328.0"
+       r="4.6"
+       id="circle3975" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="328.0"
+       r="4.6"
+       id="circle3977" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="328.0"
+       r="4.6"
+       id="circle3979" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="328.0"
+       r="4.6"
+       id="circle3981" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="328.0"
+       r="4.6"
+       id="circle3983" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="328.0"
+       r="4.6"
+       id="circle3985" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="328.0"
+       r="4.6"
+       id="circle3987" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="328.0"
+       r="4.6"
+       id="circle3989" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="328.0"
+       r="4.6"
+       id="circle3991" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="328.0"
+       r="4.6"
+       id="circle3993" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="328.0"
+       r="4.6"
+       id="circle3995" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="328.0"
+       r="4.6"
+       id="circle3997" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="328.0"
+       r="4.6"
+       id="circle3999" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="328.0"
+       r="4.6"
+       id="circle4001" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="328.0"
+       r="4.6"
+       id="circle4003" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="328.0"
+       r="4.6"
+       id="circle4005" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="328.0"
+       r="4.6"
+       id="circle4007" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="328.0"
+       r="4.6"
+       id="circle4009" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="328.0"
+       r="4.6"
+       id="circle4011" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="328.0"
+       r="4.6"
+       id="circle4013" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="328.0"
+       r="4.6"
+       id="circle4015" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="328.0"
+       r="4.6"
+       id="circle4017" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="328.0"
+       r="4.6"
+       id="circle4019" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="328.0"
+       r="4.6"
+       id="circle4021" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="328.0"
+       r="4.6"
+       id="circle4023" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="328.0"
+       r="4.6"
+       id="circle4025" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="328.0"
+       r="4.6"
+       id="circle4027" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="328.0"
+       r="4.6"
+       id="circle4029" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="328.0"
+       r="4.6"
+       id="circle4031" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="328.0"
+       r="4.6"
+       id="circle4033" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="328.0"
+       r="4.6"
+       id="circle4035" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="328.0"
+       r="4.6"
+       id="circle4037" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="328.0"
+       r="4.6"
+       id="circle4039" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4041" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4043" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4045" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4047" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4049" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4051" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4053" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4055" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4057" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4059" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4061" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4063" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4065" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4067" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4069" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4071" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4073" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4075" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4077" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4079" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4081" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4083" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4085" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4087" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4089" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4091" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4093" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4095" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4097" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4099" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4101" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4103" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4105" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4107" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4109" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="353.6"
+       r="4.6"
+       id="circle4111" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="353.6"
+       r="4.6"
+       id="circle4113" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="353.6"
+       r="4.6"
+       id="circle4115" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="353.6"
+       r="4.6"
+       id="circle4117" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="353.6"
+       r="4.6"
+       id="circle4119" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4121" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4123" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4125" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4127" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4129" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4131" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4133" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4135" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4137" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4139" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4141" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4143" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4145" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4147" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4149" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4151" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4153" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4155" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4157" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4159" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4161" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4163" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4165" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4167" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4169" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4171" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4173" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4175" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4177" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4179" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4181" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4183" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4185" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4187" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4189" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="379.2"
+       r="4.6"
+       id="circle4191" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="379.2"
+       r="4.6"
+       id="circle4193" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="379.2"
+       r="4.6"
+       id="circle4195" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="379.2"
+       r="4.6"
+       id="circle4197" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="379.2"
+       r="4.6"
+       id="circle4199" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4201" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4203" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4205" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4207" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4209" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4211" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4213" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4215" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4217" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4219" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4221" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4223" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4225" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4227" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4229" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4231" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4233" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4235" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4237" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4239" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4241" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4243" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4245" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4247" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4249" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4251" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4253" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4255" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4257" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4259" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4261" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4263" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4265" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4267" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4269" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="404.8"
+       r="4.6"
+       id="circle4271" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="404.8"
+       r="4.6"
+       id="circle4273" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="404.8"
+       r="4.6"
+       id="circle4275" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="404.8"
+       r="4.6"
+       id="circle4277" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="404.8"
+       r="4.6"
+       id="circle4279" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4281" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4283" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4285" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4287" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4289" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4291" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4293" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4295" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4297" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4299" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4301" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4303" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4305" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4307" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4309" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4311" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4313" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4315" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4317" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4319" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4321" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4323" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4325" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4327" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4329" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4331" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4333" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4335" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4337" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4339" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4341" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4343" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4345" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4347" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4349" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="430.4"
+       r="4.6"
+       id="circle4351" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="430.4"
+       r="4.6"
+       id="circle4353" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="430.4"
+       r="4.6"
+       id="circle4355" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="430.4"
+       r="4.6"
+       id="circle4357" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="430.4"
+       r="4.6"
+       id="circle4359" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4361" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4363" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4365" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4367" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4369" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4371" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4373" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4375" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4377" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4379" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4381" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4383" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4385" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4387" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4389" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4391" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4393" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4395" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4397" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4399" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4401" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4403" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4405" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4407" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4409" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4411" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4413" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4415" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4417" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4419" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4421" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4423" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4425" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4427" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4429" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="456.0"
+       r="4.6"
+       id="circle4431" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="456.0"
+       r="4.6"
+       id="circle4433" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="456.0"
+       r="4.6"
+       id="circle4435" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="456.0"
+       r="4.6"
+       id="circle4437" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="456.0"
+       r="4.6"
+       id="circle4439" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4441" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4443" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4445" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4447" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4449" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4451" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4453" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4455" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4457" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4459" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4461" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4463" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4465" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4467" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4469" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4471" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4473" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4475" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4477" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4479" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4481" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4483" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4485" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4487" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4489" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4491" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4493" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4495" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4497" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4499" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4501" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4503" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4505" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4507" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4509" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="481.6"
+       r="4.6"
+       id="circle4511" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="481.6"
+       r="4.6"
+       id="circle4513" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="481.6"
+       r="4.6"
+       id="circle4515" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="481.6"
+       r="4.6"
+       id="circle4517" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="481.6"
+       r="4.6"
+       id="circle4519" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4521" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4523" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4525" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4527" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4529" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4531" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4533" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4535" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4537" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4539" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4541" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4543" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4545" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4547" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4549" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4551" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4553" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4555" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4557" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4559" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4561" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4563" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4565" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4567" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4569" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4571" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4573" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4575" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4577" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4579" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4581" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4583" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4585" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4587" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4589" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="507.2"
+       r="4.6"
+       id="circle4591" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="507.2"
+       r="4.6"
+       id="circle4593" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="507.2"
+       r="4.6"
+       id="circle4595" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="507.2"
+       r="4.6"
+       id="circle4597" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="507.2"
+       r="4.6"
+       id="circle4599" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4601" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4603" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4605" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4607" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4609" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4611" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4613" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4615" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4617" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4619" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4621" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4623" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4625" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4627" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4629" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4631" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4633" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4635" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4637" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4639" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4641" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4643" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4645" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4647" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4649" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4651" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4653" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4655" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4657" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4659" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4661" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4663" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4665" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4667" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4669" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="532.8"
+       r="4.6"
+       id="circle4671" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="532.8"
+       r="4.6"
+       id="circle4673" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="532.8"
+       r="4.6"
+       id="circle4675" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="532.8"
+       r="4.6"
+       id="circle4677" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="532.8"
+       r="4.6"
+       id="circle4679" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4681" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4683" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4685" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4687" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4689" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4691" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4693" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4695" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4697" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4699" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4701" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4703" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4705" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4707" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4709" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4711" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4713" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4715" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4717" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4719" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4721" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4723" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4725" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4727" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4729" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4731" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4733" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4735" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4737" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4739" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4741" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4743" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4745" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4747" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4749" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="558.4"
+       r="4.6"
+       id="circle4751" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="558.4"
+       r="4.6"
+       id="circle4753" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="558.4"
+       r="4.6"
+       id="circle4755" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="558.4"
+       r="4.6"
+       id="circle4757" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="558.4"
+       r="4.6"
+       id="circle4759" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4761" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4763" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4765" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4767" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4769" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4771" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4773" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4775" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4777" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4779" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4781" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4783" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4785" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4787" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4789" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4791" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4793" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4795" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4797" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4799" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4801" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4803" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4805" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4807" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4809" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4811" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4813" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4815" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4817" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4819" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4821" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4823" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4825" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4827" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4829" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="584.0"
+       r="4.6"
+       id="circle4831" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="584.0"
+       r="4.6"
+       id="circle4833" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="584.0"
+       r="4.6"
+       id="circle4835" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="584.0"
+       r="4.6"
+       id="circle4837" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="584.0"
+       r="4.6"
+       id="circle4839" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4841" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4843" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4845" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4847" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4849" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4851" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4853" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4855" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4857" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4859" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4861" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4863" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4865" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4867" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4869" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4871" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4873" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4875" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4877" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4879" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4881" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4883" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4885" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4887" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4889" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4891" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4893" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4895" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4897" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4899" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4901" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4903" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4905" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4907" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4909" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="609.6"
+       r="4.6"
+       id="circle4911" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="609.6"
+       r="4.6"
+       id="circle4913" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="609.6"
+       r="4.6"
+       id="circle4915" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="609.6"
+       r="4.6"
+       id="circle4917" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="609.6"
+       r="4.6"
+       id="circle4919" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4921" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4923" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4925" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4927" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4929" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4931" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4933" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4935" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4937" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4939" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4941" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4943" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4945" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4947" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4949" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4951" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4953" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4955" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4957" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4959" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4961" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4963" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4965" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4967" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4969" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4971" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4973" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4975" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4977" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4979" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4981" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4983" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4985" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4987" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4989" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="635.2"
+       r="4.6"
+       id="circle4991" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="635.2"
+       r="4.6"
+       id="circle4993" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="635.2"
+       r="4.6"
+       id="circle4995" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="635.2"
+       r="4.6"
+       id="circle4997" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="635.2"
+       r="4.6"
+       id="circle4999" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5001" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5003" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5005" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5007" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5009" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5011" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5013" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5015" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5017" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5019" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5021" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5023" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5025" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5027" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5029" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5031" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5033" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5035" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5037" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5039" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5041" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5043" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5045" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5047" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5049" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5051" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5053" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5055" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5057" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5059" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5061" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5063" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5065" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5067" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5069" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="660.8"
+       r="4.6"
+       id="circle5071" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="660.8"
+       r="4.6"
+       id="circle5073" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="660.8"
+       r="4.6"
+       id="circle5075" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="660.8"
+       r="4.6"
+       id="circle5077" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="660.8"
+       r="4.6"
+       id="circle5079" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5081" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5083" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5085" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5087" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5089" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5091" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5093" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5095" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5097" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5099" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5101" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5103" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5105" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5107" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5109" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5111" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5113" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5115" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5117" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5119" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5121" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5123" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5125" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5127" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5129" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5131" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5133" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5135" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5137" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5139" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5141" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5143" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5145" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5147" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5149" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="686.4"
+       r="4.6"
+       id="circle5151" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="686.4"
+       r="4.6"
+       id="circle5153" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="686.4"
+       r="4.6"
+       id="circle5155" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="686.4"
+       r="4.6"
+       id="circle5157" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="686.4"
+       r="4.6"
+       id="circle5159" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5161" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5163" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5165" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5167" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5169" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5171" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5173" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5175" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5177" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5179" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5181" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5183" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5185" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5187" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5189" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5191" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5193" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5195" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5197" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5199" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5201" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5203" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5205" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5207" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5209" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5211" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5213" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5215" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5217" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5219" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5221" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5223" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5225" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5227" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5229" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="712.0"
+       r="4.6"
+       id="circle5231" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="712.0"
+       r="4.6"
+       id="circle5233" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="712.0"
+       r="4.6"
+       id="circle5235" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="712.0"
+       r="4.6"
+       id="circle5237" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="712.0"
+       r="4.6"
+       id="circle5239" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5241" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5243" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5245" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5247" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5249" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5251" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5253" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5255" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5257" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5259" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5261" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5263" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5265" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5267" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5269" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5271" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5273" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5275" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5277" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5279" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5281" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5283" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5285" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5287" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5289" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5291" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5293" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5295" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5297" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5299" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5301" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5303" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5305" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5307" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5309" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="737.6"
+       r="4.6"
+       id="circle5311" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="737.6"
+       r="4.6"
+       id="circle5313" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="737.6"
+       r="4.6"
+       id="circle5315" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="737.6"
+       r="4.6"
+       id="circle5317" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="737.6"
+       r="4.6"
+       id="circle5319" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5321" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5323" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5325" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5327" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5329" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5331" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5333" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5335" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5337" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5339" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5341" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5343" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5345" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5347" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5349" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5351" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5353" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5355" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5357" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5359" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5361" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5363" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5365" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5367" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5369" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5371" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5373" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5375" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5377" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5379" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5381" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5383" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5385" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5387" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5389" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="763.2"
+       r="4.6"
+       id="circle5391" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="763.2"
+       r="4.6"
+       id="circle5393" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="763.2"
+       r="4.6"
+       id="circle5395" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="763.2"
+       r="4.6"
+       id="circle5397" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="763.2"
+       r="4.6"
+       id="circle5399" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5401" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5403" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5405" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5407" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5409" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5411" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5413" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5415" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5417" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5419" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5421" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5423" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5425" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5427" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5429" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5431" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5433" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5435" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5437" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5439" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5441" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5443" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5445" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5447" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5449" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5451" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5453" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5455" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5457" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5459" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5461" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5463" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5465" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5467" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5469" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="788.8"
+       r="4.6"
+       id="circle5471" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="788.8"
+       r="4.6"
+       id="circle5473" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="788.8"
+       r="4.6"
+       id="circle5475" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="788.8"
+       r="4.6"
+       id="circle5477" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="788.8"
+       r="4.6"
+       id="circle5479" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5481" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5483" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5485" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5487" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5489" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5491" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5493" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5495" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5497" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5499" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5501" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5503" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5505" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5507" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5509" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5511" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5513" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5515" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5517" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5519" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5521" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5523" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5525" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5527" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5529" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5531" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5533" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5535" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5537" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5539" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5541" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5543" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5545" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5547" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5549" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="814.4"
+       r="4.6"
+       id="circle5551" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="814.4"
+       r="4.6"
+       id="circle5553" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="814.4"
+       r="4.6"
+       id="circle5555" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="814.4"
+       r="4.6"
+       id="circle5557" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="814.4"
+       r="4.6"
+       id="circle5559" />
+    <circle
+       class="hole"
+       cx="200.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5561" />
+    <circle
+       class="hole"
+       cx="226.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5563" />
+    <circle
+       class="hole"
+       cx="252.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5565" />
+    <circle
+       class="hole"
+       cx="277.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5567" />
+    <circle
+       class="hole"
+       cx="303.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5569" />
+    <circle
+       class="hole"
+       cx="328.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5571" />
+    <circle
+       class="hole"
+       cx="354.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5573" />
+    <circle
+       class="hole"
+       cx="380.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5575" />
+    <circle
+       class="hole"
+       cx="405.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5577" />
+    <circle
+       class="hole"
+       cx="431.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5579" />
+    <circle
+       class="hole"
+       cx="456.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5581" />
+    <circle
+       class="hole"
+       cx="482.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5583" />
+    <circle
+       class="hole"
+       cx="508.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5585" />
+    <circle
+       class="hole"
+       cx="533.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5587" />
+    <circle
+       class="hole"
+       cx="559.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5589" />
+    <circle
+       class="hole"
+       cx="584.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5591" />
+    <circle
+       class="hole"
+       cx="610.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5593" />
+    <circle
+       class="hole"
+       cx="636.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5595" />
+    <circle
+       class="hole"
+       cx="661.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5597" />
+    <circle
+       class="hole"
+       cx="687.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5599" />
+    <circle
+       class="hole"
+       cx="712.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5601" />
+    <circle
+       class="hole"
+       cx="738.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5603" />
+    <circle
+       class="hole"
+       cx="764.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5605" />
+    <circle
+       class="hole"
+       cx="789.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5607" />
+    <circle
+       class="hole"
+       cx="815.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5609" />
+    <circle
+       class="hole"
+       cx="840.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5611" />
+    <circle
+       class="hole"
+       cx="866.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5613" />
+    <circle
+       class="hole"
+       cx="892.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5615" />
+    <circle
+       class="hole"
+       cx="917.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5617" />
+    <circle
+       class="hole"
+       cx="943.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5619" />
+    <circle
+       class="hole"
+       cx="968.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5621" />
+    <circle
+       class="hole"
+       cx="994.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5623" />
+    <circle
+       class="hole"
+       cx="1020.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5625" />
+    <circle
+       class="hole"
+       cx="1045.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5627" />
+    <circle
+       class="hole"
+       cx="1071.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5629" />
+    <circle
+       class="hole"
+       cx="1096.8"
+       cy="840.0"
+       r="4.6"
+       id="circle5631" />
+    <circle
+       class="hole"
+       cx="1122.4"
+       cy="840.0"
+       r="4.6"
+       id="circle5633" />
+    <circle
+       class="hole"
+       cx="1148.0"
+       cy="840.0"
+       r="4.6"
+       id="circle5635" />
+    <circle
+       class="hole"
+       cx="1173.6"
+       cy="840.0"
+       r="4.6"
+       id="circle5637" />
+    <circle
+       class="hole"
+       cx="1199.2"
+       cy="840.0"
+       r="4.6"
+       id="circle5639" />
+  </g>
+  <!-- Note box -->
+  <rect
+     x="1010"
+     y="145"
+     width="210"
+     height="78"
+     rx="10"
+     ry="10"
+     fill="#fff"
+     stroke="#666"
+     stroke-width="1.5"
+     id="rect5642" />
+  <text
+     x="1115"
+     y="176"
+     text-anchor="middle"
+     class="note"
+     id="text5644">40 × 26 Löcher</text>
+  <text
+     x="1115"
+     y="205"
+     text-anchor="middle"
+     class="note-small"
+     id="text5646">Raster 16 mm</text>
+  <!-- Overall width 700 mm -->
+  <line
+     x1="140"
+     y1="88"
+     x2="1260"
+     y2="88"
+     class="dim"
+     id="line5648" />
+  <line
+     x1="140"
+     y1="98"
+     x2="140"
+     y2="120"
+     class="ext"
+     id="line5650" />
+  <line
+     x1="1260"
+     y1="98"
+     x2="1260"
+     y2="120"
+     class="ext"
+     id="line5652" />
+  <text
+     x="700"
+     y="76"
+     text-anchor="middle"
+     class="label"
+     id="text5654">700 mm</text>
+  <!-- Overall height 500 mm -->
+  <line
+     x1="92"
+     y1="120"
+     x2="92"
+     y2="920"
+     class="dim"
+     id="line5656" />
+  <line
+     x1="104"
+     y1="120"
+     x2="140"
+     y2="120"
+     class="ext"
+     id="line5658" />
+  <line
+     x1="104"
+     y1="920"
+     x2="140"
+     y2="920"
+     class="ext"
+     id="line5660" />
+  <text
+     x="80"
+     y="520"
+     transform="rotate(-90 80 520)"
+     text-anchor="middle"
+     class="label"
+     id="text5662">500 mm</text>
+  <!-- Hole field width 624 mm -->
+  <line
+     x1="200.8"
+     y1="958"
+     x2="1199.2"
+     y2="958"
+     class="dim"
+     id="line5664" />
+  <line
+     x1="200.8"
+     y1="920"
+     x2="200.8"
+     y2="952"
+     class="ext"
+     id="line5666" />
+  <line
+     x1="1199.2"
+     y1="920"
+     x2="1199.2"
+     y2="952"
+     class="ext"
+     id="line5668" />
+  <text
+     x="700"
+     y="968"
+     text-anchor="middle"
+     class="label"
+     id="text5670">624 mm</text>
+  <!-- Hole field height 400 mm -->
+  <line
+     x1="1302"
+     y1="200"
+     x2="1302"
+     y2="840"
+     class="dim"
+     id="line5672" />
+  <line
+     x1="1260"
+     y1="200"
+     x2="1296"
+     y2="200"
+     class="ext"
+     id="line5674" />
+  <line
+     x1="1260"
+     y1="840"
+     x2="1296"
+     y2="840"
+     class="ext"
+     id="line5676" />
+  <text
+     x="1318"
+     y="520"
+     transform="rotate(-90 1318 520)"
+     text-anchor="middle"
+     class="label"
+     id="text5678">400 mm</text>
+  <!-- Pitch 16 mm marker -->
+  <line
+     x1="180.8"
+     y1="868"
+     x2="206.4"
+     y2="868"
+     class="dim"
+     id="line5680" />
+  <line
+     x1="180.8"
+     y1="848"
+     x2="180.8"
+     y2="880"
+     class="ext"
+     id="line5682" />
+  <line
+     x1="206.4"
+     y1="848"
+     x2="206.4"
+     y2="880"
+     class="ext"
+     id="line5684" />
+  <text
+     x="193.6"
+     y="894"
+     text-anchor="middle"
+     class="small"
+     id="text5686">16 mm</text>
+  <!-- Small explanatory text -->
+  <text
+     x="140"
+     y="948"
+     class="small"
+     id="text5688">Lochmittenfeld: 39 × 16 mm = 624 mm</text>
+  <text
+     x="1010"
+     y="948"
+     text-anchor="end"
+     class="small"
+     id="text5690">25 × 16 mm = 400 mm</text>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="Dobot">
+    <rect
+       style="fill:#003700;stroke:#000000;stroke-width:12;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-linejoin:bevel;fill-opacity:0.67845654"
+       id="rect6835"
+       width="305.91409"
+       height="305.91409"
+       x="496.17892"
+       y="546.09601" />
+  </g>
+</svg>

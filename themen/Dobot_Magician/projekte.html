@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dobot Magician · Projekte</title>
+	<meta name="author" content="Andreas Sigismund">
+	<meta name="description" content="Schnittstellen des Dobot Magician: Grundlagen und Einsatz in der AG Young Engineers">
+	<link rel="stylesheet" href="../../css/my.css">
+	<link rel="stylesheet" href="../../css/prism.css">
+	<style>
+		table th {
+			text-align: left;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<strong>Der Roboter Dobot Magician</strong> - Schnittstellen im Überblick.
+	</header>
+
+	<main>
+		<nav aria-label="Navigation">
+			<a href="#start">Einleitung</a>
+			<a href="#magician">Dobot Magician übernimmt</a>
+			<a href="#esp32">ESP32 übernimmt</a>
+			<a href="#api">USB-Serial</a>
+<!-- 			<a href="#bluetooth">Bluetooth</a>
+			<a href="#wlan">WLAN</a>
+			<a href="#usb">USB</a>
+			<a href="#vergleich">Vergleich</a>
+			<a href="#links">Links</a> -->
+		</nav>
+
+		<section id="start"> <h2>Einleitung</h2>
+		 <p> Wir wollen uns an ausgewählten Beispielen mit der Nutzung der verschiedenen Schnittstellen des Dobot Magician auseinandersetzen. 
+			 <br>
+			 Dabei geht es um die Grundlagen der Kommunikation, die Möglichkeiten der Steuerung und die praktische Nutzung in unseren Projekten.
+		</p>
+		<p>Die Nutzung von Sensoren und Aktoren über den Dobot Magician ist doch sehr eingeschränkt.<br>
+		 I²C-Kommunikation, Bildverarbeitung, AI-Funktionen und komplexe Sensorik ist nicht möglich,
+		 da die Firmware des Roboters neben der Kommunikation nur die Steuerung der Bewegungen und die Ansteuerung der Endeffektoren erlaubt.
+		 Die eigentliche Intelligenz muss auf einem externen Rechner oder Mikrocontroller liegen, der die Steuerbefehle an den Roboter sendet.
+		</p>
+		</section>
+		<section id="magician"> <h2>Dobot Magician übernimmt ...</h2>
+			<p>
+				... Aufgaben, die er aufgrund seiner Schnittstellen selbst erledigen kann.<br>
+				- Über die zwei vorhandenen Schrittmotoranschlüsse kann er Schrittmotoren direkt ansteuern.<br>
+				- Mittels der zwei 12V-Ausgänge können externe Geräte wie Relais, Pumpen oder Ventile geschaltet werden.<br>
+				- Nicht genutzte digitale Ein- und Ausgänge können weitere Sensoren und Aktoren angebunden werden.<br>
+				- Der analoge Eingang kann zur Messung von Spannungen oder Strömen genutzt werden.<br>
+			</p>
+		</section>
+
+
+		<section id="esp32"> <h2>ESP32 übernimmt ...</h2>
+			<p>
+				... verschiedene Aufgaben, die der Dobot Magician nicht selbst erledigen kann oder muss.<br>
+				Dabei können seine Sensoren und Aktoren am Dobot angebaut sein oder 
+				im Bereich der Arbeitsfläche des Roboters liegen.<br>
+				Die Verarbeitung der Sensordaten und die Steuerung der Aktoren kann auf dem ESP32 erfolgen 
+				oder per Kommunikation mit dem Steuerprogramm auf dem PC weitergeleitet und dort verarbeitet werden.
+				Das Programm sendet dann die Steuerbefehle an den Dobot Magician bzw. ESP32.<br>
+				Weitere MCUs können über diesen ESP32 auf verschiedenste Weise in das Gesamtsystem eingebunden werden.
+			</p>
+		</section>
+		<section id="api"> <h2>Dobot Magician: Kommunikation per USB-Serial</h2>
+			<p>Für mich stellte sich die Frage, wie der PC mit dem Dobot Magician über die serielle Schnittstelle kommuniziert.</p>
+			<p>In der Dokumentation <a href="https://download.dobot.cc/product-manual/dobot-magician/pdf/en/Dobot-Communication-Protocol-V1.1.5.pdf" target="_blank" rel="noopener noreferrer">Dobot Communication Protocol V1.1.5</a>
+			ist die Kommunikation beschrieben. <br>
+			<img src="bilder/GedDiviceSN-api.png" alt="GetDeviceSN API" width="100%"> <br>
+			Die Befehle werden in Form von API-Funktionen beschrieben, die der PC an den Dobot Magician sendet. <br>
+			Die API-Funktionen sind in der Dokumentation in Tabellenform beschrieben. <br>
+			Die Befehle werden nicht als Klartext, sondern als binäre Datenpakete gesendet.<br>
+			Doch wie sieht das konkret aus?
+			</p>
+
+			<p>ChatGPT bringt mit der ausführlichen Antwort zur seriellen Anfrage <code>GetDeviceSN</code> Licht in die Dunkelheit.<br>
+			Und GitHub übernimmt das Aufbereiten der Informationen in diese Seite, Umsetzung der Markdown-Zusammenfassung des ursprünglichen Chats,
+			Auslagerung des ausführlichen Beispiels auf separate Seiten und das Syntax-Highlighting.<br>
+			Das ist schon irre, was man mit ChatGPT und GitHub alles machen kann. <br>
+			Und wieviel Zeit ich mit Suchen, Auswerten und Aufbereiten damit sparen kann. <br>
+			</p>
+
+			<p><a href="GetDeviceSN.html">Zum Beispiel GetDeviceSN per USB-Serial</a></p>
+		</section>
+	</main>
+
+	<footer>
+		© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+		Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+		<script src="../../js/prism-core.js"></script>
+		<script src="../../js/script.js"></script>
+	</footer>
+</body>
+</html>

@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dobot Magician – Turm von Hanoi</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #5b6778;
+      --line: #d8e0ea;
+      --accent: #2563eb;
+      --accent-dark: #1d4ed8;
+      --good: #0f766e;
+      --bad: #b91c1c;
+      --warn: #b45309;
+      --peg: #6b7280;
+      --disk1: #60a5fa;
+      --disk2: #34d399;
+      --disk3: #fbbf24;
+      --disk4: #f87171;
+      --disk5: #a78bfa;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    header p {
+      margin: 0 auto;
+      max-width: 850px;
+      opacity: 0.95;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 1.2rem;
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      box-shadow: 0 8px 25px rgba(20, 40, 80, 0.07);
+    }
+
+    h2, h3 { margin-top: 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .note {
+      border-left: 5px solid var(--accent);
+      padding: 0.8rem 1rem;
+      background: #eff6ff;
+      border-radius: 10px;
+    }
+
+    .rulebox {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    code, pre {
+      background: #111827;
+      color: #e5e7eb;
+      border-radius: 10px;
+    }
+
+    pre {
+      padding: 1rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    button, select {
+      font: inherit;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      padding: 0.55rem 0.8rem;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      border-color: var(--accent);
+      transition: transform 0.08s ease, background 0.15s ease;
+    }
+
+    button:hover { background: var(--accent-dark); }
+    button:active { transform: scale(0.98); }
+    button.secondary { background: #fff; color: var(--text); border-color: var(--line); }
+    button.secondary:hover { background: #f3f4f6; }
+    button.danger { background: var(--bad); border-color: var(--bad); }
+
+    .game-layout {
+      display: grid;
+      grid-template-columns: 1.8fr 1fr;
+      gap: 1rem;
+    }
+
+    @media (max-width: 850px) {
+      .game-layout { grid-template-columns: 1fr; }
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
+      min-height: 350px;
+      padding: 1rem;
+      border-radius: 16px;
+      background: #eef2ff;
+      border: 1px solid #c7d2fe;
+    }
+
+    .tower {
+      position: relative;
+      min-height: 310px;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem 0.25rem 2.2rem 0.25rem;
+      border: 2px dashed transparent;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.55);
+      cursor: pointer;
+    }
+
+    .tower::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 235px;
+      bottom: 2.1rem;
+      background: var(--peg);
+      border-radius: 7px 7px 0 0;
+      opacity: 0.45;
+      z-index: 0;
+    }
+
+    .tower::after {
+      content: attr(data-name);
+      position: absolute;
+      bottom: 0.45rem;
+      font-weight: 700;
+      color: #374151;
+    }
+
+    .tower.selected {
+      border-color: var(--accent);
+      background: #dbeafe;
+    }
+
+    .disk {
+      height: 30px;
+      border-radius: 9px;
+      margin: 3px 0;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #111827;
+      font-weight: 700;
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.15);
+      border: 1px solid rgba(0,0,0,0.12);
+    }
+
+    .disk-1 { width: 42%; background: var(--disk1); }
+    .disk-2 { width: 54%; background: var(--disk2); }
+    .disk-3 { width: 66%; background: var(--disk3); }
+    .disk-4 { width: 78%; background: var(--disk4); }
+    .disk-5 { width: 90%; background: var(--disk5); }
+
+    .status {
+      padding: 0.8rem 1rem;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      min-height: 3.2rem;
+    }
+
+    .status.good { background: #ecfdf5; border-color: #99f6e4; color: var(--good); }
+    .status.bad { background: #fef2f2; border-color: #fecaca; color: var(--bad); }
+    .status.warn { background: #fffbeb; border-color: #fde68a; color: var(--warn); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat {
+      background: #f9fafb;
+      border: 1px solid var(--line);
+      padding: 0.8rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.5rem;
+    }
+
+    .moves {
+      max-height: 300px;
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #f9fafb;
+      padding: 0.8rem;
+    }
+
+    .moves ol { margin: 0; padding-left: 1.4rem; }
+    .moves li { margin: 0.25rem 0; }
+
+    .task {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 0.6rem;
+      text-align: left;
+    }
+
+    th { background: #f3f4f6; }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem 1rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dobot Magician: Turm von Hanoi</h1>
+    <p>Eine interaktive Übung zum Anwenden des rekursiven Algorithmus. Ziel: Alle Scheiben vom Startturm A auf den Zielturm C bewegen – immer nur eine Scheibe, nie eine größere auf eine kleinere.</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>1. Grundidee des Algorithmus</h2>
+      <div class="grid">
+        <div class="rulebox">
+          <h3>Regeln</h3>
+          <ol>
+            <li>Es darf immer nur <strong>eine Scheibe</strong> bewegt werden.</li>
+            <li>Es darf nur die <strong>oberste Scheibe</strong> eines Turms genommen werden.</li>
+            <li>Eine <strong>größere Scheibe</strong> darf nie auf einer kleineren liegen.</li>
+          </ol>
+        </div>
+        <div class="rulebox">
+          <h3>Rekursiver Lösungsplan</h3>
+          <p>Um <strong>n Scheiben</strong> von A nach C zu bewegen, benutzt man B als Hilfsturm:</p>
+          <ol>
+            <li>Bewege <strong>n−1 Scheiben</strong> von A nach B.</li>
+            <li>Bewege die <strong>größte Scheibe</strong> von A nach C.</li>
+            <li>Bewege <strong>n−1 Scheiben</strong> von B nach C.</li>
+          </ol>
+        </div>
+      </div>
+      <p class="note"><strong>Für den Dobot gedacht:</strong> Ein einzelner Algorithmusschritt entspricht einem Pick-and-Place-Befehl: Scheibe ansaugen oder greifen, anheben, zum Ziel fahren, ablegen. Erst die Strategie planen, dann in Bewegungsbefehle übersetzen. 🤖</p>
+      <pre>hanoi(n, start, ziel, hilfe):
+    wenn n == 1:
+        bewege eine Scheibe von start nach ziel
+    sonst:
+        hanoi(n-1, start, hilfe, ziel)
+        bewege eine Scheibe von start nach ziel
+        hanoi(n-1, hilfe, ziel, start)</pre>
+    </section>
+
+    <section>
+      <h2>2. Interaktive Übung</h2>
+      <div class="controls">
+        <label for="diskCount"><strong>Anzahl Scheiben:</strong></label>
+        <select id="diskCount">
+          <option value="3">3 Scheiben</option>
+          <option value="4">4 Scheiben</option>
+          <option value="5">5 Scheiben</option>
+        </select>
+        <button id="resetBtn" class="secondary">Neu starten</button>
+        <button id="hintBtn" class="secondary">Nächsten richtigen Zug zeigen</button>
+        <button id="autoBtn">Automatisch lösen</button>
+        <button id="stopBtn" class="danger">Stopp</button>
+      </div>
+
+      <div class="game-layout">
+        <div>
+          <div class="board" id="board">
+            <div class="tower" data-index="0" data-name="A – Start"></div>
+            <div class="tower" data-index="1" data-name="B – Hilfe"></div>
+            <div class="tower" data-index="2" data-name="C – Ziel"></div>
+          </div>
+          <p id="status" class="status">Klicke zuerst auf einen Turm mit Scheibe, dann auf den Zielturm.</p>
+        </div>
+
+        <aside>
+          <div class="stats">
+            <div class="stat"><span>Züge</span><strong id="moveCount">0</strong></div>
+            <div class="stat"><span>Minimum</span><strong id="minMoves">7</strong></div>
+          </div>
+          <div class="task">
+            <h3>Schülerauftrag</h3>
+            <p><strong>Aufgabe:</strong> Löse den Turm von Hanoi mit möglichst wenigen Zügen. Schreibe anschließend auf, welches Muster du erkennst.</p>
+            <p><strong>Zusatz:</strong> Formuliere jeden Zug als Dobot-Befehl: „Nimm Scheibe X von Turm A und lege sie auf Turm C.“</p>
+          </div>
+          <h3>Zugliste</h3>
+          <div class="moves"><ol id="moveList"></ol></div>
+        </aside>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Vom Algorithmus zum Dobot-Programm</h2>
+      <p>Für den realen Dobot Magician braucht jeder Turm feste Koordinaten. Zusätzlich braucht man sichere Höhenpositionen, damit der Arm nicht gegen Scheiben oder Türme fährt.</p>
+      <table>
+        <thead>
+          <tr><th>Aktion</th><th>Beschreibung</th><th>Dobot-Idee</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1. Anfahren</td><td>Zur obersten Scheibe des Startturms fahren</td><td><code>move_to(start_x, start_y, z_oben)</code></td></tr>
+          <tr><td>2. Aufnehmen</td><td>Sauger oder Greifer aktivieren</td><td><code>suction_on()</code> oder <code>gripper_close()</code></td></tr>
+          <tr><td>3. Anheben</td><td>Auf sichere Transporthöhe fahren</td><td><code>move_to(start_x, start_y, z_sicher)</code></td></tr>
+          <tr><td>4. Transport</td><td>Über den Zielturm fahren</td><td><code>move_to(ziel_x, ziel_y, z_sicher)</code></td></tr>
+          <tr><td>5. Ablegen</td><td>Auf passende Stapelhöhe absenken und loslassen</td><td><code>suction_off()</code> oder <code>gripper_open()</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <footer>
+    Erstellt für eine einfache Einführung in Algorithmik, Rekursion und Pick-and-Place mit dem Dobot Magician.
+  </footer>
+
+  <script>
+    const towers = document.querySelectorAll('.tower');
+    const diskCountSelect = document.getElementById('diskCount');
+    const resetBtn = document.getElementById('resetBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const autoBtn = document.getElementById('autoBtn');
+    const stopBtn = document.getElementById('stopBtn');
+    const statusEl = document.getElementById('status');
+    const moveCountEl = document.getElementById('moveCount');
+    const minMovesEl = document.getElementById('minMoves');
+    const moveListEl = document.getElementById('moveList');
+
+    let state = [];
+    let selected = null;
+    let moveCount = 0;
+    let solution = [];
+    let autoTimer = null;
+
+    function towerName(index) {
+      return ['A', 'B', 'C'][index];
+    }
+
+    function setStatus(text, kind = '') {
+      statusEl.textContent = text;
+      statusEl.className = 'status ' + kind;
+    }
+
+    function generateSolution(n, from, to, aux, arr = []) {
+      if (n === 1) {
+        arr.push([from, to]);
+      } else {
+        generateSolution(n - 1, from, aux, to, arr);
+        arr.push([from, to]);
+        generateSolution(n - 1, aux, to, from, arr);
+      }
+      return arr;
+    }
+
+    function resetGame() {
+      stopAuto();
+      const n = Number(diskCountSelect.value);
+      state = [[], [], []];
+      for (let size = n; size >= 1; size--) state[0].push(size);
+      selected = null;
+      moveCount = 0;
+      solution = generateSolution(n, 0, 2, 1, []);
+      moveCountEl.textContent = '0';
+      minMovesEl.textContent = String(Math.pow(2, n) - 1);
+      moveListEl.innerHTML = '';
+      setStatus('Klicke zuerst auf einen Turm mit Scheibe, dann auf den Zielturm.');
+      render();
+    }
+
+    function render() {
+      towers.forEach((tower, index) => {
+        tower.innerHTML = '';
+        tower.classList.toggle('selected', selected === index);
+        state[index].forEach(size => {
+          const disk = document.createElement('div');
+          disk.className = 'disk disk-' + size;
+          disk.textContent = size;
+          disk.title = 'Scheibe ' + size;
+          tower.appendChild(disk);
+        });
+      });
+    }
+
+    function canMove(from, to) {
+      if (from === to) return false;
+      if (state[from].length === 0) return false;
+      const disk = state[from][state[from].length - 1];
+      const target = state[to][state[to].length - 1];
+      return target === undefined || disk < target;
+    }
+
+    function moveDisk(from, to, userMove = true) {
+      if (!canMove(from, to)) {
+        setStatus('Dieser Zug ist nicht erlaubt: Eine größere Scheibe darf nicht auf eine kleinere gelegt werden.', 'bad');
+        selected = null;
+        render();
+        return false;
+      }
+
+      const disk = state[from].pop();
+      state[to].push(disk);
+      moveCount++;
+      moveCountEl.textContent = String(moveCount);
+
+      const li = document.createElement('li');
+      li.textContent = `Scheibe ${disk}: ${towerName(from)} → ${towerName(to)}`;
+      moveListEl.appendChild(li);
+      moveListEl.parentElement.scrollTop = moveListEl.parentElement.scrollHeight;
+
+      selected = null;
+      render();
+
+      if (state[2].length === Number(diskCountSelect.value)) {
+        const min = Math.pow(2, Number(diskCountSelect.value)) - 1;
+        if (moveCount === min) {
+          setStatus('Geschafft! Optimale Lösung mit der minimalen Anzahl an Zügen. 🎉', 'good');
+        } else {
+          setStatus(`Geschafft! Du hast ${moveCount} Züge gebraucht. Das Minimum wäre ${min}.`, 'warn');
+        }
+        stopAuto();
+      } else if (userMove) {
+        setStatus(`Gültiger Zug: ${towerName(from)} → ${towerName(to)}.`);
+      }
+      return true;
+    }
+
+    function clickTower(index) {
+      if (selected === null) {
+        if (state[index].length === 0) {
+          setStatus('Dieser Turm ist leer. Wähle einen Turm mit Scheibe.', 'warn');
+          return;
+        }
+        selected = index;
+        setStatus(`Turm ${towerName(index)} ausgewählt. Wähle jetzt den Zielturm.`);
+        render();
+      } else {
+        moveDisk(selected, index, true);
+      }
+    }
+
+    function encode(s) {
+      return JSON.stringify(s);
+    }
+
+    function cloneState(s) {
+      return s.map(t => [...t]);
+    }
+
+    function possibleMoves(s) {
+      const result = [];
+      for (let from = 0; from < 3; from++) {
+        if (s[from].length === 0) continue;
+        const disk = s[from][s[from].length - 1];
+        for (let to = 0; to < 3; to++) {
+          if (from === to) continue;
+          const target = s[to][s[to].length - 1];
+          if (target === undefined || disk < target) result.push([from, to]);
+        }
+      }
+      return result;
+    }
+
+    function shortestMoveFromCurrentState() {
+      const n = Number(diskCountSelect.value);
+      const goal = [[], [], []];
+      for (let size = n; size >= 1; size--) goal[2].push(size);
+      const goalKey = encode(goal);
+      const queue = [{ s: cloneState(state), firstMove: null }];
+      const seen = new Set([encode(state)]);
+
+      while (queue.length > 0) {
+        const item = queue.shift();
+        if (encode(item.s) === goalKey) return item.firstMove;
+        for (const move of possibleMoves(item.s)) {
+          const next = cloneState(item.s);
+          const disk = next[move[0]].pop();
+          next[move[1]].push(disk);
+          const key = encode(next);
+          if (!seen.has(key)) {
+            seen.add(key);
+            queue.push({ s: next, firstMove: item.firstMove || move });
+          }
+        }
+      }
+      return null;
+    }
+
+    function showHint() {
+      if (state[2].length === Number(diskCountSelect.value)) return;
+      const move = shortestMoveFromCurrentState();
+      if (!move) return;
+      setStatus(`Tipp: Bewege die oberste Scheibe von Turm ${towerName(move[0])} nach Turm ${towerName(move[1])}.`, 'good');
+    }
+
+    function autoSolve() {
+      stopAuto();
+      resetGame();
+      let i = 0;
+      autoTimer = setInterval(() => {
+        if (i >= solution.length) {
+          stopAuto();
+          return;
+        }
+        const [from, to] = solution[i];
+        moveDisk(from, to, false);
+        setStatus(`Automatik: ${towerName(from)} → ${towerName(to)}`);
+        i++;
+      }, 700);
+    }
+
+    function stopAuto() {
+      if (autoTimer) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+      }
+    }
+
+    towers.forEach(tower => {
+      tower.addEventListener('click', () => clickTower(Number(tower.dataset.index)));
+    });
+
+    resetBtn.addEventListener('click', resetGame);
+    diskCountSelect.addEventListener('change', resetGame);
+    hintBtn.addEventListener('click', showHint);
+    autoBtn.addEventListener('click', autoSolve);
+    stopBtn.addEventListener('click', () => {
+      stopAuto();
+      setStatus('Automatik gestoppt. Du kannst selbst weiterlösen.');
+    });
+
+    resetGame();
+  </script>
+</body>
+</html>

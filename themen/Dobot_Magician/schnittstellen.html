@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dobot Magician · Schnittstellen</title>
+	<meta name="author" content="Andreas Sigismund">
+	<meta name="description" content="Schnittstellen des Dobot Magician: Grundlagen und Einsatz in der AG Young Engineers">
+	<link rel="stylesheet" href="../../css/my.css">
+	<style>
+		.anschluesse-table {
+			--first-col-width: 9.5rem;
+			width: 100%;
+			table-layout: fixed;
+		}
+
+		.anschluesse-table col:first-child {
+			width: var(--first-col-width);
+		}
+
+		table th {
+			text-align: left;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<strong>Der Roboter Dobot Magician</strong> - Schnittstellen im Überblick.
+	</header>
+
+	<main>
+		<nav aria-label="Navigation">
+			<a href="#start">Einleitung</a>
+            <a href="#schnittstellen">Schnittstellen im Überblick</a>
+			<a href="#serielle">Serielle Schnittstelle</a>
+			<a href="#bluetooth">Bluetooth</a>
+			<a href="#wlan">WLAN</a>
+			<a href="#usb">USB</a>
+			<a href="#vergleich">Vergleich</a>
+			<a href="#links">Links</a>
+		</nav>
+
+		<section id="start"> <h2>Einleitung</h2>
+			<p>
+				Diese Seite beschreibt die wichtigsten Kommunikationsschnittstellen des Dobot Magician
+				und ordnet sie für den Einsatz in AG ein.
+			</p>
+			<p>
+				Ziel ist nicht nur die Bedienung des Roboters, sondern auch das Verständnis,
+				welche Verbindung sich für welchen Anwendungsfall eignet.
+			</p>
+		</section>
+
+		<section id="schnittstellen"> <h2>vorhandene Schnittstellen im Überblick</h2>
+			<p>Dobot nennt in den aktuellen Spezifikationen als Kommunikation USB / Wi-Fi / Bluetooth und beschreibt 
+               außerdem 13 Interface-Ports für Erweiterungen und Second Development. 
+               <br>
+               Im Interface-Dokument wird der Anschluss auf der Rückseite zusätzlich als I/O interface / UART interface beschrieben, 
+               der z. B. für Bluetooth, Wi-Fi usw. genutzt wird und das Dobot-Protokoll verwendet.
+			</p>
+            <p><img src="bilder/interface-hinten.png" height="300" alt="Dobot Magician – Schnittstellen hinten"></p>
+			<table class="anschluesse-table">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>Anschluss</th>
+						<th>Funktion</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><strong>SW1</strong></td>
+						<td>steuerbarer 12-V-Ausgang, z. B. Luftpumpe</td>
+					</tr>
+					<tr>
+						<td><strong>SW2</strong></td>
+						<td>steuerbarer 12-V-Ausgang</td>
+					</tr>
+					<tr>
+						<td><strong>Stepper1</strong></td>
+						<td>Schrittmotoranschluss, auch Extruder im 3D-Druck-Modus</td>
+					</tr>
+					<tr>
+						<td><strong>Stepper2</strong></td>
+						<td>weiterer Schrittmotoranschluss</td>
+					</tr>
+					<tr>
+						<td><strong>GP1</strong></td>
+						<td>allgemeiner Signalanschluss, z. B. Pumpe, Farbsensor, Infrarotsensor</td>
+					</tr>
+					<tr>
+						<td><strong>GP2</strong></td>
+						<td>allgemeiner frei nutzbarer Anschluss</td>
+					</tr>
+				</tbody>
+			</table>
+         
+			<h3>Erweiterungsanschlüsse am Vorderarm</h3>
+            <p><img src="bilder/interface-arm.png" height="300" alt="Dobot Magician – Schnittstellen Vorderarm"></p>
+			<p>Am Arm selbst sitzen weitere Anschlüsse:</p>
+			<table class="anschluesse-table">
+				<colgroup>
+					<col>
+					<col>
+				</colgroup>
+				<thead>
+					<tr>
+						<th>Anschluss</th>
+						<th>Funktion</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><strong>GP3</strong></td>
+						<td>Endeffektor, R-Achsen-Servo, allgemeiner Anschluss</td>
+					</tr>
+					<tr>
+						<td><strong>GP4</strong></td>
+						<td>Auto-Leveling / allgemeiner Anschluss</td>
+					</tr>
+					<tr>
+						<td><strong>GP5</strong></td>
+						<td>Signal für Lasergravur / allgemeiner Anschluss</td>
+					</tr>
+					<tr>
+						<td><strong>SW3</strong></td>
+						<td>Hot-End beim 3D-Druck, steuerbarer 12-V-Ausgang</td>
+					</tr>
+					<tr>
+						<td><strong>SW4</strong></td>
+						<td>Lüfter / Laser-Stromversorgung, steuerbarer 12-V-Ausgang</td>
+					</tr>
+					<tr>
+						<td><strong>ANALOG</strong></td>
+						<td>Thermistoranschluss beim 3D-Druck</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>
+				Diese Anschlüsse sitzen laut Dobot-Interfacebeschreibung am Vorderarm und sind teilweise mehrfach belegt,
+				je nachdem ob man z. B. Greifer, Laser oder 3D-Druck verwendet.
+			</p>
+            
+		</section>
+
+		<section id="serielle">	<h2>Serielle Schnittstelle</h2>
+			<p>
+				Die serielle Kommunikation ist eine robuste und einfach nachvollziehbare Basis.
+				Kommandos werden als Datenpakete zwischen Rechner und Roboter ausgetauscht.
+			</p>
+			<ul>
+				<li>Sehr gut geeignet für erste Tests und Fehlersuche.</li>
+				<li>Direkte Verbindung mit klarer Struktur und wenig Störquellen.</li>
+				<li>Häufig die Grundlage für Steuerung per Python-Skripten.</li>
+			</ul>
+			<p class="note">
+				Praxis: Für den Einstieg zuerst Bewegungsbefehle mit kleinen Wegen testen,
+				dann Schritt für Schritt komplexere Abläufe aufbauen.
+			</p>
+		</section>
+
+		<section id="bluetooth"> <h2>Bluetooth</h2>
+			<p>
+				Bluetooth eignet sich für kurze Distanzen und mobile Szenarien,
+				bei denen kein Kabel im Weg sein soll.
+			</p>
+			<ul>
+				<li>Flexibler Aufbau auf engem Raum.</li>
+				<li>Schnelles Verbinden mit passenden Endgeräten.</li>
+				<li>Typisch für Demonstrationen und portable Aufbauten.</li>
+			</ul>
+			<p>
+				Im Unterricht sollte vorab klar sein, welches Gerät die Verbindung aufbaut
+				und wie mit Verbindungsabbrüchen umgegangen wird.
+			</p>
+		</section>
+
+		<section id="wlan"> <h2>WLAN</h2>
+			<p>
+				WLAN ist sinnvoll, wenn der Roboter in ein Netzwerk eingebunden werden soll,
+				zum Beispiel für Fernsteuerung, Monitoring oder Datenaustausch.
+			</p>
+			<ul>
+				<li>Gute Reichweite innerhalb des Schulnetzwerks.</li>
+				<li>Möglichkeit zur Integration mehrerer Systeme.</li>
+				<li>Geeignet für Projekte mit Weboberflächen und IoT-Bezug.</li>
+			</ul>
+			<p class="note">
+				Wichtig: Netzwerkregeln, Zugangsdaten und Sicherheitsaspekte sollten vorab
+				mit der Schul-IT abgestimmt werden.
+			</p>
+		</section>
+
+		<section id="usb"> <h2>USB</h2>
+			<p>
+				USB ist in vielen Szenarien die schnellste und stabilste Verbindung
+				zwischen Rechner und Dobot Magician.
+			</p>
+			<ul>
+				<li>Sehr stabil bei Dauerbetrieb und längeren Programmsitzungen.</li>
+				<li>Einfache Inbetriebnahme mit DobotStudio.</li>
+				<li>Ideal für Unterricht mit reproduzierbaren Ergebnissen.</li>
+			</ul>
+			<p>
+				Bei mehreren Arbeitsplätzen ist eine saubere Kabelführung sinnvoll,
+				damit keine mechanischen Behinderungen entstehen.
+			</p>
+		</section>
+
+		<section id="vergleich"> <h2>Vergleich der Schnittstellen</h2>
+			<table>
+				<thead>
+					<tr>
+						<th>Schnittstelle</th>
+						<th>Reichweite</th>
+						<th>Stabilität</th>
+						<th>Typischer Einsatz</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Seriell</td>
+						<td>Kurz bis mittel (kabelgebunden)</td>
+						<td>Hoch</td>
+						<td>Debugging, Grundlagen, Python-Tests</td>
+					</tr>
+					<tr>
+						<td>Bluetooth</td>
+						<td>Kurz</td>
+						<td>Mittel</td>
+						<td>Mobile Vorführung, drahtlose Steuerung</td>
+					</tr>
+					<tr>
+						<td>WLAN</td>
+						<td>Mittel bis hoch</td>
+						<td>Mittel bis hoch (netzabhängig)</td>
+						<td>Netzwerkprojekte, Fernzugriff, IoT</td>
+					</tr>
+					<tr>
+						<td>USB</td>
+						<td>Kurz (kabelgebunden)</td>
+						<td>Sehr hoch</td>
+						<td>Unterrichtsbetrieb, DobotStudio, stabile Steuerung</td>
+					</tr>
+				</tbody>
+			</table>
+		</section>
+		</section>
+
+		<section id="links"><h2>Links</h2>
+		    <ul>
+                <li><a href="https://www.dobot-robots.com/products/education/magician.html" target="_blank" rel="noopener">Dobot Magician Spezifikationen</a></li>
+                <li><a href="https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/2581/Magician%20Interface.pdf" target="_blank" rel="noopener">Dobot Magician Interface Dokument</a></li>
+                <li>Keine relevanten Links mehr gefunden.</li>
+<!-- 
+				<li><a href="https://www.dobot.cc/" target="_blank" rel="noopener">DOBOT</a></li>
+				<li><a href="https://www.dobot.cc/tutorials-center.html#tutorials" target="_blank" rel="noopener">DOBOT Tutorials Center</a></li>
+				<li><a href="https://www.generationrobots.com/media/Dobot-Magician-User-Manual.pdf" target="_blank" rel="noopener">Dobot Magician User Manual (PDF)</a></li>
+				<li><a href="https://www.schulroboter.de/dobot-magician-anleitung/" target="_blank" rel="noopener">DOBOT Magician Anleitung (de)</a></li> -->
+			</ul>
+		</section>
+	</main>
+
+	<footer>
+		© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+		Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+		<script src="../../js/script.js"></script>
+	</footer>
+</body>
+</html>
