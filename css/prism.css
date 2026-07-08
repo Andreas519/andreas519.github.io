@@ -138,22 +138,6 @@ pre[class*="language-"] {
   letter-spacing: 0.08em;
 }
 
-.codeblock-download {
-  display: inline-block;
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
-  background: #e0ecff;
-  color: #1e40af;
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.codeblock-download:hover {
-  background: #c7dcff;
-  text-decoration: none;
-}
-
 pre.codeblock {
   margin-top: 0;
 }

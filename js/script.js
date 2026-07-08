@@ -60,29 +60,7 @@ function ladeDatei(datei, elementId) {
     const languageName = languageClass.replace("language-", "");
     label.textContent = languageName.toUpperCase();
 
-    const downloadButton = document.createElement("a");
-    downloadButton.className = "codeblock-download";
-    downloadButton.textContent = "Download";
-
-    const extensionMap = {
-      python: "py",
-      json: "json",
-      javascript: "js",
-      js: "js",
-      html: "html",
-      css: "css",
-      text: "txt",
-      txt: "txt",
-      bash: "sh",
-      shell: "sh"
-    };
-    const fileExtension = extensionMap[languageName] || "txt";
-    const fileName = `codebeispiel-${String(index + 1).padStart(2, "0")}.${fileExtension}`;
-    downloadButton.download = fileName;
-    downloadButton.href = URL.createObjectURL(new Blob([codeText], { type: "text/plain;charset=utf-8" }));
-
     toolbar.appendChild(label);
-    toolbar.appendChild(downloadButton);
 
     preElement.parentNode.insertBefore(wrapper, preElement);
     wrapper.appendChild(toolbar);
