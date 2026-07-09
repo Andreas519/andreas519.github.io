@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dobot Magician – Interaktives Containerlager</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --panel: #ffffff;
+      --line: #d7dde6;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --accent2: #16a34a;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 18px 24px 10px;
+      background: #0f172a;
+      color: white;
+    }
+
+    header h1 {
+      margin: 0 0 4px;
+      font-size: 1.35rem;
+    }
+
+    header p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 0.95rem;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(720px, 1fr) 390px;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .stage, .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+    }
+
+    .stage {
+      padding: 12px;
+      overflow: auto;
+    }
+
+    canvas {
+      display: block;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+    }
+
+    .panel {
+      padding: 14px;
+      align-self: start;
+    }
+
+    .panel h2 {
+      margin: 12px 0 8px;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 5px;
+    }
+
+    .panel h2:first-child { margin-top: 0; }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 9px;
+      padding: 10px 12px;
+      font-weight: 650;
+      cursor: pointer;
+      background: #e5e7eb;
+      color: var(--text);
+    }
+
+    button.primary { background: var(--accent); color: white; }
+    button.success { background: var(--accent2); color: white; }
+    button.warning { background: var(--warning); color: #111827; }
+    button.danger { background: var(--danger); color: white; }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    label {
+      display: block;
+      margin: 8px 0 4px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    select, input, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 8px;
+      font: inherit;
+      background: white;
+    }
+
+    textarea {
+      min-height: 145px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.86rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .status {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e3a8a;
+      border-radius: 10px;
+      padding: 10px;
+      min-height: 42px;
+      font-weight: 650;
+    }
+
+    .log {
+      min-height: 120px;
+      max-height: 220px;
+      overflow: auto;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: #f9fafb;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.78rem;
+      white-space: pre-wrap;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.87rem;
+      line-height: 1.35;
+      margin: 8px 0 0;
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #374151;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    @media (max-width: 1120px) {
+      main { grid-template-columns: 1fr; }
+      .panel { max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dobot Magician – interaktives Containerlager</h1>
+    <p>Lochrasterplatte 40 × 25, Container mit vier Zapfen, Stapel bis Ebene 2</p>
+  </header>
+
+  <main>
+    <section class="stage">
+      <canvas id="canvas" width="900" height="670"></canvas>
+    </section>
+
+    <aside class="panel">
+      <h2>Status</h2>
+      <div id="status" class="status">Bereit</div>
+
+      <h2>Demo</h2>
+      <div class="buttons">
+        <button class="primary" id="btnDemo">Demo starten</button>
+        <button class="warning" id="btnStep">Einzelschritt</button>
+        <button id="btnPause">Pause</button>
+        <button class="danger" id="btnReset">Reset</button>
+      </div>
+      <p class="hint">Die Demo stapelt drei Container auf einem Lagerplatz und nimmt danach den obersten wieder herunter.</p>
+
+      <h2>Container manuell umlagern</h2>
+      <label for="containerSelect">Container</label>
+      <select id="containerSelect"></select>
+      <div class="row">
+        <div>
+          <label for="targetCol">Spalte</label>
+          <input id="targetCol" type="number" min="1" max="40" value="15" />
+        </div>
+        <div>
+          <label for="targetRow">Zeile</label>
+          <input id="targetRow" type="number" min="1" max="25" value="10" />
+        </div>
+        <div>
+          <label for="targetLevel">Ebene</label>
+          <input id="targetLevel" type="number" min="0" max="2" value="0" />
+        </div>
+      </div>
+      <button class="success" id="btnMoveManual" style="margin-top:8px;width:100%">Umlagern</button>
+
+      <h2>Dobot-Befehlsprogramm</h2>
+      <textarea id="program">home()
+pick("C1")
+place("C1", 15, 10, 0)
+pick("C2")
+place("C2", 15, 10, 1)
+pick("C3")
+place("C3", 15, 10, 2)</textarea>
+      <button class="primary" id="btnRunProgram" style="margin-top:8px;width:100%">Programm ausführen</button>
+      <p class="hint">Erlaubte Befehle: <span class="pill">home()</span> <span class="pill">pick("C1")</span> <span class="pill">place("C1", 15, 10, 0)</span></p>
+
+      <h2>Legende</h2>
+      <div class="legend">
+        <div>🔴 Greifer / Dobot</div>
+        <div>⚫ Lochraster</div>
+        <div>🟤 Zapfen</div>
+        <div>📦 Container</div>
+      </div>
+
+      <h2>Protokoll</h2>
+      <div id="log" class="log"></div>
+    </aside>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const statusEl = document.getElementById('status');
+    const logEl = document.getElementById('log');
+    const containerSelect = document.getElementById('containerSelect');
+
+    const GRID_COLS = 40;
+    const GRID_ROWS = 25;
+    const HOLE_DISTANCE = 20;
+    const MARGIN = 55;
+    const CONTAINER_SIZE = 2;
+    const FREE_HOLE_ROWS_BETWEEN_LEVELS = 1;
+    const LEVEL_OFFSET = FREE_HOLE_ROWS_BETWEEN_LEVELS * HOLE_DISTANCE;
+    const MAX_LEVEL = 2;
+    const CONTAINER_PIXELS = CONTAINER_SIZE * HOLE_DISTANCE;
+
+    let containers = [];
+    let robot = { x: 0, y: 0, carrying: null };
+    let isRunning = false;
+    let isPaused = false;
+    let commandQueue = [];
+
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function gridToPixel(col, row) {
+      return {
+        x: MARGIN + (col - 1) * HOLE_DISTANCE,
+        y: MARGIN + (row - 1) * HOLE_DISTANCE
+      };
+    }
+
+    function levelShift(level) {
+      return -level * LEVEL_OFFSET;
+    }
+
+    function slotCenter(col, row, level = 0) {
+      const p1 = gridToPixel(col, row);
+      const p2 = gridToPixel(col + CONTAINER_SIZE, row + CONTAINER_SIZE);
+      return {
+        x: (p1.x + p2.x) / 2,
+        y: (p1.y + p2.y) / 2 + levelShift(level)
+      };
+    }
+
+    function setStatus(text) {
+      statusEl.textContent = text;
+    }
+
+    function log(text) {
+      const line = `> ${text}\n`;
+      logEl.textContent += line;
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    function initContainers() {
+      containers = [
+        { name: 'C1', col: 4, row: 4,  level: 0, color: '#f59e0b' },
+        { name: 'C2', col: 4, row: 9,  level: 0, color: '#38bdf8' },
+        { name: 'C3', col: 4, row: 14, level: 0, color: '#86efac' },
+        { name: 'C4', col: 4, row: 19, level: 0, color: '#fde68a' }
+      ];
+      updateContainerSelect();
+    }
+
+    function updateContainerSelect() {
+      containerSelect.innerHTML = '';
+      for (const c of containers) {
+        const opt = document.createElement('option');
+        opt.value = c.name;
+        opt.textContent = `${c.name}  (${c.col}, ${c.row}, E${c.level})`;
+        containerSelect.appendChild(opt);
+      }
+    }
+
+    function containerByName(name) {
+      return containers.find(c => c.name === name);
+    }
+
+    function containersAtSlot(col, row) {
+      return containers
+        .filter(c => c.col === col && c.row === row)
+        .sort((a, b) => a.level - b.level);
+    }
+
+    function topContainerAt(col, row) {
+      const stack = containersAtSlot(col, row);
+      return stack.length ? stack[stack.length - 1] : null;
+    }
+
+    function isLevelFree(col, row, level, ignoredName = null) {
+      return !containers.some(c =>
+        c.name !== ignoredName && c.col === col && c.row === row && c.level === level
+      );
+    }
+
+    function canPlaceAt(col, row, level, ignoredName = null) {
+      if (col < 1 || row < 1 || col + CONTAINER_SIZE > GRID_COLS || row + CONTAINER_SIZE > GRID_ROWS) {
+        return [false, 'Der Container liegt außerhalb der Platte.'];
+      }
+      if (level < 0 || level > MAX_LEVEL) {
+        return [false, `Ebene ${level} ist nicht erlaubt. Erlaubt sind 0 bis ${MAX_LEVEL}.`];
+      }
+      if (!isLevelFree(col, row, level, ignoredName)) {
+        return [false, `Platz (${col}, ${row}, Ebene ${level}) ist belegt.`];
+      }
+      if (level > 0 && isLevelFree(col, row, level - 1, ignoredName)) {
+        return [false, `Ebene ${level} braucht darunter einen Container auf Ebene ${level - 1}.`];
+      }
+      return [true, 'OK'];
+    }
+
+    function drawPlate() {
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#111827';
+      ctx.font = 'bold 16px system-ui';
+      ctx.fillText('Lochrasterplatte 40 × 25', MARGIN, 28);
+
+      for (let row = 1; row <= GRID_ROWS; row++) {
+        for (let col = 1; col <= GRID_COLS; col++) {
+          const p = gridToPixel(col, row);
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = '#d1d5db';
+          ctx.fill();
+          ctx.strokeStyle = '#9ca3af';
+          ctx.stroke();
+        }
+      }
+
+      ctx.fillStyle = '#4b5563';
+      ctx.font = '10px system-ui';
+      for (let col = 1; col <= GRID_COLS; col += 5) {
+        const p = gridToPixel(col, 1);
+        ctx.fillText(String(col), p.x - 4, p.y - 16);
+      }
+      for (let row = 1; row <= GRID_ROWS; row += 5) {
+        const p = gridToPixel(1, row);
+        ctx.fillText(String(row), p.x - 28, p.y + 4);
+      }
+    }
+
+    function drawContainer(c, carried = false) {
+      let center;
+      if (carried) {
+        center = { x: robot.x, y: robot.y };
+      } else {
+        center = slotCenter(c.col, c.row, c.level);
+      }
+
+      const size = CONTAINER_PIXELS;
+      const x1 = center.x - size / 2;
+      const y1 = center.y - size / 2;
+      const x2 = center.x + size / 2;
+      const y2 = center.y + size / 2;
+
+      ctx.fillStyle = c.color;
+      ctx.strokeStyle = '#111827';
+      ctx.lineWidth = 2;
+      ctx.fillRect(x1, y1, size, size);
+      ctx.strokeRect(x1, y1, size, size);
+
+      const pegPositions = [
+        [x1, y1], [x2, y1], [x1, y2], [x2, y2]
+      ];
+      for (const [px, py] of pegPositions) {
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fillStyle = '#7c2d12';
+        ctx.fill();
+        ctx.strokeStyle = '#111827';
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = '#111827';
+      ctx.font = 'bold 12px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(c.name, center.x, center.y - 2);
+      ctx.font = '11px system-ui';
+      ctx.fillText(`E${c.level}`, center.x, center.y + 13);
+      ctx.textAlign = 'start';
+    }
+
+    function drawRobot() {
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = '#111827';
+      ctx.beginPath();
+      ctx.moveTo(robot.x, robot.y - 35);
+      ctx.lineTo(robot.x, robot.y - 11);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(robot.x, robot.y, 10, 0, Math.PI * 2);
+      ctx.fillStyle = '#ef4444';
+      ctx.fill();
+      ctx.strokeStyle = '#111827';
+      ctx.stroke();
+
+      ctx.fillStyle = '#111827';
+      ctx.font = 'bold 12px system-ui';
+      ctx.fillText('Dobot', robot.x + 15, robot.y - 17);
+    }
+
+    function draw() {
+      drawPlate();
+
+      const carried = robot.carrying ? containerByName(robot.carrying) : null;
+      const notCarried = containers
+        .filter(c => c.name !== robot.carrying)
+        .sort((a, b) => a.level - b.level);
+
+      for (const c of notCarried) drawContainer(c, false);
+      if (carried) drawContainer(carried, true);
+      drawRobot();
+    }
+
+    async function waitIfPaused() {
+      while (isPaused) await sleep(80);
+    }
+
+    async function moveToPixel(targetX, targetY) {
+      const steps = 55;
+      const startX = robot.x;
+      const startY = robot.y;
+      for (let i = 1; i <= steps; i++) {
+        await waitIfPaused();
+        const t = i / steps;
+        robot.x = startX + (targetX - startX) * t;
+        robot.y = startY + (targetY - startY) * t;
+        draw();
+        await sleep(10);
+      }
+    }
+
+    async function home() {
+      setStatus('HOME: Dobot fährt zur Startposition');
+      log('home()');
+      const p = gridToPixel(1, 1);
+      await moveToPixel(p.x, p.y);
+    }
+
+    async function moveToSlot(col, row, level = 0) {
+      setStatus(`MOVE: Fahre zu (${col}, ${row}), Ebene ${level}`);
+      const p = slotCenter(col, row, level);
+      await moveToPixel(p.x, p.y);
+    }
+
+    async function suctionOn() {
+      setStatus('SuctionCup ON: Container angesaugt');
+      await sleep(280);
+    }
+
+    async function suctionOff() {
+      setStatus('SuctionCup OFF: Container losgelassen');
+      await sleep(280);
+    }
+
+    async function pick(name) {
+      const c = containerByName(name);
+      if (!c) throw new Error(`Container ${name} existiert nicht.`);
+      if (robot.carrying) throw new Error('Dobot trägt bereits einen Container.');
+
+      const top = topContainerAt(c.col, c.row);
+      if (top && top.name !== name) {
+        throw new Error(`Container ${name} ist durch ${top.name} blockiert.`);
+      }
+
+      setStatus(`PICK: Container ${name} aufnehmen`);
+      log(`pick("${name}")`);
+      await moveToSlot(c.col, c.row, c.level);
+      await suctionOn();
+      robot.carrying = name;
+      draw();
+      return true;
+    }
+
+    async function place(name, col, row, level = 0) {
+      const c = containerByName(name);
+      if (!c) throw new Error(`Container ${name} existiert nicht.`);
+      if (robot.carrying !== name) throw new Error(`Container ${name} wird nicht getragen.`);
+
+      const [ok, msg] = canPlaceAt(col, row, level, name);
+      if (!ok) throw new Error(msg);
+
+      setStatus(`PLACE: Container ${name} ablegen auf (${col}, ${row}), Ebene ${level}`);
+      log(`place("${name}", ${col}, ${row}, ${level})`);
+      await moveToSlot(col, row, level);
+
+      c.col = col;
+      c.row = row;
+      c.level = level;
+
+      await suctionOff();
+      robot.carrying = null;
+      updateContainerSelect();
+      draw();
+      return true;
+    }
+
+    async function runCommands(commands) {
+      if (isRunning) return;
+      isRunning = true;
+      isPaused = false;
+      setButtonsRunning(true);
+
+      try {
+        for (const cmd of commands) {
+          await waitIfPaused();
+          if (cmd.fn === 'home') await home();
+          if (cmd.fn === 'pick') await pick(cmd.name);
+          if (cmd.fn === 'place') await place(cmd.name, cmd.col, cmd.row, cmd.level);
+        }
+        setStatus('Programm beendet');
+      } catch (err) {
+        setStatus('Fehler: ' + err.message);
+        log('FEHLER: ' + err.message);
+      } finally {
+        isRunning = false;
+        isPaused = false;
+        setButtonsRunning(false);
+      }
+    }
+
+    function setButtonsRunning(running) {
+      document.getElementById('btnDemo').disabled = running;
+      document.getElementById('btnRunProgram').disabled = running;
+      document.getElementById('btnMoveManual').disabled = running;
+      document.getElementById('btnStep').disabled = running;
+    }
+
+    function resetAll() {
+      const p = gridToPixel(1, 1);
+      robot = { x: p.x, y: p.y, carrying: null };
+      isRunning = false;
+      isPaused = false;
+      commandQueue = [];
+      initContainers();
+      logEl.textContent = '';
+      setStatus('Reset: Bereit');
+      setButtonsRunning(false);
+      draw();
+    }
+
+    function demoCommands() {
+      return [
+        { fn: 'home' },
+        { fn: 'pick', name: 'C1' },
+        { fn: 'place', name: 'C1', col: 15, row: 10, level: 0 },
+        { fn: 'pick', name: 'C2' },
+        { fn: 'place', name: 'C2', col: 15, row: 10, level: 1 },
+        { fn: 'pick', name: 'C3' },
+        { fn: 'place', name: 'C3', col: 15, row: 10, level: 2 },
+        { fn: 'pick', name: 'C4' },
+        { fn: 'place', name: 'C4', col: 23, row: 10, level: 0 },
+        { fn: 'pick', name: 'C3' },
+        { fn: 'place', name: 'C3', col: 31, row: 16, level: 0 },
+        { fn: 'home' }
+      ];
+    }
+
+    function parseProgram(text) {
+      const commands = [];
+      const lines = text.split('\n')
+        .map(line => line.trim())
+        .filter(line => line && !line.startsWith('#'));
+
+      for (const line of lines) {
+        if (/^home\(\)$/.test(line)) {
+          commands.push({ fn: 'home' });
+          continue;
+        }
+
+        let m = line.match(/^pick\("([A-Za-z0-9_\-]+)"\)$/);
+        if (m) {
+          commands.push({ fn: 'pick', name: m[1] });
+          continue;
+        }
+
+        m = line.match(/^place\("([A-Za-z0-9_\-]+)",\s*(\d+),\s*(\d+),\s*(\d+)\)$/);
+        if (m) {
+          commands.push({
+            fn: 'place',
+            name: m[1],
+            col: Number(m[2]),
+            row: Number(m[3]),
+            level: Number(m[4])
+          });
+          continue;
+        }
+
+        throw new Error(`Unbekannter Befehl: ${line}`);
+      }
+      return commands;
+    }
+
+    async function manualMove() {
+      const name = containerSelect.value;
+      const col = Number(document.getElementById('targetCol').value);
+      const row = Number(document.getElementById('targetRow').value);
+      const level = Number(document.getElementById('targetLevel').value);
+      await runCommands([
+        { fn: 'pick', name },
+        { fn: 'place', name, col, row, level }
+      ]);
+    }
+
+    document.getElementById('btnDemo').addEventListener('click', () => runCommands(demoCommands()));
+
+    document.getElementById('btnStep').addEventListener('click', async () => {
+      if (isRunning) return;
+      if (commandQueue.length === 0) commandQueue = demoCommands();
+      const cmd = commandQueue.shift();
+      await runCommands([cmd]);
+      if (commandQueue.length === 0) setStatus('Einzelschritt-Demo beendet');
+    });
+
+    document.getElementById('btnPause').addEventListener('click', () => {
+      if (!isRunning) return;
+      isPaused = !isPaused;
+      document.getElementById('btnPause').textContent = isPaused ? 'Weiter' : 'Pause';
+      setStatus(isPaused ? 'Pause' : 'Weiter');
+    });
+
+    document.getElementById('btnReset').addEventListener('click', () => {
+      resetAll();
+      document.getElementById('btnPause').textContent = 'Pause';
+    });
+
+    document.getElementById('btnMoveManual').addEventListener('click', manualMove);
+
+    document.getElementById('btnRunProgram').addEventListener('click', async () => {
+      try {
+        const text = document.getElementById('program').value;
+        const commands = parseProgram(text);
+        await runCommands(commands);
+      } catch (err) {
+        setStatus('Fehler: ' + err.message);
+        log('FEHLER: ' + err.message);
+      }
+    });
+
+    resetAll();
+  </script>
+</body>
+</html>

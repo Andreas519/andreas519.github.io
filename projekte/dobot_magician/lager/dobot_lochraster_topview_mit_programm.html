@@ -1,0 +1,1056 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dobot Magician auf Lochrasterplatte</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #1b2430;
+      --muted: #67717f;
+      --line: #d7dde5;
+      --panel: #f7f9fb;
+      --plate: #fbfbf8;
+      --hole: #17191c;
+      --blue: #2667b8;
+      --red: #d04a3a;
+      --green: #2d8a5c;
+      --yellow: #e7b94e;
+      --shadow: 0 18px 46px rgba(19, 31, 48, .13);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #edf1f5;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 340px;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .stage-wrap {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .stage {
+      width: min(100%, calc((100vh - 34px) * 1.4));
+      aspect-ratio: 7 / 5;
+      display: block;
+    }
+
+    .panel {
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      padding: 14px;
+      overflow: auto;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .readout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .value {
+      min-width: 0;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .value span {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    .value strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.15;
+      white-space: nowrap;
+    }
+
+    .group {
+      border-top: 1px solid var(--line);
+      padding-top: 13px;
+      margin-top: 13px;
+    }
+
+    .group-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: grid;
+      grid-template-columns: 90px minmax(0, 1fr) 54px;
+      gap: 8px;
+      align-items: center;
+      font-size: 13px;
+      color: #303946;
+      margin: 9px 0;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    output {
+      text-align: right;
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    button {
+      min-height: 38px;
+      border: 1px solid #bfc8d3;
+      background: #ffffff;
+      color: var(--ink);
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.active {
+      color: #ffffff;
+      background: var(--green);
+      border-color: var(--green);
+    }
+
+    button:hover {
+      border-color: var(--blue);
+    }
+
+    .status {
+      margin-top: 10px;
+      padding: 9px;
+      border-radius: 8px;
+      font-size: 13px;
+      line-height: 1.35;
+      background: #edf7f2;
+      color: #1f6845;
+      border: 1px solid #c8ead9;
+    }
+
+    .status.warn {
+      background: #fff6e1;
+      color: #826120;
+      border-color: #edd790;
+    }
+
+    textarea.program-editor {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 9px;
+      font: 12px/1.35 Consolas, "Courier New", monospace;
+      color: #1f2937;
+      background: #fbfcfe;
+    }
+
+    .program-log {
+      min-height: 74px;
+      max-height: 160px;
+      overflow: auto;
+      margin-top: 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px;
+      white-space: pre-wrap;
+      font: 12px/1.35 Consolas, "Courier New", monospace;
+      color: #2d3748;
+      background: #f8fafc;
+    }
+
+    .plate-label {
+      font: 700 12px Arial, Helvetica, sans-serif;
+      fill: #365f93;
+    }
+
+    .axis-label {
+      font: 600 10px Arial, Helvetica, sans-serif;
+      fill: #66717f;
+    }
+
+    .small-label {
+      font: 700 8px Arial, Helvetica, sans-serif;
+      fill: #2c415d;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .stage {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="stage-wrap" aria-label="Draufsicht auf Lochrasterplatte mit Dobot">
+      <svg id="stage" class="stage" viewBox="-42 -52 784 604" role="img">
+        <defs>
+          <pattern id="tablePattern" width="18" height="18" patternUnits="userSpaceOnUse">
+            <path d="M18 0H0V18" fill="none" stroke="#e7ebef" stroke-width="1"/>
+          </pattern>
+          <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#1d2a38" flood-opacity=".22"/>
+          </filter>
+          <radialGradient id="baseGrad" cx="42%" cy="34%" r="68%">
+            <stop offset="0%" stop-color="#f9fbfd"/>
+            <stop offset="55%" stop-color="#cfd8e1"/>
+            <stop offset="100%" stop-color="#7d8895"/>
+          </radialGradient>
+          <linearGradient id="upperArmGrad" x1="0" x2="1">
+            <stop offset="0%" stop-color="#d9ecff"/>
+            <stop offset="100%" stop-color="#4f93d1"/>
+          </linearGradient>
+          <linearGradient id="foreArmGrad" x1="0" x2="1">
+            <stop offset="0%" stop-color="#ffe7c8"/>
+            <stop offset="100%" stop-color="#df8a32"/>
+          </linearGradient>
+        </defs>
+
+        <rect x="-42" y="-52" width="784" height="604" fill="url(#tablePattern)"/>
+        <g id="plate">
+          <rect x="0" y="0" width="700" height="500" rx="12" fill="var(--plate)" stroke="#222831" stroke-width="2"/>
+          <text x="350" y="-18" text-anchor="middle" class="plate-label">Lochrasterplatte 70 x 50 cm, 40 x 26 Loecher, Raster 16 mm</text>
+          <text x="350" y="524" text-anchor="middle" class="axis-label">700 mm / 70 cm</text>
+          <text x="-22" y="250" text-anchor="middle" transform="rotate(-90 -22 250)" class="axis-label">500 mm / 50 cm</text>
+          <g id="holes"></g>
+          <g id="holeLabels"></g>
+        </g>
+
+        <circle id="reachOuter" cx="350" cy="250" r="315" fill="none" stroke="#2d8a5c" stroke-width="1.6" stroke-dasharray="6 5" opacity=".45"/>
+        <circle id="reachInner" cx="350" cy="250" r="45" fill="none" stroke="#d04a3a" stroke-width="1.4" stroke-dasharray="4 5" opacity=".42"/>
+
+        <g id="targetLayer">
+          <line id="targetX" x1="0" y1="0" x2="0" y2="0" stroke="#d04a3a" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/>
+          <line id="targetY" x1="0" y1="0" x2="0" y2="0" stroke="#d04a3a" stroke-width="1.2" stroke-dasharray="5 5" opacity=".55"/>
+          <circle id="target" cx="0" cy="0" r="8" fill="none" stroke="#d04a3a" stroke-width="2"/>
+        </g>
+
+        <g id="cubeLayer"></g>
+
+        <g id="dobot" filter="url(#softShadow)">
+          <g id="baseGroup">
+            <rect id="basePlate" x="270" y="170" width="160" height="160" rx="12" fill="#edf1f5" stroke="#546170" stroke-width="2"/>
+            <circle id="baseScrew1" cx="286" cy="186" r="5" fill="#7d8895"/>
+            <circle id="baseScrew2" cx="414" cy="186" r="5" fill="#7d8895"/>
+            <circle id="baseScrew3" cx="286" cy="314" r="5" fill="#7d8895"/>
+            <circle id="baseScrew4" cx="414" cy="314" r="5" fill="#7d8895"/>
+            <circle id="baseFoot" cx="350" cy="250" r="54" fill="#2f3d4f" opacity=".2"/>
+            <circle id="base" cx="350" cy="250" r="42" fill="url(#baseGrad)" stroke="#52606f" stroke-width="2"/>
+            <circle id="baseCore" cx="350" cy="250" r="15" fill="#3f4b59"/>
+            <path id="baseNose" d="" fill="#2667b8" opacity=".9"/>
+          </g>
+          <g id="armGroup">
+            <line id="upperArm" x1="0" y1="0" x2="0" y2="0" stroke="#2f5f8e" stroke-width="34" stroke-linecap="round"/>
+            <line id="upperArmHi" x1="0" y1="0" x2="0" y2="0" stroke="url(#upperArmGrad)" stroke-width="22" stroke-linecap="round"/>
+            <line id="foreArm" x1="0" y1="0" x2="0" y2="0" stroke="#986025" stroke-width="30" stroke-linecap="round"/>
+            <line id="foreArmHi" x1="0" y1="0" x2="0" y2="0" stroke="url(#foreArmGrad)" stroke-width="18" stroke-linecap="round"/>
+            <circle id="shoulderJoint" cx="0" cy="0" r="19" fill="#edf2f6" stroke="#586674" stroke-width="2"/>
+            <circle id="joint" cx="0" cy="0" r="24" fill="#e8eef4" stroke="#586674" stroke-width="2"/>
+            <circle id="jointCore" cx="0" cy="0" r="8" fill="#2f3d4f"/>
+            <g id="tool">
+              <circle id="toolJoint" cx="0" cy="0" r="18" fill="#f4f7f9" stroke="#586674" stroke-width="2"/>
+              <rect id="suctionStem" x="0" y="0" width="12" height="30" rx="4" fill="#3f4b59"/>
+              <circle id="cup" cx="0" cy="0" r="17" fill="#d04a3a" stroke="#873327" stroke-width="2"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </section>
+
+    <aside class="panel">
+      <h1>Dobot Magician</h1>
+      <div class="readout">
+        <div class="value"><span>X</span><strong id="readX">0 mm</strong></div>
+        <div class="value"><span>Y</span><strong id="readY">0 mm</strong></div>
+        <div class="value"><span>Ausladung</span><strong id="readR">0 mm</strong></div>
+        <div class="value"><span>J1</span><strong id="readA">0 deg</strong></div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Zielposition</div>
+        <label>X <input id="targetXInput" type="range" min="30" max="670" value="515"> <output id="targetXOut">515</output></label>
+        <label>Y <input id="targetYInput" type="range" min="30" max="470" value="250"> <output id="targetYOut">250</output></label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Dobot-Standort</div>
+        <label>Basis X <input id="baseXInput" type="range" min="80" max="620" value="350"> <output id="baseXOut">350</output></label>
+        <label>Basis Y <input id="baseYInput" type="range" min="80" max="420" value="380"> <output id="baseYOut">250</output></label>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Arm</div>
+        <label>joint1 <input id="shoulderInput" type="range" min="-135" max="135" value="0"> <output id="shoulderOut">0</output></label>
+        <label>joint2 <input id="joint2Input" type="range" min="-10" max="85" value="35"> <output id="joint2Out">35</output></label>
+        <label>joint3 <input id="joint3Input" type="range" min="-20" max="95" value="35"> <output id="joint3Out">35</output></label>
+        <label>Ausladung <input id="elbowInput" type="range" min="80" max="315" value="247" disabled> <output id="elbowOut">247</output></label>
+        <label>J4 <input id="j4Input" type="range" min="-180" max="180" value="0"> <output id="j4Out">0</output></label>
+        <div class="buttons">
+          <button id="ikButton" class="active" type="button">Ziel folgen</button>
+          <button id="suctionButton" type="button">Sauger aus</button>
+        </div>
+        <div class="buttons">
+          <button id="homeButton" type="button">Home</button>
+          <button id="demoButton" type="button">Demo</button>
+        </div>
+        <div id="status" class="status">Ziel erreichbar.</div>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Python-Dobot-Programm</div>
+        <textarea id="programEditor" class="program-editor" spellcheck="false"># Python-aehnliche Dobot-Befehle fuer die Simulation
+home()
+move_xy(182, 162)
+suction(True)
+wait(300)
+move_xy(246, 162)
+suction(False)</textarea>
+        <div class="buttons">
+          <button id="runProgramButton" type="button">Start</button>
+          <button id="stopProgramButton" type="button">Stop</button>
+        </div>
+        <div class="buttons">
+          <button id="sampleProgramButton" type="button">Beispiel</button>
+          <button id="clearLogButton" type="button">Log leeren</button>
+        </div>
+        <div id="programLog" class="program-log">Bereit.</div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const svg = document.getElementById("stage");
+    const holes = document.getElementById("holes");
+    const holeLabels = document.getElementById("holeLabels");
+    const cubeLayer = document.getElementById("cubeLayer");
+
+    const controls = {
+      targetX: document.getElementById("targetXInput"),
+      targetY: document.getElementById("targetYInput"),
+      baseX: document.getElementById("baseXInput"),
+      baseY: document.getElementById("baseYInput"),
+      shoulder: document.getElementById("shoulderInput"),
+      joint2: document.getElementById("joint2Input"),
+      joint3: document.getElementById("joint3Input"),
+      elbow: document.getElementById("elbowInput"),
+      j4: document.getElementById("j4Input")
+    };
+
+    const outputs = {
+      targetX: document.getElementById("targetXOut"),
+      targetY: document.getElementById("targetYOut"),
+      baseX: document.getElementById("baseXOut"),
+      baseY: document.getElementById("baseYOut"),
+      shoulder: document.getElementById("shoulderOut"),
+      joint2: document.getElementById("joint2Out"),
+      joint3: document.getElementById("joint3Out"),
+      elbow: document.getElementById("elbowOut"),
+      j4: document.getElementById("j4Out"),
+      readX: document.getElementById("readX"),
+      readY: document.getElementById("readY"),
+      readR: document.getElementById("readR"),
+      readA: document.getElementById("readA")
+    };
+
+    const dobot = {
+      minReach: 80,
+      maxReach: 315,
+      columnOffset: 82,
+      upperArm: 135,
+      foreArm: 160,
+      wristLength: 34
+    };
+    const state = {
+      followTarget: true,
+      suction: false,
+      attachedCubeId: null,
+      demo: false,
+      demoStep: 0,
+      programRunning: false,
+      programStop: false
+    };
+
+    const cubeSize = 40;
+    const cubePitch = 16;
+    const cubePickRadius = 24;
+    const cubeStackRadius = 30;
+    const cubes = [
+      { id: "red", name: "rot", color: "#d84a3a", x: 182, y: 162, level: 0 },
+      { id: "blue", name: "blau", color: "#2f73d0", x: 246, y: 162, level: 0 },
+      { id: "yellow", name: "gelb", color: "#e5b73d", x: 310, y: 162, level: 0 }
+    ];
+    let currentArm = null;
+
+    function el(name, attrs) {
+      const node = document.createElementNS("http://www.w3.org/2000/svg", name);
+      for (const [key, value] of Object.entries(attrs)) node.setAttribute(key, value);
+      return node;
+    }
+
+    function buildPlate() {
+      const plateWidth = 700;
+      const plateHeight = 500;
+      const pitch = 16;
+      const columns = 40;
+      const rows = 26;
+      const startX = (plateWidth - (columns - 1) * pitch) / 2;
+      const startY = (plateHeight - (rows - 1) * pitch) / 2;
+
+      for (let row = 0; row < rows; row += 1) {
+        for (let col = 0; col < columns; col += 1) {
+          holes.appendChild(el("circle", {
+            cx: startX + col * pitch,
+            cy: startY + row * pitch,
+            r: 2.9,
+            fill: "var(--hole)"
+          }));
+        }
+      }
+
+      for (let col = 0; col < columns; col += 5) {
+        holeLabels.appendChild(el("text", {
+          x: startX + col * pitch,
+          y: startY - 12,
+          "text-anchor": "middle",
+          class: "small-label"
+        }));
+        holeLabels.lastChild.textContent = String(col + 1);
+      }
+
+      for (let row = 0; row < rows; row += 5) {
+        holeLabels.appendChild(el("text", {
+          x: startX - 15,
+          y: startY + row * pitch + 3,
+          "text-anchor": "middle",
+          class: "small-label"
+        }));
+        holeLabels.lastChild.textContent = String(row + 1);
+      }
+    }
+
+    function setLine(id, x1, y1, x2, y2) {
+      const line = document.getElementById(id);
+      line.setAttribute("x1", x1);
+      line.setAttribute("y1", y1);
+      line.setAttribute("x2", x2);
+      line.setAttribute("y2", y2);
+    }
+
+    function setCircle(id, x, y, r = null) {
+      const circle = document.getElementById(id);
+      circle.setAttribute("cx", x);
+      circle.setAttribute("cy", y);
+      if (r !== null) circle.setAttribute("r", r);
+    }
+
+    function setRect(id, x, y) {
+      const rect = document.getElementById(id);
+      rect.setAttribute("x", x);
+      rect.setAttribute("y", y);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function deg(rad) {
+      return rad * 180 / Math.PI;
+    }
+
+    function rad(degValue) {
+      return degValue * Math.PI / 180;
+    }
+
+    function solveTopView(baseX, baseY, targetX, targetY) {
+      const dx = targetX - baseX;
+      const dy = targetY - baseY;
+      const distance = Math.hypot(dx, dy);
+      const j1 = deg(Math.atan2(dy, dx));
+      const radiusOk = distance >= dobot.minReach && distance <= dobot.maxReach;
+      const angleOk = j1 >= -135 && j1 <= 135;
+
+      return {
+        j1,
+        reach: clamp(distance, dobot.minReach, dobot.maxReach),
+        reachable: radiusOk && angleOk,
+        radiusOk,
+        angleOk
+      };
+    }
+
+    function joint3ForReach(joint2Deg, desiredReach) {
+      const localReach = clamp(
+        desiredReach - dobot.columnOffset - dobot.wristLength,
+        -dobot.upperArm - dobot.foreArm,
+        dobot.upperArm + dobot.foreArm
+      );
+      const j2 = rad(joint2Deg);
+      const foreProjection = localReach - dobot.upperArm * Math.cos(j2);
+      const cosJ23 = clamp(foreProjection / dobot.foreArm, -1, 1);
+      return deg(Math.acos(cosJ23)) - joint2Deg;
+    }
+
+    function forward(baseX, baseY, j1Deg, joint2Deg, joint3Deg, j4Deg) {
+      const a = rad(j1Deg);
+      const j2 = rad(joint2Deg);
+      const j23 = rad(joint2Deg + joint3Deg);
+      const elbowReach = dobot.columnOffset + dobot.upperArm * Math.cos(j2);
+      const wristReach = elbowReach + dobot.foreArm * Math.cos(j23);
+      const reach = clamp(wristReach + dobot.wristLength, dobot.minReach, dobot.maxReach);
+      const columnReach = dobot.columnOffset;
+      const columnX = baseX + Math.cos(a) * columnReach;
+      const columnY = baseY + Math.sin(a) * columnReach;
+      const elbowX = baseX + Math.cos(a) * elbowReach;
+      const elbowY = baseY + Math.sin(a) * elbowReach;
+      const wristX = baseX + Math.cos(a) * wristReach;
+      const wristY = baseY + Math.sin(a) * wristReach;
+      const toolX = baseX + Math.cos(a) * reach;
+      const toolY = baseY + Math.sin(a) * reach;
+      const zProjection = dobot.upperArm * Math.sin(j2) + dobot.foreArm * Math.sin(j23);
+      return { columnX, columnY, elbowX, elbowY, wristX, wristY, toolX, toolY, reach, zProjection, angle: a, toolAngle: a + rad(j4Deg) };
+    }
+
+    function cubeDistance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function sameStack(a, b) {
+      return cubeDistance(a, b) < 2;
+    }
+
+    function isTopCube(cube) {
+      return !cubes.some(other => other.id !== cube.id && sameStack(other, cube) && other.level > cube.level);
+    }
+
+    function stackHeightAt(x, y) {
+      return cubes.filter(cube => Math.hypot(cube.x - x, cube.y - y) < 2).length;
+    }
+
+    function nearestStack(x, y, ignoredId) {
+      const candidates = cubes
+        .filter(cube => cube.id !== ignoredId)
+        .filter(cube => Math.hypot(cube.x - x, cube.y - y) <= cubeStackRadius)
+        .sort((a, b) => b.level - a.level);
+      return candidates[0] || null;
+    }
+
+    function nearestTopCube(x, y) {
+      return cubes
+        .filter(cube => cube.id !== state.attachedCubeId && isTopCube(cube))
+        .map(cube => ({ cube, distance: Math.hypot(cube.x - x, cube.y - y) }))
+        .filter(item => item.distance <= cubePickRadius)
+        .sort((a, b) => b.cube.level - a.cube.level || a.distance - b.distance)[0]?.cube || null;
+    }
+
+    function snapCubeToRaster(value, axis) {
+      const first = axis === "x" ? 38 : 50;
+      const max = axis === "x" ? 700 - cubeSize / 2 : 500 - cubeSize / 2;
+      const snapped = first + Math.round((value - first) / cubePitch) * cubePitch;
+      return clamp(snapped, cubeSize / 2, max);
+    }
+
+    function snapCubePointToRaster(x, y) {
+      return {
+        x: snapCubeToRaster(x, "x"),
+        y: snapCubeToRaster(y, "y")
+      };
+    }
+
+    function attachCube() {
+      if (!currentArm) return false;
+      const cube = nearestTopCube(currentArm.toolX, currentArm.toolY);
+      if (!cube) {
+        return false;
+      }
+      state.attachedCubeId = cube.id;
+      cube.level = 0;
+      return true;
+    }
+
+    function releaseCube() {
+      if (!currentArm || state.attachedCubeId === null) return;
+      const cube = cubes.find(item => item.id === state.attachedCubeId);
+      const targetStack = nearestStack(currentArm.toolX, currentArm.toolY, cube.id);
+
+      if (targetStack) {
+        cube.x = targetStack.x;
+        cube.y = targetStack.y;
+        cube.level = stackHeightAt(targetStack.x, targetStack.y);
+      } else {
+        const snapped = snapCubePointToRaster(currentArm.toolX, currentArm.toolY);
+        const snappedStack = nearestStack(snapped.x, snapped.y, cube.id);
+
+        if (snappedStack) {
+          cube.x = snappedStack.x;
+          cube.y = snappedStack.y;
+          cube.level = stackHeightAt(snappedStack.x, snappedStack.y);
+        } else {
+          cube.x = snapped.x;
+          cube.y = snapped.y;
+          cube.level = 0;
+        }
+      }
+
+      state.attachedCubeId = null;
+    }
+
+    function renderCubes() {
+      cubeLayer.replaceChildren();
+      const sorted = [...cubes].sort((a, b) => a.level - b.level);
+      for (const cube of sorted) {
+        const visualOffset = cube.level * -5;
+        const group = el("g", {
+          transform: `translate(${cube.x + visualOffset} ${cube.y + visualOffset})`,
+          opacity: cube.id === state.attachedCubeId ? 0.88 : 1
+        });
+        group.appendChild(el("rect", {
+          x: -cubeSize / 2 + 3,
+          y: -cubeSize / 2 + 5,
+          width: cubeSize,
+          height: cubeSize,
+          rx: 6,
+          fill: "#1d2a38",
+          opacity: ".18"
+        }));
+        group.appendChild(el("rect", {
+          x: -cubeSize / 2,
+          y: -cubeSize / 2,
+          width: cubeSize,
+          height: cubeSize,
+          rx: 6,
+          fill: cube.color,
+          stroke: "#233041",
+          "stroke-width": 2
+        }));
+        group.appendChild(el("rect", {
+          x: -cubeSize / 2 + 5,
+          y: -cubeSize / 2 + 5,
+          width: cubeSize - 10,
+          height: cubeSize - 10,
+          rx: 4,
+          fill: "#ffffff",
+          opacity: ".16"
+        }));
+
+        for (const dx of [-cubePitch, 0, cubePitch]) {
+          for (const dy of [-cubePitch, 0, cubePitch]) {
+            if (dx === 0 && dy === 0) continue;
+            group.appendChild(el("circle", {
+              cx: dx,
+              cy: dy,
+              r: 3.6,
+              fill: "#f7fafc",
+              stroke: "#233041",
+              "stroke-width": 1.2,
+              opacity: ".95"
+            }));
+          }
+        }
+
+        const stackHeight = stackHeightAt(cube.x, cube.y);
+        if (isTopCube(cube) && stackHeight > 1) {
+          const badge = el("g", { transform: "translate(18 -18)" });
+          badge.appendChild(el("circle", { cx: 0, cy: 0, r: 10, fill: "#ffffff", stroke: "#233041", "stroke-width": 1.5 }));
+          const text = el("text", { x: 0, y: 4, "text-anchor": "middle", "font-size": 11, "font-weight": 700, fill: "#233041" });
+          text.textContent = String(stackHeight);
+          badge.appendChild(text);
+          group.appendChild(badge);
+        }
+
+        cubeLayer.appendChild(group);
+      }
+    }
+
+    function syncOutputs() {
+      for (const [key, input] of Object.entries(controls)) {
+        outputs[key].textContent = input.value;
+      }
+    }
+
+    function update() {
+      const baseX = Number(controls.baseX.value);
+      const baseY = Number(controls.baseY.value);
+      const targetX = Number(controls.targetX.value);
+      const targetY = Number(controls.targetY.value);
+
+      const status = document.getElementById("status");
+      if (state.followTarget) {
+        const ik = solveTopView(baseX, baseY, targetX, targetY);
+        controls.shoulder.value = Math.round(clamp(ik.j1, -135, 135));
+        controls.elbow.value = Math.round(ik.reach);
+        controls.joint3.value = Math.round(clamp(joint3ForReach(Number(controls.joint2.value), ik.reach), -20, 95));
+        status.textContent = ik.reachable
+          ? "Ziel erreichbar."
+          : (ik.angleOk ? "Ziel liegt ausserhalb der Ausladung." : "Ziel liegt ausserhalb des J1-Schwenkbereichs.");
+        status.classList.toggle("warn", !ik.reachable);
+      } else {
+        status.textContent = "Gelenkmodus: joint1 dreht die Basis, joint2 und joint3 bestimmen die Ausladung.";
+        status.classList.remove("warn");
+      }
+
+      const j1 = Number(controls.shoulder.value);
+      const joint2 = Number(controls.joint2.value);
+      const joint3 = Number(controls.joint3.value);
+      const j4 = Number(controls.j4.value);
+      const arm = forward(baseX, baseY, j1, joint2, joint3, j4);
+      currentArm = arm;
+      controls.elbow.value = Math.round(arm.reach);
+      const dx = arm.toolX - baseX;
+      const dy = arm.toolY - baseY;
+      const radius = Math.hypot(dx, dy);
+      const angle = deg(Math.atan2(dy, dx));
+
+      setCircle("baseFoot", baseX, baseY);
+      setCircle("base", baseX, baseY);
+      setCircle("baseCore", baseX, baseY);
+      setRect("basePlate", baseX - 80, baseY - 80);
+      setCircle("baseScrew1", baseX - 64, baseY - 64);
+      setCircle("baseScrew2", baseX + 64, baseY - 64);
+      setCircle("baseScrew3", baseX - 64, baseY + 64);
+      setCircle("baseScrew4", baseX + 64, baseY + 64);
+      setCircle("reachOuter", baseX, baseY, dobot.maxReach);
+      setCircle("reachInner", baseX, baseY, dobot.minReach);
+
+      const noseA = rad(j1);
+      const n1x = baseX + Math.cos(noseA) * 55;
+      const n1y = baseY + Math.sin(noseA) * 55;
+      const n2x = baseX + Math.cos(noseA + 0.26) * 34;
+      const n2y = baseY + Math.sin(noseA + 0.26) * 34;
+      const n3x = baseX + Math.cos(noseA - 0.26) * 34;
+      const n3y = baseY + Math.sin(noseA - 0.26) * 34;
+      document.getElementById("baseNose").setAttribute("d", `M${n1x} ${n1y} L${n2x} ${n2y} L${n3x} ${n3y} Z`);
+
+      setLine("upperArm", arm.columnX, arm.columnY, arm.elbowX, arm.elbowY);
+      setLine("upperArmHi", arm.columnX, arm.columnY, arm.elbowX, arm.elbowY);
+      setLine("foreArm", arm.elbowX, arm.elbowY, arm.wristX, arm.wristY);
+      setLine("foreArmHi", arm.elbowX, arm.elbowY, arm.wristX, arm.wristY);
+      setCircle("shoulderJoint", arm.columnX, arm.columnY);
+      setCircle("joint", arm.elbowX, arm.elbowY);
+      setCircle("jointCore", arm.elbowX, arm.elbowY);
+      setCircle("toolJoint", arm.toolX, arm.toolY);
+
+      const stem = document.getElementById("suctionStem");
+      stem.setAttribute("x", arm.toolX - 6);
+      stem.setAttribute("y", arm.toolY - 15);
+      stem.setAttribute("transform", `rotate(${deg(arm.toolAngle) + 90} ${arm.toolX} ${arm.toolY})`);
+      setCircle("cup", arm.toolX, arm.toolY, state.suction ? 20 : 17);
+      document.getElementById("cup").setAttribute("fill", state.suction ? "var(--green)" : "var(--red)");
+
+      if (state.attachedCubeId !== null) {
+        const cube = cubes.find(item => item.id === state.attachedCubeId);
+        cube.x = arm.toolX;
+        cube.y = arm.toolY;
+        cube.level = 0;
+      }
+      renderCubes();
+
+      setCircle("target", targetX, targetY);
+      setLine("targetX", targetX, 0, targetX, 500);
+      setLine("targetY", 0, targetY, 700, targetY);
+
+      outputs.readX.textContent = `${Math.round(arm.toolX)} mm`;
+      outputs.readY.textContent = `${Math.round(arm.toolY)} mm`;
+      outputs.readR.textContent = `${Math.round(radius)} mm`;
+      outputs.readA.textContent = `${Math.round(angle)} deg`;
+
+      syncOutputs();
+    }
+
+    function setFollow(enabled) {
+      state.followTarget = enabled;
+      document.getElementById("ikButton").classList.toggle("active", enabled);
+      controls.shoulder.disabled = false;
+      controls.joint2.disabled = false;
+      controls.joint3.disabled = false;
+      controls.elbow.disabled = true;
+      update();
+    }
+
+    function pointerToPlate(event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      const transformed = point.matrixTransform(svg.getScreenCTM().inverse());
+      return {
+        x: clamp(Math.round(transformed.x), 30, 670),
+        y: clamp(Math.round(transformed.y), 30, 470)
+      };
+    }
+
+    function runDemo() {
+      if (!state.demo) return;
+      const path = [
+        [515, 250], [490, 130], [350, 105], [215, 165],
+        [180, 310], [330, 390], [505, 360], [560, 240]
+      ];
+      const [x, y] = path[state.demoStep % path.length];
+      controls.targetX.value = x;
+      controls.targetY.value = y;
+      state.demoStep += 1;
+      update();
+      window.setTimeout(runDemo, 900);
+    }
+
+    function setSuction(enabled) {
+      if (enabled === state.suction) return;
+      let grabbed = false;
+      if (enabled) {
+        grabbed = attachCube();
+      } else {
+        releaseCube();
+      }
+      state.suction = enabled;
+      const button = document.getElementById("suctionButton");
+      button.textContent = state.suction ? "Sauger an" : "Sauger aus";
+      button.classList.toggle("active", state.suction);
+      update();
+      if (enabled && !grabbed) {
+        const status = document.getElementById("status");
+        status.textContent = "Kein Wuerfel direkt unter dem Sauggreifer.";
+        status.classList.add("warn");
+      }
+    }
+
+    function logProgram(message) {
+      const log = document.getElementById("programLog");
+      const previous = log.textContent === "Bereit." ? "" : `${log.textContent}\n`;
+      log.textContent = `${previous}${message}`;
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function setControlValue(control, value) {
+      control.value = String(Math.round(Number(value)));
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => window.setTimeout(resolve, ms));
+    }
+
+    function splitArgs(text) {
+      if (text.trim() === "") return [];
+      return text.split(",").map(part => part.trim());
+    }
+
+    function parseNumber(value, command) {
+      const number = Number(value);
+      if (!Number.isFinite(number)) {
+        throw new Error(`${command}: Zahl erwartet, erhalten '${value}'`);
+      }
+      return number;
+    }
+
+    async function runProgramLine(line, lineNumber) {
+      const clean = line.replace(/#.*$/, "").trim();
+      if (!clean) return;
+
+      const match = clean.match(/^([A-Za-z_][A-Za-z0-9_]*)\((.*)\)$/);
+      if (!match) {
+        throw new Error(`Zeile ${lineNumber}: Befehl nicht erkannt: ${clean}`);
+      }
+
+      const command = match[1].toLowerCase();
+      const args = splitArgs(match[2]);
+
+      if (command === "home") {
+        controls.baseX.value = 350;
+        controls.baseY.value = 250;
+        controls.targetX.value = 515;
+        controls.targetY.value = 250;
+        controls.shoulder.value = 0;
+        controls.joint2.value = 35;
+        controls.joint3.value = 35;
+        controls.j4.value = 0;
+        setSuction(false);
+        setFollow(false);
+      } else if (command === "joint1") {
+        setFollow(false);
+        setControlValue(controls.shoulder, clamp(parseNumber(args[0], command), -135, 135));
+        update();
+      } else if (command === "joint2") {
+        setFollow(false);
+        setControlValue(controls.joint2, clamp(parseNumber(args[0], command), -10, 85));
+        update();
+      } else if (command === "joint3") {
+        setFollow(false);
+        setControlValue(controls.joint3, clamp(parseNumber(args[0], command), -20, 95));
+        update();
+      } else if (command === "j4") {
+        setControlValue(controls.j4, clamp(parseNumber(args[0], command), -180, 180));
+        update();
+      } else if (command === "movej") {
+        if (args.length < 3) throw new Error(`Zeile ${lineNumber}: movej(joint1, joint2, joint3[, j4]) erwartet mindestens 3 Werte`);
+        setFollow(false);
+        setControlValue(controls.shoulder, clamp(parseNumber(args[0], command), -135, 135));
+        setControlValue(controls.joint2, clamp(parseNumber(args[1], command), -10, 85));
+        setControlValue(controls.joint3, clamp(parseNumber(args[2], command), -20, 95));
+        if (args[3] !== undefined) setControlValue(controls.j4, clamp(parseNumber(args[3], command), -180, 180));
+        update();
+      } else if (command === "move_xy" || command === "movexy") {
+        if (args.length < 2) throw new Error(`Zeile ${lineNumber}: move_xy(x, y) erwartet 2 Werte`);
+        controls.targetX.value = String(clamp(parseNumber(args[0], command), 30, 670));
+        controls.targetY.value = String(clamp(parseNumber(args[1], command), 30, 470));
+        setFollow(true);
+      } else if (command === "suction") {
+        const value = (args[0] || "").toLowerCase();
+        if (!["true", "false", "1", "0", "on", "off"].includes(value)) {
+          throw new Error(`Zeile ${lineNumber}: suction(True/False) erwartet`);
+        }
+        setSuction(value === "true" || value === "1" || value === "on");
+      } else if (command === "wait" || command === "sleep") {
+        await delay(clamp(parseNumber(args[0] || "300", command), 0, 5000));
+        return;
+      } else {
+        throw new Error(`Zeile ${lineNumber}: unbekannter Befehl '${command}'`);
+      }
+
+      await delay(260);
+    }
+
+    async function runProgram() {
+      if (state.programRunning) return;
+      state.programRunning = true;
+      state.programStop = false;
+      document.getElementById("runProgramButton").classList.add("active");
+      document.getElementById("programLog").textContent = "Programm startet...";
+
+      const lines = document.getElementById("programEditor").value.split(/\r?\n/);
+      try {
+        for (let index = 0; index < lines.length; index += 1) {
+          if (state.programStop) {
+            logProgram("Gestoppt.");
+            break;
+          }
+          const display = lines[index].trim();
+          if (display && !display.startsWith("#")) logProgram(`> ${display}`);
+          await runProgramLine(lines[index], index + 1);
+        }
+        if (!state.programStop) logProgram("Fertig.");
+      } catch (error) {
+        logProgram(`Fehler: ${error.message}`);
+      } finally {
+        state.programRunning = false;
+        document.getElementById("runProgramButton").classList.remove("active");
+      }
+    }
+
+    function loadSampleProgram() {
+      document.getElementById("programEditor").value = [
+        "# roten Wuerfel aufnehmen und auf blau stapeln",
+        "home()",
+        "move_xy(182, 162)",
+        "suction(True)",
+        "wait(300)",
+        "move_xy(246, 162)",
+        "suction(False)",
+        "",
+        "# Gelenke direkt einstellen",
+        "movej(-25, 40, 30, 0)",
+      ].join("\n");
+      document.getElementById("programLog").textContent = "Beispiel geladen.";
+    }
+
+    buildPlate();
+    setFollow(false);
+
+    Object.values(controls).forEach(input => input.addEventListener("input", () => {
+      if (input === controls.shoulder || input === controls.joint2 || input === controls.joint3) setFollow(false);
+      update();
+    }));
+
+    document.getElementById("ikButton").addEventListener("click", () => setFollow(!state.followTarget));
+    document.getElementById("suctionButton").addEventListener("click", () => setSuction(!state.suction));
+
+    document.getElementById("homeButton").addEventListener("click", () => {
+      controls.baseX.value = 350;
+      controls.baseY.value = 250;
+      controls.targetX.value = 515;
+      controls.targetY.value = 250;
+      controls.shoulder.value = 0;
+      controls.joint2.value = 35;
+      controls.joint3.value = 35;
+      controls.j4.value = 0;
+      setSuction(false);
+      setFollow(false);
+    });
+
+    document.getElementById("demoButton").addEventListener("click", event => {
+      state.demo = !state.demo;
+      event.currentTarget.classList.toggle("active", state.demo);
+      event.currentTarget.textContent = state.demo ? "Stop" : "Demo";
+      if (state.demo) runDemo();
+    });
+
+    document.getElementById("runProgramButton").addEventListener("click", runProgram);
+    document.getElementById("stopProgramButton").addEventListener("click", () => {
+      state.programStop = true;
+      logProgram("Stop angefordert...");
+    });
+    document.getElementById("sampleProgramButton").addEventListener("click", loadSampleProgram);
+    document.getElementById("clearLogButton").addEventListener("click", () => {
+      document.getElementById("programLog").textContent = "Bereit.";
+    });
+
+    svg.addEventListener("pointerdown", event => {
+      const p = pointerToPlate(event);
+      controls.targetX.value = p.x;
+      controls.targetY.value = p.y;
+      setFollow(true);
+    });
+
+    update();
+  </script>
+</body>
+</html>

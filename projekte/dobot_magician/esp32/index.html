@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 macht mit · Dobot Magician · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Projekt mit ESP32 und Dobot Magician.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    ESP32 macht mit
+  </header>
+  <main>
+    <section>
+        <p>Die beiden folgenden Formulierungen sind zum Durchdenken gedacht und werden später durch eine endgültige Version ersetzt.</p>
+     <div class="grid">
+      <p> Der ESP32 übernimmt im Gesamtsystem zusätzliche Aufgaben, 
+         die der Dobot Magician nicht selbst ausführen kann,
+         die außerhalb der Dobot-Steuerung zweckmäßiger umgesetzt werden
+         oder die der Dobot Magician nicht selbst ausführen kann. 
+     </p>
+     <p>Der ESP32 übernimmt im Gesamtsystem zusätzliche Aufgaben, 
+        die der Dobot Magician nicht selbst ausführen kann, 
+        die außerhalb der Dobot-Steuerung zweckmäßiger umgesetzt werden oder 
+        die aus Gründen der Flexibilität, Erweiterbarkeit oder Vereinfachung ausgelagert werden sollen.
+     </p>
+     </div>
+     <p>
+        Die vom ESP32 ausgewerteten Sensoren und angesteuerten Aktoren können 
+        entweder am Dobot Magician befestigt sein oder sich im Arbeitsbereich des Roboters befinden.
+      </p>
+      <p>
+        Die Verarbeitung der Sensordaten und die Steuerung der Aktoren können direkt auf dem ESP32 erfolgen 
+        oder an ein Steuerprogramm auf dem PC weitergegeben werden. 
+       </p>
+       <p>
+        Dieses Programm koordiniert anschließend die Steuerbefehle für den Dobot Magician und den ESP32.
+        </p>
+        <p>
+        Weitere Mikrocontroller können über den ESP32 als Kommunikationsknoten über geeignete Schnittstellen 
+        in das Gesamtsystem eingebunden werden.
+    </p>
+    </section>
+    <section>
+     <p>
+      Der ESP32 überwacht einen Schalter und sendet anfangs den Status an den PC, 
+      danach wird jede Änderung des Status an den PC gesendet.
+     </p>
+     <p>Kommunikation erfolgt über geeignete Schnittstellen. WLAN und Serielle Schnittstellen sind zu testen.</p>
+
+
+    </section>  
+    
+  </main>
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
