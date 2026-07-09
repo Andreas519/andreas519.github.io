@@ -80,6 +80,10 @@ nav a:hover {
   background: linear-gradient(135deg, #e0ecff, #cfe6ff);
   text-decoration: none;
 }
+nav a.active {
+  background: var(--accent);
+  color: #fff;
+}
 article {
   margin-bottom: 24px;
 }

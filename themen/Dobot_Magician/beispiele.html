@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dobot Studio – Python-Beispiele</title>
+  <link rel="stylesheet" href="../../css/my.css">
+  <link rel="stylesheet" href="../../css/prism.css">
+</head>
+<body>
+  <header>
+    Dobot Studio – einfache Python-Beispiele
+  </header>
+
+  <div class="layout">
+    <nav aria-label="Seitennavigation">
+      <a href="#helper"><small>Gemeinsame Hilfsdatei</small></a>
+      <a href="#01"><small>Verbindung testen und aktuelle Position anzeigen</small></a>
+      <a href="#02"><small>Dobot auf Home-Position fahren</small></a>
+      <a href="#03"><small>Einen Punkt anfahren</small></a>
+      <a href="#04"><small>Kleines Rechteck abfahren</small></a>
+      <a href="#05"><small>Stift absenken und Linie zeichnen</small></a>
+      <a href="#06"><small>Sauggreifer ein- und ausschalten</small></a>
+      <a href="#07"><small>Einfaches Pick-and-Place mit Sauggreifer</small></a>
+      <a href="#08"><small>Kleine Schleife: drei Positionen nacheinander</small></a>
+    </nav>
+
+    <main>
+      <p>Beispielsammlung für den Dobot Magician mit Python über <strong>DobotDllType</strong>.
+        <br>
+         Die Programme laufen auf dem PC und senden Befehle per USB/serieller Verbindung an den Roboter.
+      </p>
+      <section class="notice">
+        <h2>Hinweise vor dem Start</h2>
+        <ul>
+          <li><code>DobotDllType.py</code> muss für die Python-Programme erreichbar sein.</li>
+          <li>Alle Koordinaten sind Beispielwerte. Besonders der Z-Wert muss an euren Aufbau angepasst werden.</li>
+          <li>Bei echten Bewegungen langsam testen und den Arbeitsbereich frei halten.</li>
+          <li>Die Datei <code>dobot_helper.py</code> sollte im selben Ordner liegen wie die Beispielprogramme.</li>
+        </ul>
+      </section>
+      
+<section id="helper" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">dobot_helper.py</p>
+      <h2>Gemeinsame Hilfsdatei</h2>
+    </div>
+    <button class="copy-btn" data-target="code-0">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-0" class="language-python">import time
+import DobotDllType as dType
+
+CON_STR = {
+    dType.DobotConnect.DobotConnect_NoError: &quot;DobotConnect_NoError&quot;,
+    dType.DobotConnect.DobotConnect_NotFound: &quot;DobotConnect_NotFound&quot;,
+    dType.DobotConnect.DobotConnect_Occupied: &quot;DobotConnect_Occupied&quot;
+}
+
+
+def connect_dobot(port=&quot;&quot;):
+    &quot;&quot;&quot;
+    port=&quot;&quot; versucht automatische Verbindung.
+    Bei Problemen z. B. &quot;COM3&quot; eintragen.
+    &quot;&quot;&quot;
+    api = dType.load()
+    state = dType.ConnectDobot(api, port, 115200)[0]
+
+    print(&quot;Connect status:&quot;, CON_STR[state])
+
+    if state != dType.DobotConnect.DobotConnect_NoError:
+        raise RuntimeError(&quot;Dobot konnte nicht verbunden werden.&quot;)
+
+    dType.SetCmdTimeout(api, 3000)
+    dType.SetQueuedCmdClear(api)
+
+    # Langsame, schulgeeignete Bewegungen
+    dType.SetPTPJointParams(api, 100, 100, 100, 100,
+                            100, 100, 100, 100, isQueued=1)
+    dType.SetPTPCommonParams(api, 50, 50, isQueued=1)
+
+    return api
+
+
+def run_queue(api, last_index):
+    dType.SetQueuedCmdStartExec(api)
+
+    while last_index &gt; dType.GetQueuedCmdCurrentIndex(api)[0]:
+        dType.dSleep(100)
+
+    dType.SetQueuedCmdStopExec(api)
+
+
+def disconnect_dobot(api):
+    dType.DisconnectDobot(api)
+    print(&quot;Dobot getrennt.&quot;)</code></pre>
+</section>
+      
+<section id="01" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">01_position_anzeigen.py</p>
+      <h2>Verbindung testen und aktuelle Position anzeigen</h2>
+    </div>
+    <button class="copy-btn" data-target="code-1">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-1" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, disconnect_dobot
+
+api = connect_dobot()
+
+pose = dType.GetPose(api)
+
+print(&quot;Aktuelle Position:&quot;)
+print(&quot;X =&quot;, round(pose[0], 2))
+print(&quot;Y =&quot;, round(pose[1], 2))
+print(&quot;Z =&quot;, round(pose[2], 2))
+print(&quot;R =&quot;, round(pose[3], 2))
+
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="02" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">02_home.py</p>
+      <h2>Dobot auf Home-Position fahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-2">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-2" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+# Home-Parameter: X, Y, Z, R
+dType.SetHOMEParams(api, 200, 0, 50, 0, isQueued=1)
+
+last_index = dType.SetHOMECmd(api, temp=0, isQueued=1)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="03" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">03_punkt_anfahren.py</p>
+      <h2>Einen Punkt anfahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-3">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-3" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+# Zielposition
+x = 200
+y = 0
+z = 50
+r = 0
+
+last_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    x, y, z, r,
+    isQueued=1
+)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="04" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">04_rechteck.py</p>
+      <h2>Kleines Rechteck abfahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-4">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-4" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+punkte = [
+    (200, -50, 50, 0),
+    (250, -50, 50, 0),
+    (250,  50, 50, 0),
+    (200,  50, 50, 0),
+    (200, -50, 50, 0),
+]
+
+last_index = 0
+
+for x, y, z, r in punkte:
+    last_index = dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVLXYZMode,
+        x, y, z, r,
+        isQueued=1
+    )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="05" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">05_linie_zeichnen.py</p>
+      <h2>Stift absenken und Linie zeichnen</h2>
+    </div>
+    <button class="copy-btn" data-target="code-5">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-5" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+z_oben = 60
+z_unten = 20
+
+bewegungen = [
+    (200, -50, z_oben, 0),    # über Startpunkt
+    (200, -50, z_unten, 0),   # Stift absenken
+    (250, -50, z_unten, 0),   # Linie zeichnen
+    (250, -50, z_oben, 0),    # Stift anheben
+]
+
+last_index = 0
+
+for x, y, z, r in bewegungen:
+    last_index = dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVLXYZMode,
+        x, y, z, r,
+        isQueued=1
+    )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="06" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">06_sauggreifer_test.py</p>
+      <h2>Sauggreifer ein- und ausschalten</h2>
+    </div>
+    <button class="copy-btn" data-target="code-6">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-6" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+last_index = 0
+
+# Zu einem Punkt fahren
+last_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    220, 0, 40, 0,
+    isQueued=1
+)[0]
+
+# Sauggreifer einschalten
+last_index = dType.SetEndEffectorSuctionCup(
+    api,
+    1,  # enableCtrl
+    1,  # suction on
+    isQueued=1
+)[0]
+
+# Kurz warten
+last_index = dType.SetWAITCmd(api, 1000, isQueued=1)[0]
+
+# Sauggreifer ausschalten
+last_index = dType.SetEndEffectorSuctionCup(
+    api,
+    1,
+    0,
+    isQueued=1
+)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="07" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">07_pick_and_place.py</p>
+      <h2>Einfaches Pick-and-Place mit Sauggreifer</h2>
+    </div>
+    <button class="copy-btn" data-target="code-7">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-7" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+z_oben = 60
+z_unten = 25
+
+aufnahme = (220, -40)
+ablage = (220, 40)
+
+last_index = 0
+
+# Über Aufnahmepunkt
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_oben, 0, isQueued=1)[0]
+
+# Absenken
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_unten, 0, isQueued=1)[0]
+
+# Ansaugen
+last_index = dType.SetEndEffectorSuctionCup(api, 1, 1, isQueued=1)[0]
+last_index = dType.SetWAITCmd(api, 500, isQueued=1)[0]
+
+# Anheben
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_oben, 0, isQueued=1)[0]
+
+# Über Ablagepunkt
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_oben, 0, isQueued=1)[0]
+
+# Absenken
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_unten, 0, isQueued=1)[0]
+
+# Loslassen
+last_index = dType.SetEndEffectorSuctionCup(api, 1, 0, isQueued=1)[0]
+last_index = dType.SetWAITCmd(api, 500, isQueued=1)[0]
+
+# Wieder hoch
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_oben, 0, isQueued=1)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="08" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">08_positionen_schleife.py</p>
+      <h2>Kleine Schleife: drei Positionen nacheinander</h2>
+    </div>
+    <button class="copy-btn" data-target="code-8">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-8" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+positionen = [
+    (200, -60, 50, 0),
+    (230,   0, 50, 0),
+    (200,  60, 50, 0),
+]
+
+last_index = 0
+
+for wiederholung in range(3):
+    print(&quot;Durchlauf&quot;, wiederholung + 1)
+
+    for x, y, z, r in positionen:
+        last_index = dType.SetPTPCmd(
+            api,
+            dType.PTPMode.PTPMOVLXYZMode,
+            x, y, z, r,
+            isQueued=1
+        )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+    </main>
+  </div>
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../js/prism-core.js"></script>
+    <script src="../../js/prism.js"></script>
+    <script src="../../js/script.js"></script>
+  </footer>
+
+</body>
+</html>
