@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dobot Magician – Eigene Python-Hilfsfunktionen</title>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
+<style>
+:root{
+    --bg:#f4f6f8;
+    --panel:#ffffff;
+    --text:#1f2937;
+    --line:#d9e0e7;
+    --accent:#1f5f99;
+    --accent-soft:#eaf3fb;
+    --warn:#fff7df;
+    --note:#eef7ff;
+}
+*{box-sizing:border-box}
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+}
+header{
+    background:#183b5b;
+    color:#fff;
+    padding:2.2rem 1.5rem;
+}
+header .wrap{
+    max-width:1100px;
+    margin:auto;
+}
+header h1{
+    margin:0 0 .5rem 0;
+}
+header p{
+    margin:0;
+    color:#dce8f3;
+}
+.layout{
+    max-width:1200px;
+    margin:auto;
+    padding:1.5rem;
+    display:grid;
+    grid-template-columns:290px 1fr;
+    gap:1.5rem;
+    align-items:start;
+}
+nav{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1rem;
+    position:sticky;
+    top:1rem;
+    max-height:calc(100vh - 2rem);
+    overflow:auto;
+}
+nav h2{
+    margin-top:0;
+    font-size:1.1rem;
+}
+nav a{
+    display:block;
+    color:var(--accent);
+    text-decoration:none;
+    padding:.28rem 0;
+}
+nav a:hover{text-decoration:underline}
+main{min-width:0}
+section,.intro,.summary{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:1.35rem;
+    margin-bottom:1.2rem;
+}
+h2{
+    color:#173c5f;
+    border-bottom:2px solid var(--accent-soft);
+    padding-bottom:.35rem;
+}
+h3{color:#244c70}
+pre{
+    overflow-x:auto;
+    border:1px solid #dfe5eb;
+    border-radius:8px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:1rem 0;
+}
+th,td{
+    border:1px solid var(--line);
+    padding:.65rem .75rem;
+    text-align:left;
+    vertical-align:top;
+}
+th{background:var(--accent-soft)}
+.note{
+    background:var(--note);
+    border-left:4px solid var(--accent);
+    padding:.85rem 1rem;
+    margin:1rem 0;
+}
+.warning{
+    background:var(--warn);
+    border-left:4px solid #d79b00;
+    padding:.85rem 1rem;
+    margin:1rem 0;
+}
+.flow{
+    white-space:pre-wrap;
+    font-family:Consolas,"Courier New",monospace;
+    background:#f7f8fa;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:1rem;
+}
+@media(max-width:900px){
+    .layout{grid-template-columns:1fr}
+    nav{position:static;max-height:none}
+}
+@media print{
+    body{background:white}
+    nav{display:none}
+    .layout{display:block;max-width:none}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="wrap">
+<h1>Dobot Magician – Eigene Python-Hilfsfunktionen</h1>
+<p>Dokumentation der in <code>mein_programm.py</code> definierten Komfort- und Hilfsfunktionen</p>
+</div>
+</header>
+
+<div class="layout">
+
+<nav>
+<h2>Inhaltsverzeichnis</h2>
+<a href="#grundlage">Grundlage</a>
+<a href="#warten">1. warten_bis_fertig()</a>
+<a href="#queue-starten">2. queue_starten()</a>
+<a href="#queue-stoppen">3. queue_stoppen()</a>
+<a href="#position-lesen">4. position_lesen()</a>
+<a href="#position-anzeigen">5. position_anzeigen()</a>
+<a href="#fahre-zu">6. fahre_zu()</a>
+<a href="#home">7. home()</a>
+<a href="#test-z">8. test_z()</a>
+<a href="#ausfuehren">9. ausfuehren()</a>
+<a href="#main">10. main()</a>
+<a href="#zusammenhang">Zusammenhang der Funktionen</a>
+<a href="#beispiel">Komplettes Beispiel</a>
+</nav>
+
+<main>
+
+<div class="intro" id="grundlage">
+<h2>Grundlage</h2>
+
+<p>Die hier beschriebenen Funktionen gehören <strong>nicht</strong> direkt zur offiziellen Dobot-API. Sie wurden in <code>mein_programm.py</code> als eigene Python-Hilfsfunktionen definiert.</p>
+
+<p>Sie vereinfachen häufig benötigte Abläufe. Statt mehrere API-Aufrufe jedes Mal neu zu schreiben, kann später beispielsweise einfach verwendet werden:</p>
+
+<pre><code class="language-python">fahre_zu(api, dType, 200, 0, 80, 0)</code></pre>
+
+<p>Die Funktionen bilden also eine zusätzliche Ebene über <code>DobotDllType.py</code>:</p>
+
+<div class="flow">Eigenes Roboterprogramm
+        ↓
+Eigene Hilfsfunktionen in mein_programm.py
+        ↓
+DobotDllType.py
+        ↓
+DobotDll.dll
+        ↓
+Dobot Magician</div>
+
+<div class="note">
+<strong>Wichtig:</strong> Diese Funktionen können jederzeit erweitert oder verändert werden. Sie sind unsere eigene Programmierschnittstelle für den Dobot.
+</div>
+</div>
+
+<section id="warten">
+<h2>1. <code>warten_bis_fertig()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Wartet, bis ein zuvor in die Dobot-Queue eingetragener Befehl vollständig ausgeführt wurde.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def warten_bis_fertig(api, dType, ziel_index):
+    """Wartet, bis ein Queue-Befehl vollständig ausgeführt wurde."""
+
+    while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
+        dType.dSleep(100)</code></pre>
+
+<h3>Parameter</h3>
+<table>
+<tr><th>Parameter</th><th>Bedeutung</th></tr>
+<tr><td><code>api</code></td><td>API-Objekt des verbundenen Dobot</td></tr>
+<tr><td><code>dType</code></td><td>Das importierte Modul <code>DobotDllType</code></td></tr>
+<tr><td><code>ziel_index</code></td><td>Queue-Index des Befehls, auf dessen Abschluss gewartet wird</td></tr>
+</table>
+
+<h3>Beispiel</h3>
+<pre><code class="language-python">ziel_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVJXYZMode,
+    200,
+    0,
+    80,
+    0,
+    isQueued=1
+)[0]
+
+warten_bis_fertig(api, dType, ziel_index)</code></pre>
+
+<h3>Wirkungsweise</h3>
+<p>Die Funktion fragt alle 100 ms den aktuellen Queue-Index des Dobot ab. Erst wenn der Zielindex erreicht wurde, wird die Funktion beendet.</p>
+</section>
+
+<section id="queue-starten">
+<h2>2. <code>queue_starten()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Bereitet die Dobot-Befehlswarteschlange für einen neuen Programmablauf vor.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def queue_starten(api, dType):
+    """Stoppt eine laufende Queue, löscht sie und startet sie neu."""
+
+    dType.SetQueuedCmdStopExec(api)
+    dType.SetQueuedCmdClear(api)
+    dType.SetQueuedCmdStartExec(api)</code></pre>
+
+<h3>Ablauf</h3>
+<ol>
+<li>Eine eventuell laufende Queue wird gestoppt.</li>
+<li>Vorhandene alte Befehle werden gelöscht.</li>
+<li>Die Queue wird neu gestartet.</li>
+</ol>
+
+<h3>Aufruf</h3>
+<pre><code class="language-python">queue_starten(api, dType)</code></pre>
+
+<div class="note">
+Diese Funktion sorgt dafür, dass ein neues Roboterprogramm nicht versehentlich alte Befehle aus einer früheren Queue weiter ausführt.
+</div>
+</section>
+
+<section id="queue-stoppen">
+<h2>3. <code>queue_stoppen()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Stoppt die Ausführung der Dobot-Befehlswarteschlange.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def queue_stoppen(api, dType):
+    """Stoppt die Ausführung der Queue."""
+
+    dType.SetQueuedCmdStopExec(api)</code></pre>
+
+<h3>Aufruf</h3>
+<pre><code class="language-python">queue_stoppen(api, dType)</code></pre>
+
+<p>Die Funktion wird insbesondere am Ende von <code>ausfuehren()</code> verwendet.</p>
+</section>
+
+<section id="position-lesen">
+<h2>4. <code>position_lesen()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Liest die aktuelle kartesische Position des Dobot.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def position_lesen(api, dType):
+    """Liest die kartesische Position X, Y, Z und R."""
+
+    return dType.GetPose(api)[:4]</code></pre>
+
+<h3>Rückgabewert</h3>
+<p>Die Funktion liefert vier Werte zurück:</p>
+
+<pre><code class="language-text">X, Y, Z, R</code></pre>
+
+<h3>Beispiel</h3>
+<pre><code class="language-python">x, y, z, r = position_lesen(api, dType)
+
+print(x)
+print(y)
+print(z)
+print(r)</code></pre>
+
+<h3>Warum diese Hilfsfunktion?</h3>
+<p><code>dType.GetPose(api)</code> liefert insgesamt acht Werte. Für viele kartesische Bewegungen werden jedoch nur die ersten vier Werte benötigt.</p>
+
+<pre><code class="language-python">dType.GetPose(api)
+# liefert:
+# X, Y, Z, R, J1, J2, J3, J4</code></pre>
+
+<p><code>position_lesen()</code> beschränkt die Rückgabe deshalb auf:</p>
+
+<pre><code class="language-python">dType.GetPose(api)[:4]</code></pre>
+</section>
+
+<section id="position-anzeigen">
+<h2>5. <code>position_anzeigen()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Liest die aktuelle Position und gibt sie formatiert auf dem Bildschirm aus.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def position_anzeigen(api, dType):
+    """Liest und zeigt die aktuelle kartesische Position an."""
+
+    x, y, z, r = position_lesen(api, dType)
+
+    print(
+        f"X={x:.1f} mm, "
+        f"Y={y:.1f} mm, "
+        f"Z={z:.1f} mm, "
+        f"R={r:.1f}°"
+    )</code></pre>
+
+<h3>Aufruf</h3>
+<pre><code class="language-python">position_anzeigen(api, dType)</code></pre>
+
+<h3>Beispielausgabe</h3>
+<pre><code class="language-text">X=200.0 mm, Y=0.0 mm, Z=80.0 mm, R=0.0°</code></pre>
+
+<p>Die Funktion verwendet intern <code>position_lesen()</code>.</p>
+</section>
+
+<section id="fahre-zu">
+<h2>6. <code>fahre_zu()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Fährt den Dobot zu einer Zielposition und wartet automatisch, bis die Bewegung abgeschlossen ist.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def fahre_zu(api, dType, x, y, z, r, modus=None):
+    """Fährt zu einer Zielposition und wartet auf das Ende der Bewegung."""
+
+    if modus is None:
+        modus = dType.PTPMode.PTPMOVJXYZMode
+
+    ziel_index = dType.SetPTPCmd(
+        api,
+        modus,
+        x,
+        y,
+        z,
+        r,
+        isQueued=1
+    )[0]
+
+    warten_bis_fertig(api, dType, ziel_index)</code></pre>
+
+<h3>Parameter</h3>
+<table>
+<tr><th>Parameter</th><th>Bedeutung</th></tr>
+<tr><td><code>api</code></td><td>API-Objekt des Dobot</td></tr>
+<tr><td><code>dType</code></td><td>Modul <code>DobotDllType</code></td></tr>
+<tr><td><code>x</code></td><td>Zielposition X</td></tr>
+<tr><td><code>y</code></td><td>Zielposition Y</td></tr>
+<tr><td><code>z</code></td><td>Zielposition Z</td></tr>
+<tr><td><code>r</code></td><td>Zielrotation R</td></tr>
+<tr><td><code>modus</code></td><td>PTP-Bewegungsmodus; optional</td></tr>
+</table>
+
+<h3>Standardmodus</h3>
+<p>Wird kein Modus angegeben, verwendet die Funktion:</p>
+
+<pre><code class="language-python">dType.PTPMode.PTPMOVJXYZMode</code></pre>
+
+<h3>Einfacher Aufruf</h3>
+<pre><code class="language-python">fahre_zu(
+    api,
+    dType,
+    200,
+    0,
+    80,
+    0
+)</code></pre>
+
+<h3>Lineare Bewegung</h3>
+<pre><code class="language-python">fahre_zu(
+    api,
+    dType,
+    200,
+    0,
+    50,
+    0,
+    dType.PTPMode.PTPMOVLXYZMode
+)</code></pre>
+
+<h3>Nur die Z-Koordinate verändern</h3>
+<pre><code class="language-python">x, y, z, r = position_lesen(api, dType)
+
+fahre_zu(
+    api,
+    dType,
+    x,
+    y,
+    z - 20,
+    r,
+    dType.PTPMode.PTPMOVLXYZMode
+)</code></pre>
+
+<div class="warning">
+<strong>Achtung:</strong> <code>fahre_zu()</code> führt eine reale Roboterbewegung aus. Zielkoordinaten und Arbeitsbereich müssen vorher geprüft werden.
+</div>
+
+<h3>Vorteil gegenüber direktem API-Aufruf</h3>
+<p>Ohne die Hilfsfunktion müsste immer Folgendes geschrieben werden:</p>
+
+<pre><code class="language-python">ziel_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVJXYZMode,
+    200,
+    0,
+    80,
+    0,
+    isQueued=1
+)[0]
+
+warten_bis_fertig(api, dType, ziel_index)</code></pre>
+
+<p>Mit der Hilfsfunktion genügt:</p>
+
+<pre><code class="language-python">fahre_zu(api, dType, 200, 0, 80, 0)</code></pre>
+</section>
+
+<section id="home">
+<h2>7. <code>home()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Startet die HOME-Fahrt des Dobot und wartet automatisch auf deren Abschluss.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def home(api, dType):
+    """Führt eine HOME-Fahrt aus und wartet auf deren Abschluss."""
+
+    print("HOME-Fahrt wird gestartet.")
+
+    ziel_index = dType.SetHOMECmd(
+        api,
+        0,
+        1
+    )[0]
+
+    warten_bis_fertig(api, dType, ziel_index)
+
+    print("HOME-Fahrt abgeschlossen.")</code></pre>
+
+<h3>Aufruf</h3>
+<pre><code class="language-python">home(api, dType)</code></pre>
+
+<div class="warning">
+<strong>Achtung:</strong> Die Funktion verwendet die aktuell im Dobot eingestellte HOME-Position. Vor dem Aufruf muss geprüft werden, ob diese Position mit dem montierten Werkzeug sicher erreichbar ist.
+</div>
+</section>
+
+<section id="test-z">
+<h2>8. <code>test_z()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Erlaubt das interaktive Testen verschiedener Z-Koordinaten. X, Y und R bleiben dabei unverändert.</p>
+
+<h3>Aufruf</h3>
+<pre><code class="language-python">test_z(api, dType)</code></pre>
+
+<h3>Ablauf</h3>
+<ol>
+<li>Aktuelle Position wird gelesen.</li>
+<li>Der Benutzer gibt eine neue Z-Koordinate ein.</li>
+<li>Der Dobot fährt linear auf diese neue Z-Höhe.</li>
+<li>Die tatsächlich erreichte Position wird erneut gelesen.</li>
+<li>Mit <code>a</code> wird der Test beendet.</li>
+</ol>
+
+<h3>Kern des Bewegungsaufrufs</h3>
+<pre><code class="language-python">fahre_zu(
+    api,
+    dType,
+    x,
+    y,
+    neue_z,
+    r,
+    dType.PTPMode.PTPMOVLXYZMode
+)</code></pre>
+
+<h3>Beispiel für die Eingabe</h3>
+<pre><code class="language-text">Position: X=200.0, Y=0.0, Z=80.0, R=0.0
+Neue Z-Koordinate oder 'a' zum Abbrechen: 60</code></pre>
+
+<div class="warning">
+<strong>Achtung:</strong> Bei zu kleinen Z-Werten kann das Werkzeug auf die Arbeitsplatte oder andere Gegenstände treffen.
+</div>
+</section>
+
+<section id="ausfuehren">
+<h2>9. <code>ausfuehren()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Ist die zentrale Startfunktion des eigentlichen Roboterprogramms.</p>
+
+<p>Sie wird von <code>start.py</code> aufgerufen:</p>
+
+<pre><code class="language-python">import mein_programm
+
+mein_programm.ausfuehren(api, dType)</code></pre>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def ausfuehren(api, dType):
+    """Wird von start.py aufgerufen."""
+
+    print()
+    print("Roboterprogramm wird gestartet.")
+    print("--------------------------------")
+
+    queue_starten(api, dType)
+
+    try:
+        print("Aktuelle Position:")
+        position_anzeigen(api, dType)
+
+        test_z(api, dType)
+
+    finally:
+        queue_stoppen(api, dType)
+
+        print()
+        print("Roboterprogramm beendet.")</code></pre>
+
+<h3>Ablauf</h3>
+<ol>
+<li>Queue vorbereiten und starten</li>
+<li>Aktuelle Position anzeigen</li>
+<li>Eigentlichen Programmablauf ausführen</li>
+<li>Queue im <code>finally</code>-Block sicher stoppen</li>
+</ol>
+
+<div class="note">
+Der eigentliche spätere Roboterablauf wird innerhalb des <code>try</code>-Blocks ergänzt.
+</div>
+
+<h3>Beispiel für einen späteren Ablauf</h3>
+<pre><code class="language-python">def ausfuehren(api, dType):
+    queue_starten(api, dType)
+
+    try:
+        home(api, dType)
+
+        fahre_zu(
+            api,
+            dType,
+            200,
+            0,
+            80,
+            0
+        )
+
+    finally:
+        queue_stoppen(api, dType)</code></pre>
+</section>
+
+<section id="main">
+<h2>10. <code>main()</code></h2>
+
+<h3>Aufgabe</h3>
+<p>Verhindert nicht den direkten Start der Datei, weist aber darauf hin, dass normalerweise <code>start.py</code> verwendet werden soll.</p>
+
+<h3>Definition</h3>
+<pre><code class="language-python">def main():
+    print(
+        "Diese Datei wird normalerweise nicht direkt gestartet.\n"
+        "Bitte 'start.py' ausführen."
+    )
+
+
+if __name__ == "__main__":
+    main()</code></pre>
+
+<h3>Normaler Programmstart</h3>
+<pre><code class="language-text">start.py
+    ↓
+mein_programm.py
+    ↓
+ausfuehren(api, dType)</code></pre>
+</section>
+
+<section id="zusammenhang">
+<h2>Zusammenhang der Funktionen</h2>
+
+<div class="flow">ausfuehren()
+│
+├── queue_starten()
+│
+├── position_anzeigen()
+│   └── position_lesen()
+│
+├── test_z()
+│   ├── position_lesen()
+│   └── fahre_zu()
+│       └── warten_bis_fertig()
+│
+├── home()
+│   └── warten_bis_fertig()
+│
+└── queue_stoppen()</div>
+
+<p>Die Hilfsfunktionen bauen also teilweise aufeinander auf. Besonders wichtig ist:</p>
+
+<pre><code class="language-text">fahre_zu()
+    ↓
+SetPTPCmd()
+    ↓
+warten_bis_fertig()</code></pre>
+</section>
+
+<section id="beispiel">
+<h2>Komplettes Beispiel</h2>
+
+<p>Ein späteres Roboterprogramm kann mit den eigenen Hilfsfunktionen sehr kompakt aussehen:</p>
+
+<pre><code class="language-python">def ausfuehren(api, dType):
+    queue_starten(api, dType)
+
+    try:
+        print("Startposition:")
+        position_anzeigen(api, dType)
+
+        # HOME-Fahrt
+        home(api, dType)
+
+        # Aktuelle Position lesen
+        x, y, z, r = position_lesen(api, dType)
+
+        # 20 mm nach oben fahren
+        fahre_zu(
+            api,
+            dType,
+            x,
+            y,
+            z + 20,
+            r,
+            dType.PTPMode.PTPMOVLXYZMode
+        )
+
+        print("Endposition:")
+        position_anzeigen(api, dType)
+
+    finally:
+        queue_stoppen(api, dType)</code></pre>
+
+<div class="summary">
+<h3>Gedanke hinter diesen Funktionen</h3>
+<p>Die Funktionen bilden eine kleine, eigene Python-Bibliothek für den Dobot. Dadurch werden die eigentlichen Roboterprogramme kürzer, übersichtlicher und für Schüler leichter lesbar.</p>
+
+<p>Beispielsweise ist:</p>
+
+<pre><code class="language-python">fahre_zu(api, dType, 200, 0, 80, 0)</code></pre>
+
+<p>deutlich einfacher zu verstehen als die vollständige Kombination aus <code>SetPTPCmd()</code>, Queue-Index und Warteschleife.</p>
+</div>
+</section>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>

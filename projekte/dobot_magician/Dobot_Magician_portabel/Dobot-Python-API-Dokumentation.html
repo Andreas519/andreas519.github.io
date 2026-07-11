@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dobot Magician – Deutsche Python-API-Dokumentation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+<style>
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#1f2937;line-height:1.6}
+header{background:#183b5b;color:white;padding:2rem 1.5rem}
+header>div,.wrap{max-width:1100px;margin:auto}
+.layout{max-width:1200px;margin:auto;padding:1.5rem;display:grid;grid-template-columns:290px 1fr;gap:1.5rem}
+nav,section,.intro,.summary{background:white;border:1px solid #d9e0e7;border-radius:10px;padding:1.2rem}
+nav{position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto}
+nav a{display:block;color:#1f5f99;text-decoration:none;padding:.25rem 0}
+main section,.intro,.summary{margin-bottom:1.2rem}
+h2{color:#173c5f;border-bottom:2px solid #eaf3fb;padding-bottom:.35rem}
+h3{color:#244c70}
+pre{overflow-x:auto;border:1px solid #dfe5eb;border-radius:8px}
+table{width:100%;border-collapse:collapse;margin:1rem 0}
+th,td{border:1px solid #d9e0e7;padding:.6rem;text-align:left;vertical-align:top}
+th{background:#eaf3fb}
+.note{background:#eef7ff;border-left:4px solid #1f5f99;padding:.8rem 1rem}
+.warning{background:#fff7df;border-left:4px solid #d79b00;padding:.8rem 1rem}
+.flow{white-space:pre-wrap;font-family:Consolas,monospace;background:#f7f8fa;border:1px solid #d9e0e7;border-radius:8px;padding:1rem}
+section.gruppe{background:#eaf3fb;border:none;padding:.6rem 1.2rem;margin-bottom:.2rem}
+section.gruppe h2{border-bottom:none;margin:0;font-size:1.1rem}
+@media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;max-height:none}}
+</style>
+</head>
+<body>
+<header><div><h1>Dobot Magician – Deutsche Python-API-Dokumentation</h1>
+<p>Praxisorientierte Dokumentation der bisher verwendeten Funktionen aus <code>DobotDllType.py</code></p></div></header>
+
+<div class="layout">
+<nav>
+<h2>Inhaltsverzeichnis</h2>
+<a href="#grundlage">Grundlage</a>
+<strong style="display:block;margin-top:.6rem;color:#173c5f">1. Verbindung</strong>
+<a href="#f1" style="padding-left:1rem">dType.load()</a>
+<a href="#f2" style="padding-left:1rem">ConnectDobot()</a>
+<a href="#f3" style="padding-left:1rem">DisconnectDobot()</a>
+<strong style="display:block;margin-top:.6rem;color:#173c5f">2. Status und Position</strong>
+<a href="#f4" style="padding-left:1rem">GetPose()</a>
+<strong style="display:block;margin-top:.6rem;color:#173c5f">3. Befehlswarteschlange</strong>
+<a href="#f15" style="padding-left:1rem">SetQueuedCmdClear()</a>
+<a href="#f16" style="padding-left:1rem">SetQueuedCmdStartExec()</a>
+<a href="#f17" style="padding-left:1rem">SetQueuedCmdStopExec()</a>
+<a href="#f18" style="padding-left:1rem">GetQueuedCmdCurrentIndex()</a>
+<a href="#f19" style="padding-left:1rem">warten_bis_fertig()</a>
+<a href="#f20" style="padding-left:1rem">dSleep()</a>
+<strong style="display:block;margin-top:.6rem;color:#173c5f">4. HOME und Alarme</strong>
+<a href="#f12" style="padding-left:1rem">SetHOMEParams()</a>
+<a href="#f13" style="padding-left:1rem">GetHOMEParams()</a>
+<a href="#f14" style="padding-left:1rem">SetHOMECmd()</a>
+<a href="#f21" style="padding-left:1rem">GetAlarmsState()</a>
+<a href="#f22" style="padding-left:1rem">ClearAllAlarmsState()</a>
+<strong style="display:block;margin-top:.6rem;color:#173c5f">5. Bewegung und Endeffektoren</strong>
+<a href="#f5" style="padding-left:1rem">SetPTPCommonParams()</a>
+<a href="#f6" style="padding-left:1rem">GetPTPCommonParams()</a>
+<a href="#f7" style="padding-left:1rem">SetPTPJointParams()</a>
+<a href="#f8" style="padding-left:1rem">GetPTPJointParams()</a>
+<a href="#f9" style="padding-left:1rem">SetPTPCoordinateParams()</a>
+<a href="#f10" style="padding-left:1rem">GetPTPCoordinateParams()</a>
+<a href="#f11" style="padding-left:1rem">SetPTPCmd()</a>
+<a href="#f23" style="padding-left:1rem">SetEndEffectorSuctionCup()</a>
+<a href="#grundmuster" style="margin-top:.6rem;display:block">Vollständiges Grundmuster</a>
+</nav>
+
+<main>
+<div class="intro" id="grundlage">
+<h2>Grundlage</h2>
+<pre><code class="language-python">import DobotDllType as dType</code></pre>
+<p><code>DobotDllType.py</code> kapselt die C/C++-API der <code>DobotDll.dll</code> und stellt deren Funktionen für Python bereit.</p>
+<div class="flow">Python-Programm
+        ↓
+DobotDllType.py
+        ↓
+DobotDll.dll
+        ↓
+USB / serielle Verbindung
+        ↓
+Dobot Magician</div>
+<p>Diese Dokumentation konzentriert sich auf die Funktionen, die bereits praktisch verwendet wurden oder unmittelbar für die bisherigen Dobot-Programme wichtig sind.</p>
+</div>
+
+<section class="gruppe" id="gruppe1"><h2>1. Verbindung</h2></section>
+
+<section id="f1"><h2><code>dType.load()</code></h2>
+<h3>Aufgabe</h3><p>Lädt die Dobot-Bibliothek <code>DobotDll.dll</code> und liefert ein API-Objekt zurück.</p>
+<h3>Aufruf</h3><pre><code class="language-python">api = dType.load()</code></pre>
+<h3>Beispiel</h3><pre><code class="language-python">import DobotDllType as dType
+
+api = dType.load()</code></pre>
+<p>Das Objekt <code>api</code> wird anschließend bei fast allen Dobot-Funktionen als erstes Argument benötigt.</p></section>
+
+<section id="f2"><h2><code>ConnectDobot()</code></h2>
+<h3>Aufgabe</h3><p>Stellt die Verbindung zwischen dem Python-Programm und dem Dobot Magician her.</p>
+<h3>Aufruf</h3><pre><code class="language-python">dType.ConnectDobot(api, portName, baudrate)</code></pre>
+<table><tr><th>Parameter</th><th>Bedeutung</th></tr>
+<tr><td><code>api</code></td><td>API-Objekt aus <code>dType.load()</code></td></tr>
+<tr><td><code>portName</code></td><td>COM-Port, z. B. <code>"COM10"</code></td></tr>
+<tr><td><code>baudrate</code></td><td>Übertragungsgeschwindigkeit, gewöhnlich <code>115200</code></td></tr></table>
+<h3>Beispiel</h3><pre><code class="language-python">result = dType.ConnectDobot(api, "COM10", 115200)</code></pre>
+<h3>Typischer Rückgabewert</h3><pre><code class="language-text">[0, 'DobotSerial', '0.0.0']</code></pre>
+<pre><code class="language-python">if result[0] == dType.DobotConnect.DobotConnect_NoError:
+    print("Dobot verbunden.")</code></pre></section>
+
+<section id="f3"><h2><code>DisconnectDobot()</code></h2>
+<h3>Aufgabe</h3><p>Trennt die Verbindung zum Dobot.</p>
+<pre><code class="language-python">dType.DisconnectDobot(api)</code></pre>
+<pre><code class="language-python">try:
+    # Dobot-Programm
+    pass
+finally:
+    dType.DisconnectDobot(api)</code></pre></section>
+
+<section class="gruppe" id="gruppe2"><h2>2. Status und Position</h2></section>
+
+<section id="f4"><h2><code>GetPose()</code></h2>
+<h3>Aufgabe</h3><p>Liest die aktuelle Position und die Gelenkwinkel des Dobot aus.</p>
+<pre><code class="language-python">pose = dType.GetPose(api)</code></pre>
+<pre><code class="language-text">[x, y, z, r, jointAngle1, jointAngle2, jointAngle3, jointAngle4]</code></pre>
+<pre><code class="language-python">pose = dType.GetPose(api)
+
+print("X =", pose[0])
+print("Y =", pose[1])
+print("Z =", pose[2])
+print("R =", pose[3])
+print("J1 =", pose[4])
+print("J2 =", pose[5])
+print("J3 =", pose[6])
+print("J4 =", pose[7])</code></pre>
+<table><tr><th>Index</th><th>Wert</th></tr>
+<tr><td>0</td><td>X-Koordinate</td></tr><tr><td>1</td><td>Y-Koordinate</td></tr>
+<tr><td>2</td><td>Z-Koordinate</td></tr><tr><td>3</td><td>Rotation R</td></tr>
+<tr><td>4</td><td>Gelenkwinkel J1</td></tr><tr><td>5</td><td>Gelenkwinkel J2</td></tr>
+<tr><td>6</td><td>Gelenkwinkel J3</td></tr><tr><td>7</td><td>Gelenkwinkel J4</td></tr></table></section>
+
+<section class="gruppe" id="gruppe3"><h2>3. Befehlswarteschlange</h2></section>
+
+<section id="f15"><h2><code>SetQueuedCmdClear()</code></h2>
+<h3>Aufgabe</h3><p>Löscht die Befehlswarteschlange des Dobot.</p>
+<pre><code class="language-python">dType.SetQueuedCmdStopExec(api)
+dType.SetQueuedCmdClear(api)</code></pre></section>
+
+<section id="f16"><h2><code>SetQueuedCmdStartExec()</code></h2>
+<h3>Aufgabe</h3><p>Startet die Ausführung der in der Queue gespeicherten Befehle.</p>
+<pre><code class="language-python">dType.SetQueuedCmdStartExec(api)</code></pre></section>
+
+<section id="f17"><h2><code>SetQueuedCmdStopExec()</code></h2>
+<h3>Aufgabe</h3><p>Stoppt die Ausführung der Befehlswarteschlange.</p>
+<pre><code class="language-python">dType.SetQueuedCmdStopExec(api)</code></pre></section>
+
+<section id="f18"><h2><code>GetQueuedCmdCurrentIndex()</code></h2>
+<h3>Aufgabe</h3><p>Liest den Index des zuletzt ausgeführten Queue-Befehls.</p>
+<pre><code class="language-python">ziel_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    200, 0, 50, 0,
+    isQueued=1
+)[0]
+
+dType.SetQueuedCmdStartExec(api)
+
+while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
+    dType.dSleep(100)
+
+dType.SetQueuedCmdStopExec(api)</code></pre></section>
+
+<section id="f19"><h2>Hilfsfunktion <code>warten_bis_fertig()</code></h2>
+<p>Diese Funktion stammt nicht direkt aus der API, ist aber für eigene Programme nützlich.</p>
+<pre><code class="language-python">def warten_bis_fertig(api, dType, ziel_index):
+    dType.SetQueuedCmdStartExec(api)
+
+    while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
+        dType.dSleep(100)
+
+    dType.SetQueuedCmdStopExec(api)</code></pre></section>
+
+<section id="f20"><h2><code>dSleep()</code></h2>
+<h3>Aufgabe</h3><p>Wartet eine bestimmte Anzahl Millisekunden.</p>
+<pre><code class="language-python">dType.dSleep(500)</code></pre>
+<p><code>500 ms = 0,5 Sekunden</code></p></section>
+
+<section class="gruppe" id="gruppe4"><h2>4. HOME und Alarme</h2></section>
+
+<section id="f12"><h2><code>SetHOMEParams()</code></h2>
+<h3>Aufgabe</h3><p>Legt eine benutzerdefinierte HOME-Position fest.</p>
+<pre><code class="language-python">dType.SetHOMEParams(api, x, y, z, r, isQueued)</code></pre>
+<pre><code class="language-python">dType.SetHOMEParams(api, 200, 0, 80, 0, isQueued=0)</code></pre>
+<div class="warning"><strong>Achtung:</strong> Vor einer HOME-Fahrt prüfen, ob die gewählte Position mit dem montierten Werkzeug kollisionsfrei erreichbar ist.</div></section>
+
+<section id="f13"><h2><code>GetHOMEParams()</code></h2>
+<pre><code class="language-python">home = dType.GetHOMEParams(api)
+
+print("HOME X:", home[0])
+print("HOME Y:", home[1])
+print("HOME Z:", home[2])
+print("HOME R:", home[3])</code></pre></section>
+
+<section id="f14"><h2><code>SetHOMECmd()</code></h2>
+<h3>Aufgabe</h3><p>Startet die HOME-Funktion.</p>
+<pre><code class="language-python">home_index = dType.SetHOMECmd(api, 0, 1)[0]</code></pre>
+<div class="warning"><strong>Achtung:</strong> HOME ist eine reale Roboterbewegung. Arbeitsbereich freihalten und auf ausreichende Z-Höhe achten.</div></section>
+
+<section id="f21"><h2><code>GetAlarmsState()</code></h2>
+<h3>Aufgabe</h3><p>Liest den aktuellen Alarmstatus des Dobot aus.</p>
+<pre><code class="language-python">alarm_result = dType.GetAlarmsState(api)
+alarm_bytes = alarm_result[0]
+
+if any(alarm_bytes):
+    print("Alarm aktiv.")
+else:
+    print("Kein Alarm aktiv.")</code></pre>
+<div class="note"><strong>Hinweis:</strong> Die genaue Dekodierung einzelner Alarmbits sollte anhand der zur verwendeten Firmware passenden Alarmtabelle erfolgen.</div></section>
+
+<section id="f22"><h2><code>ClearAllAlarmsState()</code></h2>
+<h3>Aufgabe</h3><p>Versucht, gespeicherte Alarmzustände zu löschen.</p>
+<pre><code class="language-python">dType.ClearAllAlarmsState(api)
+dType.dSleep(300)
+
+alarm_result = dType.GetAlarmsState(api)
+
+if any(alarm_result[0]):
+    print("Es ist weiterhin ein Alarm aktiv.")</code></pre>
+<div class="warning"><strong>Wichtig:</strong> Das Löschen des Alarmstatus beseitigt nicht automatisch die physische Ursache des Alarms.</div></section>
+
+<section class="gruppe" id="gruppe5"><h2>5. Bewegung und Endeffektoren</h2></section>
+
+<section id="f5"><h2><code>SetPTPCommonParams()</code></h2>
+<h3>Aufgabe</h3><p>Legt den allgemeinen Geschwindigkeits- und Beschleunigungsfaktor für PTP-Bewegungen fest.</p>
+<pre><code class="language-python">dType.SetPTPCommonParams(api, velocityRatio, accelerationRatio, isQueued)</code></pre>
+<pre><code class="language-python">dType.SetPTPCommonParams(api, 20, 20, 0)</code></pre>
+<p>Damit werden Geschwindigkeit und Beschleunigung auf 20 % gesetzt.</p></section>
+
+<section id="f6"><h2><code>GetPTPCommonParams()</code></h2>
+<h3>Aufgabe</h3><p>Liest die aktuell eingestellten allgemeinen PTP-Faktoren aus.</p>
+<pre><code class="language-python">werte = dType.GetPTPCommonParams(api)
+print(werte)</code></pre>
+<p>Typische Ausgabe: <code>[100.0, 100.0]</code>.</p></section>
+
+<section id="f7"><h2><code>SetPTPJointParams()</code></h2>
+<h3>Aufgabe</h3><p>Legt Geschwindigkeit und Beschleunigung der vier Roboterachsen für PTP-Bewegungen fest.</p>
+<pre><code class="language-python">dType.SetPTPJointParams(
+    api,
+    v1, v2, v3, v4,
+    a1, a2, a3, a4,
+    isQueued
+)</code></pre>
+<pre><code class="language-python">dType.SetPTPJointParams(
+    api,
+    200, 200, 200, 200,
+    200, 200, 200, 200,
+    isQueued=0
+)</code></pre>
+<div class="note"><strong>Wichtig:</strong> Zuerst kommen vier Geschwindigkeitswerte, danach vier Beschleunigungswerte.</div></section>
+
+<section id="f8"><h2><code>GetPTPJointParams()</code></h2>
+<pre><code class="language-python">werte = dType.GetPTPJointParams(api)
+print(werte)</code></pre>
+<pre><code class="language-text">[
+    200.0, 200.0, 200.0, 200.0,
+    200.0, 200.0, 200.0, 200.0
+]</code></pre>
+<p>Wert 0 bis 3: Geschwindigkeiten. Wert 4 bis 7: Beschleunigungen.</p></section>
+
+<section id="f9"><h2><code>SetPTPCoordinateParams()</code></h2>
+<h3>Aufgabe</h3><p>Legt Geschwindigkeit und Beschleunigung für kartesische PTP-Bewegungen fest.</p>
+<pre><code class="language-python">dType.SetPTPCoordinateParams(
+    api,
+    xyzVelocity,
+    rVelocity,
+    xyzAcceleration,
+    rAcceleration,
+    isQueued
+)</code></pre>
+<pre><code class="language-python">dType.SetPTPCoordinateParams(
+    api, 200, 100, 200, 100, isQueued=0
+)</code></pre></section>
+
+<section id="f10"><h2><code>GetPTPCoordinateParams()</code></h2>
+<pre><code class="language-python">werte = dType.GetPTPCoordinateParams(api)</code></pre>
+<p>Typische Ausgabe: <code>[200.0, 100.0, 200.0, 100.0]</code>.</p>
+<p>Reihenfolge: <code>xyzVelocity</code>, <code>rVelocity</code>, <code>xyzAcceleration</code>, <code>rAcceleration</code>.</p></section>
+
+<section id="f11"><h2><code>SetPTPCmd()</code></h2>
+<h3>Aufgabe</h3><p>Führt eine PTP-Bewegung aus beziehungsweise trägt sie in die Befehlswarteschlange ein.</p>
+<pre><code class="language-python">index = dType.SetPTPCmd(
+    api,
+    ptpMode,
+    x,
+    y,
+    z,
+    r,
+    isQueued
+)[0]</code></pre>
+<h3>Beispiel: lineare Bewegung</h3>
+<pre><code class="language-python">index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    200, 0, 50, 0,
+    isQueued=1
+)[0]</code></pre>
+<h3>Beispiel: nur Z ändern</h3>
+<pre><code class="language-python">pose = dType.GetPose(api)
+
+x = pose[0]
+y = pose[1]
+r = pose[3]
+
+index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    x, y, 50, r,
+    isQueued=1
+)[0]</code></pre>
+<p>Damit bleiben X, Y und R unverändert; nur Z wird verändert.</p></section>
+
+<section id="f23"><h2><code>SetEndEffectorSuctionCup()</code></h2>
+<h3>Aufgabe</h3><p>Schaltet den Saugnapf ein oder aus.</p>
+<h3>Sauger einschalten</h3>
+<pre><code class="language-python">dType.SetEndEffectorSuctionCup(
+    api,
+    True,
+    True,
+    isQueued=0
+)</code></pre>
+<h3>Sauger ausschalten</h3>
+<pre><code class="language-python">dType.SetEndEffectorSuctionCup(
+    api,
+    True,
+    False,
+    isQueued=0
+)</code></pre></section>
+
+<section id="grundmuster"><h2>Typisches vollständiges Grundmuster</h2>
+<pre><code class="language-python">import DobotDllType as dType
+
+api = dType.load()
+
+result = dType.ConnectDobot(
+    api,
+    "COM10",
+    115200
+)
+
+if result[0] != dType.DobotConnect.DobotConnect_NoError:
+    print("Verbindung fehlgeschlagen.")
+    raise SystemExit
+
+try:
+    dType.SetQueuedCmdStopExec(api)
+    dType.SetQueuedCmdClear(api)
+
+    dType.SetPTPCommonParams(
+        api,
+        20,
+        20,
+        0
+    )
+
+    pose = dType.GetPose(api)
+
+    x = pose[0]
+    y = pose[1]
+    z = pose[2]
+    r = pose[3]
+
+    print(
+        f"Position: "
+        f"X={x:.1f}, "
+        f"Y={y:.1f}, "
+        f"Z={z:.1f}, "
+        f"R={r:.1f}"
+    )
+
+    ziel_index = dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVLXYZMode,
+        x,
+        y,
+        z + 20,
+        r,
+        isQueued=1
+    )[0]
+
+    dType.SetQueuedCmdStartExec(api)
+
+    while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
+        dType.dSleep(100)
+
+finally:
+    dType.SetQueuedCmdStopExec(api)
+    dType.DisconnectDobot(api)</code></pre></section>
+
+<div class="summary">
+<h2>Gliederung</h2>
+<ol>
+<li>Verbindung</li>
+<li>Status und Position</li>
+<li>Befehlswarteschlange</li>
+<li>HOME und Alarme</li>
+<li>Bewegung und Endeffektoren</li>
+</ol>
+<p>Damit besteht bereits ein brauchbarer Kern einer deutschen Dokumentation zu <code>DobotDllType.py</code>, die sich an praktisch verwendeten Python-Befehlen orientiert.</p>
+</div>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+</body>
+</html>
