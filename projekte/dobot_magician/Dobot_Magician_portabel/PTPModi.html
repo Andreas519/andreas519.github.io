@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dobot Magician – PTP-Modi</title>
+    <style>
+        :root {
+            --bg: #f4f7fb;
+            --card: #ffffff;
+            --text: #1f2937;
+            --muted: #5b6678;
+            --accent: #1f5fae;
+            --accent-dark: #174779;
+            --border: #d8e0ea;
+            --code-bg: #172033;
+            --code-text: #edf4ff;
+            --warn-bg: #fff7dd;
+            --warn-border: #d8a400;
+            --info-bg: #eaf4ff;
+            --info-border: #4b8ed0;
+            --good-bg: #eaf8ef;
+            --good-border: #3c9b62;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--bg);
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
+            color: white;
+            padding: 2.5rem 1.2rem;
+        }
+
+        header .inner,
+        main,
+        footer .inner {
+            max-width: 1120px;
+            margin: 0 auto;
+        }
+
+        header h1 {
+            margin: 0 0 0.4rem;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+        }
+
+        header p {
+            margin: 0;
+            max-width: 800px;
+            opacity: 0.95;
+            font-size: 1.08rem;
+        }
+
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        nav .inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0.7rem 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.45rem;
+        }
+
+        nav a {
+            color: var(--accent-dark);
+            text-decoration: none;
+            padding: 0.38rem 0.65rem;
+            border-radius: 0.5rem;
+            font-weight: 650;
+        }
+
+        nav a:hover {
+            background: #edf4fb;
+        }
+
+        main {
+            padding: 2rem 1rem 4rem;
+        }
+
+        section {
+            scroll-margin-top: 5rem;
+            margin-bottom: 2.2rem;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--accent-dark);
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.35rem;
+        }
+
+        h3 {
+            color: var(--accent-dark);
+            margin-top: 1.6rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.9rem;
+            padding: 1.2rem 1.3rem;
+            box-shadow: 0 5px 18px rgba(31, 71, 121, 0.06);
+            margin: 1rem 0;
+        }
+
+        .note,
+        .warning,
+        .good {
+            border-left: 5px solid;
+            border-radius: 0.55rem;
+            padding: 0.9rem 1rem;
+            margin: 1rem 0;
+        }
+
+        .note {
+            background: var(--info-bg);
+            border-color: var(--info-border);
+        }
+
+        .warning {
+            background: var(--warn-bg);
+            border-color: var(--warn-border);
+        }
+
+        .good {
+            background: var(--good-bg);
+            border-color: var(--good-border);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 860px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            vertical-align: top;
+            padding: 0.75rem 0.8rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: #eaf1f8;
+            color: var(--accent-dark);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            font-family: Consolas, "Courier New", monospace;
+            background: #eef2f6;
+            padding: 0.08rem 0.28rem;
+            border-radius: 0.25rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1rem;
+            border-radius: 0.7rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+            gap: 1rem;
+        }
+
+        .mode-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 0.8rem;
+            padding: 1rem 1.1rem;
+        }
+
+        .mode-card h3 {
+            margin-top: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.16rem 0.5rem;
+            border-radius: 999px;
+            background: #e8eef6;
+            color: var(--accent-dark);
+            margin-right: 0.35rem;
+        }
+
+        .diagram {
+            font-family: Consolas, "Courier New", monospace;
+            white-space: pre;
+            background: #f7f9fc;
+            border: 1px dashed #b7c3d2;
+            border-radius: 0.6rem;
+            padding: 0.8rem;
+            overflow-x: auto;
+        }
+
+        .small {
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        footer {
+            background: #172033;
+            color: #dbe6f3;
+            padding: 1.7rem 1rem;
+        }
+
+        footer a {
+            color: #9fd0ff;
+        }
+
+        @media print {
+            nav {
+                position: static;
+            }
+
+            body {
+                background: white;
+            }
+
+            .card,
+            .mode-card {
+                box-shadow: none;
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="inner">
+        <h1>Dobot Magician – PTP-Modi</h1>
+        <p>
+            Deutsche Übersicht der in <code>DobotDllType.py</code> definierten
+            PTP-Bewegungsarten für <code>SetPTPCmd()</code>.
+        </p>
+    </div>
+</header>
+
+<nav>
+    <div class="inner">
+        <a href="#grundlagen">Grundlagen</a>
+        <a href="#uebersicht">Übersicht</a>
+        <a href="#modi">Alle Modi</a>
+        <a href="#beispiele">Python-Beispiele</a>
+        <a href="#empfehlungen">Empfehlungen</a>
+        <a href="#quellen">Quellen</a>
+    </div>
+</nav>
+
+<main>
+
+<section id="grundlagen">
+    <h2>1. Grundlagen</h2>
+
+    <div class="card">
+        <p>
+            <strong>PTP</strong> bedeutet <em>Point to Point</em>, also eine Bewegung von
+            einem Ausgangspunkt zu einem Zielpunkt. Der gewählte PTP-Modus bestimmt,
+            <strong>wie der Dobot dieses Ziel anfährt</strong> und
+            <strong>wie die vier Zahlenwerte <code>x</code>, <code>y</code>,
+            <code>z</code> und <code>r</code> interpretiert werden</strong>.
+        </p>
+
+        <pre><code>index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    x,
+    y,
+    z,
+    r,
+    isQueued=1
+)[0]</code></pre>
+    </div>
+
+    <div class="note">
+        <strong>Wichtig:</strong>
+        Die Parameternamen der Python-Funktion heißen immer <code>x</code>,
+        <code>y</code>, <code>z</code> und <code>r</code>.
+        Bei den <strong>ANGLE-Modi</strong> stehen diese vier Werte jedoch
+        nicht für kartesische Koordinaten, sondern für Gelenkwinkel.
+    </div>
+
+    <h3>Die drei wichtigsten Bewegungsprinzipien</h3>
+
+    <div class="mode-grid">
+        <div class="mode-card">
+            <h3>MOVJ</h3>
+            <p>
+                Die Gelenke werden so bewegt, dass das Ziel erreicht wird.
+                Der Werkzeugpunkt muss dabei <strong>nicht auf einer Geraden</strong>
+                zum Ziel laufen.
+            </p>
+            <div class="diagram">Start ●
+       ╲
+        ╲   mögliche Bahn
+         ╲
+          ● Ziel</div>
+        </div>
+
+        <div class="mode-card">
+            <h3>MOVL</h3>
+            <p>
+                Der Werkzeugpunkt wird auf einer <strong>linearen Bahn</strong>
+                zum Ziel geführt.
+            </p>
+            <div class="diagram">Start ●──────────────● Ziel</div>
+        </div>
+
+        <div class="mode-card">
+            <h3>JUMP</h3>
+            <p>
+                Typische Pick-and-Place-Bewegung: anheben, überführen und wieder
+                absenken. Die JUMP-Parameter werden separat eingestellt.
+            </p>
+            <div class="diagram">       ┌───────────┐
+Start ●┘           └● Ziel</div>
+        </div>
+    </div>
+</section>
+
+<section id="uebersicht">
+    <h2>2. Übersicht aller PTP-Modi</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Wert</th>
+                    <th>Python-Name</th>
+                    <th>Prinzip</th>
+                    <th>Parameter</th>
+                    <th>Typischer Einsatz</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>0</td>
+                    <td><code>PTPJUMPXYZMode</code></td>
+                    <td>JUMP</td>
+                    <td>absolute X/Y/Z/R-Zielwerte</td>
+                    <td>Pick-and-Place mit Anheben und Absenken</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><code>PTPMOVJXYZMode</code></td>
+                    <td>MOVJ</td>
+                    <td>absolute X/Y/Z/R-Zielwerte</td>
+                    <td>schnelles Anfahren eines freien Zielpunkts</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><code>PTPMOVLXYZMode</code></td>
+                    <td>MOVL</td>
+                    <td>absolute X/Y/Z/R-Zielwerte</td>
+                    <td>geradliniges Absenken, Anheben oder Verschieben</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><code>PTPJUMPANGLEMode</code></td>
+                    <td>JUMP</td>
+                    <td>absolute Gelenkwinkel</td>
+                    <td>JUMP-Bewegung mit Zielvorgabe im Gelenkraum</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><code>PTPMOVJANGLEMode</code></td>
+                    <td>MOVJ</td>
+                    <td>absolute Gelenkwinkel</td>
+                    <td>gezieltes Anfahren einer Gelenkstellung</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><code>PTPMOVLANGLEMode</code></td>
+                    <td>MOVL</td>
+                    <td>absolute Gelenkwinkel</td>
+                    <td>seltener Spezialfall; vor Einsatz testen</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><code>PTPMOVJANGLEINCMode</code></td>
+                    <td>MOVJ, relativ</td>
+                    <td>Änderungen der Gelenkwinkel</td>
+                    <td>relative Gelenkbewegung</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><code>PTPMOVLXYZINCMode</code></td>
+                    <td>MOVL, relativ</td>
+                    <td>relative Änderung von X/Y/Z/R</td>
+                    <td>schrittweises lineares Verfahren</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td><code>PTPMOVJXYZINCMode</code></td>
+                    <td>MOVJ, relativ</td>
+                    <td>relative Änderung von X/Y/Z/R</td>
+                    <td>relative XYZ-Bewegung mit MOVJ-Bahnplanung</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td><code>PTPJUMPMOVLXYZMode</code></td>
+                    <td>JUMP + MOVL</td>
+                    <td>SDK-/Firmwareabhängig dokumentiert</td>
+                    <td>Spezialmodus; vorsichtig testen</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section id="modi">
+    <h2>3. Die PTP-Modi im Detail</h2>
+
+    <div class="mode-card">
+        <h3>0 – <code>PTPJUMPXYZMode</code></h3>
+        <p><span class="badge">JUMP</span><span class="badge">absolut</span><span class="badge">kartesisch</span></p>
+        <p>
+            Das Ziel wird als absolute kartesische Position
+            <code>X, Y, Z, R</code> angegeben. Der Dobot führt eine
+            JUMP-Bewegung aus.
+        </p>
+        <p><strong>Geeignet für:</strong> Pick-and-Place-Aufgaben, bei denen ein Hindernis
+            oder ein Werkstück sicher überfahren werden soll.</p>
+    </div>
+
+    <div class="mode-card">
+        <h3>1 – <code>PTPMOVJXYZMode</code></h3>
+        <p><span class="badge">MOVJ</span><span class="badge">absolut</span><span class="badge">kartesisch</span></p>
+        <p>
+            Das Ziel wird als absolute Position <code>X, Y, Z, R</code> angegeben.
+            Der Controller berechnet eine Gelenkbewegung zum Ziel.
+            Die Bahn des Werkzeugpunkts ist nicht zwingend gerade.
+        </p>
+        <p><strong>Geeignet für:</strong> schnelle Fahrten zwischen freien Punkten.</p>
+    </div>
+
+    <div class="mode-card">
+        <h3>2 – <code>PTPMOVLXYZMode</code></h3>
+        <p><span class="badge">MOVL</span><span class="badge">absolut</span><span class="badge">kartesisch</span></p>
+        <p>
+            Das Ziel wird als absolute Position <code>X, Y, Z, R</code> angegeben.
+            Der Werkzeugpunkt bewegt sich linear zum Ziel.
+        </p>
+        <p><strong>Geeignet für:</strong> kontrolliertes Absenken oder Anheben des
+            Saugnapfs sowie geradlinige Bewegungen.</p>
+        <div class="good">
+            Für das Absenken auf die Arbeitsplatte ist dieser Modus besonders sinnvoll,
+            wenn <code>X</code>, <code>Y</code> und <code>R</code> unverändert bleiben
+            und nur <code>Z</code> geändert wird.
+        </div>
+    </div>
+
+    <div class="mode-card">
+        <h3>3 – <code>PTPJUMPANGLEMode</code></h3>
+        <p><span class="badge">JUMP</span><span class="badge">absolut</span><span class="badge">Gelenkwinkel</span></p>
+        <p>
+            Das Ziel wird im Gelenkkoordinatensystem angegeben.
+            Die vier übergebenen Zahlenwerte stehen für die Zielstellung der Gelenke.
+        </p>
+        <div class="warning">
+            Obwohl die Python-Funktion die Argumente weiterhin
+            <code>x, y, z, r</code> nennt, sind sie in diesem Modus
+            als Gelenkwerte zu verstehen.
+        </div>
+    </div>
+
+    <div class="mode-card">
+        <h3>4 – <code>PTPMOVJANGLEMode</code></h3>
+        <p><span class="badge">MOVJ</span><span class="badge">absolut</span><span class="badge">Gelenkwinkel</span></p>
+        <p>
+            Der Dobot fährt eine absolute Gelenkstellung an.
+            Die Zielvorgabe erfolgt über die Gelenkwinkel.
+        </p>
+        <p><strong>Geeignet für:</strong> Aufgaben, bei denen eine bestimmte
+            Roboterkonfiguration beziehungsweise Gelenkstellung gewünscht ist.</p>
+    </div>
+
+    <div class="mode-card">
+        <h3>5 – <code>PTPMOVLANGLEMode</code></h3>
+        <p><span class="badge">MOVL</span><span class="badge">absolut</span><span class="badge">Gelenkwinkel</span></p>
+        <p>
+            Die offizielle API-Beschreibung ordnet diesen Modus MOVL zu,
+            während das Ziel im Gelenkkoordinatensystem angegeben wird.
+        </p>
+        <div class="warning">
+            Dieser Modus ist für Einsteiger weniger anschaulich.
+            Die tatsächliche Bahn sollte mit geringer Geschwindigkeit und großem
+            Sicherheitsabstand praktisch überprüft werden.
+        </div>
+    </div>
+
+    <div class="mode-card">
+        <h3>6 – <code>PTPMOVJANGLEINCMode</code></h3>
+        <p><span class="badge">MOVJ</span><span class="badge">relativ</span><span class="badge">Gelenkwinkel</span></p>
+        <p>
+            Die Werte geben keine absoluten Gelenkstellungen an, sondern
+            Änderungen gegenüber der aktuellen Gelenkstellung.
+        </p>
+        <p>
+            Beispiel: Ein Wert von <code>+5</code> bedeutet sinngemäß,
+            dass der betreffende Gelenkwinkel um 5° verändert wird.
+        </p>
+    </div>
+
+    <div class="mode-card">
+        <h3>7 – <code>PTPMOVLXYZINCMode</code></h3>
+        <p><span class="badge">MOVL</span><span class="badge">relativ</span><span class="badge">kartesisch</span></p>
+        <p>
+            Die Werte werden als relative Änderung der aktuellen kartesischen
+            Position verwendet. Die Bewegung erfolgt linear.
+        </p>
+        <pre><code># Z relativ um 5 mm absenken
+dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZINCMode,
+    0,      # ΔX
+    0,      # ΔY
+    -5,     # ΔZ
+    0,      # ΔR
+    isQueued=1
+)</code></pre>
+        <div class="warning">
+            Die ältere englische Dobot-API-Dokumentation enthält bei diesem Modus
+            eine sprachlich widersprüchliche Formulierung. Der Python-Name
+            <code>PTPMOVLXYZINCMode</code> kennzeichnet ihn jedoch eindeutig
+            als inkrementellen XYZ-Modus. Vor sicherheitskritischem Einsatz sollte
+            das Verhalten am eigenen Dobot mit kleinen Bewegungen geprüft werden.
+        </div>
+    </div>
+
+    <div class="mode-card">
+        <h3>8 – <code>PTPMOVJXYZINCMode</code></h3>
+        <p><span class="badge">MOVJ</span><span class="badge">relativ</span><span class="badge">kartesisch</span></p>
+        <p>
+            Das Ziel ergibt sich aus einer relativen Änderung von
+            <code>X, Y, Z, R</code>. Die Bahnplanung erfolgt nach dem MOVJ-Prinzip.
+        </p>
+        <p>
+            Der Werkzeugpunkt muss deshalb zwischen Start und Ziel nicht auf einer
+            geraden Linie laufen.
+        </p>
+    </div>
+
+    <div class="mode-card">
+        <h3>9 – <code>PTPJUMPMOVLXYZMode</code></h3>
+        <p><span class="badge">JUMP + MOVL</span><span class="badge">Spezialmodus</span></p>
+        <p>
+            Dieser Modus ist im Python-SDK als Kombination aus JUMP und MOVL benannt.
+            Die ältere offizielle englische API-Dokumentation beschreibt die
+            Parameter jedoch nicht vollständig widerspruchsfrei.
+        </p>
+        <div class="warning">
+            Deshalb sollte dieser Modus nicht allein aufgrund des Namens für eine
+            produktive Bewegung verwendet werden. Zuerst mit geringer Geschwindigkeit,
+            großem Sicherheitsabstand und kleinen Bewegungen testen.
+        </div>
+    </div>
+</section>
+
+<section id="beispiele">
+    <h2>4. Python-Beispiele</h2>
+
+    <h3>Absolute lineare Z-Bewegung</h3>
+    <pre><code>pose = dType.GetPose(api)
+
+x = pose[0]
+y = pose[1]
+z = pose[2]
+r = pose[3]
+
+neue_z = 20.0
+
+index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    x,
+    y,
+    neue_z,
+    r,
+    isQueued=1
+)[0]</code></pre>
+
+    <h3>Absolute XYZ-Bewegung mit MOVJ</h3>
+    <pre><code>index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVJXYZMode,
+    220,
+    50,
+    80,
+    0,
+    isQueued=1
+)[0]</code></pre>
+
+    <h3>Relative lineare Z-Bewegung</h3>
+    <pre><code>index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZINCMode,
+    0,
+    0,
+    -5,
+    0,
+    isQueued=1
+)[0]</code></pre>
+
+    <div class="note">
+        Bei <code>isQueued=1</code> wird der Befehl in die Warteschlange eingereiht.
+        Die Queue muss gestartet sein, zum Beispiel mit
+        <code>dType.SetQueuedCmdStartExec(api)</code>.
+    </div>
+</section>
+
+<section id="empfehlungen">
+    <h2>5. Praktische Empfehlungen</h2>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Aufgabe</th>
+                    <th>Empfohlener Modus</th>
+                    <th>Warum?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Saugnapf senkrecht absenken</td>
+                    <td><code>PTPMOVLXYZMode</code></td>
+                    <td>Geradlinige, kontrollierte Bewegung</td>
+                </tr>
+                <tr>
+                    <td>Saugnapf schrittweise um wenige Millimeter bewegen</td>
+                    <td><code>PTPMOVLXYZINCMode</code></td>
+                    <td>Relative lineare Bewegung</td>
+                </tr>
+                <tr>
+                    <td>Freien Zielpunkt schnell anfahren</td>
+                    <td><code>PTPMOVJXYZMode</code></td>
+                    <td>Gelenkoptimierte Bewegung</td>
+                </tr>
+                <tr>
+                    <td>Werkstück aufnehmen und an anderer Stelle ablegen</td>
+                    <td><code>PTPJUMPXYZMode</code></td>
+                    <td>Typische Pick-and-Place-Bewegung</td>
+                </tr>
+                <tr>
+                    <td>Bestimmte Gelenkstellung anfahren</td>
+                    <td><code>PTPMOVJANGLEMode</code></td>
+                    <td>Direkte Vorgabe der Gelenkstellung</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="warning">
+        <strong>Sicherheit:</strong>
+        Neue oder unklare Bewegungsmodi zuerst mit niedriger Geschwindigkeit,
+        freiem Arbeitsraum und ausreichend Abstand zur Arbeitsplatte testen.
+        Besonders bei inkrementellen Befehlen kann eine wiederholte Ausführung
+        den Arm schrittweise weiter bewegen.
+    </div>
+</section>
+
+<section id="quellen">
+    <h2>6. Quellen und Hinweis zur Dokumentation</h2>
+
+    <div class="card">
+        <p>
+            Die Namen und Zahlenwerte der zehn Python-Modi stammen aus
+            <code>DobotDllType.py</code>. Die grundsätzliche Zuordnung der PTP-Modi
+            zu JUMP, MOVJ, MOVL, kartesischen Zielwerten, Gelenkwerten und
+            Inkrementen wird in der offiziellen Dobot-Magician-API-Beschreibung
+            dokumentiert.
+        </p>
+
+        <p>
+            <strong>Offizielle API-Beschreibung:</strong><br>
+            <a href="https://download.dobot.cc/product-manual/dobot-magician/pdf/en/Dobot-Magician-API-DescriptionV1.2.3.pdf">
+                Dobot Magician API Description V1.2.3
+            </a>
+        </p>
+
+        <p>
+            <strong>Verwendete Python-Definition von <code>DobotDllType.py</code>:</strong><br>
+            <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/blob/master/Python%20Example%20Files/DobotDllType.py">
+                DobotDllType.py auf GitHub
+            </a>
+        </p>
+
+        <p class="small">
+            Stand dieser Zusammenstellung: Juli 2026.
+            Bei älteren Dobot-SDKs können Dokumentation, Firmware und Python-Wrapper
+            an einzelnen Stellen unterschiedlich oder missverständlich formuliert sein.
+            Maßgeblich für ein konkretes Projekt ist deshalb immer auch die tatsächlich
+            verwendete Version von <code>DobotDllType.py</code> und der Dobot-Firmware.
+        </p>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="inner">
+        <strong>Dobot Magician – PTP-Modi</strong><br>
+        Deutsche Arbeits- und Unterrichtsdokumentation zu den PTP-Bewegungsarten.
+    </div>
+</footer>
+
+</body>
+</html>

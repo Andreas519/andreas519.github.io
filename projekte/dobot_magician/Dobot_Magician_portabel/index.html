@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thonny · Dobot Magician · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Projekt mit ESP32 und Dobot Magician.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Über Thonny-IDE den Dobot Magician per Python steuern
+  </header>
+  <main>
+    <p>Das Scripting im DobotStudio ist nicht sehr vorteilhaft.<br>
+    Schriftgröße und -art sind nicht veränderbar. Die Editiermöglichkeiten sind eingeschränkt.</p>
+
+    <section> <p>Das Projekt <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">StarterGuide-Dobot-Magician-with-Python
+      </a> stellt eine Lösung bereit. </p>
+    <button type="button" onclick="var d=document.getElementById('dobot-python-details');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Mehr anzeigen':'▼ Weniger anzeigen'">▶ Mehr anzeigen</button>
+    <div id="dobot-python-details" hidden>
+    <p>Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.<br>
+      <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.<br>
+      Sie enthält typischerweise:<br>
+        - das Laden der DLL,<br>
+        - Definitionen von Datentypen und Strukturen,<br>
+        - Konstanten und Enumerationen,<br>
+        - Python-Funktionen, die intern die Funktionen der DLL aufrufen.
+    </p>
+    <p><code>DobotDll.dll</code> ist die eigentliche Programmbibliothek für die Kommunikation mit dem Dobot Magician.<br>
+      Vereinfacht sieht die Kette so aus:<br>
+    <code>dein Python-Programm<br>
+    ↓<br>
+DobotDllType.py<br>
+    ↓<br>
+DobotDll.dll<br>
+    ↓<br>
+USB / serielle Verbindung<br>
+    ↓<br>
+Dobot Magician</code>
+    </p>
+    <p>Die Datei <code>DobotDll.dll</code> ist nur für 32-Bit-Systeme geeignet.<br>
+      Wir arbeiten aber in der Regel mit 64-Bit-Systemen und der 64-Bit-Python-Version.<br>
+    
+    </p>
+    </div>
+    </section>
+
+    <section> <p>Mittels ChatGPT wurde die Lösung "Dobot_Magician_portabel" entwickelt.<br>
+        Diese verlangt keine Installation von Python und DobotStudio auf dem PC.</p>
+      <button type="button" onclick="var d=document.getElementById('portabel-details');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Mehr anzeigen':'▼ Weniger anzeigen'">▶ Mehr anzeigen</button>
+      <div id="portabel-details" hidden>
+      <p>
+      Diese besteht aus den Dateien 
+      <a href="downloads/Dobot_Magician_portabel.zip" target="_blank"><code>Dobot_Magician_portabel.zip</code></a>
+      und <a href="downloads/Python3.10.11-32bit.zip" target="_blank"><code>Python3.10.11-32bit.zip</code>.</a><br>
+      Beide ZIP-Archive werden heruntergeladen und entpackt.
+      Thonny-IDE starten, unter "Ausführen - Konfiguriere Interpreter ... Lokales Python und als ausführbares Python-Programm 
+      die python.exe aus dem entpackten Ordner <code>Python3.10.11-32bit</code> wählen.
+      <br>
+      Dann aus Thonny heraus die Datei <code>start.py</code> aus dem Ordner <code>Dobot_Magician_portabel</code> öffnen, in der Zeile 10 <code>COM_PORT = "COM10"</code> anpassen und dann ausführen.<br>
+      Für eine erfolgreiche Ausführung muss der Dobot Magician eingeschaltet und mit dem PC verbunden sein.
+      </p>
+      <p>Die Datei <code>start.py</code> enthält die notwendigen Imports und die Startfunktion.<br>
+        In ihr wird auch die Datei <code>mein_programm.py</code> importiert, in der die eigentliche Steuerung des Dobot Magician erfolgt.<br>
+        In der Datei <code>mein_programm.py</code> können die eigenen Steuerungsfunktionen implementiert werden.<br> 
+        Die Datei <code>mein_programm.py</code> kann beliebig umbenannt werden, muss dann aber auch in der Datei <code>start.py</code> angepasst werden.<br>
+        Die Anpassung der Datei <code>start.py</code> erfolgt, indem die Zeilen 130 bis 136 entsprechend geändert werden.<br>
+      </p>
+      </div>
+    
+    </section>
+
+    <section> <p>Hier nun einige Beispiel für getestete Funktionen, die in der Datei <code>mein_programm.py</code> implementiert wurden.</p>
+
+      <button type="button" onclick="var d=document.getElementById('beispiel01');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Beispiel 1':'▼ Ausblenden'">▶ Beispiel 1</button>
+      <div id="beispiel01" hidden>
+        1. Der Dobot Magician fährt in die Position (x=200, y=0, z=50) und dreht den Greifer auf 90°.<br>
+      </div>
+      
+      <button type="button" onclick="var d=document.getElementById('beispiel02');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Beispiel 2':'▼ Ausblenden'">▶ Beispiel 2</button>
+      <div id="beispiel02" hidden>
+        2. Der Dobot Magician vertauscht die Position zweier Würfel.<br>
+      </div>
+
+  </section>  
+  <section><h3>Befehlsübersicht der <code>DobotDllType.py</code></h3>
+>   <p><a href="PTPModi.html">PTP Modi - Überblick zu Point to Point - Bewegungsarten</a></p>
+     
+  </section>
+
+  </main>
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

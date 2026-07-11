@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thonny · Dobot Magician · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Projekt mit ESP32 und Dobot Magician.">
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+  <header>
+    Über Thonny-IDE den Dobot Magician per Python steuern
+  </header>
+  <main>
+    <section>
+        <p>Das Scripting im DobotStudio ist nicht sehr vorteilhaft.<br>
+        Schriftgröße und -art sind nicht veränderbar. Die Editiermöglichkeiten sind eingeschränkt.</p>
+        <p>Das Projekt 
+          <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">
+            StarterGuide-Dobot-Magician-with-Python
+          </a> 
+        stellt eine Lösung bereit. Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
+        <p>
+         <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.<br>
+          Sie enthält typischerweise:<br>
+           - das Laden der DLL,<br>
+           - Definitionen von Datentypen und Strukturen,<br>
+           - Konstanten und Enumerationen,<br>
+          Python-Funktionen, die intern die Funktionen der DLL aufrufen.
+        </p>
+        <p><code>DobotDll.dll</code> ist die eigentliche Programmbibliothek für die Kommunikation mit dem Dobot Magician.<br>
+          Vereinfacht sieht die Kette so aus:<br>
+        <code>dein Python-Programm<br>
+        ↓<br>
+DobotDllType.py<br>
+        ↓<br>
+DobotDll.dll<br>
+        ↓<br>
+USB / serielle Verbindung<br>
+        ↓<br>
+Dobot Magician</code>
+        </p>
+        <p>Im Praxistest wurde festgestellt, dass die Lösung mit der aktuellen 64-Bit-Versionwn von Python funktioniert.</p>
+        <p>Mittels ChaTGPT wurde eine Lösung entwickelt.<br>
+        Diese besteht aus den Dateien <a href="downloads/DobotDllType.py" target="_blank"><code>DobotDllType.py</code></a> und <a href="downloads/DobotDll.dll" target="_blank"><code>DobotDll.dll</code></a>.</p>
+        </p>
+        
+        
+     <div class="grid">
+      <p>...
+     </p>
+     <p>...
+     </p>
+     </div>
+     <p>      </p>
+      
+    </section>
+    <section>
+
+    </section>  
+    
+  </main>
+  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

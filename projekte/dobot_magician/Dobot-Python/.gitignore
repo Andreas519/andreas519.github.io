@@ -1,0 +1,9 @@
+*.zip
+*.dll
+*.pyc
+*.h
+main.py
+DobotDllType.py
+DoBotArm.py
+test*.*
+StarterGuide-Dobot-Magician-with-Python-master.zip

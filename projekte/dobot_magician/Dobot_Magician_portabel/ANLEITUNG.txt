@@ -1,0 +1,40 @@
+DOBOT MAGICIAN – PORTABLE PYTHON-UMGEBUNG
+=========================================
+
+Voraussetzungen
+---------------
+1. Dobot-USB-Treiber ist auf dem Rechner vorhanden.
+2. Thonny ist vorhanden.
+3. Python 3.10.11 in 32 Bit ist vorhanden, z. B.:
+   D:\Programme\Python\Python3.10.11-32bit\python.exe
+4. DobotStudio ist geschlossen.
+5. Der Dobot ist eingeschaltet und an COM10 angeschlossen.
+
+Thonny einstellen
+-----------------
+In Thonny den Interpreter auf Python 3.10.11 (32 Bit) umstellen.
+Danach start.py öffnen und ausführen.
+
+Dateien
+-------
+start.py
+    Verbindet den Dobot, zeigt Position und Alarme an, stellt PTP auf 20 %
+    und ruft mein_programm.py auf.
+
+mein_programm.py
+    Hier kommt das eigentliche Roboterprogramm hinein.
+    Das mitgelieferte Beispiel liest nur Werte und bewegt den Roboter nicht.
+
+DobotDllType.py und DLL-Dateien
+    Technische Dobot-API. Diese Dateien zusammen im Ordner lassen.
+
+COM-Port ändern
+---------------
+Falls der Dobot nicht an COM10 liegt, in start.py diese Zeile ändern:
+
+COM_PORT = "COM10"
+
+Sicherheit
+----------
+Das Startprogramm führt keine HOME-Fahrt und keine automatische Bewegung aus.
+Vor Bewegungsbefehlen Arbeitsraum freihalten und Alarmstatus prüfen.
