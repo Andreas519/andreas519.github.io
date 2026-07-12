@@ -10,4 +10,16 @@ if str(PROJEKTORDNER) not in sys.path:
 import dobot
 from sdk64 import DobotDllType as dType
 
-dobot.init()
+api = dobot.init()
+
+
+dobot.plattenkalibrierung_setzen(
+    referenzloch_1=(40, 3, -54.3, -312.0),
+    referenzloch_2=(1, 3, -56.1, 312.2),
+    referenzloch_3=(22, 26, 310.5, -18.5),
+    platten_z=-67.2,
+)
+dobot.plattenkalibrierung_anzeigen()
+#dobot.home(api)
+
+dobot.position_anzeigen(api)

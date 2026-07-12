@@ -13,44 +13,18 @@
     Über Thonny-IDE den Dobot Magician per Python steuern
   </header>
   <main>
-    <p>Das Scripting im DobotStudio ist nicht sehr vorteilhaft.<br>
-    Schriftgröße und -art sind nicht veränderbar. Die Editiermöglichkeiten sind eingeschränkt.</p>
-
-    <section> <p>Das Projekt <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">StarterGuide-Dobot-Magician-with-Python
-      </a> stellt eine Lösung bereit. </p>
-    <button type="button" onclick="var d=document.getElementById('dobot-python-details');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Mehr anzeigen':'▼ Weniger anzeigen'">▶ Mehr anzeigen</button>
-    <div id="dobot-python-details" hidden>
-    <p>Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.<br>
-      <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.<br>
-      Sie enthält typischerweise:<br>
-        - das Laden der DLL,<br>
-        - Definitionen von Datentypen und Strukturen,<br>
-        - Konstanten und Enumerationen,<br>
-        - Python-Funktionen, die intern die Funktionen der DLL aufrufen.
-    </p>
-    <p><code>DobotDll.dll</code> ist die eigentliche Programmbibliothek für die Kommunikation mit dem Dobot Magician.<br>
-      Vereinfacht sieht die Kette so aus:<br>
-    <code>dein Python-Programm<br>
-    ↓<br>
-DobotDllType.py<br>
-    ↓<br>
-DobotDll.dll<br>
-    ↓<br>
-USB / serielle Verbindung<br>
-    ↓<br>
-Dobot Magician</code>
-    </p>
-    <p>Die Datei <code>DobotDll.dll</code> ist nur für 32-Bit-Systeme geeignet.<br>
-      Wir arbeiten aber in der Regel mit 64-Bit-Systemen und der 64-Bit-Python-Version.<br>
+    <section>
     
-    </p>
-    </div>
-    </section>
-
-    <section> <p>Mittels ChatGPT wurde die Lösung "Dobot_Magician_portabel" entwickelt.<br>
+        <p>Diese Projekt beschreibt die Steuerung des Dobot Magician über die Thonny-IDE mit Python unter Verwendung der 32-Bit Version der Datei <code>DobotDll.dll</code>.</p>
+        <p>Ausgangspunkt war die Quelle 
+          <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">
+            StarterGuide-Dobot-Magician-with-Python
+          </a>, in der eine Lösung bereitgestellt wurde, die bei der Anwendung Fehler aufwies. 
+        </p>
+        <p>Als Ursache wurde die verwendete 64-Bit-Version von Python in Verbindung mit der 32-Bit-Version der <code>DobotDll.dll</code> festgestellt.</p>
+        
+      <p>Mittels ChatGPT wurde die Lösung "Dobot_Magician_portabel" entwickelt.<br>
         Diese verlangt keine Installation von Python und DobotStudio auf dem PC.</p>
-      <button type="button" onclick="var d=document.getElementById('portabel-details');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Mehr anzeigen':'▼ Weniger anzeigen'">▶ Mehr anzeigen</button>
-      <div id="portabel-details" hidden>
       <p>
       Diese besteht aus den Dateien 
       <a href="downloads/Dobot_Magician_portabel.zip" target="_blank"><code>Dobot_Magician_portabel.zip</code></a>
@@ -68,34 +42,10 @@ Dobot Magician</code>
         Die Datei <code>mein_programm.py</code> kann beliebig umbenannt werden, muss dann aber auch in der Datei <code>start.py</code> angepasst werden.<br>
         Die Anpassung der Datei <code>start.py</code> erfolgt, indem die Zeilen 130 bis 136 entsprechend geändert werden.<br>
       </p>
-      </div>
-    
+    <p><strong>Hinweis: Da die Lösung <code>Dobot_Python</code> für die 64-Bit-Version von Python vorliegt,
+    wird hier nicht weiter gearbeitet.</strong></p>
     </section>
-
-    <section> <p>Hier nun einige Beispiel für getestete Funktionen, die in der Datei <code>mein_programm.py</code> implementiert wurden.</p>
-
-      <button type="button" onclick="var d=document.getElementById('beispiel01');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Beispiel 1':'▼ Ausblenden'">▶ Beispiel 1</button>
-      <div id="beispiel01" hidden>
-        1. Der Dobot Magician fährt in die Position (x=200, y=0, z=50) und dreht den Greifer auf 90°.<br>
-      </div>
-      
-      <button type="button" onclick="var d=document.getElementById('beispiel02');d.hidden=!d.hidden;this.textContent=d.hidden?'▶ Beispiel 2':'▼ Ausblenden'">▶ Beispiel 2</button>
-      <div id="beispiel02" hidden>
-        2. Der Dobot Magician vertauscht die Position zweier Würfel.<br>
-      </div>
-
-  </section>  
-  <section><h3>Befehlsübersicht der <code>DobotDllType.py</code></h3>
-    <p><a href="https://dobot.com.mx/assets/download/magician/user%20guide/Dobot%20Magician%20Demo%20Description.pdf" target="_blank">Dobot Magician Demo Description (PDF)</a></p>
-    <p><a href="https://dobot.com.mx/assets/download/magician/user%20guide/Dobot%20Magician%20Demo%20Description.pdf" target="_blank">Dobot Magician Demo Description (PDF)</a></p>
-    <p><a href="dobot_sdk/DobotDllType_viewer.html" target="_blank">DobotDllType.py</a></p>
-    <p><a href="PTPModi.html">PTP Modi - Überblick zu Point to Point - Bewegungsarten</a></p>
-    <p><a href="Dobot-Python-API-Dokumentation.html">Dobot-Python-API-Dokumentation</a></p>
-    <p><a href="Dobot-Python-Hilfsfunktionen.html">Dobot-Python-Hilfsfunktionen</a></p>
-
-     
-  </section>
-
+    
   </main>
   <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>

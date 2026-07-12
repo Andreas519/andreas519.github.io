@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thonny · Dobot Magician · Young Engineers</title>
   <meta name="author" content="Andreas Sigismund">
-  <meta name="description" content="Projekt mit ESP32 und Dobot Magician.">
+  <meta name="description" content="Thonny und Dobot Magician.">
   <link rel="stylesheet" href="../../../css/my.css">
 </head>
 <body>
@@ -14,38 +14,26 @@
   </header>
   <main>
     <section>
-        <p>Das Scripting im DobotStudio ist nicht sehr vorteilhaft.<br>
-        Schriftgröße und -art sind nicht veränderbar. Die Editiermöglichkeiten sind eingeschränkt.</p>
-        <p>Das Projekt 
+        <p>Diese Projekt beschreibt die Steuerung des Dobot Magician über die Thonny-IDE mit Python unter Verwendung der 32-Bit Version der Datei <code>DobotDll.dll</code>.</p>
+        <p>Ausgangspunkt war die Quelle auf GitHub:</p>
           <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">
             StarterGuide-Dobot-Magician-with-Python
-          </a> 
-        stellt eine Lösung bereit. Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
-        <p>
-         <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.<br>
-          Sie enthält typischerweise:<br>
-           - das Laden der DLL,<br>
-           - Definitionen von Datentypen und Strukturen,<br>
-           - Konstanten und Enumerationen,<br>
-          Python-Funktionen, die intern die Funktionen der DLL aufrufen.
-        </p>
-        <p><code>DobotDll.dll</code> ist die eigentliche Programmbibliothek für die Kommunikation mit dem Dobot Magician.<br>
-          Vereinfacht sieht die Kette so aus:<br>
-        <code>dein Python-Programm<br>
-        ↓<br>
-DobotDllType.py<br>
-        ↓<br>
-DobotDll.dll<br>
-        ↓<br>
-USB / serielle Verbindung<br>
-        ↓<br>
-Dobot Magician</code>
-        </p>
+          </a>, in der eine Lösung bereitgestell wurde, die bei der Anwendung Fehler aufwies. 
+          
+          Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
+
         <p>Im Praxistest wurde festgestellt, dass die Lösung mit der aktuellen 64-Bit-Versionwn von Python funktioniert.</p>
         <p>Mittels ChaTGPT wurde eine Lösung entwickelt.<br>
         Diese besteht aus den Dateien <a href="downloads/DobotDllType.py" target="_blank"><code>DobotDllType.py</code></a> und <a href="downloads/DobotDll.dll" target="_blank"><code>DobotDll.dll</code></a>.</p>
         </p>
         
+        <li><a href="./Dobot-Python-API-Dokumentation.html" target="_blank" rel="noopener noreferrer">Dobot Python API Dokumentation</a><br>
+          Hier werden die von uns bisher genutzten Funktionen der Dobot Python API beschrieben. Die Dokumentation wird bei Bedarf von uns erweitert.
+        </li>
+        <li><a href="./Dobot-Python-Hilfsfunktionen.html" target="_blank" rel="noopener noreferrer">Dobot Python Hilfsfunktionen</a><br>
+          Um die Programmierung des Dobot Magician zu erleichtern, haben wir einige Hilfsfunktionen entwickelt.<br>
+           Diese werden in der Dokumentation beschrieben. 
+        </li>
         
      <div class="grid">
       <p>...
