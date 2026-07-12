@@ -1,7 +1,9 @@
 from pathlib import Path
 import struct
 
-dll = Path(r"D:\Programme\DobotStudio\DobotDll.dll")
+# dll = Path(r"D:\Programme\DobotStudio\DobotDll.dll")
+# dll = Path(r".\sdk-64\DobotDll.dll")
+dll = Path(r".\sdk-32\DobotDll.dll")
 
 with dll.open("rb") as datei:
     datei.seek(0x3C)
