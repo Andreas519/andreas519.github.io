@@ -14,17 +14,33 @@
   </header>
   <main>
     <section>
-        <p>Diese Projekt beschreibt die Steuerung des Dobot Magician über die Thonny-IDE mit Python unter Verwendung der 32-Bit Version der Datei <code>DobotDll.dll</code>.</p>
-        <p>Ausgangspunkt war die Quelle auf GitHub:</p>
+        <p>Diese Projekt beschreibt die Steuerung des Dobot Magician über die Thonny-IDE mit Python unter Verwendung der 64-Bit Versionen der <code>DobotDll.dll</code> und einer aktuelle Pythoninstallaltion.</p>
+        <p>Ausgangspunkt war die Quelle 
           <a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python/tree/master#connect-to-the-dobot" target="_blank">
             StarterGuide-Dobot-Magician-with-Python
-          </a>, in der eine Lösung bereitgestell wurde, die bei der Anwendung Fehler aufwies. 
-          
-          Darin enthalten sind neben anderen Dateien auch die Dateien <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
-
-        <p>Im Praxistest wurde festgestellt, dass die Lösung mit der aktuellen 64-Bit-Versionwn von Python funktioniert.</p>
-        <p>Mittels ChaTGPT wurde eine Lösung entwickelt.<br>
-        Diese besteht aus den Dateien <a href="downloads/DobotDllType.py" target="_blank"><code>DobotDllType.py</code></a> und <a href="downloads/DobotDll.dll" target="_blank"><code>DobotDll.dll</code></a>.</p>
+          </a>, in der eine Lösung bereitgestellt wurde, die bei uns Probleme mit dem Zugriff <code>DobotDll.dll</code> verursachte.<br>
+          Mittels ChatGPT wurde eine stabile Lösung entwickelt und umgesetzt.<br>
+        </p>
+        <p>
+        Lade die Datei <a href="./_downloads/Dobot_Python.zip">Dobot_Python.zip</a> herunter und entpacke sie in ein Verzeichnis deiner Wahl.<br>
+        Folgende Struktur wird im Verzeichnis <code>Dobot_Python</code> erwartet:</p>
+<pre>
+Dobot_Python\
+│
+├── dobot.py
+│
+├── sdk64\
+│   ├── __init__.py
+│   ├── DobotDllType.py
+│   ├── DobotDll.dll
+│   └── weitere SDK-Dateien ...
+│
+├── projekt01\
+│   └── start.py
+│
+└── projekt02\
+    └── start.py
+</pre>
         </p>
         
         <li><a href="./Dobot-Python-API-Dokumentation.html" target="_blank" rel="noopener noreferrer">Dobot Python API Dokumentation</a><br>
