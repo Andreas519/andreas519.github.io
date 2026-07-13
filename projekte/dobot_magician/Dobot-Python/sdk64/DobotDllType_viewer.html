@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DobotDllType.py – Quellcode</title>
+  <link rel="stylesheet" href="../../../../css/prism.css">
+  <style>
+    body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #1f2937; }
+    header { background: #183b5b; color: white; padding: 1rem 1.5rem; }
+    .header-top { margin-bottom: .5rem; }
+    .back-link {
+      display: inline-block;
+      color: #dbeafe;
+      text-decoration: none;
+      border: 1px solid rgba(219, 234, 254, 0.45);
+      border-radius: 6px;
+      padding: .25rem .6rem;
+      font-size: .85rem;
+    }
+    .back-link:hover { background: rgba(219, 234, 254, 0.12); text-decoration: none; }
+    header h1 { margin: 0; font-size: 1.2rem; }
+    header a { color: #9dc8f0; font-size: .9rem; text-decoration: none; margin-left: 1rem; }
+    header a:hover { text-decoration: underline; }
+    main { max-width: 1100px; margin: 1.5rem auto; padding: 0 1rem; }
+    pre { border: 1px solid #dfe5eb; border-radius: 8px; overflow-x: auto; }
+    pre.codebereich {
+      margin: 0;
+      overflow: auto;
+      position: relative;
+      line-height: 1.5;
+      padding: 16px 16px 16px 4.2em;
+    }
+    pre.codebereich.line-numbers {
+      max-height: none;
+      line-height: 1.5;
+    }
+    pre.codebereich > code {
+      white-space: pre;
+      display: block;
+    }
+    pre.codebereich.line-numbers .line-numbers-rows {
+      position: absolute;
+      top: 16px;
+      left: 0;
+      width: 3.2em;
+      border-right: 1px solid #cbd5e1;
+      user-select: none;
+      pointer-events: none;
+    }
+    pre.codebereich.line-numbers .line-numbers-rows > span {
+      display: block;
+      counter-increment: linenumber;
+      line-height: 1.5;
+    }
+    pre.codebereich.line-numbers {
+      counter-reset: linenumber;
+    }
+    pre.codebereich.line-numbers .line-numbers-rows > span::before {
+      content: counter(linenumber);
+      display: block;
+      text-align: right;
+      padding-right: .8em;
+      color: #64748b;
+    }
+    #fehler { color: #b91c1c; padding: 1rem; display: none; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <a class="back-link" href="../index.html">← Zurück</a>
+    </div>
+    <h1>DobotDllType.py <a href="DobotDllType.py" download>⬇ herunterladen</a></h1>
+  </header>
+  <main>
+    <p id="fehler"></p>
+    <pre class="codebereich line-numbers"><code class="language-python" id="code"></code></pre>
+  </main>
+  <script src="../../../../js/prism-core.js"></script>
+  <script>
+    function zeigeFehler(text) {
+      var fehler = document.getElementById('fehler');
+      fehler.textContent = text;
+      fehler.style.display = 'block';
+    }
+
+    function setzeZeilennummern(codeEl) {
+      var pre = codeEl.parentNode;
+      if (!pre || pre.tagName !== 'PRE') {
+        return;
+      }
+
+      var alt = pre.querySelector('.line-numbers-rows');
+      if (alt) {
+        alt.remove();
+      }
+
+      var text = codeEl.textContent;
+      var zeilen = text.split('\n').length;
+      if (text.endsWith('\n')) {
+        zeilen -= 1;
+      }
+      if (zeilen < 1) {
+        zeilen = 1;
+      }
+      var rows = document.createElement('span');
+      rows.className = 'line-numbers-rows';
+
+      var frag = document.createDocumentFragment();
+      for (var i = 0; i < zeilen; i++) {
+        frag.appendChild(document.createElement('span'));
+      }
+      rows.appendChild(frag);
+      pre.appendChild(rows);
+    }
+
+    fetch('DobotDllType.py')
+      .then(function(r) {
+        if (!r.ok) throw new Error('load_failed');
+        return r.text();
+      })
+      .then(function(text) {
+        var el = document.getElementById('code');
+        el.textContent = text;
+        setzeZeilennummern(el);
+
+        if (typeof Prism !== 'undefined' && typeof Prism.highlightElement === 'function') {
+          Prism.highlightElement(el);
+        } else {
+          zeigeFehler('Hinweis: Der Quelltext wurde geladen, aber Prism ist nicht verfügbar. Syntaxhervorhebung ist deaktiviert.');
+        }
+      })
+      .catch(function() {
+        zeigeFehler('Datei konnte nicht geladen werden. Beim lokalen Öffnen über file:// ist fetch() meist nicht erlaubt. Bitte über einen Webserver aufrufen.');
+      });
+  </script>
+</body>
+</html>
