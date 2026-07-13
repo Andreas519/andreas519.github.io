@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Dobot Magician – Deutsche Python-API-Dokumentation</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css">
+
 <style>
 body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#1f2937;line-height:1.6}
 header{background:#183b5b;color:white;padding:2rem 1.5rem}
@@ -24,12 +24,101 @@ th{background:#eaf3fb}
 .warning{background:#fff7df;border-left:4px solid #d79b00;padding:.8rem 1rem}
 .flow{white-space:pre-wrap;font-family:Consolas,monospace;background:#f7f8fa;border:1px solid #d9e0e7;border-radius:8px;padding:1rem}
 @media(max-width:900px){.layout{grid-template-columns:1fr}nav{position:static;max-height:none}}
+
+/* Offline-Syntaxhighlighting: vollständig eingebettet, keine CDN-Abhängigkeit */
+pre {
+  background:#f8f8f8;
+  padding:1rem;
+  line-height:1.5;
+  tab-size:4;
+}
+pre code.syntax-python {
+  display:block;
+  font-family:Consolas,"Cascadia Code","Courier New",monospace;
+  font-size:.92rem;
+  color:#000;
+  white-space:pre;
+}
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+code.syntax-python .hll { background-color: #ffffcc }
+code.syntax-python { background: #f8f8f8; }
+code.syntax-python .c { color: #3D7B7B; font-style: italic } /* Comment */
+code.syntax-python .err { border: 1px solid #F00 } /* Error */
+code.syntax-python .k { color: #008000; font-weight: bold } /* Keyword */
+code.syntax-python .o { color: #666 } /* Operator */
+code.syntax-python .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+code.syntax-python .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+code.syntax-python .cp { color: #9C6500 } /* Comment.Preproc */
+code.syntax-python .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+code.syntax-python .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+code.syntax-python .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+code.syntax-python .gd { color: #A00000 } /* Generic.Deleted */
+code.syntax-python .ge { font-style: italic } /* Generic.Emph */
+code.syntax-python .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+code.syntax-python .gr { color: #E40000 } /* Generic.Error */
+code.syntax-python .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+code.syntax-python .gi { color: #008400 } /* Generic.Inserted */
+code.syntax-python .go { color: #717171 } /* Generic.Output */
+code.syntax-python .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+code.syntax-python .gs { font-weight: bold } /* Generic.Strong */
+code.syntax-python .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+code.syntax-python .gt { color: #04D } /* Generic.Traceback */
+code.syntax-python .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+code.syntax-python .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+code.syntax-python .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+code.syntax-python .kp { color: #008000 } /* Keyword.Pseudo */
+code.syntax-python .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+code.syntax-python .kt { color: #B00040 } /* Keyword.Type */
+code.syntax-python .m { color: #666 } /* Literal.Number */
+code.syntax-python .s { color: #BA2121 } /* Literal.String */
+code.syntax-python .na { color: #687822 } /* Name.Attribute */
+code.syntax-python .nb { color: #008000 } /* Name.Builtin */
+code.syntax-python .nc { color: #00F; font-weight: bold } /* Name.Class */
+code.syntax-python .no { color: #800 } /* Name.Constant */
+code.syntax-python .nd { color: #A2F } /* Name.Decorator */
+code.syntax-python .ni { color: #717171; font-weight: bold } /* Name.Entity */
+code.syntax-python .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+code.syntax-python .nf { color: #00F } /* Name.Function */
+code.syntax-python .nl { color: #767600 } /* Name.Label */
+code.syntax-python .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+code.syntax-python .nt { color: #008000; font-weight: bold } /* Name.Tag */
+code.syntax-python .nv { color: #19177C } /* Name.Variable */
+code.syntax-python .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+code.syntax-python .w { color: #BBB } /* Text.Whitespace */
+code.syntax-python .mb { color: #666 } /* Literal.Number.Bin */
+code.syntax-python .mf { color: #666 } /* Literal.Number.Float */
+code.syntax-python .mh { color: #666 } /* Literal.Number.Hex */
+code.syntax-python .mi { color: #666 } /* Literal.Number.Integer */
+code.syntax-python .mo { color: #666 } /* Literal.Number.Oct */
+code.syntax-python .sa { color: #BA2121 } /* Literal.String.Affix */
+code.syntax-python .sb { color: #BA2121 } /* Literal.String.Backtick */
+code.syntax-python .sc { color: #BA2121 } /* Literal.String.Char */
+code.syntax-python .dl { color: #BA2121 } /* Literal.String.Delimiter */
+code.syntax-python .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+code.syntax-python .s2 { color: #BA2121 } /* Literal.String.Double */
+code.syntax-python .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+code.syntax-python .sh { color: #BA2121 } /* Literal.String.Heredoc */
+code.syntax-python .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+code.syntax-python .sx { color: #008000 } /* Literal.String.Other */
+code.syntax-python .sr { color: #A45A77 } /* Literal.String.Regex */
+code.syntax-python .s1 { color: #BA2121 } /* Literal.String.Single */
+code.syntax-python .ss { color: #19177C } /* Literal.String.Symbol */
+code.syntax-python .bp { color: #008000 } /* Name.Builtin.Pseudo */
+code.syntax-python .fm { color: #00F } /* Name.Function.Magic */
+code.syntax-python .vc { color: #19177C } /* Name.Variable.Class */
+code.syntax-python .vg { color: #19177C } /* Name.Variable.Global */
+code.syntax-python .vi { color: #19177C } /* Name.Variable.Instance */
+code.syntax-python .vm { color: #19177C } /* Name.Variable.Magic */
+code.syntax-python .il { color: #666 } /* Literal.Number.Integer.Long */
 </style>
 </head>
 <body>
 <header><div><h1>Dobot Magician – Deutsche Python-API-Dokumentation</h1>
 <p>Praxisorientierte Dokumentation der bisher verwendeten Funktionen aus <code>DobotDllType.py</code></p></div></header>
-
 <div class="layout">
 <nav>
 <h2>Inhaltsverzeichnis</h2>
@@ -59,11 +148,11 @@ th{background:#eaf3fb}
 <a href="#f23">23. SetEndEffectorSuctionCup()</a>
 <a href="#grundmuster">Vollständiges Grundmuster</a>
 </nav>
-
 <main>
 <div class="intro" id="grundlage">
-<h2>Grundlage</h2>
-<pre><code class="language-python">import DobotDllType as dType</code></pre>
+<h2>Grundlage</h2><p class="note"><strong>Offline-Version: </strong>Alle für die Darstellung benötigten Styles sind in dieser HTML-Datei eingebettet. Es werden keine CDN-Dateien geladen.</p>
+<pre><code class="syntax-python"><span class="kn">import</span><span class="w"> </span><span class="nn">DobotDllType</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dType</span>
+</code></pre>
 <p><code>DobotDllType.py</code> kapselt die C/C++-API der <code>DobotDll.dll</code> und stellt deren Funktionen für Python bereit.</p>
 <div class="flow">Python-Programm
         ↓
@@ -76,307 +165,293 @@ USB / serielle Verbindung
 Dobot Magician</div>
 <p>Diese Dokumentation konzentriert sich auf die Funktionen, die bereits praktisch verwendet wurden oder unmittelbar für die bisherigen Dobot-Programme wichtig sind.</p>
 </div>
-
 <section id="f1"><h2>1. <code>dType.load()</code></h2>
 <h3>Aufgabe</h3><p>Lädt die Dobot-Bibliothek <code>DobotDll.dll</code> und liefert ein API-Objekt zurück.</p>
-<h3>Aufruf</h3><pre><code class="language-python">api = dType.load()</code></pre>
-<h3>Beispiel</h3><pre><code class="language-python">import DobotDllType as dType
-
-api = dType.load()</code></pre>
+<h3>Aufruf</h3><pre><code class="syntax-python"><span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</code></pre>
+<h3>Beispiel</h3><pre><code class="syntax-python"><span class="kn">import</span><span class="w"> </span><span class="nn">DobotDllType</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dType</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</code></pre>
 <p>Das Objekt <code>api</code> wird anschließend bei fast allen Dobot-Funktionen als erstes Argument benötigt.</p></section>
-
 <section id="f2"><h2>2. <code>ConnectDobot()</code></h2>
 <h3>Aufgabe</h3><p>Stellt die Verbindung zwischen dem Python-Programm und dem Dobot Magician her.</p>
-<h3>Aufruf</h3><pre><code class="language-python">dType.ConnectDobot(api, portName, baudrate)</code></pre>
+<h3>Aufruf</h3><pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">ConnectDobot</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">portName</span><span class="p">,</span> <span class="n">baudrate</span><span class="p">)</span>
+</code></pre>
 <table><tr><th>Parameter</th><th>Bedeutung</th></tr>
 <tr><td><code>api</code></td><td>API-Objekt aus <code>dType.load()</code></td></tr>
 <tr><td><code>portName</code></td><td>COM-Port, z. B. <code>"COM10"</code></td></tr>
 <tr><td><code>baudrate</code></td><td>Übertragungsgeschwindigkeit, gewöhnlich <code>115200</code></td></tr></table>
-<h3>Beispiel</h3><pre><code class="language-python">result = dType.ConnectDobot(api, "COM10", 115200)</code></pre>
+<h3>Beispiel</h3><pre><code class="syntax-python"><span class="n">result</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">ConnectDobot</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="s2">"COM10"</span><span class="p">,</span> <span class="mi">115200</span><span class="p">)</span>
+</code></pre>
 <h3>Typischer Rückgabewert</h3><pre><code class="language-text">[0, 'DobotSerial', '0.0.0']</code></pre>
-<pre><code class="language-python">if result[0] == dType.DobotConnect.DobotConnect_NoError:
-    print("Dobot verbunden.")</code></pre></section>
-
+<pre><code class="syntax-python"><span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">dType</span><span class="o">.</span><span class="n">DobotConnect</span><span class="o">.</span><span class="n">DobotConnect_NoError</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Dobot verbunden."</span><span class="p">)</span>
+</code></pre></section>
 <section id="f3"><h2>3. <code>DisconnectDobot()</code></h2>
 <h3>Aufgabe</h3><p>Trennt die Verbindung zum Dobot.</p>
-<pre><code class="language-python">dType.DisconnectDobot(api)</code></pre>
-<pre><code class="language-python">try:
-    # Dobot-Programm
-    pass
-finally:
-    dType.DisconnectDobot(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">DisconnectDobot</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre>
+<pre><code class="syntax-python"><span class="k">try</span><span class="p">:</span>
+<span class="c1"># Dobot-Programm</span>
+<span class="k">pass</span>
+<span class="k">finally</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">DisconnectDobot</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f4"><h2>4. <code>GetPose()</code></h2>
 <h3>Aufgabe</h3><p>Liest die aktuelle Position und die Gelenkwinkel des Dobot aus.</p>
-<pre><code class="language-python">pose = dType.GetPose(api)</code></pre>
+<pre><code class="syntax-python"><span class="n">pose</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPose</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre>
 <pre><code class="language-text">[x, y, z, r, jointAngle1, jointAngle2, jointAngle3, jointAngle4]</code></pre>
-<pre><code class="language-python">pose = dType.GetPose(api)
-
-print("X =", pose[0])
-print("Y =", pose[1])
-print("Z =", pose[2])
-print("R =", pose[3])
-print("J1 =", pose[4])
-print("J2 =", pose[5])
-print("J3 =", pose[6])
-print("J4 =", pose[7])</code></pre>
+<pre><code class="syntax-python"><span class="n">pose</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPose</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"X ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Y ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Z ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"R ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"J1 ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"J2 ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"J3 ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"J4 ="</span><span class="p">,</span> <span class="n">pose</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span>
+</code></pre>
 <table><tr><th>Index</th><th>Wert</th></tr>
 <tr><td>0</td><td>X-Koordinate</td></tr><tr><td>1</td><td>Y-Koordinate</td></tr>
 <tr><td>2</td><td>Z-Koordinate</td></tr><tr><td>3</td><td>Rotation R</td></tr>
 <tr><td>4</td><td>Gelenkwinkel J1</td></tr><tr><td>5</td><td>Gelenkwinkel J2</td></tr>
 <tr><td>6</td><td>Gelenkwinkel J3</td></tr><tr><td>7</td><td>Gelenkwinkel J4</td></tr></table></section>
-
 <section id="f5"><h2>5. <code>SetPTPCommonParams()</code></h2>
 <h3>Aufgabe</h3><p>Legt den allgemeinen Geschwindigkeits- und Beschleunigungsfaktor für PTP-Bewegungen fest.</p>
-<pre><code class="language-python">dType.SetPTPCommonParams(api, velocityRatio, accelerationRatio, isQueued)</code></pre>
-<pre><code class="language-python">dType.SetPTPCommonParams(api, 20, 20, 0)</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCommonParams</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">velocityRatio</span><span class="p">,</span> <span class="n">accelerationRatio</span><span class="p">,</span> <span class="n">isQueued</span><span class="p">)</span>
+</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCommonParams</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</code></pre>
 <p>Damit werden Geschwindigkeit und Beschleunigung auf 20 % gesetzt.</p></section>
-
 <section id="f6"><h2>6. <code>GetPTPCommonParams()</code></h2>
 <h3>Aufgabe</h3><p>Liest die aktuell eingestellten allgemeinen PTP-Faktoren aus.</p>
-<pre><code class="language-python">werte = dType.GetPTPCommonParams(api)
-print(werte)</code></pre>
+<pre><code class="syntax-python"><span class="n">werte</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPTPCommonParams</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">werte</span><span class="p">)</span>
+</code></pre>
 <p>Typische Ausgabe: <code>[100.0, 100.0]</code>.</p></section>
-
 <section id="f7"><h2>7. <code>SetPTPJointParams()</code></h2>
 <h3>Aufgabe</h3><p>Legt Geschwindigkeit und Beschleunigung der vier Roboterachsen für PTP-Bewegungen fest.</p>
-<pre><code class="language-python">dType.SetPTPJointParams(
-    api,
-    v1, v2, v3, v4,
-    a1, a2, a3, a4,
-    isQueued
-)</code></pre>
-<pre><code class="language-python">dType.SetPTPJointParams(
-    api,
-    200, 200, 200, 200,
-    200, 200, 200, 200,
-    isQueued=0
-)</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPJointParams</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">v3</span><span class="p">,</span> <span class="n">v4</span><span class="p">,</span>
+<span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a3</span><span class="p">,</span> <span class="n">a4</span><span class="p">,</span>
+<span class="n">isQueued</span>
+<span class="p">)</span>
+</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPJointParams</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span>
+<span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</code></pre>
 <div class="note"><strong>Wichtig:</strong> Zuerst kommen vier Geschwindigkeitswerte, danach vier Beschleunigungswerte.</div></section>
-
 <section id="f8"><h2>8. <code>GetPTPJointParams()</code></h2>
-<pre><code class="language-python">werte = dType.GetPTPJointParams(api)
-print(werte)</code></pre>
+<pre><code class="syntax-python"><span class="n">werte</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPTPJointParams</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">werte</span><span class="p">)</span>
+</code></pre>
 <pre><code class="language-text">[
     200.0, 200.0, 200.0, 200.0,
     200.0, 200.0, 200.0, 200.0
 ]</code></pre>
 <p>Wert 0 bis 3: Geschwindigkeiten. Wert 4 bis 7: Beschleunigungen.</p></section>
-
 <section id="f9"><h2>9. <code>SetPTPCoordinateParams()</code></h2>
 <h3>Aufgabe</h3><p>Legt Geschwindigkeit und Beschleunigung für kartesische PTP-Bewegungen fest.</p>
-<pre><code class="language-python">dType.SetPTPCoordinateParams(
-    api,
-    xyzVelocity,
-    rVelocity,
-    xyzAcceleration,
-    rAcceleration,
-    isQueued
-)</code></pre>
-<pre><code class="language-python">dType.SetPTPCoordinateParams(
-    api, 200, 100, 200, 100, isQueued=0
-)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCoordinateParams</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">xyzVelocity</span><span class="p">,</span>
+<span class="n">rVelocity</span><span class="p">,</span>
+<span class="n">xyzAcceleration</span><span class="p">,</span>
+<span class="n">rAcceleration</span><span class="p">,</span>
+<span class="n">isQueued</span>
+<span class="p">)</span>
+</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCoordinateParams</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</code></pre></section>
 <section id="f10"><h2>10. <code>GetPTPCoordinateParams()</code></h2>
-<pre><code class="language-python">werte = dType.GetPTPCoordinateParams(api)</code></pre>
+<pre><code class="syntax-python"><span class="n">werte</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPTPCoordinateParams</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre>
 <p>Typische Ausgabe: <code>[200.0, 100.0, 200.0, 100.0]</code>.</p>
 <p>Reihenfolge: <code>xyzVelocity</code>, <code>rVelocity</code>, <code>xyzAcceleration</code>, <code>rAcceleration</code>.</p></section>
-
 <section id="f11"><h2>11. <code>SetPTPCmd()</code></h2>
 <h3>Aufgabe</h3><p>Führt eine PTP-Bewegung aus beziehungsweise trägt sie in die Befehlswarteschlange ein.</p>
-<pre><code class="language-python">index = dType.SetPTPCmd(
-    api,
-    ptpMode,
-    x,
-    y,
-    z,
-    r,
-    isQueued
-)[0]</code></pre>
+<pre><code class="syntax-python"><span class="n">index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">ptpMode</span><span class="p">,</span>
+<span class="n">x</span><span class="p">,</span>
+<span class="n">y</span><span class="p">,</span>
+<span class="n">z</span><span class="p">,</span>
+<span class="n">r</span><span class="p">,</span>
+<span class="n">isQueued</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre>
 <h3>Beispiel: lineare Bewegung</h3>
-<pre><code class="language-python">index = dType.SetPTPCmd(
-    api,
-    dType.PTPMode.PTPMOVLXYZMode,
-    200, 0, 50, 0,
-    isQueued=1
-)[0]</code></pre>
+<pre><code class="syntax-python"><span class="n">index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
+<span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre>
 <h3>Beispiel: nur Z ändern</h3>
-<pre><code class="language-python">pose = dType.GetPose(api)
-
-x = pose[0]
-y = pose[1]
-r = pose[3]
-
-index = dType.SetPTPCmd(
-    api,
-    dType.PTPMode.PTPMOVLXYZMode,
-    x, y, 50, r,
-    isQueued=1
-)[0]</code></pre>
+<pre><code class="syntax-python"><span class="n">pose</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPose</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre>
 <p>Damit bleiben X, Y und R unverändert; nur Z wird verändert.</p></section>
-
 <section id="f12"><h2>12. <code>SetHOMEParams()</code></h2>
 <h3>Aufgabe</h3><p>Legt eine benutzerdefinierte HOME-Position fest.</p>
-<pre><code class="language-python">dType.SetHOMEParams(api, x, y, z, r, isQueued)</code></pre>
-<pre><code class="language-python">dType.SetHOMEParams(api, 200, 0, 80, 0, isQueued=0)</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetHOMEParams</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">isQueued</span><span class="p">)</span>
+</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetHOMEParams</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre>
 <div class="warning"><strong>Achtung:</strong> Vor einer HOME-Fahrt prüfen, ob die gewählte Position mit dem montierten Werkzeug kollisionsfrei erreichbar ist.</div></section>
-
 <section id="f13"><h2>13. <code>GetHOMEParams()</code></h2>
-<pre><code class="language-python">home = dType.GetHOMEParams(api)
-
-print("HOME X:", home[0])
-print("HOME Y:", home[1])
-print("HOME Z:", home[2])
-print("HOME R:", home[3])</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">home</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetHOMEParams</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"HOME X:"</span><span class="p">,</span> <span class="n">home</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"HOME Y:"</span><span class="p">,</span> <span class="n">home</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"HOME Z:"</span><span class="p">,</span> <span class="n">home</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"HOME R:"</span><span class="p">,</span> <span class="n">home</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+</code></pre></section>
 <section id="f14"><h2>14. <code>SetHOMECmd()</code></h2>
 <h3>Aufgabe</h3><p>Startet die HOME-Funktion.</p>
-<pre><code class="language-python">home_index = dType.SetHOMECmd(api, 0, 1)[0]</code></pre>
+<pre><code class="syntax-python"><span class="n">home_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetHOMECmd</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+</code></pre>
 <div class="warning"><strong>Achtung:</strong> HOME ist eine reale Roboterbewegung. Arbeitsbereich freihalten und auf ausreichende Z-Höhe achten.</div></section>
-
 <section id="f15"><h2>15. <code>SetQueuedCmdClear()</code></h2>
 <h3>Aufgabe</h3><p>Löscht die Befehlswarteschlange des Dobot.</p>
-<pre><code class="language-python">dType.SetQueuedCmdStopExec(api)
-dType.SetQueuedCmdClear(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdClear</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f16"><h2>16. <code>SetQueuedCmdStartExec()</code></h2>
 <h3>Aufgabe</h3><p>Startet die Ausführung der in der Queue gespeicherten Befehle.</p>
-<pre><code class="language-python">dType.SetQueuedCmdStartExec(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStartExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f17"><h2>17. <code>SetQueuedCmdStopExec()</code></h2>
 <h3>Aufgabe</h3><p>Stoppt die Ausführung der Befehlswarteschlange.</p>
-<pre><code class="language-python">dType.SetQueuedCmdStopExec(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f18"><h2>18. <code>GetQueuedCmdCurrentIndex()</code></h2>
 <h3>Aufgabe</h3><p>Liest den Index des zuletzt ausgeführten Queue-Befehls.</p>
-<pre><code class="language-python">ziel_index = dType.SetPTPCmd(
-    api,
-    dType.PTPMode.PTPMOVLXYZMode,
-    200, 0, 50, 0,
-    isQueued=1
-)[0]
-
-dType.SetQueuedCmdStartExec(api)
-
-while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
-    dType.dSleep(100)
-
-dType.SetQueuedCmdStopExec(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">ziel_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
+<span class="mi">200</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStartExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetQueuedCmdCurrentIndex</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ziel_index</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f19"><h2>19. Hilfsfunktion <code>warten_bis_fertig()</code></h2>
 <p>Diese Funktion stammt nicht direkt aus der API, ist aber für eigene Programme nützlich.</p>
-<pre><code class="language-python">def warten_bis_fertig(api, dType, ziel_index):
-    dType.SetQueuedCmdStartExec(api)
-
-    while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
-        dType.dSleep(100)
-
-    dType.SetQueuedCmdStopExec(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="k">def</span><span class="w"> </span><span class="nf">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">dType</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">):</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStartExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetQueuedCmdCurrentIndex</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ziel_index</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <section id="f20"><h2>20. <code>dSleep()</code></h2>
 <h3>Aufgabe</h3><p>Wartet eine bestimmte Anzahl Millisekunden.</p>
-<pre><code class="language-python">dType.dSleep(500)</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+</code></pre>
 <p><code>500 ms = 0,5 Sekunden</code></p></section>
-
 <section id="f21"><h2>21. <code>GetAlarmsState()</code></h2>
 <h3>Aufgabe</h3><p>Liest den aktuellen Alarmstatus des Dobot aus.</p>
-<pre><code class="language-python">alarm_result = dType.GetAlarmsState(api)
-alarm_bytes = alarm_result[0]
-
-if any(alarm_bytes):
-    print("Alarm aktiv.")
-else:
-    print("Kein Alarm aktiv.")</code></pre>
+<pre><code class="syntax-python"><span class="n">alarm_result</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">alarm_bytes</span> <span class="o">=</span> <span class="n">alarm_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">alarm_bytes</span><span class="p">):</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Alarm aktiv."</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Kein Alarm aktiv."</span><span class="p">)</span>
+</code></pre>
 <div class="note"><strong>Hinweis:</strong> Die genaue Dekodierung einzelner Alarmbits sollte anhand der zur verwendeten Firmware passenden Alarmtabelle erfolgen.</div></section>
-
 <section id="f22"><h2>22. <code>ClearAllAlarmsState()</code></h2>
 <h3>Aufgabe</h3><p>Versucht, gespeicherte Alarmzustände zu löschen.</p>
-<pre><code class="language-python">dType.ClearAllAlarmsState(api)
-dType.dSleep(300)
-
-alarm_result = dType.GetAlarmsState(api)
-
-if any(alarm_result[0]):
-    print("Es ist weiterhin ein Alarm aktiv.")</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">ClearAllAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">alarm_result</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">alarm_result</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Es ist weiterhin ein Alarm aktiv."</span><span class="p">)</span>
+</code></pre>
 <div class="warning"><strong>Wichtig:</strong> Das Löschen des Alarmstatus beseitigt nicht automatisch die physische Ursache des Alarms.</div></section>
-
 <section id="f23"><h2>23. <code>SetEndEffectorSuctionCup()</code></h2>
 <h3>Aufgabe</h3><p>Schaltet den Saugnapf ein oder aus.</p>
 <h3>Sauger einschalten</h3>
-<pre><code class="language-python">dType.SetEndEffectorSuctionCup(
-    api,
-    True,
-    True,
-    isQueued=0
-)</code></pre>
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="kc">True</span><span class="p">,</span>
+<span class="kc">True</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</code></pre>
 <h3>Sauger ausschalten</h3>
-<pre><code class="language-python">dType.SetEndEffectorSuctionCup(
-    api,
-    True,
-    False,
-    isQueued=0
-)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="kc">True</span><span class="p">,</span>
+<span class="kc">False</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span>
+<span class="p">)</span>
+</code></pre></section>
 <section id="grundmuster"><h2>Typisches vollständiges Grundmuster</h2>
-<pre><code class="language-python">import DobotDllType as dType
-
-api = dType.load()
-
-result = dType.ConnectDobot(
-    api,
-    "COM10",
-    115200
-)
-
-if result[0] != dType.DobotConnect.DobotConnect_NoError:
-    print("Verbindung fehlgeschlagen.")
-    raise SystemExit
-
-try:
-    dType.SetQueuedCmdStopExec(api)
-    dType.SetQueuedCmdClear(api)
-
-    dType.SetPTPCommonParams(
-        api,
-        20,
-        20,
-        0
-    )
-
-    pose = dType.GetPose(api)
-
-    x = pose[0]
-    y = pose[1]
-    z = pose[2]
-    r = pose[3]
-
-    print(
-        f"Position: "
-        f"X={x:.1f}, "
-        f"Y={y:.1f}, "
-        f"Z={z:.1f}, "
-        f"R={r:.1f}"
-    )
-
-    ziel_index = dType.SetPTPCmd(
-        api,
-        dType.PTPMode.PTPMOVLXYZMode,
-        x,
-        y,
-        z + 20,
-        r,
-        isQueued=1
-    )[0]
-
-    dType.SetQueuedCmdStartExec(api)
-
-    while dType.GetQueuedCmdCurrentIndex(api)[0] &lt; ziel_index:
-        dType.dSleep(100)
-
-finally:
-    dType.SetQueuedCmdStopExec(api)
-    dType.DisconnectDobot(api)</code></pre></section>
-
+<pre><code class="syntax-python"><span class="kn">import</span><span class="w"> </span><span class="nn">DobotDllType</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">dType</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">ConnectDobot</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="s2">"COM10"</span><span class="p">,</span>
+<span class="mi">115200</span>
+<span class="p">)</span>
+<span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">dType</span><span class="o">.</span><span class="n">DobotConnect</span><span class="o">.</span><span class="n">DobotConnect_NoError</span><span class="p">:</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Verbindung fehlgeschlagen."</span><span class="p">)</span>
+<span class="k">raise</span> <span class="ne">SystemExit</span>
+<span class="k">try</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdClear</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCommonParams</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="mi">20</span><span class="p">,</span>
+<span class="mi">20</span><span class="p">,</span>
+<span class="mi">0</span>
+<span class="p">)</span>
+<span class="n">pose</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPose</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">pose</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span>
+<span class="sa">f</span><span class="s2">"Position: "</span>
+<span class="sa">f</span><span class="s2">"X=</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, "</span>
+<span class="sa">f</span><span class="s2">"Y=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, "</span>
+<span class="sa">f</span><span class="s2">"Z=</span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, "</span>
+<span class="sa">f</span><span class="s2">"R=</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span>
+<span class="p">)</span>
+<span class="n">ziel_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+<span class="n">api</span><span class="p">,</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
+<span class="n">x</span><span class="p">,</span>
+<span class="n">y</span><span class="p">,</span>
+<span class="n">z</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+<span class="n">r</span><span class="p">,</span>
+<span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStartExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="k">while</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetQueuedCmdCurrentIndex</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ziel_index</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="k">finally</span><span class="p">:</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dType</span><span class="o">.</span><span class="n">DisconnectDobot</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></section>
 <div class="summary">
 <h2>Empfohlener weiterer Aufbau</h2>
 <ol>
@@ -388,11 +463,9 @@ finally:
 </ol>
 <p>Damit besteht bereits ein brauchbarer Kern einer deutschen Dokumentation zu <code>DobotDllType.py</code>, die sich an praktisch verwendeten Python-Befehlen orientiert.</p>
 </div>
-
 </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-python.min.js"></script>
+
 </body>
 </html>
