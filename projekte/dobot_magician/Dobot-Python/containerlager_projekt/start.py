@@ -27,20 +27,19 @@ import containerlager as lager
 COMPORT = "COM10"
 SICHERE_HOEHE = 50.0
 
-# Bereits gemessener Referenzpunkt:
-REFERENZLOCH_1 = (40, 3, -54.3, -312.0)
-
 # Diese Werte noch durch die tatsächlich gemessenen Dobot-Koordinaten
 # ersetzen. None verhindert, dass der Dobot versehentlich mit falschen
 # Kalibrierwerten bewegt wird.
+
+REFERENZLOCH_1 = (40, 3, -54.3, -312.0)
 REFERENZLOCH_2 = (1, 3, -56.1, 312.2)
 REFERENZLOCH_3 = (22, 26, 310.5, -18.5)
+
 
 PLATTEN_Z = -67.2
 STANDARD_R = 0.0
 
-
-    
+   
 def lagerplaetze_anlegen():
     """Legt die vom Anwender benannten Lagerplätze an."""
 
@@ -48,10 +47,10 @@ def lagerplaetze_anlegen():
     lager.LAGERPLAETZE.clear()
 
     # Name, Mittelspalte und Mittelzeile des jeweiligen Würfels.
-    lager.lagerplatz_hinzufuegen("Wareneingang", 5, 4)
-    lager.lagerplatz_hinzufuegen("Lagerplatz links", 8, 4)
-    lager.lagerplatz_hinzufuegen("Lagerplatz rechts", 11, 4)
-    lager.lagerplatz_hinzufuegen("Warenausgang", 14, 4)
+    lager.lagerplatz_hinzufuegen("Wareneingang", 5, 20)
+    lager.lagerplatz_hinzufuegen("Lagerplatz links", 8, 20)
+    lager.lagerplatz_hinzufuegen("Lagerplatz rechts", 11, 20)
+    lager.lagerplatz_hinzufuegen("Warenausgang", 14, 20)
 
 
 def kalibrierung_pruefen():
@@ -103,11 +102,11 @@ def roboterprogramm(api):
         print()
         print("Belegung nach dem Einlagern von W01:")
         lager.belegung_anzeigen()
-
-        # Zunächst nur sicher oberhalb der Lagerplätze fahren.
+# 
+#         # Zunächst nur sicher oberhalb der Lagerplätze fahren.
         fahre_zu_lagerplatz(api, "Wareneingang")
-        fahre_zu_lagerplatz(api, "Lagerplatz links")
-        fahre_zu_lagerplatz(api, "Warenausgang")
+#         fahre_zu_lagerplatz(api, "Lagerplatz links")
+#         fahre_zu_lagerplatz(api, "Warenausgang")
 
     finally:
         dobot.queue_stoppen(api)
