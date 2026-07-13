@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dobot Studio – Python-Beispiele</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --ink: #1f2937;
+      --muted: #607086;
+      --line: #d9e2ef;
+      --code-bg: #101827;
+      --code-ink: #e5eefc;
+      --code-line: #344154;
+      --accent: #0f6bcb;
+      --accent-soft: #e8f2ff;
+      --shadow: 0 12px 32px rgba(31, 41, 55, .10);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      color: var(--ink);
+      background: linear-gradient(180deg, #eef5ff 0%, var(--bg) 260px);
+    }
+    header { padding: 2.4rem 1rem 1rem; text-align: center; }
+    header h1 { margin: 0 0 .4rem; font-size: clamp(2rem, 5vw, 3.2rem); letter-spacing: -0.03em; }
+    header p { max-width: 820px; margin: 0 auto; color: var(--muted); font-size: 1.08rem; }
+    .layout { display: grid; grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); gap: 1.25rem; max-width: 1280px; margin: 0 auto; padding: 1rem; align-items: start; }
+    nav { position: sticky; top: 1rem; background: rgba(255, 255, 255, .94); backdrop-filter: blur(12px); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem; }
+    nav h2 { font-size: 1rem; margin: 0 0 .8rem; }
+    nav a { display: block; padding: .72rem .75rem; border-radius: 12px; text-decoration: none; color: var(--ink); border: 1px solid transparent; }
+    nav a:hover { background: var(--accent-soft); border-color: #bfdcff; }
+    nav a span { display: block; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: .92rem; font-weight: 700; }
+    nav a small { display: block; color: var(--muted); margin-top: .15rem; }
+    main { min-width: 0; }
+    .notice { background: var(--panel); border: 1px solid var(--line); border-left: 6px solid var(--accent); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1rem 1.2rem; margin-bottom: 1.25rem; }
+    .notice h2 { margin-top: 0; font-size: 1.1rem; }
+    .notice ul { margin-bottom: 0; }
+    .example-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); margin: 0 0 1.25rem; overflow: hidden; scroll-margin-top: 1rem; }
+    .example-heading { display: flex; justify-content: space-between; gap: 1rem; align-items: flex-start; padding: 1.1rem 1.2rem; border-bottom: 1px solid var(--line); background: linear-gradient(180deg, #ffffff, #f8fbff); }
+    .example-heading h2 { margin: .1rem 0 0; font-size: clamp(1.2rem, 2.3vw, 1.55rem); }
+    .file-name { margin: 0; color: var(--accent); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-weight: 700; }
+    .copy-btn { border: 1px solid #bad6f7; background: var(--accent-soft); color: #084f9a; padding: .55rem .75rem; border-radius: 12px; cursor: pointer; font-weight: 700; white-space: nowrap; }
+    .copy-btn:hover { filter: brightness(.98); }
+    .codebox { margin: 0; padding: 0; overflow: auto; background: var(--code-bg); color: var(--code-ink); tab-size: 4; }
+    code { display: block; min-width: max-content; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: .93rem; line-height: 1.55; white-space: pre; padding: 1rem 0; counter-reset: line; }
+    .line { display: block; padding: 0 1rem 0 4.25rem; min-height: 1.55em; position: relative; }
+    .line::before { counter-increment: line; content: counter(line); position: absolute; left: 0; top: 0; width: 3.2rem; padding-right: .7rem; text-align: right; color: #8aa0bd; border-right: 1px solid var(--code-line); user-select: none; }
+    .line:hover { background: rgba(255,255,255,.045); }
+    .tok-comment { color: #86b38f; font-style: italic; }
+    .tok-string  { color: #f5cf87; }
+    .tok-number  { color: #94d7ff; }
+    .tok-keyword { color: #ff8da1; font-weight: 700; }
+    .tok-built   { color: #bba6ff; }
+    .tok-func    { color: #86e1fc; }
+    footer { max-width: 1280px; margin: 0 auto; padding: 0 1rem 2rem; color: var(--muted); text-align: center; }
+    @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } nav { position: static; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Dobot Studio – einfache Python-Beispiele</h1>
+    <p>Beispielsammlung für den Dobot Magician mit Python über <strong>DobotDllType</strong>. Die Programme laufen auf dem PC und senden Befehle per USB/serieller Verbindung an den Roboter.</p>
+  </header>
+
+  <div class="layout">
+    <nav aria-label="Seitennavigation">
+      <h2>Navigation</h2>
+      <a href="#helper"><span>dobot_helper.py</span><small>Gemeinsame Hilfsdatei</small></a>
+      <a href="#01"><span>01_position_anzeigen.py</span><small>Verbindung testen und aktuelle Position anzeigen</small></a>
+      <a href="#02"><span>02_home.py</span><small>Dobot auf Home-Position fahren</small></a>
+      <a href="#03"><span>03_punkt_anfahren.py</span><small>Einen Punkt anfahren</small></a>
+      <a href="#04"><span>04_rechteck.py</span><small>Kleines Rechteck abfahren</small></a>
+      <a href="#05"><span>05_linie_zeichnen.py</span><small>Stift absenken und Linie zeichnen</small></a>
+      <a href="#06"><span>06_sauggreifer_test.py</span><small>Sauggreifer ein- und ausschalten</small></a>
+      <a href="#07"><span>07_pick_and_place.py</span><small>Einfaches Pick-and-Place mit Sauggreifer</small></a>
+      <a href="#08"><span>08_positionen_schleife.py</span><small>Kleine Schleife: drei Positionen nacheinander</small></a>
+    </nav>
+
+    <main>
+      <section class="notice">
+        <h2>Hinweise vor dem Start</h2>
+        <ul>
+          <li><code>DobotDllType.py</code> muss für die Python-Programme erreichbar sein.</li>
+          <li>Alle Koordinaten sind Beispielwerte. Besonders der Z-Wert muss an euren Aufbau angepasst werden.</li>
+          <li>Bei echten Bewegungen langsam testen und den Arbeitsbereich frei halten.</li>
+          <li>Die Datei <code>dobot_helper.py</code> sollte im selben Ordner liegen wie die Beispielprogramme.</li>
+        </ul>
+      </section>
+      
+<section id="helper" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">dobot_helper.py</p>
+      <h2>Gemeinsame Hilfsdatei</h2>
+    </div>
+    <button class="copy-btn" data-target="code-0">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-0" class="language-python">import time
+import DobotDllType as dType
+
+CON_STR = {
+    dType.DobotConnect.DobotConnect_NoError: &quot;DobotConnect_NoError&quot;,
+    dType.DobotConnect.DobotConnect_NotFound: &quot;DobotConnect_NotFound&quot;,
+    dType.DobotConnect.DobotConnect_Occupied: &quot;DobotConnect_Occupied&quot;
+}
+
+
+def connect_dobot(port=&quot;&quot;):
+    &quot;&quot;&quot;
+    port=&quot;&quot; versucht automatische Verbindung.
+    Bei Problemen z. B. &quot;COM3&quot; eintragen.
+    &quot;&quot;&quot;
+    api = dType.load()
+    state = dType.ConnectDobot(api, port, 115200)[0]
+
+    print(&quot;Connect status:&quot;, CON_STR[state])
+
+    if state != dType.DobotConnect.DobotConnect_NoError:
+        raise RuntimeError(&quot;Dobot konnte nicht verbunden werden.&quot;)
+
+    dType.SetCmdTimeout(api, 3000)
+    dType.SetQueuedCmdClear(api)
+
+    # Langsame, schulgeeignete Bewegungen
+    dType.SetPTPJointParams(api, 100, 100, 100, 100,
+                            100, 100, 100, 100, isQueued=1)
+    dType.SetPTPCommonParams(api, 50, 50, isQueued=1)
+
+    return api
+
+
+def run_queue(api, last_index):
+    dType.SetQueuedCmdStartExec(api)
+
+    while last_index &gt; dType.GetQueuedCmdCurrentIndex(api)[0]:
+        dType.dSleep(100)
+
+    dType.SetQueuedCmdStopExec(api)
+
+
+def disconnect_dobot(api):
+    dType.DisconnectDobot(api)
+    print(&quot;Dobot getrennt.&quot;)</code></pre>
+</section>
+      
+<section id="01" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">01_position_anzeigen.py</p>
+      <h2>Verbindung testen und aktuelle Position anzeigen</h2>
+    </div>
+    <button class="copy-btn" data-target="code-1">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-1" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, disconnect_dobot
+
+api = connect_dobot()
+
+pose = dType.GetPose(api)
+
+print(&quot;Aktuelle Position:&quot;)
+print(&quot;X =&quot;, round(pose[0], 2))
+print(&quot;Y =&quot;, round(pose[1], 2))
+print(&quot;Z =&quot;, round(pose[2], 2))
+print(&quot;R =&quot;, round(pose[3], 2))
+
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="02" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">02_home.py</p>
+      <h2>Dobot auf Home-Position fahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-2">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-2" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+# Home-Parameter: X, Y, Z, R
+dType.SetHOMEParams(api, 200, 0, 50, 0, isQueued=1)
+
+last_index = dType.SetHOMECmd(api, temp=0, isQueued=1)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="03" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">03_punkt_anfahren.py</p>
+      <h2>Einen Punkt anfahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-3">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-3" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+# Zielposition
+x = 200
+y = 0
+z = 50
+r = 0
+
+last_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    x, y, z, r,
+    isQueued=1
+)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="04" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">04_rechteck.py</p>
+      <h2>Kleines Rechteck abfahren</h2>
+    </div>
+    <button class="copy-btn" data-target="code-4">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-4" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+punkte = [
+    (200, -50, 50, 0),
+    (250, -50, 50, 0),
+    (250,  50, 50, 0),
+    (200,  50, 50, 0),
+    (200, -50, 50, 0),
+]
+
+last_index = 0
+
+for x, y, z, r in punkte:
+    last_index = dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVLXYZMode,
+        x, y, z, r,
+        isQueued=1
+    )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="05" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">05_linie_zeichnen.py</p>
+      <h2>Stift absenken und Linie zeichnen</h2>
+    </div>
+    <button class="copy-btn" data-target="code-5">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-5" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+z_oben = 60
+z_unten = 20
+
+bewegungen = [
+    (200, -50, z_oben, 0),    # über Startpunkt
+    (200, -50, z_unten, 0),   # Stift absenken
+    (250, -50, z_unten, 0),   # Linie zeichnen
+    (250, -50, z_oben, 0),    # Stift anheben
+]
+
+last_index = 0
+
+for x, y, z, r in bewegungen:
+    last_index = dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVLXYZMode,
+        x, y, z, r,
+        isQueued=1
+    )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="06" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">06_sauggreifer_test.py</p>
+      <h2>Sauggreifer ein- und ausschalten</h2>
+    </div>
+    <button class="copy-btn" data-target="code-6">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-6" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+last_index = 0
+
+# Zu einem Punkt fahren
+last_index = dType.SetPTPCmd(
+    api,
+    dType.PTPMode.PTPMOVLXYZMode,
+    220, 0, 40, 0,
+    isQueued=1
+)[0]
+
+# Sauggreifer einschalten
+last_index = dType.SetEndEffectorSuctionCup(
+    api,
+    1,  # enableCtrl
+    1,  # suction on
+    isQueued=1
+)[0]
+
+# Kurz warten
+last_index = dType.SetWAITCmd(api, 1000, isQueued=1)[0]
+
+# Sauggreifer ausschalten
+last_index = dType.SetEndEffectorSuctionCup(
+    api,
+    1,
+    0,
+    isQueued=1
+)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="07" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">07_pick_and_place.py</p>
+      <h2>Einfaches Pick-and-Place mit Sauggreifer</h2>
+    </div>
+    <button class="copy-btn" data-target="code-7">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-7" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+z_oben = 60
+z_unten = 25
+
+aufnahme = (220, -40)
+ablage = (220, 40)
+
+last_index = 0
+
+# Über Aufnahmepunkt
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_oben, 0, isQueued=1)[0]
+
+# Absenken
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_unten, 0, isQueued=1)[0]
+
+# Ansaugen
+last_index = dType.SetEndEffectorSuctionCup(api, 1, 1, isQueued=1)[0]
+last_index = dType.SetWAITCmd(api, 500, isQueued=1)[0]
+
+# Anheben
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             aufnahme[0], aufnahme[1], z_oben, 0, isQueued=1)[0]
+
+# Über Ablagepunkt
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_oben, 0, isQueued=1)[0]
+
+# Absenken
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_unten, 0, isQueued=1)[0]
+
+# Loslassen
+last_index = dType.SetEndEffectorSuctionCup(api, 1, 0, isQueued=1)[0]
+last_index = dType.SetWAITCmd(api, 500, isQueued=1)[0]
+
+# Wieder hoch
+last_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode,
+                             ablage[0], ablage[1], z_oben, 0, isQueued=1)[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+      
+<section id="08" class="example-card">
+  <div class="example-heading">
+    <div>
+      <p class="file-name">08_positionen_schleife.py</p>
+      <h2>Kleine Schleife: drei Positionen nacheinander</h2>
+    </div>
+    <button class="copy-btn" data-target="code-8">Kopieren</button>
+  </div>
+  <pre class="codebox"><code id="code-8" class="language-python">import DobotDllType as dType
+from dobot_helper import connect_dobot, run_queue, disconnect_dobot
+
+api = connect_dobot()
+
+positionen = [
+    (200, -60, 50, 0),
+    (230,   0, 50, 0),
+    (200,  60, 50, 0),
+]
+
+last_index = 0
+
+for wiederholung in range(3):
+    print(&quot;Durchlauf&quot;, wiederholung + 1)
+
+    for x, y, z, r in positionen:
+        last_index = dType.SetPTPCmd(
+            api,
+            dType.PTPMode.PTPMOVLXYZMode,
+            x, y, z, r,
+            isQueued=1
+        )[0]
+
+run_queue(api, last_index)
+disconnect_dobot(api)</code></pre>
+</section>
+    </main>
+  </div>
+
+  <footer>Erstellt als kompakte Unterrichtsübersicht mit Syntaxhighlighting und Zeilennummern.</footer>
+
+  <script>
+    const pythonKeywords = new Set(["False", "None", "True", "and", "as", "assert", "break", "class", "continue", "def", "del", "elif", "else", "except", "finally", "for", "from", "global", "if", "import", "in", "is", "lambda", "not", "or", "pass", "raise", "return", "try", "while", "with", "yield"]);
+    const pythonBuiltins = new Set(["print", "range", "round", "RuntimeError", "len", "int", "float", "str", "list", "dict", "set", "tuple"]);
+
+    function esc(s) {
+      return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function highlightPythonLine(line) {
+      let out = "";
+      let i = 0;
+      while (i < line.length) {
+        const ch = line[i];
+        const rest = line.slice(i);
+        if (ch === "#") {
+          out += `<span class="tok-comment">${esc(rest)}</span>`;
+          break;
+        }
+        if (ch === '"' || ch === "'") {
+          const quote = ch;
+          let j = i + 1;
+          while (j < line.length) {
+            if (line[j] === "\\") { j += 2; continue; }
+            if (line[j] === quote) { j++; break; }
+            j++;
+          }
+          out += `<span class="tok-string">${esc(line.slice(i, j))}</span>`;
+          i = j;
+          continue;
+        }
+        const numberMatch = rest.match(/^\b\d+(?:\.\d+)?\b/);
+        if (numberMatch) {
+          out += `<span class="tok-number">${numberMatch[0]}</span>`;
+          i += numberMatch[0].length;
+          continue;
+        }
+        const identMatch = rest.match(/^[A-Za-z_ÄÖÜäöüß][A-Za-z0-9_ÄÖÜäöüß]*/);
+        if (identMatch) {
+          const word = identMatch[0];
+          const next = line.slice(i + word.length).trimStart();
+          if (pythonKeywords.has(word)) out += `<span class="tok-keyword">${esc(word)}</span>`;
+          else if (pythonBuiltins.has(word)) out += `<span class="tok-built">${esc(word)}</span>`;
+          else if (next.startsWith("(")) out += `<span class="tok-func">${esc(word)}</span>`;
+          else out += esc(word);
+          i += word.length;
+          continue;
+        }
+        out += esc(ch);
+        i++;
+      }
+      return out || " ";
+    }
+
+    function renderCodeBlocks() {
+      document.querySelectorAll("code.language-python").forEach(code => {
+        const text = code.textContent.replace(/
+$/, "");
+        const lines = text.split("
+");
+        code.innerHTML = lines.map(line => `<span class="line">${highlightPythonLine(line)}</span>`).join("");
+      });
+    }
+
+    function setupCopyButtons() {
+      document.querySelectorAll(".copy-btn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const target = document.getElementById(btn.dataset.target);
+          const text = Array.from(target.querySelectorAll(".line")).map(line => line.textContent).join("
+");
+          try {
+            await navigator.clipboard.writeText(text);
+            const old = btn.textContent;
+            btn.textContent = "Kopiert ✓";
+            setTimeout(() => btn.textContent = old, 1200);
+          } catch (err) {
+            alert("Kopieren ist in diesem Browser nicht erlaubt.");
+          }
+        });
+      });
+    }
+
+    renderCodeBlocks();
+    setupCopyButtons();
+  </script>
+</body>
+</html>
