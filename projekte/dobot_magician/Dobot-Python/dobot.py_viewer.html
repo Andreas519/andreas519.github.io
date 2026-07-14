@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>dobot.py – Quellcode</title>
-  <link rel="stylesheet" href="../../../../css/prism.css">
+  <link rel="stylesheet" href="../../../css/prism.css">
   <style>
     body { margin: 0; font-family: Arial, Helvetica, sans-serif; background: #f4f6f8; color: #1f2937; }
     header { background: #183b5b; color: white; padding: 1rem 1.5rem; }
@@ -69,15 +69,15 @@
 <body>
   <header>
     <div class="header-top">
-      <a class="back-link" href="../index.html">← Zurück</a>
+      <a class="back-link" href="./index.html">← Zurück</a>
     </div>
-    <h1>DobotDllType.py <a href="./dobot.py_viewer.html" target = "_blank">⬇ dobot.py anzeigen</a></h1>
+    <h1>dobot.py <a href="./dobot.py" download>⬇ herunterladen</a></h1>
   </header>
   <main>
     <p id="fehler"></p>
     <pre class="codebereich line-numbers"><code class="language-python" id="code"></code></pre>
   </main>
-  <script src="../../../../js/prism-core.js"></script>
+  <script src="../../../js/prism-core.js"></script>
   <script>
     function zeigeFehler(text) {
       var fehler = document.getElementById('fehler');
@@ -115,7 +115,7 @@
       pre.appendChild(rows);
     }
 
-    fetch('DobotDllType.py')
+    fetch('dobot.py')
       .then(function(r) {
         if (!r.ok) throw new Error('load_failed');
         return r.text();

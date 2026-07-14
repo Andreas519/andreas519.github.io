@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D-Drucker · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="publisher" content="Andreas Sigismund">
+  <meta name="project" content="Prusa MK4, AG Young Engineers">
+  <link rel="stylesheet" href="../../css/my.css">
+  <style>
+    .stl-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .stl-card {
+      border: 1px solid #d8dee9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .stl-canvas-wrap {
+      height: 220px;
+      background: #0f172a;
+      position: relative;
+    }
+
+    .stl-canvas-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .stl-caption {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.65rem 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .stl-caption a {
+      text-decoration: none;
+      color: #0f3f75;
+      font-weight: 600;
+    }
+
+    .btn-vollbild {
+      border: 1px solid #9ca3af;
+      background: #f8fafc;
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+      cursor: pointer;
+    }
+
+    .stl-hinweis {
+      margin-top: 0.8rem;
+      color: #4b5563;
+      font-size: 0.9rem;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.95);
+      z-index: 9999;
+      display: none;
+    }
+
+    .overlay.is-open {
+      display: block;
+    }
+
+    .overlay-toolbar {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      right: 12px;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      border-radius: 8px;
+      padding: 0.5rem 0.8rem;
+    }
+
+    .overlay-close {
+      border: 1px solid #94a3b8;
+      background: #111827;
+      color: #e5e7eb;
+      border-radius: 6px;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+    }
+
+    #fullscreenCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.185.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.185.1/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header>
+    <h3>Stabler-Dateien</h3>
+  </header>
+  <main>
+    <section>
+      <p>Animierte Vorschau der STL-Dateien. Klicke auf ein Modell oder auf Vollbild.</p>
+      <div id="previewGrid" class="stl-grid"></div>
+      <p class="stl-hinweis">Die STL-Dateien werden lokal vom Server geladen, es erfolgt kein externer Upload.</p>
+    </section>
+  </main>
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../js/script.js"></script>
+  </footer>
+
+  <div id="overlay" class="overlay" aria-hidden="true">
+    <div class="overlay-toolbar">
+      <strong id="overlayTitle">STL-Vollbild</strong>
+      <button id="overlayClose" class="overlay-close" type="button">Schließen</button>
+    </div>
+    <canvas id="fullscreenCanvas"></canvas>
+  </div>
+
+  <script type="module">
+    import * as THREE from "three";
+    import { STLLoader } from "three/addons/loaders/STLLoader.js";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+    const MODELLE = [
+      { name: "Arm links", path: "modelle/calliope/stabler/Arm_links.stl" },
+      { name: "Arm rechts", path: "modelle/calliope/stabler/Arm_recht.stl" },
+      { name: "Gabel", path: "modelle/calliope/stabler/Gabel.stl" },
+      { name: "Gabel Halter", path: "modelle/calliope/stabler/Gabel_Halter.stl" },
+      { name: "Grundplatte", path: "modelle/calliope/stabler/Grundplatte.stl" },
+      { name: "Servo Halter", path: "modelle/calliope/stabler/Servo_Halter.stl" }
+    ];
+
+    const loader = new STLLoader();
+    const previewGrid = document.getElementById("previewGrid");
+
+    function erstelleBasisSzene(canvas) {
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0f172a);
+
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 2000);
+      camera.position.set(2.6, 1.8, 2.6);
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const controls = new OrbitControls(camera, canvas);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 2.1;
+
+      const hemi = new THREE.HemisphereLight(0xffffff, 0x334155, 2.2);
+      scene.add(hemi);
+      const keyLight = new THREE.DirectionalLight(0xffffff, 1.7);
+      keyLight.position.set(4, 6, 3);
+      scene.add(keyLight);
+
+      const fillLight = new THREE.DirectionalLight(0xffffff, 1.1);
+      fillLight.position.set(-4, 2, -3);
+      scene.add(fillLight);
+
+      return { scene, camera, renderer, controls, mesh: null };
+    }
+
+    function passeKameraAn(state, geometry) {
+      geometry.center();
+      geometry.computeVertexNormals();
+      geometry.computeBoundingSphere();
+      const radius = Math.max(geometry.boundingSphere?.radius ?? 1, 0.01);
+
+      state.camera.near = radius / 100;
+      state.camera.far = radius * 100;
+      state.camera.position.set(radius * 2.2, radius * 1.5, radius * 2.2);
+      state.camera.updateProjectionMatrix();
+
+      state.controls.target.set(0, 0, 0);
+      state.controls.minDistance = radius * 0.25;
+      state.controls.maxDistance = radius * 24;
+      state.controls.update();
+    }
+
+    function setzeMesh(state, geometry) {
+      if (state.mesh) {
+        state.scene.remove(state.mesh);
+        state.mesh.geometry.dispose();
+        state.mesh.material.dispose();
+      }
+
+      const material = new THREE.MeshStandardMaterial({
+        color: 0x3b82f6,
+        roughness: 0.56,
+        metalness: 0.1,
+        side: THREE.DoubleSide
+      });
+
+      const mesh = new THREE.Mesh(geometry, material);
+      state.mesh = mesh;
+      state.scene.add(mesh);
+      passeKameraAn(state, geometry);
+    }
+
+    function baueKarte(modell) {
+      const card = document.createElement("article");
+      card.className = "stl-card";
+
+      const wrap = document.createElement("div");
+      wrap.className = "stl-canvas-wrap";
+
+      const canvas = document.createElement("canvas");
+      wrap.appendChild(canvas);
+
+      const caption = document.createElement("div");
+      caption.className = "stl-caption";
+
+      const link = document.createElement("a");
+      link.href = modell.path;
+      link.textContent = modell.name;
+      link.title = "STL-Datei herunterladen";
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "btn-vollbild";
+      button.textContent = "Vollbild";
+
+      caption.appendChild(link);
+      caption.appendChild(button);
+
+      card.appendChild(wrap);
+      card.appendChild(caption);
+      previewGrid.appendChild(card);
+
+      const state = erstelleBasisSzene(canvas);
+
+      loader.load(
+        modell.path,
+        geometry => {
+          setzeMesh(state, geometry);
+        },
+        undefined,
+        error => {
+          console.error("Fehler beim Laden:", modell.path, error);
+        }
+      );
+
+      function updateSize() {
+        const width = wrap.clientWidth || 300;
+        const height = wrap.clientHeight || 220;
+        state.camera.aspect = width / height;
+        state.camera.updateProjectionMatrix();
+        state.renderer.setSize(width, height, false);
+      }
+
+      const ro = new ResizeObserver(updateSize);
+      ro.observe(wrap);
+      updateSize();
+
+      return {
+        state,
+        openFullscreen: () => zeigeVollbild(modell.path, modell.name)
+      };
+    }
+
+    const previewStates = MODELLE.map(baueKarte);
+
+    const overlay = document.getElementById("overlay");
+    const overlayTitle = document.getElementById("overlayTitle");
+    const overlayClose = document.getElementById("overlayClose");
+    const fullscreenCanvas = document.getElementById("fullscreenCanvas");
+
+    const fsState = erstelleBasisSzene(fullscreenCanvas);
+    fsState.controls.enableZoom = true;
+    fsState.controls.enablePan = true;
+    fsState.controls.autoRotate = false;
+
+    function updateFullscreenSize() {
+      if (!overlay.classList.contains("is-open")) {
+        return;
+      }
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      fsState.camera.aspect = width / height;
+      fsState.camera.updateProjectionMatrix();
+      fsState.renderer.setSize(width, height, false);
+    }
+
+    function zeigeVollbild(path, name) {
+      overlayTitle.textContent = name;
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      updateFullscreenSize();
+
+      loader.load(
+        path,
+        geometry => setzeMesh(fsState, geometry),
+        undefined,
+        error => console.error("Fehler im Vollbild:", path, error)
+      );
+    }
+
+    function schliesseVollbild() {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+    }
+
+    overlayClose.addEventListener("click", schliesseVollbild);
+    overlay.addEventListener("click", event => {
+      if (event.target === overlay) {
+        schliesseVollbild();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        schliesseVollbild();
+      }
+    });
+
+    document.querySelectorAll(".stl-canvas-wrap").forEach((wrap, i) => {
+      wrap.addEventListener("click", () => previewStates[i].openFullscreen());
+    });
+
+    window.addEventListener("resize", updateFullscreenSize);
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      previewStates.forEach(({ state }) => {
+        state.controls.update();
+        state.renderer.render(state.scene, state.camera);
+      });
+
+      if (overlay.classList.contains("is-open")) {
+        fsState.controls.update();
+        fsState.renderer.render(fsState.scene, fsState.camera);
+      }
+    }
+
+    animate();
+  </script>
+</body>
+</html>

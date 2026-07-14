@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Zwischenstopp in 3D-Druck-Dateien</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f9;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --accent: #f97316;
+      --border: #d1d5db;
+      --code: #111827;
+      --code-bg: #f3f4f6;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #111827;
+        --card: #1f2937;
+        --text: #f3f4f6;
+        --muted: #cbd5e1;
+        --border: #4b5563;
+        --code: #f9fafb;
+        --code-bg: #374151;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: 40px auto;
+      background: var(--card);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h1, h2 {
+      line-height: 1.25;
+    }
+
+    h1 {
+      margin-top: 0;
+      border-bottom: 4px solid var(--accent);
+      padding-bottom: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: color-mix(in srgb, var(--accent) 14%, transparent);
+    }
+
+    code {
+      background: var(--code-bg);
+      color: var(--code);
+      padding: 0.12em 0.35em;
+      border-radius: 4px;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    .note {
+      border-left: 5px solid var(--accent);
+      padding: 12px 16px;
+      background: color-mix(in srgb, var(--accent) 10%, transparent);
+      margin: 24px 0;
+    }
+
+    .summary {
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: 32px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      main {
+        margin: 16px auto;
+        padding: 20px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Wo steckt der Zwischenstopp bei einer 3D-Druck-Datei?</h1>
+
+    <p>
+      Beim Drucken mit <strong>PrusaSlicer</strong> und einem
+      <strong>Prusa MK4 Input Shaper</strong> ist entscheidend:
+      Die tatsächlich ausgeführte Pause steht im fertigen
+      <code>.gcode</code> beziehungsweise <code>.bgcode</code>.
+    </p>
+
+    <h2>Übersicht der Dateiformate</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Dateiformat</th>
+          <th>Enthält einen Zwischenstopp?</th>
+          <th>Inhalt</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>.stl</code></td>
+          <td>Nein</td>
+          <td>Nur die Oberfläche des Modells als Dreiecksnetz.</td>
+        </tr>
+        <tr>
+          <td><code>.stp</code> / <code>.step</code></td>
+          <td>Nein</td>
+          <td>CAD-Geometrie; beim Import in PrusaSlicer wird sie trianguliert.</td>
+        </tr>
+        <tr>
+          <td><code>.3mf</code> als reine Modelldatei</td>
+          <td>Nicht unbedingt</td>
+          <td>Kann lediglich das Modell enthalten.</td>
+        </tr>
+        <tr>
+          <td><code>.3mf</code> als PrusaSlicer-Projekt</td>
+          <td>Ja, als Projekteinstellung</td>
+          <td>Kann Modell, Druckeinstellungen, Modifier und gesetzte Pausen speichern.</td>
+        </tr>
+        <tr>
+          <td><code>.gcode</code> / <code>.bgcode</code></td>
+          <td>Ja, ausführbar</td>
+          <td>Enthält den konkreten Pausenbefehl für den Drucker.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      <strong>Wichtig:</strong>
+      Die <code>.3mf</code>-Datei speichert bei einem vollständigen
+      PrusaSlicer-Projekt, <em>wo</em> eine Pause vorgesehen ist.
+      Erst beim Slicen wird daraus der konkrete Befehl im
+      <code>.gcode</code> oder <code>.bgcode</code>.
+    </div>
+
+    <h2>Zwischenstopp in PrusaSlicer einfügen</h2>
+
+    <ol>
+      <li>Modell slicen.</li>
+      <li>In die <strong>Vorschau</strong> wechseln.</li>
+      <li>Am rechten Schichtregler die gewünschte Schicht auswählen.</li>
+      <li>Mit der rechten Maustaste auf das orangefarbene Pluszeichen klicken.</li>
+      <li><strong>„Druckpause einfügen (M601)“</strong> auswählen.</li>
+      <li>Erneut slicen und die <code>.gcode</code>- oder <code>.bgcode</code>-Datei exportieren.</li>
+    </ol>
+
+    <p>
+      PrusaSlicer fügt dabei den Pausenbefehl <code>M601</code>
+      vor der ausgewählten Schicht in den Druckcode ein.
+    </p>
+
+    <h2>Empfehlung für den Prusa MK4</h2>
+
+    <ul>
+      <li>
+        <strong><code>.3mf</code></strong> speichern, um das vollständige
+        PrusaSlicer-Projekt einschließlich des Zwischenstopps später bearbeiten zu können.
+      </li>
+      <li>
+        <strong><code>.bgcode</code></strong> beziehungsweise
+        <strong><code>.gcode</code></strong> an den Drucker senden.
+      </li>
+    </ul>
+
+    <p class="summary">
+      Merksatz: 3MF speichert, wo die Pause geplant ist.
+      BGCODE oder GCODE führt die Pause tatsächlich aus.
+    </p>
+
+    <h2>Quellen</h2>
+    <ul>
+      <li>
+        <a href="https://help.prusa3d.com/article/saving-projects-as-3mf_1773">
+          Prusa Knowledge Base: Projekte als 3MF speichern
+        </a>
+      </li>
+      <li>
+        <a href="https://help.prusa3d.com/de/article/pause-oder-benutzerdefinierten-g-code-auf-schicht-einfugen_120490">
+          Prusa Knowledge Base: Pause oder benutzerdefinierten G-Code einfügen
+        </a>
+      </li>
+      <li>
+        <a href="https://help.prusa3d.com/article/binary-g-code_646763">
+          Prusa Knowledge Base: Binärer G-Code
+        </a>
+      </li>
+    </ul>
+
+    <footer>
+      Erstellt als eigenständige HTML-Datei. Sie kann direkt im Browser geöffnet werden.
+    </footer>
+  </main>
+</body>
+</html>

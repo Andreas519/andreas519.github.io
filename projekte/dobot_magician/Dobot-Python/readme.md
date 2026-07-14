@@ -8,10 +8,13 @@ test-dll.py
 
 
 dobot-python/
-├── start.py
+├── test.py
 └── sdk64/
     ├── __init__.py
     ├── DobotDllType.py
     └── DobotDll.dll
+└── api-testen/    
+    ├── start.py
 └── projekt01/    
     ├── start.py
+    

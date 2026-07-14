@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D-Druckverfahren · Young Engineers</title>
+    <meta name="author" content="Andreas Sigismund">
+    <meta name="publisher" content="Andreas Sigismund">
+    <meta name="project" content="3D-Druckverfahren, AG Young Engineers">
+    <link rel="stylesheet" href="../../css/my.css">
+    <style>
+      .vergleichstabelle {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0 1.5rem;
+      }
+
+      .vergleichstabelle th,
+      .vergleichstabelle td {
+        border: 1px solid #ccc;
+        padding: 0.6rem 0.75rem;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      .vergleichstabelle th {
+        background: #ececec;
+      }
+
+      .vergleichstabelle tr:nth-child(even) {
+        background: #fafafa;
+      }
+    </style>
+</head>
+<body>
+    <header>
+      <h3>3D-Drucker</h3>
+    </header>
+    <main>
+      <section>
+        <h2>3D-Druckverfahren neben FDM</h2>
+
+        <p>Neben <strong>FDM/FFF</strong> gibt es mehrere wichtige Verfahren:</p>
+
+        <table class="vergleichstabelle">
+          <thead>
+            <tr>
+              <th>Verfahren</th>
+              <th>Funktionsweise</th>
+              <th>Typische Materialien</th>
+              <th>Typische Anwendung</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>SLA</strong> - Stereolithografie</td>
+              <td>Flüssiges Harz wird mit einem Laser ausgehärtet.</td>
+              <td>Kunstharz</td>
+              <td>Sehr detailreiche Modelle, Dentaltechnik, Schmuck</td>
+            </tr>
+            <tr>
+              <td><strong>DLP/LCD</strong></td>
+              <td>Eine ganze Harzschicht wird gleichzeitig mit Licht ausgehärtet.</td>
+              <td>Kunstharz</td>
+              <td>Miniaturen, Figuren, Zahntechnik</td>
+            </tr>
+            <tr>
+              <td><strong>SLS</strong> - Selektives Lasersintern</td>
+              <td>Kunststoffpulver wird mit einem Laser verschmolzen.</td>
+              <td>Nylon, TPU</td>
+              <td>Belastbare Funktionsteile, komplexe Formen</td>
+            </tr>
+            <tr>
+              <td><strong>MJF</strong> - Multi Jet Fusion</td>
+              <td>Flüssige Wirkstoffe werden auf Pulver aufgetragen und erhitzt.</td>
+              <td>Vor allem Nylon</td>
+              <td>Kleinserien und robuste Bauteile</td>
+            </tr>
+            <tr>
+              <td><strong>SLM/DMLS</strong></td>
+              <td>Metallpulver wird mit einem Laser vollständig aufgeschmolzen.</td>
+              <td>Stahl, Aluminium, Titan</td>
+              <td>Luftfahrt, Medizin, Maschinenbau</td>
+            </tr>
+            <tr>
+              <td><strong>EBM</strong> - Electron Beam Melting</td>
+              <td>Metallpulver wird durch einen Elektronenstrahl geschmolzen.</td>
+              <td>Vor allem Titan</td>
+              <td>Implantate und Hochleistungsbauteile</td>
+            </tr>
+            <tr>
+              <td><strong>Binder Jetting</strong></td>
+              <td>Ein Bindemittel verklebt Pulver; anschließend wird das Teil gesintert.</td>
+              <td>Metall, Keramik, Sand</td>
+              <td>Metallteile, Gussformen, Architekturmodelle</td>
+            </tr>
+            <tr>
+              <td><strong>Material Jetting</strong></td>
+              <td>Sehr kleine Materialtröpfchen werden aufgetragen und ausgehärtet.</td>
+              <td>Photopolymere, Wachs</td>
+              <td>Farbige und sehr praezise Modelle</td>
+            </tr>
+            <tr>
+              <td><strong>DED</strong> - Directed Energy Deposition</td>
+              <td>Metallpulver oder Draht wird während des Auftragens geschmolzen.</td>
+              <td>Metalle</td>
+              <td>Reparatur großer Metallbauteile</td>
+            </tr>
+            <tr>
+              <td><strong>Laminated Object Manufacturing</strong></td>
+              <td>Folien oder Platten werden verklebt und ausgeschnitten.</td>
+              <td>Papier, Kunststoff, Metallfolie</td>
+              <td>Modelle und große Bauteile</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Die wichtigsten Unterschiede</h4>
+
+        <p><strong>FDM</strong> ist günstig, robust und gut für Schule, Hobby und Prototypen geeignet. Die Schichten bleiben jedoch häufig sichtbar.</p>
+
+        <p><strong>SLA/DLP</strong> liefert besonders glatte und detailreiche Oberflächen. Das Harz ist allerdings teurer und muss nach dem Drucken gereinigt und ausgehärtet werden.</p>
+
+        <p><strong>SLS</strong> benötigt keine zusätzlichen Stützstrukturen, weil das umgebende Pulver das Bauteil trägt. Die Geräte und das Pulvermanagement sind jedoch aufwendiger.</p>
+
+        <p><strong>Metallverfahren wie SLM oder DMLS</strong> erzeugen hochfeste Bauteile, sind aber sehr teuer und werden hauptsächlich industriell eingesetzt.</p>
+
+        <h4>Vier grundlegende Gruppen</h4>
+
+        <ol>
+          <li><strong>Material wird durch eine Düse aufgetragen:</strong> FDM, DED</li>
+          <li><strong>Flüssigkeit wird mit Licht ausgehärtet:</strong> SLA, DLP, LCD</li>
+          <li><strong>Pulver wird verschmolzen oder verklebt:</strong> SLS, MJF, SLM, Binder Jetting</li>
+          <li><strong>Material wird als Tröpfchen oder Schichten aufgebracht:</strong> Material Jetting, Folienverfahren</li>
+        </ol>
+      </section>
+    </main>
+    <footer>
+      © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+      Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+      <script src="../../js/script.js"></script>
+    </footer>
+</body>
+</html>

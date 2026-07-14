@@ -20,6 +20,8 @@ dobot.plattenkalibrierung_setzen(
     platten_z=-67.2,
 )
 dobot.plattenkalibrierung_anzeigen()
-#dobot.home(api)
+dType.ClearAllAlarmsState(api)
+dobot.home(api)
 
 dobot.position_anzeigen(api)
+

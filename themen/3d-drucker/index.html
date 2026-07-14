@@ -1,0 +1,182 @@
+  <!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D-Drucker · Young Engineers</title>
+    <meta name="author" content="Andreas Sigismund">
+    <meta name="publisher" content="Andreas Sigismund">
+    <meta name="project" content="Prusa MK4, AG Young Engineers">
+    <link rel="stylesheet" href="../../css/my.css">
+    <style>
+      .mk4-intro {
+        display: flex;
+        gap: 1.5rem;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+      }
+
+      .mk4-intro-image {
+        flex: 0 0 320px;
+        height: 220px;
+      }
+
+      .mk4-intro-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+
+      .mk4-intro-text {
+        flex: 1;
+      }
+
+      .mk4-intro-text p:first-child {
+        margin-top: 0;
+      }
+
+      @media (max-width: 900px) {
+        .mk4-intro {
+          flex-direction: column;
+        }
+
+        .mk4-intro-image {
+          flex-basis: auto;
+          width: 100%;
+          max-width: 520px;
+          height: 240px;
+        }
+      }
+    </style>
+</head>
+<body>
+    <header>
+      <h3>3D-Drucker</h3>
+    </header>
+    <main>
+      <section>
+        <h2>3D-Druck mit dem Prusa MK4</h2>
+        <div class="mk4-intro">
+          <div class="mk4-intro-image">
+            <img id="mk4-rotating-image" src="bilder/ChatGPT_Image_2xPrusa_MK4.png" alt="Prusa MK4">
+          </div>
+        
+          <div class="mk4-intro-text">
+            <p>Der Prusa MK4 ist ein präziser FDM-3D-Drucker mit automatischer Kalibrierung und zuverlässiger erster Schicht. Er eignet sich gut für Unterrichtsprojekte, Prototypen und den regelmäßigen Einsatz in der AG, weil Bedienung und Druckqualität auch bei längeren Druckaufträgen stabil bleiben.</p>
+            <p>Ein Original Prusa MK4/S Enclosure ist ein Gehäuse für den 3D-Drucker.<br>
+               Es hält die Luft im Druckraum wärmer und gleichmäßiger. Dadurch lassen sich schwierige Materialien wie ASA, PC-CF oder PP besser drucken, weil sich die Teile weniger verziehen.<br>
+              Die Geräusch- und Geruchsbelastung sinkt merklich.</p>
+        
+          </div>
+        </div>
+        <h2>Druckvorbereitung mit dem Prusa Slicer</h2>  
+        <div class="mk4-intro">
+          <div class="mk4-intro-image">
+            <img id="slicer-rotating-image" src="bilder/PrusaSlicer-a.png" alt="PrusaSlicer">
+          </div>
+          <div class="mk4-intro-text">
+            <p>Der PrusaSlicer ist die Software für den 3D-Drucker. <br>
+              Sie ermöglicht die Positionierung verschiedener 3D-Modelle auf der Druckplatte und die Vorschau des Druckvorgangs.<br>
+              Sie wandelt 3D-Modelle in G-Code um und bietet viele Einstellungen für Material, Temperatur, Geschwindigkeit und Stützstrukturen.<br>
+              Außerdem unterstützt sie definierte Druckpausen und Filamentwechsel.“</p>
+          </div>
+        </div>        
+        <h4>Unsere 3D-Druck-Modelle</h4>
+        <ul>
+          <!-- <li><a href="stl-viewer.html?model=modelle/calliope/stabler/Gabel.stl">STL-Viewer</a></li> -->
+          <li><a href="modelle/stl-view.html?dir=calliope/stabler">Calliope Stabler</a></li>
+        </ul>
+
+        <h4>TinkerCAD und Autodesk Fusion</h4>
+        <ul>
+          <li><a href="../themen/tinkercad/index.html" target="_blank" rel="noopener noreferrer">TinkerCAD</a></li>
+          <li><a href="../fusion360/index.html" target="_blank" rel="noopener noreferrer">Autodesk Fusion 360</a></li>
+        </ul>
+
+        <h4>Tipps & Tricks</h4>
+        <ul>
+          <li><a href="zwischenstopp_3d_druck_prusa.html">Zwischenstopp 3D-Druck Prusa</a></li>
+          <li><a href="3d-druckverfahren.html">3D-Druckverfahren neben FDM</a></li>
+        </ul>
+        
+      </section>
+    </main>
+    <footer>
+      © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+      Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+      <script>
+        (function () {
+          const bildOrdner = 'bilder/';
+          const wechselIntervallMs = 5000;
+          const erlaubteEndungen = /\.(png|jpe?g|webp|gif)$/i;
+
+          function dateiNameAusHref(href) {
+            if (!href) {
+              return '';
+            }
+
+            let bereinigt = href.split('#')[0].split('?')[0];
+            bereinigt = bereinigt.replace(/\\/g, '/');
+            const teile = bereinigt.split('/').filter(Boolean);
+            return decodeURIComponent(teile[teile.length - 1] || '');
+          }
+
+          function ermittleBildDateien(listingHtml, dateiPraefix) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(listingHtml, 'text/html');
+            const links = Array.from(doc.querySelectorAll('a[href]'));
+            const dateien = links
+              .map((link) => dateiNameAusHref(link.getAttribute('href')))
+              .filter((name) => name.startsWith(dateiPraefix) && erlaubteEndungen.test(name));
+
+            return Array.from(new Set(dateien)).sort((a, b) => a.localeCompare(b, 'de', { numeric: true }));
+          }
+
+          async function starteBildwechsel(bildElementId, dateiPraefix) {
+            const bildElement = document.getElementById(bildElementId);
+            if (!bildElement) {
+              return;
+            }
+
+            try {
+              const antwort = await fetch(bildOrdner, { cache: 'no-store' });
+              if (!antwort.ok) {
+                return;
+              }
+
+              const listingHtml = await antwort.text();
+              const bilder = ermittleBildDateien(listingHtml, dateiPraefix);
+              if (bilder.length === 0) {
+                return;
+              }
+
+              const aktuellesSrc = bildElement.getAttribute('src') || '';
+              let index = bilder.findIndex((name) => aktuellesSrc.endsWith('/' + name) || aktuellesSrc.endsWith(name));
+              if (index < 0) {
+                index = 0;
+              }
+
+              bildElement.src = bildOrdner + bilder[index];
+
+              if (bilder.length < 2) {
+                return;
+              }
+
+              setInterval(function () {
+                index = (index + 1) % bilder.length;
+                bildElement.src = bildOrdner + bilder[index];
+              }, wechselIntervallMs);
+            } catch (fehler) {
+              console.warn('Automatischer Bildwechsel konnte nicht gestartet werden fuer ' + bildElementId + '.', fehler);
+            }
+          }
+
+          starteBildwechsel('mk4-rotating-image', 'ChatGPT_Image_2xPrusa_MK4');
+          starteBildwechsel('slicer-rotating-image', 'PrusaSlicer');
+        })();
+      </script>
+      <script src="../../js/script.js"></script>
+    </footer>
+</body>
+</html>

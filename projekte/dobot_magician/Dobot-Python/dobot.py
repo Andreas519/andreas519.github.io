@@ -731,6 +731,19 @@ def ausfuehren(api):
 
         print()
         print("Roboterprogramm beendet.")
+# ---- undokumentierte Funktioen
+
+def alarme_loeschen():
+    """
+    Löscht alle gespeicherten Alarmzustände des Dobot.
+
+    Achtung:
+    Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
+    """
+    if api is None:
+        raise RuntimeError("Der Dobot ist nicht verbunden.")
+
+    dType.ClearAllAlarmsState(api)
 
 
 def main():
