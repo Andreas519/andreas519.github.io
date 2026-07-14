@@ -12,6 +12,9 @@ from sdk64 import DobotDllType as dType
 
 api = dobot.init()
 
+sys.exit()
+
+result = dType.ConnectDobot(api, "COM12", 115200)
 
 dobot.plattenkalibrierung_setzen(
     referenzloch_1=(40, 3, -54.3, -312.0),

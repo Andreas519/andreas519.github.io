@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offline README.md Viewer</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #ffffff;
+      --fg: #1f2328;
+      --muted: #656d76;
+      --border: #d0d7de;
+      --panel: #f6f8fa;
+      --accent: #0969da;
+      --code-bg: #f6f8fa;
+      --quote: #d0d7de;
+      --shadow: rgba(31, 35, 40, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --fg: #e6edf3;
+        --muted: #8b949e;
+        --border: #30363d;
+        --panel: #161b22;
+        --accent: #58a6ff;
+        --code-bg: #161b22;
+        --quote: #30363d;
+        --shadow: rgba(0, 0, 0, 0.35);
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 0.8rem 1rem;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    header strong { margin-right: auto; }
+
+    button, .file-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.25rem;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 0.4rem;
+      background: var(--panel);
+      color: var(--fg);
+      font: inherit;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    button:hover, .file-label:hover {
+      border-color: var(--accent);
+    }
+
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      clip-path: inset(50%);
+    }
+
+    main {
+      width: min(980px, calc(100% - 2rem));
+      margin: 2rem auto 4rem;
+    }
+
+    #status {
+      margin: 0 0 1.25rem;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      background: var(--panel);
+      color: var(--muted);
+    }
+
+    #status:empty { display: none; }
+
+    #dropzone {
+      display: none;
+      margin: 1rem 0;
+      padding: 2rem;
+      text-align: center;
+      border: 2px dashed var(--border);
+      border-radius: 0.75rem;
+      color: var(--muted);
+      background: var(--panel);
+    }
+
+    #dropzone.visible { display: block; }
+    #dropzone.dragover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    article {
+      min-height: 50vh;
+      padding: 1.5rem 2rem;
+      border: 1px solid var(--border);
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 24px var(--shadow);
+      overflow-wrap: anywhere;
+    }
+
+    article h1, article h2 {
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    article h1 { font-size: 2rem; }
+    article h2 { font-size: 1.5rem; }
+    article h3 { font-size: 1.25rem; }
+
+    article a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    article a:hover { text-decoration: underline; }
+
+    article img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 0.35rem;
+    }
+
+    article blockquote {
+      margin-left: 0;
+      padding-left: 1rem;
+      border-left: 0.25rem solid var(--quote);
+      color: var(--muted);
+    }
+
+    article code {
+      padding: 0.15em 0.35em;
+      border-radius: 0.3rem;
+      background: var(--code-bg);
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    article pre {
+      position: relative;
+      overflow: auto;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+    }
+
+    article pre code {
+      padding: 0;
+      background: transparent;
+      font-size: 0.9rem;
+    }
+
+    .code-lang {
+      position: absolute;
+      top: 0.35rem;
+      right: 0.6rem;
+      color: var(--muted);
+      font-size: 0.75rem;
+      user-select: none;
+    }
+
+    article table {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+
+    article th, article td {
+      padding: 0.45rem 0.75rem;
+      border: 1px solid var(--border);
+      text-align: left;
+    }
+
+    article th { background: var(--panel); }
+
+    article hr {
+      height: 1px;
+      border: 0;
+      background: var(--border);
+      margin: 1.5rem 0;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+      main { width: min(100% - 1rem, 980px); margin-top: 1rem; }
+      article { padding: 1rem; border-radius: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>README.md Viewer</strong>
+    <button id="reloadBtn" type="button">Neu laden</button>
+    <label class="file-label" for="fileInput">Markdown-Datei öffnen</label>
+    <input id="fileInput" type="file" accept=".md,.markdown,text/markdown,text/plain">
+  </header>
+
+  <main>
+    <div id="status">Lade <code>readme.md</code> aus dem gleichen Ordner …</div>
+    <div id="dropzone">Markdown-Datei hierher ziehen</div>
+    <article id="viewer" aria-live="polite"></article>
+    <p class="muted">
+      Hinweis: Beim direkten Öffnen über <code>file://</code> blockieren manche Browser den automatischen Zugriff auf
+      <code>readme.md</code>. In diesem Fall die Datei über „Markdown-Datei öffnen“ auswählen oder hierher ziehen.
+    </p>
+  </main>
+
+  <script>
+    "use strict";
+
+    const viewer = document.getElementById("viewer");
+    const statusBox = document.getElementById("status");
+    const fileInput = document.getElementById("fileInput");
+    const reloadBtn = document.getElementById("reloadBtn");
+    const dropzone = document.getElementById("dropzone");
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function safeUrl(url) {
+      const trimmed = url.trim();
+      if (/^(javascript|vbscript|data):/i.test(trimmed)) {
+        return "#";
+      }
+      return escapeHtml(trimmed);
+    }
+
+    function slugify(text) {
+      return text
+        .toLowerCase()
+        .replace(/<[^>]*>/g, "")
+        .replace(/&[a-z0-9#]+;/gi, "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9äöüß\s-]/g, "")
+        .trim()
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-");
+    }
+
+    function renderInline(source) {
+      let text = escapeHtml(source);
+
+      // Inline-Code zuerst schützen.
+      const codeTokens = [];
+      text = text.replace(/`([^`]+)`/g, (_, code) => {
+        const token = `@@CODETOKEN${codeTokens.length}@@`;
+        codeTokens.push(`<code>${code}</code>`);
+        return token;
+      });
+
+      // Bilder
+      text = text.replace(/!\[([^\]]*)\]\(([^)\s]+)(?:\s+&quot;([^&]*)&quot;)?\)/g,
+        (_, alt, url, title) => {
+          const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+          return `<img src="${safeUrl(url)}" alt="${alt}"${titleAttr}>`;
+        }
+      );
+
+      // Links
+      text = text.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+&quot;([^&]*)&quot;)?\)/g,
+        (_, label, url, title) => {
+          const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+          return `<a href="${safeUrl(url)}"${titleAttr}>${label}</a>`;
+        }
+      );
+
+      // Fett, kursiv, durchgestrichen
+      text = text.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      text = text.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+      text = text.replace(/~~([^~]+)~~/g, "<del>$1</del>");
+      text = text.replace(/(^|[\s(])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+      text = text.replace(/(^|[\s(])_([^_\n]+)_/g, "$1<em>$2</em>");
+
+      // Code-Tokens zurücksetzen.
+      codeTokens.forEach((html, index) => {
+        text = text.replace(`@@CODETOKEN${index}@@`, html);
+      });
+
+      return text;
+    }
+
+    function isTableSeparator(line) {
+      const cells = line.trim().replace(/^\||\|$/g, "").split("|");
+      return cells.length > 0 && cells.every(cell => /^\s*:?-{3,}:?\s*$/.test(cell));
+    }
+
+    function parseTableRow(line) {
+      return line.trim().replace(/^\||\|$/g, "").split("|").map(cell => cell.trim());
+    }
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n?/g, "\n").split("\n");
+      const html = [];
+      let i = 0;
+      let inUl = false;
+      let inOl = false;
+
+      function closeLists() {
+        if (inUl) { html.push("</ul>"); inUl = false; }
+        if (inOl) { html.push("</ol>"); inOl = false; }
+      }
+
+      while (i < lines.length) {
+        const line = lines[i];
+
+        // Codeblock
+        const fence = line.match(/^```([A-Za-z0-9_+-]*)\s*$/);
+        if (fence) {
+          closeLists();
+          const lang = fence[1];
+          const code = [];
+          i++;
+          while (i < lines.length && !/^```\s*$/.test(lines[i])) {
+            code.push(lines[i]);
+            i++;
+          }
+          const langLabel = lang ? `<span class="code-lang">${escapeHtml(lang)}</span>` : "";
+          html.push(`<pre>${langLabel}<code${lang ? ` class="language-${escapeHtml(lang)}"` : ""}>${escapeHtml(code.join("\n"))}</code></pre>`);
+          i++;
+          continue;
+        }
+
+        // Überschrift
+        const heading = line.match(/^(#{1,6})\s+(.+)$/);
+        if (heading) {
+          closeLists();
+          const level = heading[1].length;
+          const content = renderInline(heading[2]);
+          const id = slugify(heading[2]) || `heading-${i}`;
+          html.push(`<h${level} id="${id}">${content}</h${level}>`);
+          i++;
+          continue;
+        }
+
+        // Horizontale Linie
+        if (/^\s{0,3}([-*_])(?:\s*\1){2,}\s*$/.test(line)) {
+          closeLists();
+          html.push("<hr>");
+          i++;
+          continue;
+        }
+
+        // Tabelle
+        if (i + 1 < lines.length && line.includes("|") && isTableSeparator(lines[i + 1])) {
+          closeLists();
+          const headers = parseTableRow(line);
+          i += 2;
+          const rows = [];
+          while (i < lines.length && lines[i].includes("|") && lines[i].trim() !== "") {
+            rows.push(parseTableRow(lines[i]));
+            i++;
+          }
+          html.push("<table><thead><tr>");
+          headers.forEach(cell => html.push(`<th>${renderInline(cell)}</th>`));
+          html.push("</tr></thead><tbody>");
+          rows.forEach(row => {
+            html.push("<tr>");
+            headers.forEach((_, index) => html.push(`<td>${renderInline(row[index] || "")}</td>`));
+            html.push("</tr>");
+          });
+          html.push("</tbody></table>");
+          continue;
+        }
+
+        // Blockquote
+        if (/^\s*>\s?/.test(line)) {
+          closeLists();
+          const quoteLines = [];
+          while (i < lines.length && /^\s*>\s?/.test(lines[i])) {
+            quoteLines.push(lines[i].replace(/^\s*>\s?/, ""));
+            i++;
+          }
+          html.push(`<blockquote>${quoteLines.map(renderInline).join("<br>")}</blockquote>`);
+          continue;
+        }
+
+        // Ungeordnete Liste
+        const ul = line.match(/^\s*[-+*]\s+(.+)$/);
+        if (ul) {
+          if (inOl) { html.push("</ol>"); inOl = false; }
+          if (!inUl) { html.push("<ul>"); inUl = true; }
+          html.push(`<li>${renderInline(ul[1])}</li>`);
+          i++;
+          continue;
+        }
+
+        // Geordnete Liste
+        const ol = line.match(/^\s*\d+\.\s+(.+)$/);
+        if (ol) {
+          if (inUl) { html.push("</ul>"); inUl = false; }
+          if (!inOl) { html.push("<ol>"); inOl = true; }
+          html.push(`<li>${renderInline(ol[1])}</li>`);
+          i++;
+          continue;
+        }
+
+        // Leerzeile
+        if (line.trim() === "") {
+          closeLists();
+          i++;
+          continue;
+        }
+
+        // Absatz: fortlaufende Zeilen bis zu einem Blockelement sammeln.
+        closeLists();
+        const paragraph = [line.trim()];
+        i++;
+
+        while (
+          i < lines.length &&
+          lines[i].trim() !== "" &&
+          !/^```/.test(lines[i]) &&
+          !/^(#{1,6})\s+/.test(lines[i]) &&
+          !/^\s*>\s?/.test(lines[i]) &&
+          !/^\s*[-+*]\s+/.test(lines[i]) &&
+          !/^\s*\d+\.\s+/.test(lines[i]) &&
+          !/^\s{0,3}([-*_])(?:\s*\1){2,}\s*$/.test(lines[i])
+        ) {
+          if (i + 1 < lines.length && lines[i].includes("|") && isTableSeparator(lines[i + 1])) {
+            break;
+          }
+          paragraph.push(lines[i].trim());
+          i++;
+        }
+
+        html.push(`<p>${renderInline(paragraph.join(" "))}</p>`);
+      }
+
+      closeLists();
+      return html.join("\n");
+    }
+
+    function showMarkdown(markdown, sourceName) {
+      viewer.innerHTML = renderMarkdown(markdown);
+      statusBox.textContent = `${sourceName} wurde geladen.`;
+      document.title = `${sourceName} – Offline Markdown Viewer`;
+    }
+
+    async function loadDefaultReadme() {
+      statusBox.innerHTML = 'Lade <code>readme.md</code> aus dem gleichen Ordner …';
+      dropzone.classList.remove("visible");
+
+      try {
+        const response = await fetch("./readme.md", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const markdown = await response.text();
+        showMarkdown(markdown, "readme.md");
+      } catch (error) {
+        viewer.innerHTML = `
+          <h1>README.md konnte nicht automatisch geladen werden</h1>
+          <p>Beim direkten Öffnen einer lokalen HTML-Datei verhindern viele Browser den Zugriff auf eine benachbarte Datei.</p>
+          <p>Wähle die <code>readme.md</code> über die Schaltfläche oben aus oder ziehe sie in das Feld.</p>
+        `;
+        statusBox.textContent = `Automatisches Laden nicht möglich: ${error.message}`;
+        dropzone.classList.add("visible");
+      }
+    }
+
+    async function readSelectedFile(file) {
+      if (!file) return;
+      try {
+        const text = await file.text();
+        showMarkdown(text, file.name);
+        dropzone.classList.remove("visible");
+      } catch (error) {
+        statusBox.textContent = `Datei konnte nicht gelesen werden: ${error.message}`;
+      }
+    }
+
+    fileInput.addEventListener("change", event => {
+      readSelectedFile(event.target.files[0]);
+    });
+
+    reloadBtn.addEventListener("click", loadDefaultReadme);
+
+    ["dragenter", "dragover"].forEach(type => {
+      document.addEventListener(type, event => {
+        event.preventDefault();
+        dropzone.classList.add("visible", "dragover");
+      });
+    });
+
+    ["dragleave", "drop"].forEach(type => {
+      document.addEventListener(type, event => {
+        event.preventDefault();
+        dropzone.classList.remove("dragover");
+      });
+    });
+
+    document.addEventListener("drop", event => {
+      const file = event.dataTransfer.files[0];
+      if (file) readSelectedFile(file);
+    });
+
+    loadDefaultReadme();
+  </script>
+</body>
+</html>

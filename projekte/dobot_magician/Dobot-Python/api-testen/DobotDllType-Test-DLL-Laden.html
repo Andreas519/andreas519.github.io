@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dobot Magician – DobotDllType.py und DobotDll.dll testen</title>
+<style>
+:root {
+  --bg: #f4f7fb;
+  --paper: #ffffff;
+  --text: #1f2937;
+  --muted: #667085;
+  --line: #d9e2ec;
+  --accent: #0b63ce;
+  --accent2: #0f766e;
+  --warn: #9a6700;
+  --danger: #b42318;
+  --code-bg: #0f172a;
+  --code-text: #e5e7eb;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+}
+header {
+  background: linear-gradient(135deg, #0b63ce, #124a87);
+  color: white;
+  padding: 3rem 1.25rem;
+}
+header .wrap, main, footer {
+  max-width: 1100px;
+  margin: auto;
+}
+header h1 {
+  margin: 0 0 .75rem;
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  line-height: 1.1;
+}
+header p {
+  max-width: 850px;
+  font-size: 1.1rem;
+  margin: 0;
+  opacity: .95;
+}
+main {
+  padding: 2rem 1.25rem 4rem;
+}
+nav {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 24px rgba(16,24,40,.05);
+}
+nav strong { display: block; margin-bottom: .5rem; }
+nav a {
+  display: inline-block;
+  margin: .2rem .65rem .2rem 0;
+  color: var(--accent);
+  text-decoration: none;
+}
+nav a:hover { text-decoration: underline; }
+section {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin: 1.25rem 0;
+  box-shadow: 0 8px 24px rgba(16,24,40,.04);
+}
+h2 {
+  margin-top: 0;
+  color: #12385f;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: .5rem;
+}
+h3 { color: #234; margin-top: 1.5rem; }
+code {
+  font-family: "Cascadia Code", "Consolas", "Courier New", monospace;
+}
+p code, li code {
+  background: #eef3f8;
+  padding: .1rem .35rem;
+  border-radius: 5px;
+  color: #7c2d12;
+}
+.highlight, pre.output, pre.tree {
+  overflow-x: auto;
+  padding: 1rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid #26344d;
+  background: var(--code-bg);
+  color: var(--code-text);
+  font-size: .94rem;
+  line-height: 1.5;
+}
+.highlight pre { margin: 0; }
+.output {
+  background: #111827 !important;
+  color: #e5e7eb !important;
+}
+.tree {
+  background: #172033 !important;
+  color: #d8e2f0 !important;
+}
+.note, .warning, .success, .danger {
+  border-left: 5px solid;
+  padding: .9rem 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+}
+.note { border-color: var(--accent); background: #eff6ff; }
+.warning { border-color: #d97706; background: #fff7ed; }
+.success { border-color: #059669; background: #ecfdf5; }
+.danger { border-color: var(--danger); background: #fef3f2; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: .7rem;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: #eef3f8; }
+kbd {
+  background: #f2f4f7;
+  border: 1px solid #cfd4dc;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: .05rem .35rem;
+  font-family: inherit;
+}
+footer {
+  padding: 0 1.25rem 3rem;
+  color: var(--muted);
+}
+.small { color: var(--muted); font-size: .95rem; }
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #ffffcc }
+.highlight { background: #f8f8f8; }
+.highlight .c { color: #3D7B7B; font-style: italic } /* Comment */
+.highlight .err { border: 1px solid #F00 } /* Error */
+.highlight .k { color: #008000; font-weight: bold } /* Keyword */
+.highlight .o { color: #666 } /* Operator */
+.highlight .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #9C6500 } /* Comment.Preproc */
+.highlight .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #A00000 } /* Generic.Deleted */
+.highlight .ge { font-style: italic } /* Generic.Emph */
+.highlight .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #E40000 } /* Generic.Error */
+.highlight .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #008400 } /* Generic.Inserted */
+.highlight .go { color: #717171 } /* Generic.Output */
+.highlight .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.highlight .gs { font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.highlight .gt { color: #04D } /* Generic.Traceback */
+.highlight .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.highlight .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.highlight .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.highlight .kp { color: #008000 } /* Keyword.Pseudo */
+.highlight .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.highlight .kt { color: #B00040 } /* Keyword.Type */
+.highlight .m { color: #666 } /* Literal.Number */
+.highlight .s { color: #BA2121 } /* Literal.String */
+.highlight .na { color: #687822 } /* Name.Attribute */
+.highlight .nb { color: #008000 } /* Name.Builtin */
+.highlight .nc { color: #00F; font-weight: bold } /* Name.Class */
+.highlight .no { color: #800 } /* Name.Constant */
+.highlight .nd { color: #A2F } /* Name.Decorator */
+.highlight .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.highlight .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #00F } /* Name.Function */
+.highlight .nl { color: #767600 } /* Name.Label */
+.highlight .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.highlight .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.highlight .nv { color: #19177C } /* Name.Variable */
+.highlight .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.highlight .w { color: #BBB } /* Text.Whitespace */
+.highlight .mb { color: #666 } /* Literal.Number.Bin */
+.highlight .mf { color: #666 } /* Literal.Number.Float */
+.highlight .mh { color: #666 } /* Literal.Number.Hex */
+.highlight .mi { color: #666 } /* Literal.Number.Integer */
+.highlight .mo { color: #666 } /* Literal.Number.Oct */
+.highlight .sa { color: #BA2121 } /* Literal.String.Affix */
+.highlight .sb { color: #BA2121 } /* Literal.String.Backtick */
+.highlight .sc { color: #BA2121 } /* Literal.String.Char */
+.highlight .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.highlight .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.highlight .s2 { color: #BA2121 } /* Literal.String.Double */
+.highlight .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.highlight .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.highlight .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.highlight .sx { color: #008000 } /* Literal.String.Other */
+.highlight .sr { color: #A45A77 } /* Literal.String.Regex */
+.highlight .s1 { color: #BA2121 } /* Literal.String.Single */
+.highlight .ss { color: #19177C } /* Literal.String.Symbol */
+.highlight .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #00F } /* Name.Function.Magic */
+.highlight .vc { color: #19177C } /* Name.Variable.Class */
+.highlight .vg { color: #19177C } /* Name.Variable.Global */
+.highlight .vi { color: #19177C } /* Name.Variable.Instance */
+.highlight .vm { color: #19177C } /* Name.Variable.Magic */
+.highlight .il { color: #666 } /* Literal.Number.Integer.Long */
+
+/* ------------------------------------------------------------
+   Gut lesbares Syntaxhighlighting – kontrastreiches Dunkel-Schema
+   ------------------------------------------------------------ */
+.highlight {
+  background: #0b1220 !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
+}
+.highlight pre {
+  background: transparent !important;
+  color: #f8fafc !important;
+}
+
+/* Kommentare */
+.highlight .c,
+.highlight .ch,
+.highlight .cm,
+.highlight .cpf,
+.highlight .c1,
+.highlight .cs {
+  color: #a7f3d0 !important;
+  font-style: italic;
+}
+
+/* Schlüsselwörter: import, from, if, try, except, def ... */
+.highlight .k,
+.highlight .kc,
+.highlight .kd,
+.highlight .kn,
+.highlight .kp,
+.highlight .kr,
+.highlight .kt {
+  color: #93c5fd !important;
+  font-weight: 700;
+}
+
+/* Strings */
+.highlight .s,
+.highlight .sa,
+.highlight .sb,
+.highlight .sc,
+.highlight .dl,
+.highlight .sd,
+.highlight .s1,
+.highlight .s2,
+.highlight .sh,
+.highlight .sx {
+  color: #fde68a !important;
+}
+
+/* String-Sonderfälle */
+.highlight .se,
+.highlight .si,
+.highlight .sr,
+.highlight .ss {
+  color: #fdba74 !important;
+}
+
+/* Zahlen */
+.highlight .m,
+.highlight .mb,
+.highlight .mf,
+.highlight .mh,
+.highlight .mi,
+.highlight .mo {
+  color: #fca5a5 !important;
+}
+
+/* Funktionen und Methoden */
+.highlight .nf,
+.highlight .fm {
+  color: #c4b5fd !important;
+  font-weight: 700;
+}
+
+/* Klassen, Namespaces, Dekoratoren */
+.highlight .nc,
+.highlight .nn,
+.highlight .nd {
+  color: #f0abfc !important;
+  font-weight: 700;
+}
+
+/* Eingebaute Namen und Konstanten */
+.highlight .nb,
+.highlight .bp,
+.highlight .no {
+  color: #67e8f9 !important;
+}
+
+/* Variablen und Attribute */
+.highlight .n,
+.highlight .na,
+.highlight .nv,
+.highlight .vc,
+.highlight .vg,
+.highlight .vi,
+.highlight .vm {
+  color: #f8fafc !important;
+}
+
+/* Operatoren und Satzzeichen */
+.highlight .o,
+.highlight .ow,
+.highlight .p {
+  color: #e2e8f0 !important;
+}
+
+/* Exceptions und Fehlermarkierungen */
+.highlight .ne,
+.highlight .err,
+.highlight .gr {
+  color: #fda4af !important;
+  font-weight: 700;
+  border: 0 !important;
+}
+
+/* Hervorgehobene Zeilen */
+.highlight .hll {
+  background: #1e3a5f !important;
+}
+
+/* Generische Ausgaben innerhalb hervorgehobener Blöcke */
+.highlight .go,
+.highlight .gp,
+.highlight .gt {
+  color: #cbd5e1 !important;
+}
+
+/* Leerzeichen nicht abdunkeln */
+.highlight .w {
+  color: #94a3b8 !important;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Dobot Magician: <code>DobotDllType.py</code> und <code>DobotDll.dll</code> testen</h1>
+    <p>Ausführliche Zusammenfassung des Testwegs – vom Projektaufbau über die Herkunft von <code>COM10</code> bis zum gezielten Test des DLL-Ladens unter Python 3.14.5 (64 Bit).</p>
+  </div>
+</header>
+
+<main>
+<nav>
+  <strong>Inhalt</strong>
+  <a href="#ziel">1. Ziel</a>
+  <a href="#struktur">2. Projektstruktur</a>
+  <a href="#start">3. Ausgangspunkt</a>
+  <a href="#com10">4. Woher kommt COM10?</a>
+  <a href="#direkttest">5. Direkter API-Test</a>
+  <a href="#import">6. Import vs. DLL-Laden</a>
+  <a href="#fehler">7. Fehlermeldung analysieren</a>
+  <a href="#loesung">8. Test mit os.add_dll_directory()</a>
+  <a href="#komplett">9. Vollständiges Testprogramm</a>
+  <a href="#auswertung">10. Auswertung</a>
+  <a href="#schueler">11. Für Schüler</a>
+</nav>
+
+<section id="ziel">
+<h2>1. Ziel des Tests</h2>
+<p>Das Ziel war, die Dobot-Python-API schrittweise zu testen und dabei die einzelnen Fehlerquellen sauber voneinander zu trennen:</p>
+<ol>
+  <li>Läuft die verwendete Python-Version und stimmt die Architektur?</li>
+  <li>Wird das SDK-Verzeichnis korrekt gefunden?</li>
+  <li>Ist die Datei <code>DobotDll.dll</code> vorhanden?</li>
+  <li>Kann <code>DobotDllType.py</code> als Python-Modul importiert werden?</li>
+  <li>Kann <code>DobotDllType.py</code> anschließend die DLL wirklich laden?</li>
+  <li>Erst danach: Kann eine Verbindung zum Dobot hergestellt werden?</li>
+</ol>
+<div class="note"><strong>Didaktischer Grundgedanke:</strong> Nicht mehrere Fehlerquellen gleichzeitig testen. Jeder Testschritt soll genau eine Frage beantworten.</div>
+</section>
+
+<section id="struktur">
+<h2>2. Projektstruktur</h2>
+<p>Für die Tests wurde folgende Grundstruktur verwendet:</p>
+<pre class="tree"><code>Dobot-Python/
+├── dobot.py
+├── sdk64/
+│   ├── __init__.py
+│   ├── DobotDllType.py
+│   └── DobotDll.dll
+└── api-testen/
+    ├── start.py
+    └── test.py</code></pre>
+
+<p>Die Datei <code>test.py</code> liegt zwei Ebenen unterhalb von <code>Dobot-Python</code>. Deshalb liefert:</p>
+<div class="highlight"><pre><span></span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span>
+</pre></div>
+
+<p>den Ordner <code>api-testen</code>, während:</p>
+<div class="highlight"><pre><span></span><span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+</pre></div>
+
+<p>den Projektordner <code>Dobot-Python</code> ergibt.</p>
+
+<div class="warning"><strong>Wichtige Korrektur:</strong> Der Kommentar „Übergeordneten Ordner <code>projekte</code> in den Python-Suchpfad aufnehmen“ war ungenau. Tatsächlich wird hier der Ordner <code>Dobot-Python</code> in <code>sys.path</code> aufgenommen.</div>
+</section>
+
+<section id="start">
+<h2>3. Ausgangspunkt: Test über <code>dobot.py</code></h2>
+<p>Der erste Test verwendete:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># Übergeordneten Ordner &quot;Dobot-Python&quot; in den Python-Suchpfad aufnehmen</span>
+<span class="n">PROJEKTORDNER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">))</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">dobot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdk64</span><span class="w"> </span><span class="kn">import</span> <span class="n">DobotDllType</span> <span class="k">as</span> <span class="n">dType</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Die Ausgabe zeigte:</p>
+<pre class='output'><code>Python-Version:     3.14.5
+Python-Architektur: 64bit
+SDK-Verzeichnis:    D:\Github\andreas519.github.io\projekte\dobot_magician\Dobot-Python\sdk64
+DLL-Datei:          D:\Github\andreas519.github.io\projekte\dobot_magician\Dobot-Python\sdk64\DobotDll.dll
+DLL vorhanden:      True
+
+FEHLER: Die serielle Schnittstelle COM10 ist nicht verfügbar.
+
+Vom Betriebssystem erkannte COM-Ports:
+  COM13    USB-SERIAL CH340 (COM13)
+
+Das Programm wird beendet.
+
+Process ended with exit code 1.</code></pre>
+
+<p>Damit war bereits klar:</p>
+<ul>
+  <li>Python läuft als 64-Bit-Version.</li>
+  <li>Das SDK-Verzeichnis wird gefunden.</li>
+  <li>Die DLL-Datei ist vorhanden.</li>
+  <li>Die Verbindung scheitert zunächst an der seriellen Schnittstelle.</li>
+</ul>
+</section>
+
+<section id="com10">
+<h2>4. Woher kam <code>COM10</code>?</h2>
+<p>In <code>start.py</code> stand kein <code>COM10</code>. Die Ursache war der Aufruf:</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">dobot</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Mit <code>import dobot</code> wird das Modul <code>dobot.py</code> geladen. Dort ist bzw. war <code>COM10</code> als Standardwert für die Initialisierung hinterlegt.</p>
+
+<p>Ein Aufruf ohne Argument:</p>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+</pre></div>
+
+
+<p>entspricht deshalb sinngemäß einem Aufruf wie:</p>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="note"><strong>Merksatz:</strong> Ein Wert muss nicht in der aktuellen Datei stehen. Er kann aus einem importierten Modul oder aus einem Standardparameter einer Funktion stammen.</div>
+
+<p>Der aktuelle Windows-Computer erkannte den angeschlossenen USB-Seriell-Wandler jedoch als:</p>
+<pre class='output'><code>COM13    USB-SERIAL CH340 (COM13)</code></pre>
+
+<p>Damit war der erste Fehler verstanden: <code>dobot.init()</code> erwartete <code>COM10</code>, tatsächlich war aktuell <code>COM13</code> vorhanden.</p>
+</section>
+
+<section id="direkttest">
+<h2>5. Direkter Test von <code>DobotDllType.py</code></h2>
+<p>Um <code>dobot.py</code> als zusätzliche Fehlerquelle auszuschließen, wurde ein direkter Test von <code>DobotDllType.py</code> vorbereitet.</p>
+
+<p>Die Testdatei ermittelt zunächst die wichtigsten Pfade:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">PROJEKTORDNER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">))</span>
+
+<span class="n">sdk_verzeichnis</span> <span class="o">=</span> <span class="n">PROJEKTORDNER</span> <span class="o">/</span> <span class="s2">&quot;sdk64&quot;</span>
+<span class="n">dll_datei</span> <span class="o">=</span> <span class="n">sdk_verzeichnis</span> <span class="o">/</span> <span class="s2">&quot;DobotDll.dll&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python-Version:    &quot;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python-Architektur:&quot;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">architecture</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SDK-Verzeichnis:   &quot;</span><span class="p">,</span> <span class="n">sdk_verzeichnis</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL-Datei:         &quot;</span><span class="p">,</span> <span class="n">dll_datei</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL vorhanden:     &quot;</span><span class="p">,</span> <span class="n">dll_datei</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdk64</span><span class="w"> </span><span class="kn">import</span> <span class="n">DobotDllType</span> <span class="k">as</span> <span class="n">dType</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DobotDllType.py:   &quot;</span><span class="p">,</span> <span class="n">dType</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Die zusätzliche Ausgabe von <code>dType.__file__</code> ist besonders nützlich. Sie zeigt exakt, welche Datei tatsächlich importiert wurde:</p>
+<pre class='output'><code>DobotDllType.py:    D:\Github\andreas519.github.io\projekte\dobot_magician\Dobot-Python\sdk64\DobotDllType.py</code></pre>
+
+<div class="success"><strong>Ergebnis:</strong> <code>DobotDllType.py</code> konnte erfolgreich importiert werden.</div>
+</section>
+
+<section id="import">
+<h2>6. Unterschied: Python-Modul importieren und DLL laden</h2>
+<p>Diese beiden Schritte sind nicht dasselbe.</p>
+
+<h3>6.1 Python-Modul importieren</h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">sdk64</span><span class="w"> </span><span class="kn">import</span> <span class="n">DobotDllType</span> <span class="k">as</span> <span class="n">dType</span>
+</pre></div>
+
+
+<p>Dadurch wird <code>DobotDllType.py</code> als Python-Modul geladen. Funktionen, Klassen und Konstanten stehen anschließend über <code>dType</code> zur Verfügung.</p>
+
+<h3>6.2 Die eigentliche DLL laden</h3>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Erst dieser Aufruf versucht, <code>DobotDll.dll</code> als native Windows-Bibliothek zu laden.</p>
+
+<table>
+<thead>
+<tr><th>Testschritt</th><th>Was wird geprüft?</th></tr>
+</thead>
+<tbody>
+<tr><td><code>from sdk64 import DobotDllType as dType</code></td><td>Kann das Python-Modul importiert werden?</td></tr>
+<tr><td><code>dType.__file__</code></td><td>Welche konkrete Datei wurde importiert?</td></tr>
+<tr><td><code>dType.load()</code></td><td>Kann die native DLL geladen werden?</td></tr>
+</tbody>
+</table>
+
+<div class="note"><strong>Wichtig:</strong> Wenn <code>api = dType.load()</code> auskommentiert ist, wird die DLL nicht geladen. Dann kann der Import von <code>DobotDllType.py</code> erfolgreich sein, obwohl das spätere Laden der DLL noch fehlschlägt.</div>
+</section>
+
+<section id="fehler">
+<h2>7. Der eigentliche DLL-Ladefehler</h2>
+<p>Mit aktiviertem Aufruf:</p>
+<div class="highlight"><pre><span></span><span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+
+
+<p>erschien:</p>
+<pre class='output'><code>Traceback (most recent call last):
+  File &quot;...\api-testen\test.py&quot;, line 25, in &lt;module&gt;
+    api = dType.load()
+  File &quot;...\sdk64\DobotDllType.py&quot;, line 460, in load
+    return CDLL(&quot;DobotDll.dll&quot;,  RTLD_GLOBAL)
+  File &quot;...\ctypes\__init__.py&quot;, line 451, in _load_library
+    return _LoadLibrary(self._name, winmode)
+FileNotFoundError: Could not find module &#x27;DobotDll.dll&#x27;
+(or one of its dependencies).
+Try using the full path with constructor syntax.</code></pre>
+
+<p>Das wirkte zunächst widersprüchlich, weil vorher ausgegeben wurde:</p>
+<pre class='output'><code>DLL vorhanden:      True</code></pre>
+
+<h3>7.1 Warum ist das kein Widerspruch?</h3>
+<p>Die Variable:</p>
+<div class="highlight"><pre><span></span><span class="n">dll_datei</span> <span class="o">=</span> <span class="n">sdk_verzeichnis</span> <span class="o">/</span> <span class="s2">&quot;DobotDll.dll&quot;</span>
+</pre></div>
+
+
+<p>prüft nur, ob die Datei an diesem vollständigen Pfad vorhanden ist.</p>
+
+<p>Die Funktion <code>dType.load()</code> verwendet diesen Pfad aber nicht. Laut Fehlermeldung führt <code>DobotDllType.py</code> aus:</p>
+<div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">CDLL</span><span class="p">(</span><span class="s2">&quot;DobotDll.dll&quot;</span><span class="p">,</span> <span class="n">RTLD_GLOBAL</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Die DLL wird also nur anhand ihres Dateinamens gesucht:</p>
+<pre class='output'><code>DobotDll.dll</code></pre>
+
+<p>Das Verzeichnis <code>sdk64</code> ist damit nicht automatisch Teil des Windows-DLL-Suchpfads.</p>
+
+<pre class="tree"><code>test.py
+│
+├── findet:
+│   D:\...\Dobot-Python\sdk64\DobotDll.dll
+│
+│   → DLL vorhanden: True
+│
+└── dType.load()
+    │
+    └── CDLL("DobotDll.dll")
+        │
+        └── sucht erneut nur nach dem Dateinamen
+            → FileNotFoundError</code></pre>
+
+<div class="danger"><strong>Kernaussage:</strong> „Datei vorhanden“ bedeutet nicht automatisch „DLL kann von Windows geladen werden“.</div>
+</section>
+
+<section id="loesung">
+<h2>8. Test mit <code>os.add_dll_directory()</code></h2>
+<p>Für den nächsten Test wird das Verzeichnis <code>sdk64</code> ausdrücklich in den Windows-DLL-Suchpfad aufgenommen.</p>
+
+<div class="highlight"><pre><span></span><span class="n">dll_verzeichnis_handle</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">add_dll_directory</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sdk_verzeichnis</span><span class="p">))</span>
+
+<span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Die Funktion:</p>
+<div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">add_dll_directory</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+
+
+<p>registriert das angegebene Verzeichnis für die Suche nach DLLs.</p>
+
+<div class="warning"><strong>Wichtig:</strong> Das zurückgegebene Handle wird in einer Variablen gespeichert. Es soll während des DLL-Ladens erhalten bleiben.</div>
+
+<p>Dieser Test verändert <code>DobotDllType.py</code> zunächst nicht. Damit kann geprüft werden, ob das Problem tatsächlich nur im DLL-Suchpfad liegt.</p>
+</section>
+
+<section id="komplett">
+<h2>9. Vollständiges Testprogramm</h2>
+<p>Die folgende Version trennt die Schritte klar voneinander und gibt verständliche Statusmeldungen aus:</p>
+
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="c1"># Übergeordneten Ordner &quot;Dobot-Python&quot; in den Python-Suchpfad aufnehmen</span>
+<span class="n">PROJEKTORDNER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
+
+<span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">:</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">PROJEKTORDNER</span><span class="p">))</span>
+
+<span class="n">sdk_verzeichnis</span> <span class="o">=</span> <span class="n">PROJEKTORDNER</span> <span class="o">/</span> <span class="s2">&quot;sdk64&quot;</span>
+<span class="n">dll_datei</span> <span class="o">=</span> <span class="n">sdk_verzeichnis</span> <span class="o">/</span> <span class="s2">&quot;DobotDll.dll&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python-Version:    &quot;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python-Architektur:&quot;</span><span class="p">,</span> <span class="n">platform</span><span class="o">.</span><span class="n">architecture</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SDK-Verzeichnis:   &quot;</span><span class="p">,</span> <span class="n">sdk_verzeichnis</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL-Datei:         &quot;</span><span class="p">,</span> <span class="n">dll_datei</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL vorhanden:     &quot;</span><span class="p">,</span> <span class="n">dll_datei</span><span class="o">.</span><span class="n">exists</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># DobotDllType.py importieren</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sdk64</span><span class="w"> </span><span class="kn">import</span> <span class="n">DobotDllType</span> <span class="k">as</span> <span class="n">dType</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DobotDllType.py:   &quot;</span><span class="p">,</span> <span class="n">dType</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL-Verzeichnis wird zum Windows-DLL-Suchpfad hinzugefügt ...&quot;</span><span class="p">)</span>
+
+<span class="c1"># Das Verzeichnis sdk64 für die DLL-Suche registrieren.</span>
+<span class="c1"># Das Handle muss während des Ladens der DLL erhalten bleiben.</span>
+<span class="n">dll_verzeichnis_handle</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">add_dll_directory</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">sdk_verzeichnis</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DLL-Verzeichnis registriert.&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DobotDll.dll wird geladen ...&quot;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">api</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DobotDll.dll wurde erfolgreich geladen.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;API-Objekt:&quot;</span><span class="p">,</span> <span class="n">api</span><span class="p">)</span>
+
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">fehler</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FEHLER beim Laden der DobotDll.dll:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">fehler</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">fehler</span><span class="p">)</span>
+
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Test erfolgreich beendet.&quot;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+
+
+<h3>Erwartete Ausgabe bei erfolgreichem Laden</h3>
+<pre class='output'><code>Python-Version:     3.14.5
+Python-Architektur: 64bit
+SDK-Verzeichnis:    D:\...\Dobot-Python\sdk64
+DLL-Datei:          D:\...\Dobot-Python\sdk64\DobotDll.dll
+DLL vorhanden:      True
+
+DobotDllType.py:    D:\...\Dobot-Python\sdk64\DobotDllType.py
+
+DLL-Verzeichnis wird zum Windows-DLL-Suchpfad hinzugefügt ...
+DLL-Verzeichnis registriert.
+
+DobotDll.dll wird geladen ...
+DobotDll.dll wurde erfolgreich geladen.
+API-Objekt: &lt;CDLL ...&gt;
+
+Test erfolgreich beendet.</code></pre>
+</section>
+
+<section id="auswertung">
+<h2>10. Was bedeutet das Ergebnis?</h2>
+
+<h3>Fall A: Die DLL wird erfolgreich geladen</h3>
+<p>Dann ist bewiesen:</p>
+<ul>
+  <li>Python und DLL besitzen eine passende Architektur.</li>
+  <li><code>DobotDllType.py</code> kann importiert werden.</li>
+  <li><code>DobotDll.dll</code> ist grundsätzlich ladbar.</li>
+  <li>Das ursprüngliche Problem lag am DLL-Suchpfad.</li>
+</ul>
+
+<h3>Fall B: Es erscheint weiterhin <code>FileNotFoundError</code></h3>
+<p>Dann kann eine Abhängigkeit der DLL fehlen. Die Fehlermeldung weist ausdrücklich darauf hin:</p>
+<pre class='output'><code>Could not find module &#x27;DobotDll.dll&#x27; (or one of its dependencies).</code></pre>
+
+<p>In diesem Fall muss untersucht werden, ob <code>DobotDll.dll</code> weitere DLLs benötigt, die Windows nicht findet.</p>
+
+<h3>Fall C: Es erscheint ein Architekturfehler</h3>
+<p>Dann passen Python und DLL möglicherweise nicht zusammen, zum Beispiel:</p>
+<ul>
+  <li>64-Bit-Python mit 32-Bit-DLL oder</li>
+  <li>32-Bit-Python mit 64-Bit-DLL.</li>
+</ul>
+
+<div class="success"><strong>Aktueller Stand des Testwegs:</strong> Der Import von <code>DobotDllType.py</code> funktioniert. Der Fehler tritt erst beim Aufruf von <code>dType.load()</code> auf. Der nächste gezielte Test ist deshalb die Registrierung des Ordners <code>sdk64</code> mit <code>os.add_dll_directory()</code>.</div>
+</section>
+
+<section>
+<h2>11. Mögliche dauerhafte Verbesserung von <code>DobotDllType.py</code></h2>
+<p>Für das eigentliche Projekt kann es später sinnvoll sein, die DLL relativ zur Datei <code>DobotDllType.py</code> zu laden.</p>
+
+<p>Statt:</p>
+<div class="highlight"><pre><span></span><span class="k">return</span> <span class="n">CDLL</span><span class="p">(</span><span class="s2">&quot;DobotDll.dll&quot;</span><span class="p">,</span> <span class="n">RTLD_GLOBAL</span><span class="p">)</span>
+</pre></div>
+
+
+<p>könnte sinngemäß verwendet werden:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">dll_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;DobotDll.dll&quot;</span>
+<span class="k">return</span> <span class="n">CDLL</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">dll_path</span><span class="p">),</span> <span class="n">RTLD_GLOBAL</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Damit sucht das Modul die DLL immer in seinem eigenen Verzeichnis:</p>
+
+<pre class="tree"><code>sdk64/
+├── DobotDllType.py
+└── DobotDll.dll</code></pre>
+
+<div class="note"><strong>Vorteil:</strong> Das Test- oder Hauptprogramm kann aus einem beliebigen Unterordner gestartet werden, ohne dass das aktuelle Arbeitsverzeichnis stimmen muss.</div>
+</section>
+
+<section id="schueler">
+<h2>12. Fragen und Arbeitsaufträge für Schüler</h2>
+
+<ol>
+  <li>Was ist der Unterschied zwischen <code>Path.exists()</code> und dem tatsächlichen Laden einer DLL?</li>
+  <li>Warum kann <code>DobotDllType.py</code> erfolgreich importiert werden, obwohl <code>DobotDll.dll</code> anschließend nicht geladen werden kann?</li>
+  <li>Welche Aufgabe hat <code>sys.path</code>?</li>
+  <li>Was liefert <code>__file__</code>?</li>
+  <li>Warum ist <code>dType.__file__</code> für die Fehlersuche hilfreich?</li>
+  <li>Warum ist ein relativer Dateiname wie <code>"DobotDll.dll"</code> weniger robust als ein vollständiger Pfad?</li>
+  <li>Welche Bedeutung hat die Unterscheidung zwischen 32-Bit- und 64-Bit-Software?</li>
+  <li>Warum sollte eine Fehlersuche schrittweise aufgebaut sein?</li>
+</ol>
+
+<h3>Merksätze</h3>
+<ul>
+  <li><strong>Importieren ist nicht dasselbe wie Laden einer nativen Bibliothek.</strong></li>
+  <li><strong>Eine vorhandene Datei kann trotzdem nicht ladbar sein.</strong></li>
+  <li><strong>Pfadprobleme sollten getrennt von Verbindungsproblemen untersucht werden.</strong></li>
+  <li><strong>Gute Testprogramme geben sichtbar aus, welche Datei und welcher Pfad tatsächlich verwendet werden.</strong></li>
+</ul>
+</section>
+
+<section>
+<h2>13. Empfohlene Reihenfolge für weitere Tests</h2>
+<ol>
+  <li><code>os.add_dll_directory()</code> testen.</li>
+  <li>Prüfen, ob <code>dType.load()</code> erfolgreich ist.</li>
+  <li>Erst danach den Dobot über den aktuell vorhandenen COM-Port verbinden.</li>
+  <li>Dann eine reine Leseoperation testen, zum Beispiel <code>GetPose()</code>.</li>
+  <li>Erst anschließend Bewegungsbefehle testen.</li>
+</ol>
+
+<div class="warning"><strong>Sicherheitsprinzip:</strong> Bei einem Roboter zuerst Verbindungs- und Lesefunktionen testen. Bewegungen erst ausführen, wenn der Kommunikationsweg sicher funktioniert.</div>
+</section>
+
+<section>
+<h2>14. Zusammenfassung in einem Satz</h2>
+<p>Der bisherige Test zeigt, dass <code>DobotDllType.py</code> korrekt importiert wird, die Datei <code>DobotDll.dll</code> vorhanden ist, aber die ursprüngliche <code>load()</code>-Funktion die DLL nur über ihren Dateinamen sucht; deshalb wird nun das Verzeichnis <code>sdk64</code> mit <code>os.add_dll_directory()</code> ausdrücklich für die Windows-DLL-Suche registriert.</p>
+</section>
+
+</main>
+
+<footer>
+  <p>Dokumentation für das Projekt <strong>Dobot Magician</strong> – Nacharbeitung, Unterricht und Fehlersuche.</p>
+  <p class="small">Die Datei ist vollständig eigenständig aufgebaut und benötigt keine CDN-Verbindung.</p>
+</footer>
+</body>
+</html>

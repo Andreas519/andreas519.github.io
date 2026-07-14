@@ -15,6 +15,16 @@ dobot-python/
     └── DobotDll.dll
 └── api-testen/    
     ├── start.py
+    ├── ... 
+    └── readme.md
+└── hilfsfunktionen-testen/    
+    ├── start.py
+    ├── ... 
+    └── readme.md
+└── lochplatte-testen/    
+    ├── start.py    
+    ├── ... 
+    └── readme.md
 └── projekt01/    
     ├── start.py
     
