@@ -1,7 +1,8 @@
 """
-Hilfsfunktionen zur Steuerung eines Dobot Magician auf der Basis der DobotDllType.py  .
+Hilfsfunktionen zur Steuerung eines Dobot Magician auf Basis von DobotDllType.py.
 
-Stand: 13.07.2026 - 06:34
+Version: 1.0.0
+Stand: 15.07.2026
 
 Die Datei liegt im Hauptordner ``Dobot_Python``. Die 64-Bit-Version des
 Dobot-SDK wird aus dem Unterordner ``sdk64`` geladen.
@@ -14,6 +15,20 @@ import platform
 import sys
 
 from sdk64 import DobotDllType as dType
+
+
+VERSION = "1.0.0"
+VERSIONSDATUM = "15.07.2026"
+
+
+def version():
+    """Gibt die Versionsbezeichnung dieser ``dobot.py`` zurück.
+
+    Beispiel:
+        ``print(dobot.version())``
+    """
+
+    return f"dobot.py Version {VERSION} - Stand {VERSIONSDATUM}"
 
 
 def com_ports_ermitteln():
@@ -115,8 +130,8 @@ PLATTE_ZEILEN = 27
 PLATTE_RASTER_MM = 16.0
 
 # Die Kalibrierung wird mit plattenkalibrierung_setzen(...) eingetragen.
-# Benötigt werden die Dobot-Koordinaten von drei Referenzlöchern:
-#   Loch (1, 1), Loch (40, 1) und Loch (1, 27).
+# Benötigt werden die Dobot-Koordinaten von drei beliebigen erreichbaren
+# Referenzlöchern. Ihre Rasterpositionen dürfen nicht auf einer Geraden liegen.
 _plattenkalibrierung = None
 
 
@@ -734,15 +749,19 @@ def ausfuehren(api):
 
         print()
         print("Roboterprogramm beendet.")
-# ---- undokumentierte Funktioen
 
-def alarme_loeschen():
-    """
-    Löscht alle gespeicherten Alarmzustände des Dobot.
+
+# ---------------------------------------------------------------------------
+# Weitere Funktionen
+# ---------------------------------------------------------------------------
+
+def alarme_loeschen(api):
+    """Löscht alle gespeicherten Alarmzustände des Dobot.
 
     Achtung:
     Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
     """
+
     if api is None:
         raise RuntimeError("Der Dobot ist nicht verbunden.")
 
