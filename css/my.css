@@ -140,6 +140,14 @@ ol > li {
       margin: 1rem 0;
     }
 
+    .code-panel {
+      display: flex;
+      align-items: stretch;
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
     .copy-button {
       position: absolute;
       right: .6rem;
@@ -161,35 +169,42 @@ ol > li {
     pre.codebereich {
       margin: 0;
       overflow: auto;
-      position: relative;
       line-height: 1.5;
-      padding: 1rem 1rem 1rem 4.2em;
-      border-radius: 8px;
+      padding: 1rem;
+      border-radius: 0;
+      background: transparent;
+      flex: 1 1 auto;
+      min-width: 0;
     }
 
     pre.codebereich.line-numbers {
-      counter-reset: linenumber;
+      display: block;
     }
 
-    pre.codebereich.line-numbers .line-numbers-rows {
-      position: absolute;
-      top: 1rem;
-      left: 0;
-      width: 3.2em;
+    .code-panel .line-numbers-rows {
+      display: block;
+      flex: 0 0 3.2em;
+      margin: 0;
       border-right: 1px solid #cbd5e1;
       user-select: none;
       pointer-events: none;
+      padding: 1rem .8rem 1rem 0;
     }
 
-    pre.codebereich.line-numbers .line-numbers-rows > span {
+    .code-panel .line-numbers-rows > span {
       display: block;
       line-height: 1.5;
       text-align: right;
-      padding-right: .8em;
       color: #94a3b8;
     }
 
-    pre.codebereich.line-numbers .line-numbers-rows > span::before {
+    pre.codebereich.line-numbers > code {
+      display: block;
+      min-width: 0;
+      white-space: pre;
+    }
+
+    .code-panel .line-numbers-rows > span::before {
       content: none;
     }
 

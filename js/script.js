@@ -27,49 +27,81 @@ function ladeDatei(datei, elementId) {
       minute: "2-digit"
     }) + " Uhr";
 
-  document.querySelectorAll('pre > code[class*="language-"]').forEach((codeElement, index) => {
-    const preElement = codeElement.parentElement;
+function initialisiereKopierButton(codeElement) {
+  const wrapper = codeElement.closest(".code-wrap");
+  if (!wrapper) {
+    return;
+  }
 
-    if (!preElement || preElement.dataset.codeEnhanced === "true") {
+  let copyButton = wrapper.querySelector(".copy-button");
+  if (!copyButton) {
+    copyButton = document.createElement("button");
+    copyButton.type = "button";
+    copyButton.className = "copy-button";
+    copyButton.textContent = "Kopieren";
+    wrapper.insertBefore(copyButton, wrapper.firstChild);
+  }
+
+  if (copyButton.dataset.copyBound === "true") {
+    return;
+  }
+
+  copyButton.dataset.copyBound = "true";
+  copyButton.addEventListener("click", () => {
+    if (!navigator.clipboard) {
       return;
     }
 
-    preElement.dataset.codeEnhanced = "true";
-    preElement.classList.add("codeblock");
+    navigator.clipboard.writeText(codeElement.textContent).then(() => {
+      const originalText = copyButton.textContent;
+      copyButton.textContent = "Kopiert";
+      setTimeout(() => {
+        copyButton.textContent = originalText;
+      }, 1200);
+    });
+  });
+}
 
-    const codeText = codeElement.textContent.replace(/\n$/, "");
-    const lineCount = codeText === "" ? 1 : codeText.split("\n").length;
-    const lineNumbers = document.createElement("span");
-    lineNumbers.className = "line-numbers-rows";
+function setzeZeilennummern(codeElement) {
+  const codePanel = codeElement.closest(".code-panel");
+  if (!codePanel) {
+    return;
+  }
 
-    for (let lineIndex = 0; lineIndex < lineCount; lineIndex += 1) {
-      lineNumbers.appendChild(document.createElement("span"));
+  const zeilenbereich = codePanel.querySelector(".line-numbers-rows");
+  if (!zeilenbereich) {
+    return;
+  }
+
+  zeilenbereich.textContent = "";
+
+  const codeText = codeElement.textContent.replace(/\n$/, "");
+  const zeilenanzahl = codeText === "" ? 1 : codeText.split("\n").length;
+
+  for (let index = 1; index <= zeilenanzahl; index += 1) {
+    const zeile = document.createElement("span");
+    zeile.textContent = String(index);
+    zeilenbereich.appendChild(zeile);
+  }
+}
+
+function initialisiereCodebloecke() {
+  document.querySelectorAll('pre > code[class*="language-"]').forEach(codeElement => {
+    const preElement = codeElement.parentElement;
+    if (!preElement) {
+      return;
     }
 
-    preElement.appendChild(lineNumbers);
-
-    const wrapper = document.createElement("div");
-    wrapper.className = "codeblock-wrapper";
-
-    const toolbar = document.createElement("div");
-    toolbar.className = "codeblock-toolbar";
-
-    const label = document.createElement("span");
-    label.className = "codeblock-language";
-    const languageClass = Array.from(codeElement.classList).find(cssClass => cssClass.startsWith("language-")) || "language-text";
-    const languageName = languageClass.replace("language-", "");
-    label.textContent = languageName.toUpperCase();
-
-    toolbar.appendChild(label);
-
-    preElement.parentNode.insertBefore(wrapper, preElement);
-    wrapper.appendChild(toolbar);
-    wrapper.appendChild(preElement);
+    setzeZeilennummern(codeElement);
+    initialisiereKopierButton(codeElement);
 
     if (window.Prism) {
       Prism.highlightElement(codeElement);
     }
   });
+}
+
+initialisiereCodebloecke();
 
     async function ladeMarkdown(datei) {
       const bereich = document.getElementById("markdown-inhalt");
