@@ -52,7 +52,9 @@ function initialisiereKopierButton(codeElement) {
       return;
     }
 
-    navigator.clipboard.writeText(codeElement.textContent).then(() => {
+    const rohtext = codeElement.dataset.rawCode || codeElement.textContent;
+
+    navigator.clipboard.writeText(rohtext).then(() => {
       const originalText = copyButton.textContent;
       copyButton.textContent = "Kopiert";
       setTimeout(() => {
@@ -62,43 +64,42 @@ function initialisiereKopierButton(codeElement) {
   });
 }
 
-function setzeZeilennummern(codeElement) {
-  const codePanel = codeElement.closest(".code-panel");
-  if (!codePanel) {
-    return;
-  }
-
-  const zeilenbereich = codePanel.querySelector(".line-numbers-rows");
-  if (!zeilenbereich) {
-    return;
-  }
-
-  zeilenbereich.textContent = "";
-
-  const codeText = codeElement.textContent.replace(/\n$/, "");
-  const zeilenanzahl = codeText === "" ? 1 : codeText.split("\n").length;
-
-  for (let index = 1; index <= zeilenanzahl; index += 1) {
-    const zeile = document.createElement("span");
-    zeile.textContent = String(index);
-    zeilenbereich.appendChild(zeile);
-  }
-}
-
-function teileCodeInZeilen(codeElement) {
+function renderCodeMitZeilennummern(codeElement) {
   if (codeElement.dataset.codeLinesReady === "true") {
     return;
   }
 
-  const highlightedHtml = codeElement.innerHTML.replace(/\n$/, "");
-  const zeilen = highlightedHtml === "" ? [""] : highlightedHtml.split("\n");
+  const rohtext = codeElement.textContent.replace(/\n$/, "");
+  const zeilen = rohtext === "" ? [""] : rohtext.split("\n");
+  const sprachKlasse = Array.from(codeElement.classList).find(cssClass => cssClass.startsWith("language-")) || "language-text";
+  const sprache = sprachKlasse.replace("language-", "");
+  const grammatik = window.Prism && Prism.languages ? Prism.languages[sprache] : null;
 
+  codeElement.dataset.rawCode = rohtext;
   codeElement.innerHTML = "";
 
-  zeilen.forEach(zeileHtml => {
+  zeilen.forEach((zeilenText, index) => {
     const zeile = document.createElement("span");
     zeile.className = "code-line";
-    zeile.innerHTML = zeileHtml === "" ? "&nbsp;" : zeileHtml;
+
+    const nummer = document.createElement("span");
+    nummer.className = "code-line-number";
+    nummer.textContent = String(index + 1);
+
+    const inhalt = document.createElement("span");
+    inhalt.className = "code-line-content";
+
+    if (window.Prism && grammatik) {
+      const highlighted = Prism.highlight(zeilenText, grammatik, sprache);
+      inhalt.innerHTML = highlighted === "" ? "&nbsp;" : highlighted;
+    } else if (zeilenText === "") {
+      inhalt.innerHTML = "&nbsp;";
+    } else {
+      inhalt.textContent = zeilenText;
+    }
+
+    zeile.appendChild(nummer);
+    zeile.appendChild(inhalt);
     codeElement.appendChild(zeile);
   });
 
@@ -106,20 +107,14 @@ function teileCodeInZeilen(codeElement) {
 }
 
 function initialisiereCodebloecke() {
-  document.querySelectorAll('pre > code[class*="language-"]').forEach(codeElement => {
+  document.querySelectorAll('pre.codebereich.line-numbers > code[class*="language-"]').forEach(codeElement => {
     const preElement = codeElement.parentElement;
     if (!preElement) {
       return;
     }
 
     initialisiereKopierButton(codeElement);
-
-    if (window.Prism) {
-      Prism.highlightElement(codeElement);
-    }
-
-    teileCodeInZeilen(codeElement);
-    setzeZeilennummern(codeElement);
+    renderCodeMitZeilennummern(codeElement);
   });
 }
 
