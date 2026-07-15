@@ -3,198 +3,470 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Dokumentation der Python-Hilfsfunktionen für den Dobot Magician, passend zu dobot.py Version 1.0.0 vom 15.07.2026.">
-<title>Dobot Magician – Python-Hilfsfunktionen – Dokumentation Version 1.0.1</title>
+<title>Dobot Magician – Python-Hilfsfunktionen 1.2.0</title>
 <style>
-:root { color-scheme: light dark; --bg:#f3f5f8; --surface:#fff; --surface2:#eef3f8; --text:#1c2630; --muted:#5c6b78; --border:#cfd8e1; --accent:#145ea8; --accent2:#0c477f; --code:#17212b; --warning:#fff5d8; --warning-border:#d39900; --danger:#ffe9e8; --danger-border:#c5423f; --success:#e9f7ee; --success-border:#2d8a51; --shadow:0 10px 28px rgba(16,35,52,.10); }
-@media (prefers-color-scheme:dark) { :root { --bg:#11171d; --surface:#182129; --surface2:#202c36; --text:#edf4fa; --muted:#afbecb; --border:#344453; --accent:#72b7ff; --accent2:#a9d3ff; --warning:#3a321c; --warning-border:#d7a327; --danger:#3b2324; --danger-border:#d26562; --success:#1c3527; --success-border:#4ab578; --shadow:0 12px 32px rgba(0,0,0,.28); } }
-*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.62} a{color:var(--accent)} code,pre{font-family:"Cascadia Code","Consolas",monospace}
-header{background:linear-gradient(135deg,#0d3d68,#1769aa);color:white;padding:2.4rem 1.4rem 2rem;box-shadow:var(--shadow)} header .inner{max-width:1360px;margin:auto} header h1{margin:0 0 .45rem;font-size:clamp(2rem,5vw,3.35rem);line-height:1.08} header p{max-width:900px;margin:.55rem 0 1rem;font-size:1.08rem}
-.version-panel{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:1.25rem 0 1rem;max-width:980px} .version-box{background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.78);border-radius:12px;padding:.85rem 1rem} .version-box strong{display:block;font-size:1.12rem} .version-box span{opacity:.92}
-.badge-row{display:flex;flex-wrap:wrap;gap:.55rem} .badge{display:inline-block;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:.35rem .65rem;border-radius:999px;font-size:.9rem;font-weight:650}
-.layout{max-width:1360px;margin:0 auto;padding:1.4rem;display:grid;grid-template-columns:285px minmax(0,1fr);gap:1.35rem;align-items:start} nav{position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem;box-shadow:var(--shadow)} nav h2{margin-top:0;font-size:1.05rem} nav a{display:block;padding:.35rem .3rem;text-decoration:none;border-radius:6px} nav a:hover{background:var(--surface2)} main{min-width:0} section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.35rem 1.5rem;margin-bottom:1.2rem;box-shadow:var(--shadow)} h2{scroll-margin-top:1rem;color:var(--accent2)} h3{margin-top:1.5rem} table{width:100%;border-collapse:collapse} th,td{border:1px solid var(--border);padding:.65rem;text-align:left;vertical-align:top} th{background:var(--surface2)}
-.code-wrap{position:relative;margin:1rem 0} pre{margin:0;background:#17212b;color:#eef6ff;border-radius:10px;padding:1rem;overflow:auto;line-height:1.48;font-size:.92rem} .copy-button{position:absolute;right:.55rem;top:.55rem;z-index:2;border:1px solid #6d8296;border-radius:7px;background:#243544;color:white;padding:.3rem .55rem;cursor:pointer} .copy-button:hover{background:#334b60}
-.callout{border-left:5px solid;padding:.85rem 1rem;margin:1rem 0;border-radius:8px} .warning{background:var(--warning);border-color:var(--warning-border)} .danger{background:var(--danger);border-color:var(--danger-border)} .success{background:var(--success);border-color:var(--success-border)} .flow{white-space:pre-wrap;background:var(--surface2);border:1px solid var(--border);padding:1rem;border-radius:9px;font-family:"Cascadia Code","Consolas",monospace} details{border:1px solid var(--border);border-radius:9px;padding:.7rem .9rem;margin:.7rem 0;background:var(--surface2)} summary{cursor:pointer;font-weight:700} .example-output{background:var(--surface2);border-radius:8px;padding:.7rem .9rem} footer{max-width:1360px;margin:0 auto;padding:0 1.4rem 2.5rem;color:var(--muted);text-align:center}
-
-/* -------------------------------------------------------------------------
-   Eingebettetes Python-Syntaxhighlighting
-   Dunkles, kontrastreiches Farbschema. Kein CDN, kein externes JavaScript.
-   Die Python-Tokens sind bereits statisch als <span>-Elemente eingebettet.
-   ------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+  --page: #f4f7fb;
+  --surface: #ffffff;
+  --surface-soft: #eef3f9;
+  --border: #cbd5e1;
+  --text: #172033;
+  --muted: #526176;
+  --accent: #1456a0;
+  --accent-dark: #0b376a;
+  --success: #176b45;
+  --warning: #8a5200;
+  --danger: #9b1c1c;
+  --code-bg: #0d1117;
+  --shadow: 0 10px 28px rgba(15, 39, 71, 0.10);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--text);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.62;
+}
+header {
+  color: white;
+  background:
+    radial-gradient(circle at top right, rgba(69, 142, 224, 0.45), transparent 36%),
+    linear-gradient(135deg, #081f3c, #0d477e 58%, #1262a8);
+  border-bottom: 6px solid #f0b429;
+}
+header .inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 2.2rem 2rem 2rem;
+}
+h1 {
+  margin: 0 0 .45rem;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  line-height: 1.1;
+}
+header p {
+  max-width: 900px;
+  margin: 0;
+  color: #deebf8;
+  font-size: 1.08rem;
+}
+.version-panel {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .8rem;
+  margin-top: 1.35rem;
+}
+.version-box {
+  padding: .9rem 1rem;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: .8rem;
+  background: rgba(255,255,255,.11);
+  backdrop-filter: blur(3px);
+}
+.version-box strong, .version-box span { display: block; }
+.version-box span { color: #d6e6f7; font-size: .92rem; }
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: 1rem;
+}
+.badge {
+  padding: .28rem .62rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  font-size: .87rem;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 285px minmax(0, 1fr);
+  gap: 1.3rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.4rem;
+}
+nav {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: .9rem;
+  box-shadow: var(--shadow);
+}
+nav h2 { margin: 0 0 .6rem; font-size: 1rem; }
+nav a {
+  display: block;
+  padding: .38rem .48rem;
+  color: var(--accent-dark);
+  text-decoration: none;
+  border-radius: .4rem;
+  font-size: .91rem;
+}
+nav a:hover { background: var(--surface-soft); }
+main { min-width: 0; }
+section {
+  margin: 0 0 1.2rem;
+  padding: 1.35rem 1.45rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: .95rem;
+  box-shadow: var(--shadow);
+  scroll-margin-top: 1rem;
+}
+h2 {
+  margin-top: 0;
+  color: var(--accent-dark);
+  line-height: 1.25;
+}
+h3 { margin-bottom: .45rem; color: #243c5a; }
+p.lead { color: var(--muted); white-space: normal; }
+code {
+  font-family: Consolas, "Liberation Mono", "Courier New", monospace;
+}
+p code, li code, td code, th code, summary code, h2 code, h3 code {
+  padding: .08rem .3rem;
+  border-radius: .3rem;
+  background: #e9f0f8;
+  color: #123f72;
+}
+.callout {
+  margin: 1rem 0;
+  padding: .85rem 1rem;
+  border-left: 5px solid;
+  border-radius: .5rem;
+  background: var(--surface-soft);
+}
+.callout.success { border-color: var(--success); background: #edf9f3; }
+.callout.warning { border-color: #d18400; background: #fff8e8; }
+.callout.danger { border-color: var(--danger); background: #fff0f0; }
+.function-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+  gap: .75rem;
+}
+.function-card {
+  display: flex;
+  flex-direction: column;
+  gap: .38rem;
+  padding: .85rem;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: .65rem;
+  background: #f9fbfd;
+}
+.function-card:hover {
+  border-color: #7ca9d6;
+  transform: translateY(-1px);
+}
+.function-card code { font-weight: 700; color: var(--accent-dark); }
+.function-card span { color: var(--muted); font-size: .9rem; }
+.code-wrap {
+  position: relative;
+  margin: .75rem 0 1rem;
+  border: 1px solid #30363d;
+  border-radius: .7rem;
+  overflow: hidden;
+  background: var(--code-bg);
+}
 pre {
-    line-height: 1.5;
-    background: #0d1117;
-    color: #e6edf3;
-    border: 1px solid #30363d;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow: auto;
+  background: var(--code-bg);
+  color: #e6edf3;
+  tab-size: 4;
+  line-height: 1.52;
 }
 pre code {
-    display: block;
-    min-width: max-content;
-    padding: 0;
-    background: transparent !important;
-    color: #e6edf3;
-    font: inherit;
-    tab-size: 4;
+  display: block;
+  min-width: max-content;
+  background: transparent;
+  color: inherit;
+  font-size: .92rem;
 }
-pre code::selection,
-pre code span::selection {
-    background: #264f78;
-    color: #ffffff;
+.copy-button {
+  position: absolute;
+  top: .48rem;
+  right: .48rem;
+  z-index: 2;
+  padding: .3rem .58rem;
+  border: 1px solid #59636e;
+  border-radius: .45rem;
+  background: #21262d;
+  color: #f0f6fc;
+  cursor: pointer;
+  font-size: .78rem;
 }
-
-/* Kommentare */
-pre code .c,
-pre code .ch,
-pre code .cm,
-pre code .cp,
-pre code .cpf,
-pre code .c1,
-pre code .cs {
-    color: #8b949e;
-    font-style: italic;
+.copy-button:hover { background: #30363d; }
+details {
+  margin-top: .8rem;
+  border: 1px solid var(--border);
+  border-radius: .6rem;
+  background: #fbfcfe;
 }
-
-/* Schlüsselwörter und logische Operatoren */
-pre code .k,
-pre code .kc,
-pre code .kd,
-pre code .kn,
-pre code .kp,
-pre code .kr,
-pre code .kt,
-pre code .ow {
-    color: #ff7b72;
-    font-weight: 600;
+summary {
+  padding: .72rem .85rem;
+  cursor: pointer;
+  color: var(--accent-dark);
+  font-weight: 650;
 }
-
-/* Zeichenketten */
-pre code .s,
-pre code .sa,
-pre code .sb,
-pre code .sc,
-pre code .dl,
-pre code .sd,
-pre code .s1,
-pre code .s2,
-pre code .se,
-pre code .sh,
-pre code .si,
-pre code .sx,
-pre code .sr,
-pre code .ss {
-    color: #a5d6ff;
+details .code-wrap { margin: 0 .8rem .8rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: .8rem 0;
 }
-pre code .sd {
-    font-style: italic;
+th, td {
+  padding: .55rem .65rem;
+  border: 1px solid var(--border);
+  text-align: left;
+  vertical-align: top;
 }
-
-/* Zahlen */
-pre code .m,
-pre code .mb,
-pre code .mf,
-pre code .mh,
-pre code .mi,
-pre code .mo,
-pre code .il {
-    color: #79c0ff;
+th { background: #e8f0f8; color: #153b65; }
+.flow {
+  padding: 1rem;
+  border-radius: .6rem;
+  background: #edf3f9;
+  font-family: Consolas, "Courier New", monospace;
+  white-space: pre-wrap;
 }
-
-/* Funktionen, Klassen und Namensräume */
-pre code .nf,
-pre code .fm,
-pre code .nc,
-pre code .nn,
-pre code .nd {
-    color: #d2a8ff;
+footer {
+  max-width: 1440px;
+  margin: 0 auto 2rem;
+  padding: 0 1.4rem;
+  color: var(--muted);
 }
-pre code .nf,
-pre code .fm,
-pre code .nc,
-pre code .nn {
-    font-weight: 600;
+pre { line-height: 125%; }
+td.linenos .normal { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: #6e7681; background-color: #0d1117; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #e6edf3; background-color: #6e7681; padding-left: 5px; padding-right: 5px; }
+.highlight .hll { background-color: #6e7681 }
+.highlight { background: #0d1117; color: #E6EDF3 }
+.highlight .c { color: #8B949E; font-style: italic } /* Comment */
+.highlight .err { color: #F85149 } /* Error */
+.highlight .esc { color: #E6EDF3 } /* Escape */
+.highlight .g { color: #E6EDF3 } /* Generic */
+.highlight .k { color: #FF7B72 } /* Keyword */
+.highlight .l { color: #A5D6FF } /* Literal */
+.highlight .n { color: #E6EDF3 } /* Name */
+.highlight .o { color: #FF7B72; font-weight: bold } /* Operator */
+.highlight .x { color: #E6EDF3 } /* Other */
+.highlight .p { color: #E6EDF3 } /* Punctuation */
+.highlight .ch { color: #8B949E; font-style: italic } /* Comment.Hashbang */
+.highlight .cm { color: #8B949E; font-style: italic } /* Comment.Multiline */
+.highlight .cp { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Preproc */
+.highlight .cpf { color: #8B949E; font-style: italic } /* Comment.PreprocFile */
+.highlight .c1 { color: #8B949E; font-style: italic } /* Comment.Single */
+.highlight .cs { color: #8B949E; font-weight: bold; font-style: italic } /* Comment.Special */
+.highlight .gd { color: #FFA198; background-color: #490202 } /* Generic.Deleted */
+.highlight .ge { color: #E6EDF3; font-style: italic } /* Generic.Emph */
+.highlight .ges { color: #E6EDF3; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.highlight .gr { color: #FFA198 } /* Generic.Error */
+.highlight .gh { color: #79C0FF; font-weight: bold } /* Generic.Heading */
+.highlight .gi { color: #56D364; background-color: #0F5323 } /* Generic.Inserted */
+.highlight .go { color: #8B949E } /* Generic.Output */
+.highlight .gp { color: #8B949E } /* Generic.Prompt */
+.highlight .gs { color: #E6EDF3; font-weight: bold } /* Generic.Strong */
+.highlight .gu { color: #79C0FF } /* Generic.Subheading */
+.highlight .gt { color: #FF7B72 } /* Generic.Traceback */
+.highlight .g-Underline { color: #E6EDF3; text-decoration: underline } /* Generic.Underline */
+.highlight .kc { color: #79C0FF } /* Keyword.Constant */
+.highlight .kd { color: #FF7B72 } /* Keyword.Declaration */
+.highlight .kn { color: #FF7B72 } /* Keyword.Namespace */
+.highlight .kp { color: #79C0FF } /* Keyword.Pseudo */
+.highlight .kr { color: #FF7B72 } /* Keyword.Reserved */
+.highlight .kt { color: #FF7B72 } /* Keyword.Type */
+.highlight .ld { color: #79C0FF } /* Literal.Date */
+.highlight .m { color: #A5D6FF } /* Literal.Number */
+.highlight .s { color: #A5D6FF } /* Literal.String */
+.highlight .na { color: #E6EDF3 } /* Name.Attribute */
+.highlight .nb { color: #E6EDF3 } /* Name.Builtin */
+.highlight .nc { color: #F0883E; font-weight: bold } /* Name.Class */
+.highlight .no { color: #79C0FF; font-weight: bold } /* Name.Constant */
+.highlight .nd { color: #D2A8FF; font-weight: bold } /* Name.Decorator */
+.highlight .ni { color: #FFA657 } /* Name.Entity */
+.highlight .ne { color: #F0883E; font-weight: bold } /* Name.Exception */
+.highlight .nf { color: #D2A8FF; font-weight: bold } /* Name.Function */
+.highlight .nl { color: #79C0FF; font-weight: bold } /* Name.Label */
+.highlight .nn { color: #FF7B72 } /* Name.Namespace */
+.highlight .nx { color: #E6EDF3 } /* Name.Other */
+.highlight .py { color: #79C0FF } /* Name.Property */
+.highlight .nt { color: #7EE787 } /* Name.Tag */
+.highlight .nv { color: #79C0FF } /* Name.Variable */
+.highlight .ow { color: #FF7B72; font-weight: bold } /* Operator.Word */
+.highlight .pm { color: #E6EDF3 } /* Punctuation.Marker */
+.highlight .w { color: #6E7681 } /* Text.Whitespace */
+.highlight .mb { color: #A5D6FF } /* Literal.Number.Bin */
+.highlight .mf { color: #A5D6FF } /* Literal.Number.Float */
+.highlight .mh { color: #A5D6FF } /* Literal.Number.Hex */
+.highlight .mi { color: #A5D6FF } /* Literal.Number.Integer */
+.highlight .mo { color: #A5D6FF } /* Literal.Number.Oct */
+.highlight .sa { color: #79C0FF } /* Literal.String.Affix */
+.highlight .sb { color: #A5D6FF } /* Literal.String.Backtick */
+.highlight .sc { color: #A5D6FF } /* Literal.String.Char */
+.highlight .dl { color: #79C0FF } /* Literal.String.Delimiter */
+.highlight .sd { color: #A5D6FF } /* Literal.String.Doc */
+.highlight .s2 { color: #A5D6FF } /* Literal.String.Double */
+.highlight .se { color: #79C0FF } /* Literal.String.Escape */
+.highlight .sh { color: #79C0FF } /* Literal.String.Heredoc */
+.highlight .si { color: #A5D6FF } /* Literal.String.Interpol */
+.highlight .sx { color: #A5D6FF } /* Literal.String.Other */
+.highlight .sr { color: #79C0FF } /* Literal.String.Regex */
+.highlight .s1 { color: #A5D6FF } /* Literal.String.Single */
+.highlight .ss { color: #A5D6FF } /* Literal.String.Symbol */
+.highlight .bp { color: #E6EDF3 } /* Name.Builtin.Pseudo */
+.highlight .fm { color: #D2A8FF; font-weight: bold } /* Name.Function.Magic */
+.highlight .vc { color: #79C0FF } /* Name.Variable.Class */
+.highlight .vg { color: #79C0FF } /* Name.Variable.Global */
+.highlight .vi { color: #79C0FF } /* Name.Variable.Instance */
+.highlight .vm { color: #79C0FF } /* Name.Variable.Magic */
+.highlight .il { color: #A5D6FF } /* Literal.Number.Integer.Long */
+@media (max-width: 920px) {
+  .layout { grid-template-columns: 1fr; }
+  nav { position: static; max-height: none; }
+  .version-panel { grid-template-columns: 1fr; }
 }
-
-/* Built-ins, Konstanten und besondere Namen */
-pre code .nb,
-pre code .bp,
-pre code .no,
-pre code .ne {
-    color: #ffa657;
+@media print {
+  nav, .copy-button { display: none; }
+  .layout { display: block; max-width: none; padding: 0; }
+  section { box-shadow: none; break-inside: avoid; }
+  details { break-inside: avoid; }
+  details > * { display: block; }
 }
-pre code .ne {
-    font-weight: 600;
-}
-
-/* Variablen und Attribute */
-pre code .n,
-pre code .na,
-pre code .nv,
-pre code .vc,
-pre code .vg,
-pre code .vi,
-pre code .vm,
-pre code .nl {
-    color: #e6edf3;
-}
-
-/* Operatoren und Interpunktion */
-pre code .o {
-    color: #ff7b72;
-}
-pre code .p {
-    color: #c9d1d9;
-}
-
-/* Whitespace darf nicht als grauer Textstreifen erscheinen. */
-pre code .w {
-    color: inherit;
-}
-
-/* Seltene generische Token */
-pre code .err,
-pre code .gr {
-    color: #ffa198;
-    background: transparent;
-    border: 0;
-}
-pre code .gd { color: #ffa198; }
-pre code .gi { color: #7ee787; }
-pre code .gh,
-pre code .gu { color: #79c0ff; font-weight: 700; }
-pre code .go,
-pre code .gp,
-pre code .gt { color: #8b949e; }
-pre code .ge { font-style: italic; }
-pre code .gs { font-weight: 700; }
-pre code .ges { font-weight: 700; font-style: italic; }
-pre code .hll { background: #3b2e00; }
-
-@media (max-width:900px){.layout{grid-template-columns:1fr} nav{position:static;max-height:none} .version-panel{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<header><div class="inner">
-<h1>Dobot Magician – Python-Hilfsfunktionen</h1>
-<p>Dokumentation der aktuellen <code>dobot.py</code> für Thonny, die 64-Bit-Dobot-DLL und das Lochraster-Koordinatensystem.</p>
-<div class="version-panel">
-<div class="version-box"><strong>Dokumentation Version 1.0.1</strong><span>korrigiertes Syntaxhighlighting</span></div>
-<div class="version-box"><strong>Basis: dobot.py Version 1.0.0</strong><span>Stand 15.07.2026</span></div>
-<div class="version-box"><strong>Kanonische Datei</strong><span>Dobot-Python-Hilfsfunktionen.html</span></div>
-</div>
-<div class="badge-row"><span class="badge">40 Spalten</span><span class="badge">27 Zeilen</span><span class="badge">16-mm-Lochraster</span><span class="badge">beliebige Referenzlöcher</span><span class="badge">MOVJ und MOVL</span><span class="badge">Alarm löschen</span><span class="badge">Versionsabfrage</span><span class="badge">Offline-Syntaxhighlighting</span></div>
-</div></header>
+<header>
+  <div class="inner">
+    <h1>Dobot Magician – Python-Hilfsfunktionen</h1>
+    <p>Dokumentation des aktuellen Moduls <code>dobot.py</code> für die 64-Bit-Dobot-DLL, Lochrasterplatte, Saugersteuerung und Alarmdiagnose.</p>
+    <div class="version-panel">
+      <div class="version-box">
+        <strong>Dokumentation Version 1.2.0</strong>
+        <span>aktualisierte Funktionsdokumentation</span>
+      </div>
+      <div class="version-box">
+        <strong>Basis: dobot.py Version 1.2.0</strong>
+        <span>Stand 15.07.2026 - 23:40</span>
+      </div>
+      <div class="version-box">
+        <strong>Kanonische Datei</strong>
+        <span>Dobot-Python-Hilfsfunktionen.html</span>
+      </div>
+    </div>
+    <div class="badge-row">
+      <span class="badge">Lochposition lesen und anzeigen</span>
+      <span class="badge">Sofortfahrt</span>
+      <span class="badge">Saugersteuerung</span>
+      <span class="badge">Alarmnummern und Meldungen</span>
+      <span class="badge">Offline-Syntaxhighlighting</span>
+      <span class="badge">Vollständiger Quelltext</span>
+    </div>
+  </div>
+</header>
+
 <div class="layout">
-<nav aria-label="Inhaltsverzeichnis"><h2>Inhaltsverzeichnis</h2><a href="#status">Version und Dokumentstand</a><a href="#grundlage">Grundlage und Ordnerstruktur</a><a href="#programmstart">Empfohlener Programmstart</a><a href="#konstanten">Konstanten</a><a href="#version">version()</a><a href="#com-ports-ermitteln">com_ports_ermitteln()</a><a href="#comport-pruefen">comport_pruefen()</a><a href="#init">init()</a><a href="#warten-bis-fertig">warten_bis_fertig()</a><a href="#queue-starten">queue_starten()</a><a href="#queue-stoppen">queue_stoppen()</a><a href="#position-lesen">position_lesen()</a><a href="#position-anzeigen">position_anzeigen()</a><a href="#fahre-zu">fahre_zu()</a><a href="#plattenkalibrierung-setzen">plattenkalibrierung_setzen()</a><a href="#plattenkalibrierung-anzeigen">plattenkalibrierung_anzeigen()</a><a href="#fahre-zu-loch">fahre_zu_loch()</a><a href="#fahre-zu-loch-linear">fahre_zu_loch_linear()</a><a href="#aktuelle-plattenposition">aktuelle_plattenposition()</a><a href="#home">home()</a><a href="#test-z">test_z()</a><a href="#ausfuehren">ausfuehren()</a><a href="#alarme-loeschen">alarme_loeschen()</a><a href="#main">main()</a><a href="#interne-funktionen">Interne Funktionen</a><a href="#zusammenhang">Zusammenhang der Funktionen</a><a href="#vollstaendiger-quelltext">Vollständiger Quelltext</a></nav>
+<nav aria-label="Inhaltsverzeichnis">
+  <h2>Inhaltsverzeichnis</h2>
+  <a href="#status">Version und Dokumentstand</a>
+<a href="#neu">Neuerungen in Version 1.2.0</a>
+<a href="#grundlage">Grundlage und Ordnerstruktur</a>
+<a href="#programmstart">Empfohlener Programmstart</a>
+<a href="#konstanten">Konstanten</a>
+<a href="#verbindung und grundfunktionen">Verbindung und Grundfunktionen</a>
+<a href="#version">version()</a>
+<a href="#com-ports-ermitteln">com_ports_ermitteln()</a>
+<a href="#comport-pruefen">comport_pruefen()</a>
+<a href="#init">init()</a>
+<a href="#warten-bis-fertig">warten_bis_fertig()</a>
+<a href="#queue-starten">queue_starten()</a>
+<a href="#queue-stoppen">queue_stoppen()</a>
+<a href="#position und bewegung">Position und Bewegung</a>
+<a href="#position-lesen">position_lesen()</a>
+<a href="#position-anzeigen">position_anzeigen()</a>
+<a href="#fahre-zu">fahre_zu()</a>
+<a href="#fahre-sofort-zu">fahre_sofort_zu()</a>
+<a href="#home">home()</a>
+<a href="#test-z">test_z()</a>
+<a href="#ausfuehren">ausfuehren()</a>
+<a href="#lochrasterplatte">Lochrasterplatte</a>
+<a href="#plattenkalibrierung-setzen">plattenkalibrierung_setzen()</a>
+<a href="#plattenkalibrierung-anzeigen">plattenkalibrierung_anzeigen()</a>
+<a href="#fahre-zu-loch">fahre_zu_loch()</a>
+<a href="#fahre-zu-loch-linear">fahre_zu_loch_linear()</a>
+<a href="#lochposition-lesen">lochposition_lesen()</a>
+<a href="#lochposition-anzeigen">lochposition_anzeigen()</a>
+<a href="#aktuelle-plattenposition">aktuelle_plattenposition()</a>
+<a href="#sauger">Sauger</a>
+<a href="#sauger-status">sauger_status()</a>
+<a href="#sauger-aktivieren">sauger_aktivieren()</a>
+<a href="#sauger-deaktivieren">sauger_deaktivieren()</a>
+<a href="#alarme">Alarme</a>
+<a href="#alarme-lesen">alarme_lesen()</a>
+<a href="#alarme-anzeigen">alarme_anzeigen()</a>
+<a href="#alarme-loeschen">alarme_loeschen()</a>
+<a href="#alarmtabelle">Alarmmeldungen</a>
+<a href="#interne-funktionen">Interne Funktionen</a>
+<a href="#vollstaendiger-quelltext">Vollständiger Quelltext</a>
+</nav>
+
 <main>
-<section id="status"><h2>Version und Dokumentstand</h2>
-<div class="success callout"><strong>Aktueller Stand:</strong> Diese Dokumentation ist auf <code>dobot.py Version 1.0.0</code> vom <strong>15.07.2026</strong> abgestimmt.</div>
-<table><tr><th>Komponente</th><th>Version / Stand</th></tr><tr><td>Dokumentation</td><td><strong>Version 1.0.1</strong></td></tr><tr><td><code>dobot.py</code></td><td><strong>Version 1.0.0</strong> · 15.07.2026</td></tr><tr><td>Versionsabfrage</td><td><code>dobot.version()</code></td></tr><tr><td>Dateiname</td><td><code>Dobot-Python-Hilfsfunktionen.html</code></td></tr></table>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="nb">print</span><span class="p">(</span><span class="n">dobot</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
-</code></pre></div>
+<section id="status">
+  <h2>Version und Dokumentstand</h2>
+  <div class="callout success">
+    <strong>Dokumentationsstand:</strong>
+    Diese Fassung beschreibt alle im hochgeladenen Modul vorhandenen öffentlichen Funktionen,
+    einschließlich Lochposition, Sofortfahrt, Saugersteuerung und Alarmmeldungen.
+  </div>
+  
+<div class="callout danger">
+  <strong>Versionswiderspruch im hochgeladenen Modul:</strong>
+  Der Dateikopf nennt <code>Version 1.2.0</code>,
+  die ausführbare Konstante lautet jedoch noch
+  <code>VERSION = "1.1.0"</code>.
+  Dadurch gibt <code>dobot.version()</code> momentan Version 1.1.0 zurück.
+  Für einen vollständig konsistenten Stand muss die Konstante im Modul auf
+  <code>VERSION = "1.2.0"</code> geändert werden.
+</div>
+
+  <table>
+    <tr><th>Komponente</th><th>Version / Stand</th></tr>
+    <tr><td>Dokumentation</td><td><strong>1.2.0</strong></td></tr>
+    <tr><td>Dateikopf des Moduls</td><td><strong>1.2.0</strong> · 15.07.2026 - 23:40</td></tr>
+    <tr><td>Interne Konstante im Upload</td><td><code>VERSION = "1.1.0"</code></td></tr>
+    <tr><td>Versionsdatum</td><td><code>15.07.2026</code></td></tr>
+    <tr><td>Öffentliche Funktionen</td><td>27</td></tr>
+    <tr><td>Interne Funktionen</td><td>6</td></tr>
+  </table>
 </section>
-<section id="grundlage"><h2>Grundlage und Ordnerstruktur</h2><p>Die Datei <code>dobot.py</code> bildet eine eigene, leicht lesbare Programmierschicht über <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
-<div class="flow">Eigenes Projekt: start.py
+
+<section id="neu">
+  <h2>Neuerungen in Version 1.2.0</h2>
+  <ul>
+    <li><code>lochposition_lesen(api)</code> trennt die reine Wertrückgabe von der Bildschirmausgabe.</li>
+    <li><code>lochposition_anzeigen(api)</code> zeigt Spalte, Zeile, Höhe und das nächstgelegene Loch.</li>
+    <li><code>fahre_sofort_zu(api, x, y, z)</code> sendet einen PTP-Befehl ohne Queue.</li>
+    <li><code>sauger_status(api)</code>, <code>sauger_aktivieren(api)</code> und <code>sauger_deaktivieren(api)</code> steuern den Sauger.</li>
+    <li><code>alarme_lesen(api)</code> liefert aktive Alarmnummern.</li>
+    <li><code>alarme_anzeigen(api)</code> zeigt Dezimalnummer, Hex-Code und deutsche Fehlermeldung.</li>
+    <li><code>alarme_loeschen(api)</code> löscht gespeicherte Alarmzustände.</li>
+  </ul>
+</section>
+
+<section id="grundlage">
+  <h2>Grundlage und Ordnerstruktur</h2>
+  <p><code>dobot.py</code> bildet eine eigene, gut lesbare Programmierschicht über <code>DobotDllType.py</code> und <code>DobotDll.dll</code>.</p>
+  <div class="flow">Eigenes Projekt: start.py
         ↓
 Eigene Hilfsfunktionen: dobot.py
         ↓
@@ -203,19 +475,21 @@ Python-API: sdk64/DobotDllType.py
 64-Bit-Bibliothek: sdk64/DobotDll.dll
         ↓
 Dobot Magician</div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-text">Dobot_Python\
-│
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-text">Dobot_Python\
 ├── dobot.py
-│
 ├── sdk64\
 │   ├── __init__.py
 │   ├── DobotDllType.py
 │   └── DobotDll.dll
-│
 └── projekt01\
     └── start.py
-</code></pre></div></section>
-<section id="programmstart"><h2>Empfohlener Programmstart</h2><p>Die folgende Struktur berücksichtigt die Versionsabfrage, die korrigierte Alarmfunktion und die notwendige Queue-Reihenfolge für HOME- und Bewegungsbefehle.</p><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+</code></pre></div>
+</section>
+
+<section id="programmstart">
+  <h2>Empfohlener Programmstart</h2>
+  <p>Die Reihenfolge berücksichtigt Alarmprüfung, Queue-Start, HOME-Fahrt und ein sicheres Beenden.</p>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
 <span class="n">HAUPTORDNER</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span>
@@ -227,45 +501,83 @@ Dobot Magician</div>
 <span class="nb">print</span><span class="p">(</span><span class="n">dobot</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
 
 <span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
-<span class="n">dobot</span><span class="o">.</span><span class="n">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="c1"># Alarmzustand prüfen, bevor eine Bewegung gestartet wird.</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="c1"># Queue für HOME-, Fahr- und eingereihte Saugerbefehle starten.</span>
 <span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="n">dobot</span><span class="o">.</span><span class="n">home</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
     <span class="n">dobot</span><span class="o">.</span><span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="n">dobot</span><span class="o">.</span><span class="n">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 
-    <span class="c1"># Optional: Lochrasterplatte kalibrieren</span>
-    <span class="c1"># dobot.plattenkalibrierung_setzen(...)</span>
+    <span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu_loch</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="n">spalte</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">zeile</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+        <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">dobot</span><span class="o">.</span><span class="n">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 <span class="k">finally</span><span class="p">:</span>
     <span class="n">dobot</span><span class="o">.</span><span class="n">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
-<div class="warning callout"><strong>Queue-Reihenfolge:</strong> <code>home()</code> und <code>fahre_zu()</code> stellen Befehle mit <code>isQueued=1</code> ein. Deshalb muss <code>queue_starten(api)</code> vor diesen Befehlen ausgeführt werden.</div></section>
-<section id="konstanten"><h2>Konstanten</h2><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
+  <div class="callout warning">
+    <strong>Sicherheit:</strong>
+    Bewegungen zunächst mit großer Höhe, geringer Geschwindigkeit und freiem Arbeitsraum testen.
+    Aktive Alarme zuerst anzeigen und ihre Ursache beheben.
+  </div>
+</section>
+
+<section id="konstanten">
+  <h2>Konstanten</h2>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.2.0&quot;</span>
 <span class="n">VERSIONSDATUM</span> <span class="o">=</span> <span class="s2">&quot;15.07.2026&quot;</span>
+
 <span class="n">PLATTE_SPALTEN</span> <span class="o">=</span> <span class="mi">40</span>
 <span class="n">PLATTE_ZEILEN</span> <span class="o">=</span> <span class="mi">27</span>
 <span class="n">PLATTE_RASTER_MM</span> <span class="o">=</span> <span class="mf">16.0</span>
-</code></pre></div><p><code>PLATTE_RASTER_MM</code> dokumentiert das konstruktive Raster. Die tatsächliche XY-Umrechnung nutzt die aus drei Referenzlöchern berechneten Vektoren.</p></section>
-<section id="version">
-<h2><code>version()</code> – Versionsabfrage</h2>
-<p>Gibt die eindeutige Versionsbezeichnung der geladenen <code>dobot.py</code> zurück.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt die Versionsbezeichnung dieser ``dobot.py`` zurück.</span>
+</code></pre></div>
+  <p>Die Lochrasterplatte besitzt 40 Spalten, 27 Zeilen und einen Rasterabstand von 16&nbsp;mm.</p>
+</section>
 
-<span class="sd">    Beispiel:</span>
-<span class="sd">        ``print(dobot.version())``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<section id="verbindung und grundfunktionen" class="group-overview"><h2>Verbindung und Grundfunktionen</h2><div class="function-grid"><a class="function-card" href="#version"><code>version()</code><span>Gibt die Versionsinformation dieser Hilfsbibliothek zurück.</span></a><a class="function-card" href="#com-ports-ermitteln"><code>com_ports_ermitteln()</code><span>Gibt die vom Betriebssystem erkannten seriellen Schnittstellen zurück.</span></a><a class="function-card" href="#comport-pruefen"><code>comport_pruefen()</code><span>Prüft, ob der gewünschte COM-Port vom Betriebssystem erkannt wird.</span></a><a class="function-card" href="#init"><code>init()</code><span>Lädt die 64-Bit-DLL, verbindet den Dobot und gibt ``api`` zurück.</span></a><a class="function-card" href="#warten-bis-fertig"><code>warten_bis_fertig()</code><span>Wartet, bis ein Queue-Befehl vollständig ausgeführt wurde.</span></a><a class="function-card" href="#queue-starten"><code>queue_starten()</code><span>Stoppt eine laufende Queue, löscht sie und startet sie neu.</span></a><a class="function-card" href="#queue-stoppen"><code>queue_stoppen()</code><span>Stoppt die Ausführung der Queue.</span></a></div></section>
+<section id="version">
+  <h2><code>version()</code></h2>
+  <p class="lead">Gibt die Versionsinformation dieser Hilfsbibliothek zurück.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">():</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="kn">import</span><span class="w"> </span><span class="nn">dobot</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">dobot</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt die Versionsinformation dieser Hilfsbibliothek zurück.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;dobot.py Version </span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2"> - Stand </span><span class="si">{</span><span class="n">VERSIONSDATUM</span><span class="si">}</span><span class="s2">&quot;</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="nb">print</span><span class="p">(</span><span class="n">dobot</span><span class="o">.</span><span class="n">version</span><span class="p">())</span>
-</code></pre></div><p class="example-output"><strong>Ausgabe:</strong> <code>dobot.py Version 1.0.0 - Stand 15.07.2026</code></p>
-</section><section id="com-ports-ermitteln">
-<h2><code>com_ports_ermitteln()</code> – COM-Ports ermitteln</h2>
-<p>Ermittelt die vom Betriebssystem erkannten seriellen Schnittstellen. Wenn PySerial installiert ist, werden ausführliche Portbeschreibungen verwendet; unter Windows gibt es zusätzlich einen Registry-Fallback.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">com_ports_ermitteln</span><span class="p">():</span>
+  </details>
+</section>
+
+<section id="com-ports-ermitteln">
+  <h2><code>com_ports_ermitteln()</code></h2>
+  <p class="lead">Gibt die vom Betriebssystem erkannten seriellen Schnittstellen zurück.<br><br>Das Ergebnis ist eine Liste aus Paaren:<br>``[(Portname, Beschreibung), ...]``.<br><br>Wenn PySerial installiert ist, werden dessen ausführliche Angaben<br>verwendet. Unter Windows dient andernfalls die Registrierungsdatenbank<br>als Fallback.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">com_ports_ermitteln</span><span class="p">():</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">for</span> <span class="n">port</span><span class="p">,</span> <span class="n">beschreibung</span> <span class="ow">in</span> <span class="n">dobot</span><span class="o">.</span><span class="n">com_ports_ermitteln</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">beschreibung</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">com_ports_ermitteln</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt die vom Betriebssystem erkannten seriellen Schnittstellen zurück.</span>
 
 <span class="sd">    Das Ergebnis ist eine Liste aus Paaren:</span>
@@ -320,15 +632,21 @@ Dobot Magician</div>
 
     <span class="k">return</span> <span class="p">[]</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">ports</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">com_ports_ermitteln</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">port</span><span class="p">,</span> <span class="n">beschreibung</span> <span class="ow">in</span> <span class="n">ports</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">beschreibung</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="comport-pruefen">
+  <h2><code>comport_pruefen()</code></h2>
+  <p class="lead">Prüft, ob der gewünschte COM-Port vom Betriebssystem erkannt wird.<br><br>Ist der Port nicht vorhanden, werden alle erkannten seriellen<br>Schnittstellen ausgegeben und das Programm mit Fehlercode 1 beendet.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">comport_pruefen</span><span class="p">(</span><span class="n">comport</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="comport-pruefen">
-<h2><code>comport_pruefen()</code> – COM-Port prüfen</h2>
-<p>Prüft, ob der gewünschte COM-Port vorhanden ist. Bei einem Fehler werden die gefundenen Ports ausgegeben und das Programm beendet.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">comport_pruefen</span><span class="p">(</span><span class="n">comport</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">comport_pruefen</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">comport_pruefen</span><span class="p">(</span><span class="n">comport</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prüft, ob der gewünschte COM-Port vom Betriebssystem erkannt wird.</span>
 
 <span class="sd">    Ist der Port nicht vorhanden, werden alle erkannten seriellen</span>
@@ -361,13 +679,27 @@ Dobot Magician</div>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Das Programm wird beendet.&quot;</span><span class="p">)</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">comport_pruefen</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="init">
+  <h2><code>init()</code></h2>
+  <p class="lead">Lädt die 64-Bit-DLL, verbindet den Dobot und gibt ``api`` zurück.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span>
+    <span class="n">comport</span><span class="o">=</span><span class="s2">&quot;COM10&quot;</span><span class="p">,</span>
+    <span class="n">device_name</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;Dobot Magician - AG Young Engineers - &quot;</span>
+        <span class="s2">&quot;Martin-Rinckart-Gymnasium&quot;</span>
+    <span class="p">),</span>
+<span class="p">):</span>
 </code></pre></div>
-</section><section id="init">
-<h2><code>init()</code> – Dobot initialisieren</h2>
-<p>Prüft den COM-Port, lädt die 64-Bit-DLL, verbindet den Dobot, setzt optional den Gerätenamen und gibt das API-Objekt zurück.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">init</span><span class="p">(</span>
     <span class="n">comport</span><span class="o">=</span><span class="s2">&quot;COM10&quot;</span><span class="p">,</span>
     <span class="n">device_name</span><span class="o">=</span><span class="p">(</span>
         <span class="s2">&quot;Dobot Magician - AG Young Engineers - &quot;</span>
@@ -438,59 +770,107 @@ Dobot Magician</div>
 
     <span class="k">return</span> <span class="n">api</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">api</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s2">&quot;COM10&quot;</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="warten-bis-fertig">
+  <h2><code>warten_bis_fertig()</code></h2>
+  <p class="lead">Wartet, bis ein Queue-Befehl vollständig ausgeführt wurde.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Diese Funktion setzt voraus, dass die Queue gestartet wurde. Ohne laufende Queue kann sie unbegrenzt warten.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="warten-bis-fertig">
-<h2><code>warten_bis_fertig()</code> – Auf Queue-Befehl warten</h2>
-<p>Wartet, bis der Dobot den angegebenen Queue-Index erreicht hat. Diese Funktion wird intern von Bewegungs- und HOME-Befehlen genutzt.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">ziel_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+    <span class="n">api</span><span class="p">,</span> <span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVJXYZMode</span><span class="p">,</span>
+    <span class="mf">200.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">dobot</span><span class="o">.</span><span class="n">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Wartet, bis ein Queue-Befehl vollständig ausgeführt wurde.&quot;&quot;&quot;</span>
 
     <span class="k">while</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetQueuedCmdCurrentIndex</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">ziel_index</span><span class="p">:</span>
         <span class="n">dType</span><span class="o">.</span><span class="n">dSleep</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
 </code></pre></div>
-<div class="warning callout"><strong>Wichtig:</strong> Die Queue muss laufen. Sonst kann die Funktion dauerhaft warten.</div>
-</section><section id="queue-starten">
-<h2><code>queue_starten()</code> – Queue starten</h2>
-<p>Stoppt eine eventuell laufende Queue, löscht alte Befehle und startet die Befehlswarteschlange neu.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+  </details>
+</section>
+
+<section id="queue-starten">
+  <h2><code>queue_starten()</code></h2>
+  <p class="lead">Stoppt eine laufende Queue, löscht sie und startet sie neu.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Stoppt eine laufende Queue, löscht sie und startet sie neu.&quot;&quot;&quot;</span>
 
     <span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
     <span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdClear</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
     <span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStartExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="queue-stoppen">
+  <h2><code>queue_stoppen()</code></h2>
+  <p class="lead">Stoppt die Ausführung der Queue.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="queue-stoppen">
-<h2><code>queue_stoppen()</code> – Queue stoppen</h2>
-<p>Stoppt die Ausführung der Dobot-Befehlswarteschlange.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Stoppt die Ausführung der Queue.&quot;&quot;&quot;</span>
 
     <span class="n">dType</span><span class="o">.</span><span class="n">SetQueuedCmdStopExec</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+<section id="position und bewegung" class="group-overview"><h2>Position und Bewegung</h2><div class="function-grid"><a class="function-card" href="#position-lesen"><code>position_lesen()</code><span>Liest die kartesische Position X, Y, Z und R.</span></a><a class="function-card" href="#position-anzeigen"><code>position_anzeigen()</code><span>Liest und zeigt die aktuelle kartesische Position an.</span></a><a class="function-card" href="#fahre-zu"><code>fahre_zu()</code><span>Fährt zu einer Zielposition und wartet auf das Bewegungsende.</span></a><a class="function-card" href="#fahre-sofort-zu"><code>fahre_sofort_zu()</code><span>Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.</span></a><a class="function-card" href="#home"><code>home()</code><span>Führt eine HOME-Fahrt aus und wartet auf deren Abschluss.</span></a><a class="function-card" href="#test-z"><code>test_z()</code><span>Erlaubt das interaktive Verändern der aktuellen Z-Koordinate.</span></a><a class="function-card" href="#ausfuehren"><code>ausfuehren()</code><span>Startet den auf der Webseite beschriebenen Beispielablauf.</span></a></div></section>
+<section id="position-lesen">
+  <h2><code>position_lesen()</code></h2>
+  <p class="lead">Liest die kartesische Position X, Y, Z und R.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="position-lesen">
-<h2><code>position_lesen()</code> – Position lesen</h2>
-<p>Liest die aktuelle kartesische Position und gibt <code>(x, y, z, r)</code> zurück.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die kartesische Position X, Y, Z und R.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetPose</span><span class="p">(</span><span class="n">api</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="position-anzeigen">
+  <h2><code>position_anzeigen()</code></h2>
+  <p class="lead">Liest und zeigt die aktuelle kartesische Position an.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="position-anzeigen">
-<h2><code>position_anzeigen()</code> – Position anzeigen</h2>
-<p>Liest die aktuelle Position und gibt X, Y, Z und R formatiert aus.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest und zeigt die aktuelle kartesische Position an.&quot;&quot;&quot;</span>
 
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
@@ -502,13 +882,29 @@ Dobot Magician</div>
         <span class="sa">f</span><span class="s2">&quot;R=</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°&quot;</span>
     <span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="fahre-zu">
+  <h2><code>fahre_zu()</code></h2>
+  <p class="lead">Fährt zu einer Zielposition und wartet auf das Bewegungsende.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Der Befehl wird mit isQueued=1 eingereiht. Deshalb vorher queue_starten(api) aufrufen.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="fahre-zu">
-<h2><code>fahre_zu()</code> – Zu einer absoluten Position fahren</h2>
-<p>Fährt zu einer kartesischen Zielposition und wartet auf das Bewegungsende. Ohne Angabe wird <code>PTPMOVJXYZMode</code> verwendet.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu</span><span class="p">(</span>
+    <span class="n">api</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="mf">200.0</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+    <span class="n">z</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">r</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">modus</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fährt zu einer Zielposition und wartet auf das Bewegungsende.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">modus</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -526,13 +922,196 @@ Dobot Magician</div>
 
     <span class="n">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
-</code></pre></div><div class="danger callout"><strong>Sicherheit:</strong> Zielpunkt und Fahrweg müssen kollisionsfrei und innerhalb des Arbeitsbereichs liegen.</div>
-</section><section id="plattenkalibrierung-setzen">
-<h2><code>plattenkalibrierung_setzen()</code> – Lochrasterplatte kalibrieren</h2>
-<p>Kalibriert die 40 × 27-Lochrasterplatte mit drei beliebigen erreichbaren Referenzlöchern. Die drei Rasterpositionen dürfen nicht auf einer gemeinsamen Geraden liegen.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_setzen</span><span class="p">(</span>
+  </details>
+</section>
+
+<section id="fahre-sofort-zu">
+  <h2><code>fahre_sofort_zu()</code></h2>
+  <p class="lead">Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.<br><br>Die aktuelle Werkzeugrotation R wird beibehalten.<br>Als Bewegungsart wird PTPMOVJXYZMode verwendet.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> isQueued=0 umgeht nur die Queue. Aktive Dobot-Alarme werden dadurch nicht umgangen.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_sofort_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="c1"># Ohne Queue und ohne Warten auf das Bewegungsende:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">fahre_sofort_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mf">200.0</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mf">50.0</span><span class="p">)</span>
+
+<span class="c1"># Aktive Alarme verhindern normalerweise trotzdem die Bewegung.</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_sofort_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.</span>
+
+<span class="sd">    Die aktuelle Werkzeugrotation R wird beibehalten.</span>
+<span class="sd">    Als Bewegungsart wird PTPMOVJXYZMode verwendet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">api</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Der Dobot ist nicht verbunden.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Aktuelle Werkzeugrotation beibehalten.</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVJXYZMode</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">z</span><span class="p">,</span>
+        <span class="n">r</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+
+<section id="home">
+  <h2><code>home()</code></h2>
+  <p class="lead">Führt eine HOME-Fahrt aus und wartet auf deren Abschluss.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">home</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Führt eine HOME-Fahrt aus und wartet auf deren Abschluss.&quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HOME-Fahrt wird gestartet.&quot;</span><span class="p">)</span>
+
+    <span class="n">ziel_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetHOMECmd</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="mi">0</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HOME-Fahrt abgeschlossen.&quot;</span><span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+
+<section id="test-z">
+  <h2><code>test_z()</code></h2>
+  <p class="lead">Erlaubt das interaktive Verändern der aktuellen Z-Koordinate.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Erlaubt das interaktive Verändern der aktuellen Z-Koordinate.&quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interaktiver Test der Z-Koordinate&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------&quot;</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Position: X=</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, Y=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Z=</span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, R=</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">eingabe</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
+            <span class="s2">&quot;Neue Z-Koordinate oder &#39;a&#39; zum Abbrechen: &quot;</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">eingabe</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="c1"># Auch eine Eingabe mit deutschem Dezimalkomma wird akzeptiert.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">neue_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">eingabe</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ungültige Eingabe. Bitte eine Zahl oder &#39;a&#39; eingeben.&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">fahre_zu</span><span class="p">(</span>
+            <span class="n">api</span><span class="p">,</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">y</span><span class="p">,</span>
+            <span class="n">neue_z</span><span class="p">,</span>
+            <span class="n">r</span><span class="p">,</span>
+            <span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erreichte Position:&quot;</span><span class="p">)</span>
+        <span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Z-Test beendet.&quot;</span><span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+
+<section id="ausfuehren">
+  <h2><code>ausfuehren()</code></h2>
+  <p class="lead">Startet den auf der Webseite beschriebenen Beispielablauf.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Startet den auf der Webseite beschriebenen Beispielablauf.&quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Roboterprogramm wird gestartet.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------&quot;</span><span class="p">)</span>
+
+    <span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Position:&quot;</span><span class="p">)</span>
+        <span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+        <span class="n">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Roboterprogramm beendet.&quot;</span><span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+<section id="lochrasterplatte" class="group-overview"><h2>Lochrasterplatte</h2><div class="function-grid"><a class="function-card" href="#plattenkalibrierung-setzen"><code>plattenkalibrierung_setzen()</code><span>Kalibriert die Platte mit drei beliebigen erreichbaren Löchern.</span></a><a class="function-card" href="#plattenkalibrierung-anzeigen"><code>plattenkalibrierung_anzeigen()</code><span>Zeigt Referenzlöcher, Ursprung und Rastervektoren an.</span></a><a class="function-card" href="#fahre-zu-loch"><code>fahre_zu_loch()</code><span>Fährt gelenkoptimiert zu einer Position im Lochraster.</span></a><a class="function-card" href="#fahre-zu-loch-linear"><code>fahre_zu_loch_linear()</code><span>Fährt auf einer geraden Bahn zu einer Position im Lochraster.</span></a><a class="function-card" href="#lochposition-lesen"><code>lochposition_lesen()</code><span>Liest die aktuelle Position im Koordinatensystem der Lochrasterplatte.</span></a><a class="function-card" href="#lochposition-anzeigen"><code>lochposition_anzeigen()</code><span>Liest und zeigt die aktuelle Position auf der Lochrasterplatte an.</span></a><a class="function-card" href="#aktuelle-plattenposition"><code>aktuelle_plattenposition()</code><span>Kompatibler Alias für die Lochpositionsfunktionen.</span></a></div></section>
+<section id="plattenkalibrierung-setzen">
+  <h2><code>plattenkalibrierung_setzen()</code></h2>
+  <p class="lead">Kalibriert die Platte mit drei beliebigen erreichbaren Löchern.<br><br>Neue Schreibweise der Referenzpunkte:<br>    ``(spalte, zeile, x, y)``<br><br>Beispiel:<br>    ``referenzloch_1=(2, 1, -73.8, -311.1)``<br><br>Die drei Rasterpositionen dürfen nicht auf einer gemeinsamen Geraden<br>liegen. Günstig sind zwei weit auseinanderliegende Löcher einer Zeile<br>und ein drittes Loch in einer möglichst weit entfernten Zeile.<br><br>Aus Gründen der Abwärtskompatibilität wird auch die bisherige<br>Eckpunkt-Schreibweise mit drei XY-Tupeln unterstützt:<br><br>    ``loch_1_1=(x, y)``<br>    ``loch_40_1=(x, y)``<br>    ``loch_1_27=(x, y)``</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_setzen</span><span class="p">(</span>
+    <span class="n">referenzloch_1</span><span class="p">,</span>
+    <span class="n">referenzloch_2</span><span class="p">,</span>
+    <span class="n">referenzloch_3</span><span class="p">,</span>
+    <span class="n">platten_z</span><span class="p">,</span>
+    <span class="n">standard_r</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">plattenkalibrierung_setzen</span><span class="p">(</span>
+    <span class="n">referenzloch_1</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">311.1</span><span class="p">),</span>
+    <span class="n">referenzloch_2</span><span class="o">=</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">56.1</span><span class="p">,</span> <span class="mf">312.2</span><span class="p">),</span>
+    <span class="n">referenzloch_3</span><span class="o">=</span><span class="p">(</span><span class="mi">22</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mf">310.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">18.5</span><span class="p">),</span>
+    <span class="n">platten_z</span><span class="o">=-</span><span class="mf">67.2</span><span class="p">,</span>
+    <span class="n">standard_r</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_setzen</span><span class="p">(</span>
     <span class="n">referenzloch_1</span><span class="p">,</span>
     <span class="n">referenzloch_2</span><span class="p">,</span>
     <span class="n">referenzloch_3</span><span class="p">,</span>
@@ -648,19 +1227,21 @@ Dobot Magician</div>
         <span class="s2">&quot;standard_r&quot;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">standard_r</span><span class="p">),</span>
     <span class="p">}</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">plattenkalibrierung_setzen</span><span class="p">(</span>
-    <span class="n">referenzloch_1</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mf">73.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">311.1</span><span class="p">),</span>
-    <span class="n">referenzloch_2</span><span class="o">=</span><span class="p">(</span><span class="mi">39</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">X_39_1</span><span class="p">,</span> <span class="n">Y_39_1</span><span class="p">),</span>
-    <span class="n">referenzloch_3</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="n">X_2_26</span><span class="p">,</span> <span class="n">Y_2_26</span><span class="p">),</span>
-    <span class="n">platten_z</span><span class="o">=-</span><span class="mf">35.0</span><span class="p">,</span>
-    <span class="n">standard_r</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
-<span class="p">)</span>
+  </details>
+</section>
+
+<section id="plattenkalibrierung-anzeigen">
+  <h2><code>plattenkalibrierung_anzeigen()</code></h2>
+  <p class="lead">Zeigt Referenzlöcher, Ursprung und Rastervektoren an.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_anzeigen</span><span class="p">():</span>
 </code></pre></div>
-</section><section id="plattenkalibrierung-anzeigen">
-<h2><code>plattenkalibrierung_anzeigen()</code> – Kalibrierung anzeigen</h2>
-<p>Zeigt die Referenzlöcher, das rechnerische Loch (1, 1), Platten-Z, Standard-R sowie die beiden Rastervektoren an.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_anzeigen</span><span class="p">():</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">plattenkalibrierung_anzeigen</span><span class="p">()</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">plattenkalibrierung_anzeigen</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Zeigt Referenzlöcher, Ursprung und Rastervektoren an.&quot;&quot;&quot;</span>
 
     <span class="n">k</span> <span class="o">=</span> <span class="n">_plattenkalibrierung_holen</span><span class="p">()</span>
@@ -698,13 +1279,28 @@ Dobot Magician</div>
         <span class="sa">f</span><span class="s2">&quot;dy=</span><span class="si">{</span><span class="n">zeilenvektor</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">plattenkalibrierung_anzeigen</span><span class="p">()</span>
+  </details>
+</section>
+
+<section id="fahre-zu-loch">
+  <h2><code>fahre_zu_loch()</code></h2>
+  <p class="lead">Fährt gelenkoptimiert zu einer Position im Lochraster.<br><br>``spalte`` und ``zeile`` beginnen bei 1.<br><br>``hoehe`` ist die Höhe in Millimetern über der Plattenoberfläche.<br>Der sichere Standardwert beträgt 30 mm.<br><br>Beispiel:<br>    ``fahre_zu_loch(api, 10, 8, hoehe=30)``</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch</span><span class="p">(</span>
+    <span class="n">api</span><span class="p">,</span>
+    <span class="n">spalte</span><span class="p">,</span>
+    <span class="n">zeile</span><span class="p">,</span>
+    <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 </code></pre></div>
-</section><section id="fahre-zu-loch">
-<h2><code>fahre_zu_loch()</code> – Gelenkoptimiert zu einer Lochposition fahren</h2>
-<p>Rechnet Lochrasterkoordinaten in Dobot-Koordinaten um und fährt mit <code>PTPMOVJXYZMode</code> zur Zielposition.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch</span><span class="p">(</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu_loch</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">spalte</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zeile</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch</span><span class="p">(</span>
     <span class="n">api</span><span class="p">,</span>
     <span class="n">spalte</span><span class="p">,</span>
     <span class="n">zeile</span><span class="p">,</span>
@@ -740,13 +1336,28 @@ Dobot Magician</div>
 
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rotation</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu_loch</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="fahre-zu-loch-linear">
+  <h2><code>fahre_zu_loch_linear()</code></h2>
+  <p class="lead">Fährt auf einer geraden Bahn zu einer Position im Lochraster.<br><br>Der gesamte Weg wird linear ausgeführt. Vor allem bei niedriger Höhe<br>muss deshalb geprüft werden, ob der Fahrweg frei ist.<br><br>Beispiel:<br>    ``fahre_zu_loch_linear(api, 10, 8, hoehe=5)``</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Bei niedriger Höhe muss der gesamte lineare Fahrweg frei sein.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch_linear</span><span class="p">(</span>
+    <span class="n">api</span><span class="p">,</span>
+    <span class="n">spalte</span><span class="p">,</span>
+    <span class="n">zeile</span><span class="p">,</span>
+    <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 </code></pre></div>
-</section><section id="fahre-zu-loch-linear">
-<h2><code>fahre_zu_loch_linear()</code> – Linear zu einer Lochposition fahren</h2>
-<p>Rechnet Lochrasterkoordinaten in Dobot-Koordinaten um und fährt den gesamten Weg linear mit <code>PTPMOVLXYZMode</code>.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch_linear</span><span class="p">(</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu_loch_linear</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">spalte</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">zeile</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">fahre_zu_loch_linear</span><span class="p">(</span>
     <span class="n">api</span><span class="p">,</span>
     <span class="n">spalte</span><span class="p">,</span>
     <span class="n">zeile</span><span class="p">,</span>
@@ -780,150 +1391,270 @@ Dobot Magician</div>
 
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rotation</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">fahre_zu_loch_linear</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
-</code></pre></div><div class="warning callout"><strong>Achtung:</strong> Bei niedriger Höhe muss der komplette lineare Fahrweg frei sein.</div>
-</section><section id="aktuelle-plattenposition">
-<h2><code>aktuelle_plattenposition()</code> – Aktuelle Plattenposition bestimmen</h2>
-<p>Rechnet die aktuelle Dobot-Position zurück in <code>(Spalte, Zeile, Höhe)</code>. Spalte und Zeile können Dezimalwerte enthalten.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">anzeigen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liefert die aktuelle Position im Lochraster-Koordinatensystem.</span>
+  </details>
+</section>
+
+<section id="lochposition-lesen">
+  <h2><code>lochposition_lesen()</code></h2>
+  <p class="lead">Liest die aktuelle Position im Koordinatensystem der Lochrasterplatte.<br><br>Rückgabe:<br>    ``(spalte, zeile, hoehe)``<br><br>``spalte`` und ``zeile`` können Dezimalstellen enthalten. Ganzzahlige<br>Werte entsprechen den Mittelpunkten der Rasterlöcher. ``hoehe`` ist die<br>Höhe in Millimetern über der kalibrierten Plattenoberfläche.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Vorher muss die Lochrasterplatte kalibriert worden sein.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktuelle Position im Koordinatensystem der Lochrasterplatte.</span>
 
 <span class="sd">    Rückgabe:</span>
 <span class="sd">        ``(spalte, zeile, hoehe)``</span>
 
-<span class="sd">    Die Werte für Spalte und Zeile können Dezimalstellen enthalten.</span>
-<span class="sd">    Ein ganzzahliger Wert bezeichnet die Mitte eines Lochs.</span>
-
-<span class="sd">    Mit ``anzeigen=False`` wird die Ausgabe unterdrückt.</span>
+<span class="sd">    ``spalte`` und ``zeile`` können Dezimalstellen enthalten. Ganzzahlige</span>
+<span class="sd">    Werte entsprechen den Mittelpunkten der Rasterlöcher. ``hoehe`` ist die</span>
+<span class="sd">    Höhe in Millimetern über der kalibrierten Plattenoberfläche.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">_r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-    <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
 
-    <span class="k">if</span> <span class="n">anzeigen</span><span class="p">:</span>
-        <span class="n">naechste_spalte</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">spalte</span><span class="p">)</span>
-        <span class="n">naechste_zeile</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">zeile</span><span class="p">)</span>
+<section id="lochposition-anzeigen">
+  <h2><code>lochposition_anzeigen()</code></h2>
+  <p class="lead">Liest und zeigt die aktuelle Position auf der Lochrasterplatte an.<br><br>Zusätzlich zur genauen Rasterposition wird das nächstgelegene Loch<br>ausgegeben. Die gelesenen Werte werden auch als Tupel zurückgegeben.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Die Funktion zeigt die genaue Rasterposition und das nächstgelegene Loch an und gibt die Werte zusätzlich zurück.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest und zeigt die aktuelle Position auf der Lochrasterplatte an.</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Plattenposition:&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Spalte: </span><span class="si">{</span><span class="n">spalte</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Zeile:  </span><span class="si">{</span><span class="n">zeile</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Höhe:   </span><span class="si">{</span><span class="n">hoehe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> mm&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;  Nächstes Loch: &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">naechste_spalte</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">naechste_zeile</span><span class="si">}</span><span class="s2">)&quot;</span>
-        <span class="p">)</span>
+<span class="sd">    Zusätzlich zur genauen Rasterposition wird das nächstgelegene Loch</span>
+<span class="sd">    ausgegeben. Die gelesenen Werte werden auch als Tupel zurückgegeben.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="n">naechste_spalte</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">spalte</span><span class="p">)</span>
+    <span class="n">naechste_zeile</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">zeile</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Lochposition:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Spalte: </span><span class="si">{</span><span class="n">spalte</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Zeile:  </span><span class="si">{</span><span class="n">zeile</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Höhe:   </span><span class="si">{</span><span class="n">hoehe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> mm&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;  Nächstes Loch: &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">naechste_spalte</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">naechste_zeile</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="aktuelle-plattenposition">
+  <h2><code>aktuelle_plattenposition()</code></h2>
+  <p class="lead">Kompatibler Alias für die Lochpositionsfunktionen.<br><br>Mit ``anzeigen=True`` wird ``lochposition_anzeigen(api)`` verwendet.<br>Mit ``anzeigen=False`` wird ``lochposition_lesen(api)`` verwendet.<br><br>Rückgabe:<br>    ``(spalte, zeile, hoehe)``</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Diese Funktion bleibt als kompatibler Alias erhalten. Neue Programme sollten lochposition_lesen() oder lochposition_anzeigen() verwenden.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">anzeigen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="home">
-<h2><code>home()</code> – HOME-Fahrt</h2>
-<p>Startet eine HOME-Fahrt und wartet auf deren Abschluss.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Führt eine HOME-Fahrt aus und wartet auf deren Abschluss.&quot;&quot;&quot;</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="c1"># Kompatibler Alias:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HOME-Fahrt wird gestartet.&quot;</span><span class="p">)</span>
+<span class="c1"># Ohne Bildschirmausgabe:</span>
+<span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">aktuelle_plattenposition</span><span class="p">(</span>
+    <span class="n">api</span><span class="p">,</span>
+    <span class="n">anzeigen</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">anzeigen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kompatibler Alias für die Lochpositionsfunktionen.</span>
 
-    <span class="n">ziel_index</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetHOMECmd</span><span class="p">(</span>
+<span class="sd">    Mit ``anzeigen=True`` wird ``lochposition_anzeigen(api)`` verwendet.</span>
+<span class="sd">    Mit ``anzeigen=False`` wird ``lochposition_lesen(api)`` verwendet.</span>
+
+<span class="sd">    Rückgabe:</span>
+<span class="sd">        ``(spalte, zeile, hoehe)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">anzeigen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+<section id="sauger" class="group-overview"><h2>Sauger</h2><div class="function-grid"><a class="function-card" href="#sauger-status"><code>sauger_status()</code><span>Gibt True zurück, wenn der Sauger eingeschaltet ist.</span></a><a class="function-card" href="#sauger-aktivieren"><code>sauger_aktivieren()</code><span>Aktiviert den Sauger.</span></a><a class="function-card" href="#sauger-deaktivieren"><code>sauger_deaktivieren()</code><span>Deaktiviert den Sauger.</span></a></div></section>
+<section id="sauger-status">
+  <h2><code>sauger_status()</code></h2>
+  <p class="lead">Gibt True zurück, wenn der Sauger eingeschaltet ist.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_status</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">if</span> <span class="n">dobot</span><span class="o">.</span><span class="n">sauger_status</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sauger ist eingeschaltet.&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Sauger ist ausgeschaltet.&quot;</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_status</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt True zurück, wenn der Sauger eingeschaltet ist.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">dType</span><span class="o">.</span><span class="n">GetEndEffectorSuctionCup</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div>
+  </details>
+</section>
+
+<section id="sauger-aktivieren">
+  <h2><code>sauger_aktivieren()</code></h2>
+  <p class="lead">Aktiviert den Sauger.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Mit isQueued=1 wird der Saugerbefehl eingereiht. Mit isQueued=0 wird er sofort gesendet.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="c1"># In die Queue einreihen:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="c1"># Sofort ausführen:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aktiviert den Sauger.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
         <span class="n">api</span><span class="p">,</span>
-        <span class="mi">0</span><span class="p">,</span>
-        <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-
-    <span class="n">warten_bis_fertig</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">ziel_index</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HOME-Fahrt abgeschlossen.&quot;</span><span class="p">)</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="n">isQueued</span><span class="p">,</span>
+    <span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-<span class="n">dobot</span><span class="o">.</span><span class="n">home</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-</code></pre></div><div class="warning callout"><strong>Wichtig:</strong> <code>home()</code> verwendet einen Queue-Befehl. Vorher muss die Queue gestartet worden sein.</div>
-</section><section id="test-z">
-<h2><code>test_z()</code> – Interaktiver Z-Test</h2>
-<p>Erlaubt, ausgehend von der aktuellen Position neue Z-Koordinaten einzugeben. Die Bewegung erfolgt linear.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Erlaubt das interaktive Verändern der aktuellen Z-Koordinate.&quot;&quot;&quot;</span>
+  </details>
+</section>
 
+<section id="sauger-deaktivieren">
+  <h2><code>sauger_deaktivieren()</code></h2>
+  <p class="lead">Deaktiviert den Sauger.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Mit isQueued=1 wird der Saugerbefehl eingereiht. Mit isQueued=0 wird er sofort gesendet.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_deaktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="c1"># In die Queue einreihen:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">sauger_deaktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+<span class="c1"># Sofort ausführen:</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">sauger_deaktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">sauger_deaktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deaktiviert den Sauger.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="n">isQueued</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div>
+  </details>
+</section>
+<section id="alarme" class="group-overview"><h2>Alarme</h2><div class="function-grid"><a class="function-card" href="#alarme-lesen"><code>alarme_lesen()</code><span>Liest die aktuell gesetzten Alarmnummern des Dobot.</span></a><a class="function-card" href="#alarme-anzeigen"><code>alarme_anzeigen()</code><span>Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an.</span></a><a class="function-card" href="#alarme-loeschen"><code>alarme_loeschen()</code><span>Löscht alle gespeicherten Alarmzustände des Dobot.</span></a></div></section>
+<section id="alarme-lesen">
+  <h2><code>alarme_lesen()</code></h2>
+  <p class="lead">Liest die aktuell gesetzten Alarmnummern des Dobot.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">aktive_alarme</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">aktive_alarme</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktuell gesetzten Alarmnummern des Dobot.&quot;&quot;&quot;</span>
+
+    <span class="n">alarmdaten</span><span class="p">,</span> <span class="n">laenge</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="n">aktive_alarme</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">byte_index</span><span class="p">,</span> <span class="n">wert</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alarmdaten</span><span class="p">[:</span><span class="n">laenge</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">bit_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">wert</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bit_index</span><span class="p">):</span>
+                <span class="n">alarmnummer</span> <span class="o">=</span> <span class="n">byte_index</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">bit_index</span>
+                <span class="n">aktive_alarme</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alarmnummer</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">aktive_alarme</span>
+</code></pre></div>
+  </details>
+</section>
+
+<section id="alarme-anzeigen">
+  <h2><code>alarme_anzeigen()</code></h2>
+  <p class="lead">Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an.</p>
+  
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+</code></pre></div>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+</code></pre></div>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an.&quot;&quot;&quot;</span>
+
+    <span class="n">aktive_alarme</span> <span class="o">=</span> <span class="n">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">aktive_alarme</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keine Alarme aktiv.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aktive_alarme</span><span class="p">)</span><span class="si">}</span><span class="s2"> Alarm(e) aktiv:&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Interaktiver Test der Z-Koordinate&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;----------------------------------&quot;</span><span class="p">)</span>
 
-    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">alarmnummer</span> <span class="ow">in</span> <span class="n">aktive_alarme</span><span class="p">:</span>
+        <span class="n">meldung</span> <span class="o">=</span> <span class="n">ALARM_MELDUNGEN</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">alarmnummer</span><span class="p">,</span>
+            <span class="s2">&quot;Unbekannter Alarm&quot;</span>
+        <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Position: X=</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, Y=</span><span class="si">{</span><span class="n">y</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;Z=</span><span class="si">{</span><span class="n">z</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">, R=</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;  Alarm </span><span class="si">{</span><span class="n">alarmnummer</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(0x</span><span class="si">{</span><span class="n">alarmnummer</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">): &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">meldung</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
-
-        <span class="n">eingabe</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span>
-            <span class="s2">&quot;Neue Z-Koordinate oder &#39;a&#39; zum Abbrechen: &quot;</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-
-        <span class="k">if</span> <span class="n">eingabe</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;a&quot;</span><span class="p">:</span>
-            <span class="k">break</span>
-
-        <span class="c1"># Auch eine Eingabe mit deutschem Dezimalkomma wird akzeptiert.</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">neue_z</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">eingabe</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">))</span>
-        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ungültige Eingabe. Bitte eine Zahl oder &#39;a&#39; eingeben.&quot;</span><span class="p">)</span>
-            <span class="k">continue</span>
-
-        <span class="n">fahre_zu</span><span class="p">(</span>
-            <span class="n">api</span><span class="p">,</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">y</span><span class="p">,</span>
-            <span class="n">neue_z</span><span class="p">,</span>
-            <span class="n">r</span><span class="p">,</span>
-            <span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVLXYZMode</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Erreichte Position:&quot;</span><span class="p">)</span>
-        <span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Z-Test beendet.&quot;</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+  </details>
+</section>
+
+<section id="alarme-loeschen">
+  <h2><code>alarme_loeschen()</code></h2>
+  <p class="lead">Löscht alle gespeicherten Alarmzustände des Dobot.<br><br>Achtung:<br>    Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.</p>
+  <div class="callout warning"><strong>Wichtig:</strong> Bleibt die Alarmursache bestehen, wird der Alarm unmittelbar erneut ausgelöst.</div>
+  <h3>Aufrufsignatur</h3>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 </code></pre></div>
-</section><section id="ausfuehren">
-<h2><code>ausfuehren()</code> – Beispielablauf starten</h2>
-<p>Startet die Queue, zeigt die aktuelle Position an, führt <code>test_z()</code> aus und stoppt die Queue sicher in einem <code>finally</code>-Block.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Startet den auf der Webseite beschriebenen Beispielablauf.&quot;&quot;&quot;</span>
-
-    <span class="nb">print</span><span class="p">()</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Roboterprogramm wird gestartet.&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;--------------------------------&quot;</span><span class="p">)</span>
-
-    <span class="n">queue_starten</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Position:&quot;</span><span class="p">)</span>
-        <span class="n">position_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-
-        <span class="n">test_z</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-    <span class="k">finally</span><span class="p">:</span>
-        <span class="n">queue_stoppen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-
-        <span class="nb">print</span><span class="p">()</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Roboterprogramm beendet.&quot;</span><span class="p">)</span>
+  <h3>Beispiel</h3><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+<span class="n">dobot</span><span class="o">.</span><span class="n">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-</code></pre></div>
-</section><section id="alarme-loeschen">
-<h2><code>alarme_loeschen()</code> – Alarmzustände löschen</h2>
-<p>Löscht die gespeicherten Alarmzustände des Dobot. Besteht die Ursache fort, kann der Alarm sofort erneut auftreten.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+  <details>
+    <summary>Vollständige Definition aus <code>dobot.py</code></summary>
+    <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Löscht alle gespeicherten Alarmzustände des Dobot.</span>
 
 <span class="sd">    Achtung:</span>
-<span class="sd">    Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.</span>
+<span class="sd">        Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">api</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -931,23 +1662,66 @@ Dobot Magician</div>
 
     <span class="n">dType</span><span class="o">.</span><span class="n">ClearAllAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 </code></pre></div>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="n">dobot</span><span class="o">.</span><span class="n">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-</code></pre></div><div class="danger callout"><strong>Kein Ersatz für Fehlerbehebung:</strong> Vor dem Löschen muss die Ursache eines Alarms geklärt und beseitigt werden.</div>
-</section><section id="main">
-<h2><code>main()</code> – Direktstart-Hinweis</h2>
-<p>Gibt einen Hinweis aus, wenn <code>dobot.py</code> direkt gestartet wird. Normalerweise wird eine Projektdatei wie <code>start.py</code> ausgeführt.</p>
-<h3>Aktuelle Definition in <code>dobot.py</code> Version 1.0.0</h3>
-<div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Hinweis beim direkten Start dieser Bibliotheksdatei.&quot;&quot;&quot;</span>
-
-    <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;Diese Datei wird normalerweise nicht direkt gestartet.</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="s2">&quot;Bitte &#39;start.py&#39; ausführen.&quot;</span>
-    <span class="p">)</span>
-</code></pre></div>
-
+  </details>
 </section>
-<section id="interne-funktionen"><h2>Interne Funktionen</h2><p>Diese Funktionen sind für die interne Umsetzung vorgesehen. Sie werden normalerweise nicht direkt aus einem Projektprogramm aufgerufen.</p><details><summary><code>_referenzloch_lesen()</code> – Prüft und zerlegt ein Referenzloch im Format (Spalte, Zeile, X, Y).</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_referenzloch_lesen</span><span class="p">(</span><span class="n">referenz</span><span class="p">,</span> <span class="n">bezeichnung</span><span class="p">):</span>
+
+
+<section id="alarmtabelle">
+  <h2>Alarmnummern und Fehlermeldungen</h2>
+  <p>Die Tabelle entspricht dem Wörterbuch <code>ALARM_MELDUNGEN</code> im hochgeladenen Modul.</p>
+  <table>
+    <thead><tr><th>Dezimal</th><th>Hex-Code</th><th>Fehlermeldung</th></tr></thead>
+    <tbody><tr><td>0</td><td><code>0x00</code></td><td>Reset-Alarm</td></tr>
+<tr><td>1</td><td><code>0x01</code></td><td>Unbekannter oder ungültiger Befehl</td></tr>
+<tr><td>2</td><td><code>0x02</code></td><td>Dateisystemfehler</td></tr>
+<tr><td>3</td><td><code>0x03</code></td><td>Kommunikationsfehler zwischen MCU und FPGA</td></tr>
+<tr><td>4</td><td><code>0x04</code></td><td>Fehler des Winkelsensors</td></tr>
+<tr><td>16</td><td><code>0x10</code></td><td>Zielposition liegt in einer Singularität</td></tr>
+<tr><td>17</td><td><code>0x11</code></td><td>Zielposition liegt außerhalb des Arbeitsbereichs</td></tr>
+<tr><td>18</td><td><code>0x12</code></td><td>Zielposition überschreitet einen Gelenkgrenzwert</td></tr>
+<tr><td>19</td><td><code>0x13</code></td><td>Doppelte oder ungeeignete Punkte bei ARC/JUMP</td></tr>
+<tr><td>20</td><td><code>0x14</code></td><td>Ungültige Eingabeparameter für ARC</td></tr>
+<tr><td>21</td><td><code>0x15</code></td><td>Ungültige JUMP-Parameter</td></tr>
+<tr><td>32</td><td><code>0x20</code></td><td>Bewegungsbahn führt durch eine Singularität</td></tr>
+<tr><td>33</td><td><code>0x21</code></td><td>Bewegungsbahn liegt außerhalb des Arbeitsbereichs</td></tr>
+<tr><td>34</td><td><code>0x22</code></td><td>Bewegung überschreitet einen Gelenkgrenzwert</td></tr>
+<tr><td>48</td><td><code>0x30</code></td><td>Gelenk 1: Geschwindigkeit zu hoch</td></tr>
+<tr><td>49</td><td><code>0x31</code></td><td>Gelenk 2: Geschwindigkeit zu hoch</td></tr>
+<tr><td>50</td><td><code>0x32</code></td><td>Gelenk 3: Geschwindigkeit zu hoch</td></tr>
+<tr><td>51</td><td><code>0x33</code></td><td>Gelenk 4: Geschwindigkeit zu hoch</td></tr>
+<tr><td>64</td><td><code>0x40</code></td><td>Gelenk 1: positiver Grenzwert erreicht</td></tr>
+<tr><td>65</td><td><code>0x41</code></td><td>Gelenk 1: negativer Grenzwert erreicht</td></tr>
+<tr><td>66</td><td><code>0x42</code></td><td>Gelenk 2: positiver Grenzwert erreicht</td></tr>
+<tr><td>67</td><td><code>0x43</code></td><td>Gelenk 2: negativer Grenzwert erreicht</td></tr>
+<tr><td>68</td><td><code>0x44</code></td><td>Gelenk 3: positiver Grenzwert erreicht</td></tr>
+<tr><td>69</td><td><code>0x45</code></td><td>Gelenk 3: negativer Grenzwert erreicht</td></tr>
+<tr><td>70</td><td><code>0x46</code></td><td>Gelenk 4: positiver Grenzwert erreicht</td></tr>
+<tr><td>71</td><td><code>0x47</code></td><td>Gelenk 4: negativer Grenzwert erreicht</td></tr>
+<tr><td>72</td><td><code>0x48</code></td><td>Parallelogramm: positiver Grenzwert erreicht</td></tr>
+<tr><td>73</td><td><code>0x49</code></td><td>Parallelogramm: negativer Grenzwert erreicht</td></tr>
+<tr><td>80</td><td><code>0x50</code></td><td>Gelenk 1: Schrittverlust erkannt</td></tr>
+<tr><td>81</td><td><code>0x51</code></td><td>Gelenk 2: Schrittverlust erkannt</td></tr>
+<tr><td>82</td><td><code>0x52</code></td><td>Gelenk 3: Schrittverlust erkannt</td></tr>
+<tr><td>83</td><td><code>0x53</code></td><td>Gelenk 4: Schrittverlust erkannt</td></tr></tbody>
+  </table>
+</section>
+
+<section id="interne-funktionen">
+  <h2>Interne Funktionen</h2>
+  <div class="callout warning">
+    Funktionen mit führendem Unterstrich sind für die interne Verwendung vorgesehen.
+    Besonders wichtig: <code>_loch_zu_dobot(spalte, zeile, ...)</code> erhält kein <code>api</code>-Objekt.
+  </div>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="c1"># Richtig:</span>
+<span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">dobot</span><span class="o">.</span><span class="n">_loch_zu_dobot</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Falsch:</span>
+<span class="c1"># dobot._loch_zu_dobot(api, 20, 20)</span>
+</code></pre></div>
+  
+<details id="-referenzloch-lesen">
+  <summary><code>_referenzloch_lesen()</code> – Prüft und zerlegt ein Referenzloch.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_referenzloch_lesen</span><span class="p">(</span><span class="n">referenz</span><span class="p">,</span> <span class="n">bezeichnung</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prüft und zerlegt ein Referenzloch.</span>
 
 <span class="sd">    Neue Schreibweise:</span>
@@ -974,7 +1748,12 @@ Dobot Magician</div>
     <span class="n">_plattenkoordinate_pruefen</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
-</code></pre></div></details><details><summary><code>_plattenkalibrierung_holen()</code> – Liefert die gespeicherte Kalibrierung oder erzeugt eine verständliche Fehlermeldung.</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_plattenkalibrierung_holen</span><span class="p">():</span>
+</code></pre></div>
+</details>
+
+<details id="-plattenkalibrierung-holen">
+  <summary><code>_plattenkalibrierung_holen()</code> – Liefert die Kalibrierung oder erzeugt eine verständliche Meldung.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_plattenkalibrierung_holen</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Liefert die Kalibrierung oder erzeugt eine verständliche Meldung.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">_plattenkalibrierung</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -984,7 +1763,12 @@ Dobot Magician</div>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_plattenkalibrierung</span>
-</code></pre></div></details><details><summary><code>_plattenkoordinate_pruefen()</code> – Prüft, ob Spalte und Zeile innerhalb des Lochfeldes liegen.</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_plattenkoordinate_pruefen</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">):</span>
+</code></pre></div>
+</details>
+
+<details id="-plattenkoordinate-pruefen">
+  <summary><code>_plattenkoordinate_pruefen()</code> – Prüft, ob die angegebene Position innerhalb des Lochfeldes liegt.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_plattenkoordinate_pruefen</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prüft, ob die angegebene Position innerhalb des Lochfeldes liegt.&quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">spalte</span> <span class="o">&lt;=</span> <span class="n">PLATTE_SPALTEN</span><span class="p">:</span>
@@ -998,12 +1782,22 @@ Dobot Magician</div>
             <span class="sa">f</span><span class="s2">&quot;Zeile </span><span class="si">{</span><span class="n">zeile</span><span class="si">}</span><span class="s2"> liegt außerhalb der Platte. &quot;</span>
             <span class="sa">f</span><span class="s2">&quot;Erlaubt sind Werte von 1 bis </span><span class="si">{</span><span class="n">PLATTE_ZEILEN</span><span class="si">}</span><span class="s2">.&quot;</span>
         <span class="p">)</span>
-</code></pre></div></details><details><summary><code>_platten_rastervektoren()</code> – Liefert die kalibrierten XY-Vektoren für einen Rasterabstand.</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_platten_rastervektoren</span><span class="p">():</span>
+</code></pre></div>
+</details>
+
+<details id="-platten-rastervektoren">
+  <summary><code>_platten_rastervektoren()</code> – Liefert die kalibrierten Dobot-XY-Vektoren eines Rasterabstands.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_platten_rastervektoren</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Liefert die kalibrierten Dobot-XY-Vektoren eines Rasterabstands.&quot;&quot;&quot;</span>
 
     <span class="n">k</span> <span class="o">=</span> <span class="n">_plattenkalibrierung_holen</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">k</span><span class="p">[</span><span class="s2">&quot;spaltenvektor&quot;</span><span class="p">],</span> <span class="n">k</span><span class="p">[</span><span class="s2">&quot;zeilenvektor&quot;</span><span class="p">]</span>
-</code></pre></div></details><details><summary><code>_loch_zu_dobot()</code> – Rechnet Lochrasterkoordinaten in absolute Dobot-Koordinaten um.</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_loch_zu_dobot</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</code></pre></div>
+</details>
+
+<details id="-loch-zu-dobot">
+  <summary><code>_loch_zu_dobot()</code> – Rechnet Lochrasterkoordinaten in Dobot-Koordinaten um.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_loch_zu_dobot</span><span class="p">(</span><span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span> <span class="n">r</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rechnet Lochrasterkoordinaten in Dobot-Koordinaten um.&quot;&quot;&quot;</span>
 
     <span class="n">spalte</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">spalte</span><span class="p">)</span>
@@ -1036,7 +1830,12 @@ Dobot Magician</div>
     <span class="n">rotation</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="s2">&quot;standard_r&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">float</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rotation</span>
-</code></pre></div></details><details><summary><code>_dobot_zu_platte()</code> – Rechnet Dobot-Koordinaten in Spalte, Zeile und Höhe zurück.</summary><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+</code></pre></div>
+</details>
+
+<details id="-dobot-zu-platte">
+  <summary><code>_dobot_zu_platte()</code> – Rechnet Dobot-Koordinaten in Lochrasterkoordinaten zurück.</summary>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="k">def</span><span class="w"> </span><span class="nf">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rechnet Dobot-Koordinaten in Lochrasterkoordinaten zurück.&quot;&quot;&quot;</span>
 
     <span class="n">k</span> <span class="o">=</span> <span class="n">_plattenkalibrierung_holen</span><span class="p">()</span>
@@ -1072,29 +1871,19 @@ Dobot Magician</div>
     <span class="n">hoehe</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">-</span> <span class="n">k</span><span class="p">[</span><span class="s2">&quot;platten_z&quot;</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span>
-</code></pre></div></details></section>
-<section id="zusammenhang"><h2>Zusammenhang der Funktionen</h2><div class="flow">start.py
-  ├─ dobot.version()
-  ├─ dobot.init()
-  ├─ dobot.alarme_loeschen(api)
-  ├─ dobot.queue_starten(api)
-  │    ├─ dobot.home(api)
-  │    ├─ dobot.fahre_zu(...)
-  │    ├─ dobot.fahre_zu_loch(...)
-  │    └─ dobot.fahre_zu_loch_linear(...)
-  └─ dobot.queue_stoppen(api)
+</code></pre></div>
+</details>
 
-Lochraster:
-  plattenkalibrierung_setzen()
-        ↓
-  _loch_zu_dobot() / _dobot_zu_platte()
-        ↓
-  fahre_zu_loch() / aktuelle_plattenposition()</div></section>
-<section id="vollstaendiger-quelltext"><h2>Vollständiger Quelltext von <code>dobot.py</code> Version 1.0.0</h2><p>Der folgende Quelltext wurde direkt aus der für diese Dokumentation verwendeten aktuellen Datei übernommen.</p><div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="language-python"><span class="sd">&quot;&quot;&quot;</span>
+</section>
+
+<section id="vollstaendiger-quelltext">
+  <h2>Vollständiger Quelltext des hochgeladenen Moduls</h2>
+  <p>Der folgende Quelltext wurde unverändert aus der hochgeladenen Datei <code>dobot.py</code> übernommen.</p>
+  <div class="code-wrap"><button class="copy-button" type="button">Kopieren</button><pre><code class="highlight language-python"><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Hilfsfunktionen zur Steuerung eines Dobot Magician auf Basis von DobotDllType.py.</span>
 
-<span class="sd">Version: 1.0.0</span>
-<span class="sd">Stand: 15.07.2026</span>
+<span class="sd">Version: 1.2.0</span>
+<span class="sd">Stand: 15.07.2026 - 23:40</span>
 
 <span class="sd">Die Datei liegt im Hauptordner ``Dobot_Python``. Die 64-Bit-Version des</span>
 <span class="sd">Dobot-SDK wird aus dem Unterordner ``sdk64`` geladen.</span>
@@ -1109,16 +1898,12 @@ Lochraster:
 <span class="kn">from</span><span class="w"> </span><span class="nn">sdk64</span><span class="w"> </span><span class="kn">import</span> <span class="n">DobotDllType</span> <span class="k">as</span> <span class="n">dType</span>
 
 
-<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.0.0&quot;</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s2">&quot;1.1.0&quot;</span>
 <span class="n">VERSIONSDATUM</span> <span class="o">=</span> <span class="s2">&quot;15.07.2026&quot;</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">version</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt die Versionsbezeichnung dieser ``dobot.py`` zurück.</span>
-
-<span class="sd">    Beispiel:</span>
-<span class="sd">        ``print(dobot.version())``</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt die Versionsinformation dieser Hilfsbibliothek zurück.&quot;&quot;&quot;</span>
 
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;dobot.py Version </span><span class="si">{</span><span class="n">VERSION</span><span class="si">}</span><span class="s2"> - Stand </span><span class="si">{</span><span class="n">VERSIONSDATUM</span><span class="si">}</span><span class="s2">&quot;</span>
 
@@ -1222,8 +2007,8 @@ Lochraster:
 <span class="n">PLATTE_RASTER_MM</span> <span class="o">=</span> <span class="mf">16.0</span>
 
 <span class="c1"># Die Kalibrierung wird mit plattenkalibrierung_setzen(...) eingetragen.</span>
-<span class="c1"># Benötigt werden die Dobot-Koordinaten von drei beliebigen erreichbaren</span>
-<span class="c1"># Referenzlöchern. Ihre Rasterpositionen dürfen nicht auf einer Geraden liegen.</span>
+<span class="c1"># Verwendet werden drei beliebige erreichbare Referenzlöcher, deren</span>
+<span class="c1"># Rasterpositionen nicht auf einer gemeinsamen Geraden liegen dürfen.</span>
 <span class="n">_plattenkalibrierung</span> <span class="o">=</span> <span class="kc">None</span>
 
 
@@ -1731,35 +2516,58 @@ Lochraster:
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">rotation</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">anzeigen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liefert die aktuelle Position im Lochraster-Koordinatensystem.</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktuelle Position im Koordinatensystem der Lochrasterplatte.</span>
 
 <span class="sd">    Rückgabe:</span>
 <span class="sd">        ``(spalte, zeile, hoehe)``</span>
 
-<span class="sd">    Die Werte für Spalte und Zeile können Dezimalstellen enthalten.</span>
-<span class="sd">    Ein ganzzahliger Wert bezeichnet die Mitte eines Lochs.</span>
-
-<span class="sd">    Mit ``anzeigen=False`` wird die Ausgabe unterdrückt.</span>
+<span class="sd">    ``spalte`` und ``zeile`` können Dezimalstellen enthalten. Ganzzahlige</span>
+<span class="sd">    Werte entsprechen den Mittelpunkten der Rasterlöcher. ``hoehe`` ist die</span>
+<span class="sd">    Höhe in Millimetern über der kalibrierten Plattenoberfläche.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">_r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
-    <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_dobot_zu_platte</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">anzeigen</span><span class="p">:</span>
-        <span class="n">naechste_spalte</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">spalte</span><span class="p">)</span>
-        <span class="n">naechste_zeile</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">zeile</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Plattenposition:&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Spalte: </span><span class="si">{</span><span class="n">spalte</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Zeile:  </span><span class="si">{</span><span class="n">zeile</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Höhe:   </span><span class="si">{</span><span class="n">hoehe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> mm&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;  Nächstes Loch: &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">naechste_spalte</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">naechste_zeile</span><span class="si">}</span><span class="s2">)&quot;</span>
-        <span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest und zeigt die aktuelle Position auf der Lochrasterplatte an.</span>
+
+<span class="sd">    Zusätzlich zur genauen Rasterposition wird das nächstgelegene Loch</span>
+<span class="sd">    ausgegeben. Die gelesenen Werte werden auch als Tupel zurückgegeben.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span> <span class="o">=</span> <span class="n">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+    <span class="n">naechste_spalte</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">spalte</span><span class="p">)</span>
+    <span class="n">naechste_zeile</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">zeile</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Aktuelle Lochposition:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Spalte: </span><span class="si">{</span><span class="n">spalte</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Zeile:  </span><span class="si">{</span><span class="n">zeile</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  Höhe:   </span><span class="si">{</span><span class="n">hoehe</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> mm&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="s2">&quot;  Nächstes Loch: &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">naechste_spalte</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">naechste_zeile</span><span class="si">}</span><span class="s2">)&quot;</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">spalte</span><span class="p">,</span> <span class="n">zeile</span><span class="p">,</span> <span class="n">hoehe</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">aktuelle_plattenposition</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">anzeigen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Kompatibler Alias für die Lochpositionsfunktionen.</span>
+
+<span class="sd">    Mit ``anzeigen=True`` wird ``lochposition_anzeigen(api)`` verwendet.</span>
+<span class="sd">    Mit ``anzeigen=False`` wird ``lochposition_lesen(api)`` verwendet.</span>
+
+<span class="sd">    Rückgabe:</span>
+<span class="sd">        ``(spalte, zeile, hoehe)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">anzeigen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">lochposition_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">lochposition_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
@@ -1821,6 +2629,50 @@ Lochraster:
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Z-Test beendet.&quot;</span><span class="p">)</span>
 
+<span class="k">def</span><span class="w"> </span><span class="nf">fahre_sofort_zu</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.</span>
+
+<span class="sd">    Die aktuelle Werkzeugrotation R wird beibehalten.</span>
+<span class="sd">    Als Bewegungsart wird PTPMOVJXYZMode verwendet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">api</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Der Dobot ist nicht verbunden.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Aktuelle Werkzeugrotation beibehalten.</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">r</span> <span class="o">=</span> <span class="n">position_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetPTPCmd</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="n">dType</span><span class="o">.</span><span class="n">PTPMode</span><span class="o">.</span><span class="n">PTPMOVJXYZMode</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">z</span><span class="p">,</span>
+        <span class="n">r</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sauger_status</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gibt True zurück, wenn der Sauger eingeschaltet ist.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">dType</span><span class="o">.</span><span class="n">GetEndEffectorSuctionCup</span><span class="p">(</span><span class="n">api</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sauger_aktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Aktiviert den Sauger.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="n">isQueued</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sauger_deaktivieren</span><span class="p">(</span><span class="n">api</span><span class="p">,</span> <span class="n">isQueued</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deaktiviert den Sauger.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dType</span><span class="o">.</span><span class="n">SetEndEffectorSuctionCup</span><span class="p">(</span>
+        <span class="n">api</span><span class="p">,</span>
+        <span class="kc">True</span><span class="p">,</span>
+        <span class="kc">False</span><span class="p">,</span>
+        <span class="n">isQueued</span><span class="o">=</span><span class="n">isQueued</span><span class="p">,</span>
+    <span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ausfuehren</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Startet den auf der Webseite beschriebenen Beispielablauf.&quot;&quot;&quot;</span>
@@ -1841,17 +2693,61 @@ Lochraster:
 
         <span class="nb">print</span><span class="p">()</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Roboterprogramm beendet.&quot;</span><span class="p">)</span>
-
-
 <span class="c1"># ---------------------------------------------------------------------------</span>
-<span class="c1"># Weitere Funktionen</span>
+<span class="c1"># Alarmfunktionen</span>
 <span class="c1"># ---------------------------------------------------------------------------</span>
+
+<span class="n">ALARM_MELDUNGEN</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="c1"># Allgemeine Fehler</span>
+    <span class="mh">0x00</span><span class="p">:</span> <span class="s2">&quot;Reset-Alarm&quot;</span><span class="p">,</span>
+    <span class="mh">0x01</span><span class="p">:</span> <span class="s2">&quot;Unbekannter oder ungültiger Befehl&quot;</span><span class="p">,</span>
+    <span class="mh">0x02</span><span class="p">:</span> <span class="s2">&quot;Dateisystemfehler&quot;</span><span class="p">,</span>
+    <span class="mh">0x03</span><span class="p">:</span> <span class="s2">&quot;Kommunikationsfehler zwischen MCU und FPGA&quot;</span><span class="p">,</span>
+    <span class="mh">0x04</span><span class="p">:</span> <span class="s2">&quot;Fehler des Winkelsensors&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Planungsfehler</span>
+    <span class="mh">0x10</span><span class="p">:</span> <span class="s2">&quot;Zielposition liegt in einer Singularität&quot;</span><span class="p">,</span>
+    <span class="mh">0x11</span><span class="p">:</span> <span class="s2">&quot;Zielposition liegt außerhalb des Arbeitsbereichs&quot;</span><span class="p">,</span>
+    <span class="mh">0x12</span><span class="p">:</span> <span class="s2">&quot;Zielposition überschreitet einen Gelenkgrenzwert&quot;</span><span class="p">,</span>
+    <span class="mh">0x13</span><span class="p">:</span> <span class="s2">&quot;Doppelte oder ungeeignete Punkte bei ARC/JUMP&quot;</span><span class="p">,</span>
+    <span class="mh">0x14</span><span class="p">:</span> <span class="s2">&quot;Ungültige Eingabeparameter für ARC&quot;</span><span class="p">,</span>
+    <span class="mh">0x15</span><span class="p">:</span> <span class="s2">&quot;Ungültige JUMP-Parameter&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Bewegungsfehler</span>
+    <span class="mh">0x20</span><span class="p">:</span> <span class="s2">&quot;Bewegungsbahn führt durch eine Singularität&quot;</span><span class="p">,</span>
+    <span class="mh">0x21</span><span class="p">:</span> <span class="s2">&quot;Bewegungsbahn liegt außerhalb des Arbeitsbereichs&quot;</span><span class="p">,</span>
+    <span class="mh">0x22</span><span class="p">:</span> <span class="s2">&quot;Bewegung überschreitet einen Gelenkgrenzwert&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Geschwindigkeitsfehler</span>
+    <span class="mh">0x30</span><span class="p">:</span> <span class="s2">&quot;Gelenk 1: Geschwindigkeit zu hoch&quot;</span><span class="p">,</span>
+    <span class="mh">0x31</span><span class="p">:</span> <span class="s2">&quot;Gelenk 2: Geschwindigkeit zu hoch&quot;</span><span class="p">,</span>
+    <span class="mh">0x32</span><span class="p">:</span> <span class="s2">&quot;Gelenk 3: Geschwindigkeit zu hoch&quot;</span><span class="p">,</span>
+    <span class="mh">0x33</span><span class="p">:</span> <span class="s2">&quot;Gelenk 4: Geschwindigkeit zu hoch&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Grenzwertfehler</span>
+    <span class="mh">0x40</span><span class="p">:</span> <span class="s2">&quot;Gelenk 1: positiver Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x41</span><span class="p">:</span> <span class="s2">&quot;Gelenk 1: negativer Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x42</span><span class="p">:</span> <span class="s2">&quot;Gelenk 2: positiver Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x43</span><span class="p">:</span> <span class="s2">&quot;Gelenk 2: negativer Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x44</span><span class="p">:</span> <span class="s2">&quot;Gelenk 3: positiver Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x45</span><span class="p">:</span> <span class="s2">&quot;Gelenk 3: negativer Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x46</span><span class="p">:</span> <span class="s2">&quot;Gelenk 4: positiver Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x47</span><span class="p">:</span> <span class="s2">&quot;Gelenk 4: negativer Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x48</span><span class="p">:</span> <span class="s2">&quot;Parallelogramm: positiver Grenzwert erreicht&quot;</span><span class="p">,</span>
+    <span class="mh">0x49</span><span class="p">:</span> <span class="s2">&quot;Parallelogramm: negativer Grenzwert erreicht&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Schrittverluste</span>
+    <span class="mh">0x50</span><span class="p">:</span> <span class="s2">&quot;Gelenk 1: Schrittverlust erkannt&quot;</span><span class="p">,</span>
+    <span class="mh">0x51</span><span class="p">:</span> <span class="s2">&quot;Gelenk 2: Schrittverlust erkannt&quot;</span><span class="p">,</span>
+    <span class="mh">0x52</span><span class="p">:</span> <span class="s2">&quot;Gelenk 3: Schrittverlust erkannt&quot;</span><span class="p">,</span>
+    <span class="mh">0x53</span><span class="p">:</span> <span class="s2">&quot;Gelenk 4: Schrittverlust erkannt&quot;</span><span class="p">,</span>
+<span class="p">}</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">alarme_loeschen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Löscht alle gespeicherten Alarmzustände des Dobot.</span>
 
 <span class="sd">    Achtung:</span>
-<span class="sd">    Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.</span>
+<span class="sd">        Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">if</span> <span class="n">api</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1859,6 +2755,45 @@ Lochraster:
 
     <span class="n">dType</span><span class="o">.</span><span class="n">ClearAllAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
 
+<span class="k">def</span><span class="w"> </span><span class="nf">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktuell gesetzten Alarmnummern des Dobot.&quot;&quot;&quot;</span>
+
+    <span class="n">alarmdaten</span><span class="p">,</span> <span class="n">laenge</span> <span class="o">=</span> <span class="n">dType</span><span class="o">.</span><span class="n">GetAlarmsState</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="n">aktive_alarme</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">byte_index</span><span class="p">,</span> <span class="n">wert</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">alarmdaten</span><span class="p">[:</span><span class="n">laenge</span><span class="p">]):</span>
+        <span class="k">for</span> <span class="n">bit_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">wert</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bit_index</span><span class="p">):</span>
+                <span class="n">alarmnummer</span> <span class="o">=</span> <span class="n">byte_index</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">bit_index</span>
+                <span class="n">aktive_alarme</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">alarmnummer</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">aktive_alarme</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">alarme_anzeigen</span><span class="p">(</span><span class="n">api</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an.&quot;&quot;&quot;</span>
+
+    <span class="n">aktive_alarme</span> <span class="o">=</span> <span class="n">alarme_lesen</span><span class="p">(</span><span class="n">api</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">aktive_alarme</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Keine Alarme aktiv.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">aktive_alarme</span><span class="p">)</span><span class="si">}</span><span class="s2"> Alarm(e) aktiv:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">alarmnummer</span> <span class="ow">in</span> <span class="n">aktive_alarme</span><span class="p">:</span>
+        <span class="n">meldung</span> <span class="o">=</span> <span class="n">ALARM_MELDUNGEN</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">alarmnummer</span><span class="p">,</span>
+            <span class="s2">&quot;Unbekannter Alarm&quot;</span>
+        <span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;  Alarm </span><span class="si">{</span><span class="n">alarmnummer</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(0x</span><span class="si">{</span><span class="n">alarmnummer</span><span class="si">:</span><span class="s2">02X</span><span class="si">}</span><span class="s2">): &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">meldung</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Hinweis beim direkten Start dieser Bibliotheksdatei.&quot;&quot;&quot;</span>
@@ -1871,10 +2806,29 @@ Lochraster:
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
-</code></pre></div></section>
-</main></div>
-<footer>Dobot-Magician-Projekt · Dokumentation Version 1.0.0 · Basis: dobot.py Version 1.0.0 · Stand 15.07.2026</footer>
+</code></pre></div>
+</section>
+</main>
+</div>
+
+<footer>
+  <p>Dokumentation Version 1.2.0 · Basis: dobot.py 1.2.0 · Stand 15.07.2026 - 23:40</p>
+</footer>
+
 <script>
-document.querySelectorAll('.copy-button').forEach(button=>{button.addEventListener('click',async()=>{const text=button.parentElement.querySelector('code').innerText;try{await navigator.clipboard.writeText(text);const old=button.textContent;button.textContent='Kopiert';setTimeout(()=>button.textContent=old,1200)}catch(e){button.textContent='Nicht möglich'}})});
+document.querySelectorAll(".copy-button").forEach(button => {
+  button.addEventListener("click", async () => {
+    const code = button.parentElement.querySelector("code").innerText;
+    try {
+      await navigator.clipboard.writeText(code);
+      const oldText = button.textContent;
+      button.textContent = "Kopiert";
+      setTimeout(() => button.textContent = oldText, 1200);
+    } catch (error) {
+      button.textContent = "Kopieren fehlgeschlagen";
+    }
+  });
+});
 </script>
-</body></html>
+</body>
+</html>
