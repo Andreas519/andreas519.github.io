@@ -141,7 +141,11 @@ ol > li {
     }
 
     .code-panel {
-      display: block;
+      display: flex;
+      align-items: stretch;
+      background: #0f172a;
+      border-radius: 12px;
+      overflow: hidden;
     }
 
     .copy-button {
@@ -164,11 +168,15 @@ ol > li {
 
     pre.codebereich {
       margin: 0;
-      overflow: auto;
+      overflow-x: auto;
+      overflow-y: visible;
+      height: auto;
+      max-height: none;
       line-height: 1.5;
-      padding: 0;
-      border-radius: 12px;
-      background: #0f172a;
+      padding: 1rem;
+      border-radius: 0;
+      background: transparent;
+      flex: 1 1 auto;
       min-width: 0;
     }
 
@@ -176,35 +184,32 @@ ol > li {
       display: block;
     }
 
-    pre.codebereich.line-numbers > code {
+    .code-panel .line-numbers-rows {
       display: block;
-      min-width: 0;
-      white-space: normal;
-      font-family: Consolas, "Courier New", monospace;
-      font-size: 0.95rem;
-    }
-
-    pre.codebereich.line-numbers > code > .code-line {
-      display: grid;
-      grid-template-columns: 3.2em minmax(0, 1fr);
-      align-items: start;
-      min-height: 1.5em;
-      line-height: 1.5;
-    }
-
-    pre.codebereich.line-numbers > code > .code-line > .code-line-number {
-      display: block;
-      padding: 0 .8rem 0 1rem;
-      text-align: right;
-      color: #94a3b8;
+      flex: 0 0 3.2em;
+      margin: 0;
       border-right: 1px solid #cbd5e1;
       user-select: none;
       pointer-events: none;
+      padding: 1rem .8rem 1rem 0;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    pre.codebereich.line-numbers > code > .code-line > .code-line-content {
+    .code-panel .line-numbers-rows > span {
       display: block;
-      padding: 0 1rem;
+      line-height: 1.5;
+      text-align: right;
+      color: #94a3b8;
+    }
+
+    pre.codebereich.line-numbers > code {
+      display: block;
+      min-width: 0;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
       white-space: pre;
     }
 

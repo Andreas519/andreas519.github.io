@@ -52,9 +52,7 @@ function initialisiereKopierButton(codeElement) {
       return;
     }
 
-    const rohtext = codeElement.dataset.rawCode || codeElement.textContent;
-
-    navigator.clipboard.writeText(rohtext).then(() => {
+    navigator.clipboard.writeText(codeElement.textContent).then(() => {
       const originalText = copyButton.textContent;
       copyButton.textContent = "Kopiert";
       setTimeout(() => {
@@ -64,57 +62,18 @@ function initialisiereKopierButton(codeElement) {
   });
 }
 
-function renderCodeMitZeilennummern(codeElement) {
-  if (codeElement.dataset.codeLinesReady === "true") {
-    return;
-  }
-
-  const rohtext = codeElement.textContent.replace(/\n$/, "");
-  const zeilen = rohtext === "" ? [""] : rohtext.split("\n");
-  const sprachKlasse = Array.from(codeElement.classList).find(cssClass => cssClass.startsWith("language-")) || "language-text";
-  const sprache = sprachKlasse.replace("language-", "");
-  const grammatik = window.Prism && Prism.languages ? Prism.languages[sprache] : null;
-
-  codeElement.dataset.rawCode = rohtext;
-  codeElement.innerHTML = "";
-
-  zeilen.forEach((zeilenText, index) => {
-    const zeile = document.createElement("span");
-    zeile.className = "code-line";
-
-    const nummer = document.createElement("span");
-    nummer.className = "code-line-number";
-    nummer.textContent = String(index + 1);
-
-    const inhalt = document.createElement("span");
-    inhalt.className = "code-line-content";
-
-    if (window.Prism && grammatik) {
-      const highlighted = Prism.highlight(zeilenText, grammatik, sprache);
-      inhalt.innerHTML = highlighted === "" ? "&nbsp;" : highlighted;
-    } else if (zeilenText === "") {
-      inhalt.innerHTML = "&nbsp;";
-    } else {
-      inhalt.textContent = zeilenText;
-    }
-
-    zeile.appendChild(nummer);
-    zeile.appendChild(inhalt);
-    codeElement.appendChild(zeile);
-  });
-
-  codeElement.dataset.codeLinesReady = "true";
-}
-
 function initialisiereCodebloecke() {
-  document.querySelectorAll('pre.codebereich.line-numbers > code[class*="language-"]').forEach(codeElement => {
+  document.querySelectorAll('pre.codebereich > code[class*="language-"]').forEach(codeElement => {
     const preElement = codeElement.parentElement;
     if (!preElement) {
       return;
     }
 
     initialisiereKopierButton(codeElement);
-    renderCodeMitZeilennummern(codeElement);
+
+    if (window.Prism) {
+      Prism.highlightElement(codeElement);
+    }
   });
 }
 

@@ -28,7 +28,7 @@
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
-          <pre class="codebereich line-numbers"><code class="language-python">from pathlib import Path
+          <pre class="codebereich"><code class="language-python">from pathlib import Path
 import sys
 
 # Übergeordneten Ordner "Dobot-Python" in den Python-Suchpfad aufnehmen
@@ -50,14 +50,12 @@ dobot.position_anzeigen(api)</code></pre>
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
-          <pre class="codebereich line-numbers"><code class="language-python">api = dobot.init()
-
+          <pre class="codebereich"><code class="language-python"># nach api = dobot.init() einfügen
 dobot.home(api)
 dobot.position_anzeigen(api)
 
 dType.ClearAllAlarmsState(api)
-dType.DisconnectDobot(api)
-</code></pre>
+dType.DisconnectDobot(api)</code></pre>
         </div>
       </div>
 
@@ -86,7 +84,7 @@ dType.DisconnectDobot(api)
     Letzte Aenderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../../../../js/prism-core.js"></script>
     <script src="../../../../js/prism.js"></script>
-    <script src="../../../../js/script.js?v=20260715-02"></script>
+    <script src="../../../../js/script.js?v=20260715-04"></script>
   </footer>
 </body>
 </html>
