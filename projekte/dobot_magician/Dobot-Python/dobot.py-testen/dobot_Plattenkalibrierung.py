@@ -21,9 +21,9 @@ dobot.plattenkalibrierung_setzen(
 )
 
 dobot.plattenkalibrierung_anzeigen()
+dobot._loch_zu_dobot(20, 20)
+dobot.alarme_loeschen(api)
+dobot.queue_starten(api)
+#dobot.home(api)
+#dobot.position_anzeigen(api)
 
-dType.ClearAllAlarmsState(api)
-
-dobot.home(api)
-
-dobot.position_anzeigen(api)

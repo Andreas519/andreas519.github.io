@@ -1,8 +1,8 @@
 """
 Hilfsfunktionen zur Steuerung eines Dobot Magician auf Basis von DobotDllType.py.
 
-Version: 1.2.0
-Stand: 15.07.2026 - 23:40
+Version: 1.0.0
+Stand: 15.07.2026
 
 Die Datei liegt im Hauptordner ``Dobot_Python``. Die 64-Bit-Version des
 Dobot-SDK wird aus dem Unterordner ``sdk64`` geladen.
@@ -17,12 +17,16 @@ import sys
 from sdk64 import DobotDllType as dType
 
 
-VERSION = "1.1.0"
+VERSION = "1.0.0"
 VERSIONSDATUM = "15.07.2026"
 
 
 def version():
-    """Gibt die Versionsinformation dieser Hilfsbibliothek zurück."""
+    """Gibt die Versionsbezeichnung dieser ``dobot.py`` zurück.
+
+    Beispiel:
+        ``print(dobot.version())``
+    """
 
     return f"dobot.py Version {VERSION} - Stand {VERSIONSDATUM}"
 
@@ -126,8 +130,8 @@ PLATTE_ZEILEN = 27
 PLATTE_RASTER_MM = 16.0
 
 # Die Kalibrierung wird mit plattenkalibrierung_setzen(...) eingetragen.
-# Verwendet werden drei beliebige erreichbare Referenzlöcher, deren
-# Rasterpositionen nicht auf einer gemeinsamen Geraden liegen dürfen.
+# Benötigt werden die Dobot-Koordinaten von drei beliebigen erreichbaren
+# Referenzlöchern. Ihre Rasterpositionen dürfen nicht auf einer Geraden liegen.
 _plattenkalibrierung = None
 
 
@@ -635,58 +639,35 @@ def fahre_zu_loch_linear(
     return x, y, z, rotation
 
 
-def lochposition_lesen(api):
-    """Liest die aktuelle Position im Koordinatensystem der Lochrasterplatte.
+def aktuelle_plattenposition(api, anzeigen=True):
+    """Liefert die aktuelle Position im Lochraster-Koordinatensystem.
 
     Rückgabe:
         ``(spalte, zeile, hoehe)``
 
-    ``spalte`` und ``zeile`` können Dezimalstellen enthalten. Ganzzahlige
-    Werte entsprechen den Mittelpunkten der Rasterlöcher. ``hoehe`` ist die
-    Höhe in Millimetern über der kalibrierten Plattenoberfläche.
+    Die Werte für Spalte und Zeile können Dezimalstellen enthalten.
+    Ein ganzzahliger Wert bezeichnet die Mitte eines Lochs.
+
+    Mit ``anzeigen=False`` wird die Ausgabe unterdrückt.
     """
 
     x, y, z, _r = position_lesen(api)
-    return _dobot_zu_platte(x, y, z)
-
-
-def lochposition_anzeigen(api):
-    """Liest und zeigt die aktuelle Position auf der Lochrasterplatte an.
-
-    Zusätzlich zur genauen Rasterposition wird das nächstgelegene Loch
-    ausgegeben. Die gelesenen Werte werden auch als Tupel zurückgegeben.
-    """
-
-    spalte, zeile, hoehe = lochposition_lesen(api)
-    naechste_spalte = round(spalte)
-    naechste_zeile = round(zeile)
-
-    print("Aktuelle Lochposition:")
-    print(f"  Spalte: {spalte:.3f}")
-    print(f"  Zeile:  {zeile:.3f}")
-    print(f"  Höhe:   {hoehe:.2f} mm")
-    print(
-        "  Nächstes Loch: "
-        f"({naechste_spalte}, {naechste_zeile})"
-    )
-
-    return spalte, zeile, hoehe
-
-
-def aktuelle_plattenposition(api, anzeigen=True):
-    """Kompatibler Alias für die Lochpositionsfunktionen.
-
-    Mit ``anzeigen=True`` wird ``lochposition_anzeigen(api)`` verwendet.
-    Mit ``anzeigen=False`` wird ``lochposition_lesen(api)`` verwendet.
-
-    Rückgabe:
-        ``(spalte, zeile, hoehe)``
-    """
+    spalte, zeile, hoehe = _dobot_zu_platte(x, y, z)
 
     if anzeigen:
-        return lochposition_anzeigen(api)
+        naechste_spalte = round(spalte)
+        naechste_zeile = round(zeile)
 
-    return lochposition_lesen(api)
+        print("Aktuelle Plattenposition:")
+        print(f"  Spalte: {spalte:.3f}")
+        print(f"  Zeile:  {zeile:.3f}")
+        print(f"  Höhe:   {hoehe:.2f} mm")
+        print(
+            "  Nächstes Loch: "
+            f"({naechste_spalte}, {naechste_zeile})"
+        )
+
+    return spalte, zeile, hoehe
 
 
 def home(api):
@@ -748,28 +729,43 @@ def test_z(api):
 
     print("Z-Test beendet.")
 
-def fahre_sofort_zu(api, x, y, z):
-    """Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.
 
-    Die aktuelle Werkzeugrotation R wird beibehalten.
-    Als Bewegungsart wird PTPMOVJXYZMode verwendet.
+def ausfuehren(api):
+    """Startet den auf der Webseite beschriebenen Beispielablauf."""
+
+    print()
+    print("Roboterprogramm wird gestartet.")
+    print("--------------------------------")
+
+    queue_starten(api)
+
+    try:
+        print("Aktuelle Position:")
+        position_anzeigen(api)
+
+        test_z(api)
+    finally:
+        queue_stoppen(api)
+
+        print()
+        print("Roboterprogramm beendet.")
+
+
+# ---------------------------------------------------------------------------
+# Weitere Funktionen
+# ---------------------------------------------------------------------------
+
+def alarme_loeschen(api):
+    """Löscht alle gespeicherten Alarmzustände des Dobot.
+
+    Achtung:
+    Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
     """
 
     if api is None:
         raise RuntimeError("Der Dobot ist nicht verbunden.")
 
-    # Aktuelle Werkzeugrotation beibehalten.
-    _, _, _, r = position_lesen(api)
-
-    return dType.SetPTPCmd(
-        api,
-        dType.PTPMode.PTPMOVJXYZMode,
-        x,
-        y,
-        z,
-        r,
-        isQueued=0,
-    )
+    dType.ClearAllAlarmsState(api)
 
 def sauger_status(api):
     """Gibt True zurück, wenn der Sauger eingeschaltet ist."""
@@ -792,127 +788,158 @@ def sauger_deaktivieren(api, isQueued=1):
         False,
         isQueued=isQueued,
     )
+def fahre_sofort_zu(api, x, y, z):
+    """Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.
 
-def ausfuehren(api):
-    """Startet den auf der Webseite beschriebenen Beispielablauf."""
+    Die aktuelle Werkzeugrotation R wird beibehalten.
+    Als Bewegungsart wird PTPMOVJXYZMode verwendet.
+    """
+# 
+#     if api is None:
+#         raise RuntimeError("Der Dobot ist nicht verbunden.")
 
-    print()
-    print("Roboterprogramm wird gestartet.")
-    print("--------------------------------")
+    # Aktuelle Werkzeugrotation beibehalten
+    _x, _y, _z, r = position_lesen(api)
 
-    queue_starten(api)
+    return dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVJXYZMode,
+        x,
+        y,
+        z,
+        r,
+        isQueued=0,
+    )
 
-    try:
-        print("Aktuelle Position:")
-        position_anzeigen(api)
+def alarme_sofort_zeigen(api):
+    """Zeigt alle aktuell anliegenden Alarme sofort an.
 
-        test_z(api)
-    finally:
-        queue_stoppen(api)
+    Die Funktion liest den Alarmstatus direkt vom Dobot aus.
+    Sie zeigt:
+        - die Anzahl der aktiven Alarme,
+        - den Alarmcode in Hexadezimaldarstellung,
+        - die bekannte Bedeutung des Alarms.
 
-        print()
-        print("Roboterprogramm beendet.")
-# ---------------------------------------------------------------------------
-# Alarmfunktionen
-# ---------------------------------------------------------------------------
+    Rückgabewert:
+        Liste der aktiven Alarmnummern.
 
-ALARM_MELDUNGEN = {
-    # Allgemeine Fehler
-    0x00: "Reset-Alarm",
-    0x01: "Unbekannter oder ungültiger Befehl",
-    0x02: "Dateisystemfehler",
-    0x03: "Kommunikationsfehler zwischen MCU und FPGA",
-    0x04: "Fehler des Winkelsensors",
-
-    # Planungsfehler
-    0x10: "Zielposition liegt in einer Singularität",
-    0x11: "Zielposition liegt außerhalb des Arbeitsbereichs",
-    0x12: "Zielposition überschreitet einen Gelenkgrenzwert",
-    0x13: "Doppelte oder ungeeignete Punkte bei ARC/JUMP",
-    0x14: "Ungültige Eingabeparameter für ARC",
-    0x15: "Ungültige JUMP-Parameter",
-
-    # Bewegungsfehler
-    0x20: "Bewegungsbahn führt durch eine Singularität",
-    0x21: "Bewegungsbahn liegt außerhalb des Arbeitsbereichs",
-    0x22: "Bewegung überschreitet einen Gelenkgrenzwert",
-
-    # Geschwindigkeitsfehler
-    0x30: "Gelenk 1: Geschwindigkeit zu hoch",
-    0x31: "Gelenk 2: Geschwindigkeit zu hoch",
-    0x32: "Gelenk 3: Geschwindigkeit zu hoch",
-    0x33: "Gelenk 4: Geschwindigkeit zu hoch",
-
-    # Grenzwertfehler
-    0x40: "Gelenk 1: positiver Grenzwert erreicht",
-    0x41: "Gelenk 1: negativer Grenzwert erreicht",
-    0x42: "Gelenk 2: positiver Grenzwert erreicht",
-    0x43: "Gelenk 2: negativer Grenzwert erreicht",
-    0x44: "Gelenk 3: positiver Grenzwert erreicht",
-    0x45: "Gelenk 3: negativer Grenzwert erreicht",
-    0x46: "Gelenk 4: positiver Grenzwert erreicht",
-    0x47: "Gelenk 4: negativer Grenzwert erreicht",
-    0x48: "Parallelogramm: positiver Grenzwert erreicht",
-    0x49: "Parallelogramm: negativer Grenzwert erreicht",
-
-    # Schrittverluste
-    0x50: "Gelenk 1: Schrittverlust erkannt",
-    0x51: "Gelenk 2: Schrittverlust erkannt",
-    0x52: "Gelenk 3: Schrittverlust erkannt",
-    0x53: "Gelenk 4: Schrittverlust erkannt",
-}
-
-def alarme_loeschen(api):
-    """Löscht alle gespeicherten Alarmzustände des Dobot.
-
-    Achtung:
-        Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
+    Beispiel:
+        aktive_alarme = dobot.alarme_sofort_zeigen(api)
     """
 
     if api is None:
         raise RuntimeError("Der Dobot ist nicht verbunden.")
 
-    dType.ClearAllAlarmsState(api)
+    alarmtexte = {
+        0x00: "ERR_COMMON_RESET – Reset-Alarm",
+        0x01: "Undefinierter Befehl",
+        0x02: "Dateisystemfehler",
+        0x03: "Kommunikationsfehler zwischen MCU und FPGA",
+        0x04: "Fehler des Winkelsensors",
 
-def alarme_lesen(api):
-    """Liest die aktuell gesetzten Alarmnummern des Dobot."""
+        0x10: (
+            "ERR_PLAN_INV_SINGULARITY – "
+            "Planungsfehler: ungültige oder singuläre Zielposition"
+        ),
+        0x11: (
+            "ERR_PLAN_INV_CALC – "
+            "Planungsfehler: Zielposition außerhalb des Arbeitsbereichs"
+        ),
+        0x12: (
+            "ERR_PLAN_INV_LIMIT – "
+            "Planungsfehler: Zielposition außerhalb der Gelenkgrenzen"
+        ),
+        0x13: (
+            "ERR_PLAN_PUSH_DATA_REPEAT – "
+            "Planungsfehler: wiederholte Punkte"
+        ),
+        0x14: (
+            "ERR_PLAN_ARC_INPUT_PARAM – "
+            "Planungsfehler: ungültiger ARC-Parameter"
+        ),
+        0x15: (
+            "ERR_PLAN_JUMP_PARAM – "
+            "Planungsfehler: ungültiger JUMP-Parameter"
+        ),
+
+        0x20: (
+            "ERR_MOVE_INV_SINGULARITY – "
+            "Bewegungsfehler: Singularität in der Bahn"
+        ),
+        0x21: (
+            "ERR_MOVE_INV_CALC – "
+            "Bewegungsfehler: Bahn außerhalb des Arbeitsbereichs"
+        ),
+        0x22: (
+            "ERR_MOVE_INV_LIMIT – "
+            "Bewegungsfehler: Bahn außerhalb der Gelenkgrenzen"
+        ),
+
+        0x30: "ERR_OVERSPEED_AXIS1 – Gelenk 1 zu schnell",
+        0x31: "ERR_OVERSPEED_AXIS2 – Gelenk 2 zu schnell",
+        0x32: "ERR_OVERSPEED_AXIS3 – Gelenk 3 zu schnell",
+        0x33: "ERR_OVERSPEED_AXIS4 – Gelenk 4 zu schnell",
+
+        0x40: "ERR_LIMIT_AXIS1_POS – Gelenk 1 positive Grenze",
+        0x41: "ERR_LIMIT_AXIS1_NEG – Gelenk 1 negative Grenze",
+        0x42: "ERR_LIMIT_AXIS2_POS – Gelenk 2 positive Grenze",
+        0x43: "ERR_LIMIT_AXIS2_NEG – Gelenk 2 negative Grenze",
+        0x44: "ERR_LIMIT_AXIS3_POS – Gelenk 3 positive Grenze",
+        0x45: "ERR_LIMIT_AXIS3_NEG – Gelenk 3 negative Grenze",
+        0x46: "ERR_LIMIT_AXIS4_POS – Gelenk 4 positive Grenze",
+        0x47: "ERR_LIMIT_AXIS4_NEG – Gelenk 4 negative Grenze",
+        0x48: (
+            "ERR_LIMIT_AXIS23_POS – "
+            "Parallelogramm positive Grenze"
+        ),
+        0x49: (
+            "ERR_LIMIT_AXIS23_NEG – "
+            "Parallelogramm negative Grenze"
+        ),
+
+        0x50: "ERR_LOSE_STEP_AXIS1 – Schrittverlust Gelenk 1",
+        0x51: "ERR_LOSE_STEP_AXIS2 – Schrittverlust Gelenk 2",
+        0x52: "ERR_LOSE_STEP_AXIS3 – Schrittverlust Gelenk 3",
+        0x53: "ERR_LOSE_STEP_AXIS4 – Schrittverlust Gelenk 4",
+    }
 
     alarmdaten, laenge = dType.GetAlarmsState(api)
 
     aktive_alarme = []
 
-    for byte_index, wert in enumerate(alarmdaten[:laenge]):
-        for bit_index in range(8):
-            if wert & (1 << bit_index):
-                alarmnummer = byte_index * 8 + bit_index
+    # Nur die tatsächlich vom Dobot belegten Bytes auswerten.
+    for byte_index, byte_wert in enumerate(alarmdaten[:laenge]):
+        for bit in range(8):
+            if byte_wert & (1 << bit):
+                alarmnummer = byte_index * 8 + bit
                 aktive_alarme.append(alarmnummer)
 
-    return aktive_alarme
-
-
-def alarme_anzeigen(api):
-    """Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an."""
-
-    aktive_alarme = alarme_lesen(api)
+    print()
 
     if not aktive_alarme:
         print("Keine Alarme aktiv.")
-        return
+        return []
 
-    print(f"{len(aktive_alarme)} Alarm(e) aktiv:")
-    print()
+    anzahl = len(aktive_alarme)
+
+    if anzahl == 1:
+        print("1 Alarm aktiv:")
+    else:
+        print(f"{anzahl} Alarme aktiv:")
 
     for alarmnummer in aktive_alarme:
-        meldung = ALARM_MELDUNGEN.get(
+        alarmtext = alarmtexte.get(
             alarmnummer,
-            "Unbekannter Alarm"
+            "Unbekannter oder nicht dokumentierter Alarm",
         )
 
         print(
-            f"  Alarm {alarmnummer:3d} "
-            f"(0x{alarmnummer:02X}): "
-            f"{meldung}"
+            f"  0x{alarmnummer:02X} "
+            f"({alarmnummer:3d}): "
+            f"{alarmtext}"
         )
+
+    return aktive_alarme
 
 def main():
     """Hinweis beim direkten Start dieser Bibliotheksdatei."""
