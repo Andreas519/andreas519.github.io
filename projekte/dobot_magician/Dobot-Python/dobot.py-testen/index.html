@@ -6,36 +6,56 @@
   <title>dobot.py-testen · Dobot Python · Young Engineers</title>
   <meta name="author" content="Andreas Sigismund">
   <meta name="description" content="Projektbereich dobot.py-testen fuer Dobot Python">
+  <link rel="stylesheet" href="../../../../css/prism.css">
   <link rel="stylesheet" href="../../../../css/my.css">
 </head>
 <body>
   <header>
-    Projektbereich dobot.py-testen
+    Projektbereich <code>dobot.py-testen</code> im Projekt <a href="../index.html">Dobot-Python</a>
   </header>
-
   <main>
     <section>
-      <h2>Ueberblick</h2>
+      <h3>Ueberblick</h3>
       <p>
         Hier werden neue Befehle und Funktionen in <code>dobot.py</code> implementiert und getestet.
         Die erprobten Funktionen werden anschliessend in weiteren Projekten genutzt.
         Die aktuelle Version von <code>dobot.py</code> ist im Projekt <a href="../index.html">Dobot-Python</a> zu finden.
       </p>
     </section>
+
     <section>
-      <h2>Programmstart und -ende</h2>
-      <code>
-        
-      </code>
+      <h3>Programmstart und -ende</h3>
+      <div class="code-wrap">
+        <button class="copy-button" type="button" id="copy-programmstart">Kopieren</button>
+        <pre class="codebereich line-numbers" data-code-enhanced="true"><code class="language-python" id="programmstart-code">from pathlib import Path
+import sys
+
+# Übergeordneten Ordner "Dobot-Python" in den Python-Suchpfad aufnehmen
+PROJEKTORDNER = Path(__file__).resolve().parent.parent
+
+if str(PROJEKTORDNER) not in sys.path:
+    sys.path.insert(0, str(PROJEKTORDNER))
+
+from sdk64 import DobotDllType as dType
+import dobot
+
+api = dobot.init()
+
+dobot.position_anzeigen(api)
+  </code><span aria-hidden="true" class="line-numbers-rows" style="position:absolute;top:1rem;left:0;width:3.2em;border-right:1px solid #cbd5e1;user-select:none;pointer-events:none;"><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">1</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">2</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">3</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">4</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">5</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">6</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">7</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">8</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">9</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">10</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">11</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">12</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">13</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">14</span><span style="display:block;line-height:1.5;text-align:right;padding-right:.8em;color:#94a3b8;">15</span></span></pre>
+      </div>
+      <p><a href="Dobot-Python-Hilfsfunktionen.html#programmstart">Programmstart und -ende</a></p>
     </section>
 
     <section>
-      <h2>Dateien im Projekt</h2>
+      <h3>Dateien im Projekt</h3>
       <ul>
         <li><a href="readme.md">readme.md</a></li>
         <li><a href="start.py">start.py</a></li>
         <li><a href="dobot-test-01.py">dobot-test-01.py</a></li>
         <li><a href="dobot-positioniere.py">dobot-positioniere.py</a></li>
+        
+        <li><a href="dobot_Plattenkalibrierung.html">Dobot Plattenkalibrierung</a></li>
       </ul>
     </section>
 
@@ -47,6 +67,78 @@
   <footer>
     © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Aenderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/prism-core.js"></script>
+    <script src="../../../../js/prism.js"></script>
+    <script>
+      (function() {
+        var codeEl = document.getElementById('programmstart-code');
+        var copyBtn = document.getElementById('copy-programmstart');
+
+        function setzeZeilennummern(el) {
+          var pre = el.parentNode;
+          if (!pre || pre.tagName !== 'PRE') {
+            return;
+          }
+
+          pre.style.position = 'relative';
+          pre.style.paddingLeft = '4.2em';
+
+          var rows = pre.querySelector('.line-numbers-rows');
+          if (rows) {
+            rows.remove();
+          }
+
+          var text = el.textContent;
+          var zeilen = text.split('\n').length;
+          if (text.endsWith('\n')) {
+            zeilen -= 1;
+          }
+          if (zeilen < 1) {
+            zeilen = 1;
+          }
+
+          var lineRows = document.createElement('span');
+          lineRows.className = 'line-numbers-rows';
+          lineRows.style.position = 'absolute';
+          lineRows.style.top = '1rem';
+          lineRows.style.left = '0';
+          lineRows.style.width = '3.2em';
+          lineRows.style.borderRight = '1px solid #cbd5e1';
+          lineRows.style.userSelect = 'none';
+          lineRows.style.pointerEvents = 'none';
+          for (var i = 0; i < zeilen; i++) {
+            var lineSpan = document.createElement('span');
+            lineSpan.textContent = String(i + 1);
+            lineSpan.style.display = 'block';
+            lineSpan.style.lineHeight = '1.5';
+            lineSpan.style.textAlign = 'right';
+            lineSpan.style.paddingRight = '.8em';
+            lineSpan.style.color = '#94a3b8';
+            lineRows.appendChild(lineSpan);
+          }
+          pre.appendChild(lineRows);
+        }
+
+        if (codeEl) {
+          setzeZeilennummern(codeEl);
+          if (window.Prism && typeof Prism.highlightElement === 'function') {
+            Prism.highlightElement(codeEl);
+          }
+        }
+
+        if (copyBtn && codeEl && navigator.clipboard) {
+          copyBtn.addEventListener('click', function() {
+            navigator.clipboard.writeText(codeEl.textContent).then(function() {
+              var originalText = copyBtn.textContent;
+              copyBtn.textContent = 'Kopiert';
+              setTimeout(function() {
+                copyBtn.textContent = originalText;
+              }, 1200);
+            });
+          });
+        }
+      })();
+    </script>
     <script src="../../../../js/script.js"></script>
   </footer>
 </body>

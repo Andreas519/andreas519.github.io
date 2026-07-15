@@ -767,6 +767,179 @@ def alarme_loeschen(api):
 
     dType.ClearAllAlarmsState(api)
 
+def sauger_status(api):
+    """Gibt True zurück, wenn der Sauger eingeschaltet ist."""
+    return bool(dType.GetEndEffectorSuctionCup(api)[0])
+
+def sauger_aktivieren(api, isQueued=1):
+    """Aktiviert den Sauger."""
+    return dType.SetEndEffectorSuctionCup(
+        api,
+        True,
+        True,
+        isQueued=isQueued,
+    )
+
+def sauger_deaktivieren(api, isQueued=1):
+    """Deaktiviert den Sauger."""
+    return dType.SetEndEffectorSuctionCup(
+        api,
+        True,
+        False,
+        isQueued=isQueued,
+    )
+def fahre_sofort_zu(api, x, y, z):
+    """Sendet eine Bewegung sofort, ohne sie in die Queue einzureihen.
+
+    Die aktuelle Werkzeugrotation R wird beibehalten.
+    Als Bewegungsart wird PTPMOVJXYZMode verwendet.
+    """
+# 
+#     if api is None:
+#         raise RuntimeError("Der Dobot ist nicht verbunden.")
+
+    # Aktuelle Werkzeugrotation beibehalten
+    _x, _y, _z, r = position_lesen(api)
+
+    return dType.SetPTPCmd(
+        api,
+        dType.PTPMode.PTPMOVJXYZMode,
+        x,
+        y,
+        z,
+        r,
+        isQueued=0,
+    )
+
+def alarme_sofort_zeigen(api):
+    """Zeigt alle aktuell anliegenden Alarme sofort an.
+
+    Die Funktion liest den Alarmstatus direkt vom Dobot aus.
+    Sie zeigt:
+        - die Anzahl der aktiven Alarme,
+        - den Alarmcode in Hexadezimaldarstellung,
+        - die bekannte Bedeutung des Alarms.
+
+    Rückgabewert:
+        Liste der aktiven Alarmnummern.
+
+    Beispiel:
+        aktive_alarme = dobot.alarme_sofort_zeigen(api)
+    """
+
+    if api is None:
+        raise RuntimeError("Der Dobot ist nicht verbunden.")
+
+    alarmtexte = {
+        0x00: "ERR_COMMON_RESET – Reset-Alarm",
+        0x01: "Undefinierter Befehl",
+        0x02: "Dateisystemfehler",
+        0x03: "Kommunikationsfehler zwischen MCU und FPGA",
+        0x04: "Fehler des Winkelsensors",
+
+        0x10: (
+            "ERR_PLAN_INV_SINGULARITY – "
+            "Planungsfehler: ungültige oder singuläre Zielposition"
+        ),
+        0x11: (
+            "ERR_PLAN_INV_CALC – "
+            "Planungsfehler: Zielposition außerhalb des Arbeitsbereichs"
+        ),
+        0x12: (
+            "ERR_PLAN_INV_LIMIT – "
+            "Planungsfehler: Zielposition außerhalb der Gelenkgrenzen"
+        ),
+        0x13: (
+            "ERR_PLAN_PUSH_DATA_REPEAT – "
+            "Planungsfehler: wiederholte Punkte"
+        ),
+        0x14: (
+            "ERR_PLAN_ARC_INPUT_PARAM – "
+            "Planungsfehler: ungültiger ARC-Parameter"
+        ),
+        0x15: (
+            "ERR_PLAN_JUMP_PARAM – "
+            "Planungsfehler: ungültiger JUMP-Parameter"
+        ),
+
+        0x20: (
+            "ERR_MOVE_INV_SINGULARITY – "
+            "Bewegungsfehler: Singularität in der Bahn"
+        ),
+        0x21: (
+            "ERR_MOVE_INV_CALC – "
+            "Bewegungsfehler: Bahn außerhalb des Arbeitsbereichs"
+        ),
+        0x22: (
+            "ERR_MOVE_INV_LIMIT – "
+            "Bewegungsfehler: Bahn außerhalb der Gelenkgrenzen"
+        ),
+
+        0x30: "ERR_OVERSPEED_AXIS1 – Gelenk 1 zu schnell",
+        0x31: "ERR_OVERSPEED_AXIS2 – Gelenk 2 zu schnell",
+        0x32: "ERR_OVERSPEED_AXIS3 – Gelenk 3 zu schnell",
+        0x33: "ERR_OVERSPEED_AXIS4 – Gelenk 4 zu schnell",
+
+        0x40: "ERR_LIMIT_AXIS1_POS – Gelenk 1 positive Grenze",
+        0x41: "ERR_LIMIT_AXIS1_NEG – Gelenk 1 negative Grenze",
+        0x42: "ERR_LIMIT_AXIS2_POS – Gelenk 2 positive Grenze",
+        0x43: "ERR_LIMIT_AXIS2_NEG – Gelenk 2 negative Grenze",
+        0x44: "ERR_LIMIT_AXIS3_POS – Gelenk 3 positive Grenze",
+        0x45: "ERR_LIMIT_AXIS3_NEG – Gelenk 3 negative Grenze",
+        0x46: "ERR_LIMIT_AXIS4_POS – Gelenk 4 positive Grenze",
+        0x47: "ERR_LIMIT_AXIS4_NEG – Gelenk 4 negative Grenze",
+        0x48: (
+            "ERR_LIMIT_AXIS23_POS – "
+            "Parallelogramm positive Grenze"
+        ),
+        0x49: (
+            "ERR_LIMIT_AXIS23_NEG – "
+            "Parallelogramm negative Grenze"
+        ),
+
+        0x50: "ERR_LOSE_STEP_AXIS1 – Schrittverlust Gelenk 1",
+        0x51: "ERR_LOSE_STEP_AXIS2 – Schrittverlust Gelenk 2",
+        0x52: "ERR_LOSE_STEP_AXIS3 – Schrittverlust Gelenk 3",
+        0x53: "ERR_LOSE_STEP_AXIS4 – Schrittverlust Gelenk 4",
+    }
+
+    alarmdaten, laenge = dType.GetAlarmsState(api)
+
+    aktive_alarme = []
+
+    # Nur die tatsächlich vom Dobot belegten Bytes auswerten.
+    for byte_index, byte_wert in enumerate(alarmdaten[:laenge]):
+        for bit in range(8):
+            if byte_wert & (1 << bit):
+                alarmnummer = byte_index * 8 + bit
+                aktive_alarme.append(alarmnummer)
+
+    print()
+
+    if not aktive_alarme:
+        print("Keine Alarme aktiv.")
+        return []
+
+    anzahl = len(aktive_alarme)
+
+    if anzahl == 1:
+        print("1 Alarm aktiv:")
+    else:
+        print(f"{anzahl} Alarme aktiv:")
+
+    for alarmnummer in aktive_alarme:
+        alarmtext = alarmtexte.get(
+            alarmnummer,
+            "Unbekannter oder nicht dokumentierter Alarm",
+        )
+
+        print(
+            f"  0x{alarmnummer:02X} "
+            f"({alarmnummer:3d}): "
+            f"{alarmtext}"
+        )
+
+    return aktive_alarme
 
 def main():
     """Hinweis beim direkten Start dieser Bibliotheksdatei."""

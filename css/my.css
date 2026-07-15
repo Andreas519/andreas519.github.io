@@ -135,6 +135,64 @@ ol > li {
       height: auto;
     }
 
+    .code-wrap {
+      position: relative;
+      margin: 1rem 0;
+    }
+
+    .copy-button {
+      position: absolute;
+      right: .6rem;
+      top: .6rem;
+      z-index: 2;
+      border: 1px solid #6d8296;
+      border-radius: 7px;
+      background: #243544;
+      color: #fff;
+      padding: .35rem .6rem;
+      cursor: pointer;
+      font-size: .9rem;
+    }
+
+    .copy-button:hover {
+      background: #334b60;
+    }
+
+    pre.codebereich {
+      margin: 0;
+      overflow: auto;
+      position: relative;
+      line-height: 1.5;
+      padding: 1rem 1rem 1rem 4.2em;
+      border-radius: 8px;
+    }
+
+    pre.codebereich.line-numbers {
+      counter-reset: linenumber;
+    }
+
+    pre.codebereich.line-numbers .line-numbers-rows {
+      position: absolute;
+      top: 1rem;
+      left: 0;
+      width: 3.2em;
+      border-right: 1px solid #cbd5e1;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    pre.codebereich.line-numbers .line-numbers-rows > span {
+      display: block;
+      line-height: 1.5;
+      text-align: right;
+      padding-right: .8em;
+      color: #94a3b8;
+    }
+
+    pre.codebereich.line-numbers .line-numbers-rows > span::before {
+      content: none;
+    }
+
     @media (max-width: 768px) {
       .content-row {
         flex-direction: column;
