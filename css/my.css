@@ -199,6 +199,7 @@ ol > li {
     .code-panel .line-numbers-rows > span {
       display: block;
       line-height: 1.5;
+      min-height: 1.5em;
       text-align: right;
       color: #94a3b8;
     }
@@ -206,6 +207,13 @@ ol > li {
     pre.codebereich.line-numbers > code {
       display: block;
       min-width: 0;
+      white-space: normal;
+    }
+
+    pre.codebereich.line-numbers > code > .code-line {
+      display: block;
+      min-height: 1.5em;
+      line-height: 1.5;
       white-space: pre;
     }
 

@@ -85,6 +85,26 @@ function setzeZeilennummern(codeElement) {
   }
 }
 
+function teileCodeInZeilen(codeElement) {
+  if (codeElement.dataset.codeLinesReady === "true") {
+    return;
+  }
+
+  const highlightedHtml = codeElement.innerHTML.replace(/\n$/, "");
+  const zeilen = highlightedHtml === "" ? [""] : highlightedHtml.split("\n");
+
+  codeElement.innerHTML = "";
+
+  zeilen.forEach(zeileHtml => {
+    const zeile = document.createElement("span");
+    zeile.className = "code-line";
+    zeile.innerHTML = zeileHtml === "" ? "&nbsp;" : zeileHtml;
+    codeElement.appendChild(zeile);
+  });
+
+  codeElement.dataset.codeLinesReady = "true";
+}
+
 function initialisiereCodebloecke() {
   document.querySelectorAll('pre > code[class*="language-"]').forEach(codeElement => {
     const preElement = codeElement.parentElement;
@@ -92,12 +112,14 @@ function initialisiereCodebloecke() {
       return;
     }
 
-    setzeZeilennummern(codeElement);
     initialisiereKopierButton(codeElement);
 
     if (window.Prism) {
       Prism.highlightElement(codeElement);
     }
+
+    teileCodeInZeilen(codeElement);
+    setzeZeilennummern(codeElement);
   });
 }
 
