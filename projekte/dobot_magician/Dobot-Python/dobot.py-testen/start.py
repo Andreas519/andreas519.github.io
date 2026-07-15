@@ -24,4 +24,23 @@ dType.ClearAllAlarmsState(api)
 dobot.home(api)
 
 dobot.position_anzeigen(api)
-
+eingabe=""
+while eingabe!="e":
+    eingabe = input("Befehle: ?, e, p : ")
+    if eingabe == "e":
+        pass    
+    elif eingabe == "?":
+        pass    
+    elif eingabe == "?":
+        print("Hilfetext")
+    elif eingabe == "p":        
+        print("Position anzeigen")
+    elif eingabe == "x":        
+        pass    
+    elif eingabe == "y":        
+        pass    
+    elif eingabe == "z":
+        pass
+    else:
+        print("unbekannter Befehl")
+    
