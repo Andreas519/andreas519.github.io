@@ -146,6 +146,8 @@ ol > li {
       background: #0f172a;
       border-radius: 12px;
       overflow: hidden;
+      overflow-x: auto;
+      overflow-y: auto;
     }
 
     .copy-button {
@@ -168,7 +170,7 @@ ol > li {
 
     pre.codebereich {
       margin: 0;
-      overflow: auto;
+      overflow: visible;
       line-height: 1.5;
       padding: 1rem;
       border-radius: 0;
@@ -189,6 +191,9 @@ ol > li {
       user-select: none;
       pointer-events: none;
       padding: 1rem .8rem 1rem 0;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
     .code-panel .line-numbers-rows > span {
