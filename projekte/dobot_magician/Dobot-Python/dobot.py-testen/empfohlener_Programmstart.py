@@ -14,7 +14,7 @@ dobot.alarme_loeschen(api)
 dobot.queue_starten(api)
 
 try:
-    dobot.home(api)
+    # dobot.home(api)
     dobot.position_anzeigen(api)
 
     # Optional: Lochrasterplatte kalibrieren
