@@ -3,65 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dobot Magician Projekte · Young Engineers</title>
+  <title>Dobot Magician - DobotDll.dll und DobotDllType.py</title>
   <meta name="author" content="Andreas Sigismund">
-  <meta name="description" content="DobotDll.dll und DobotDllType.py für den Dobot Magician, AG Young Engineers, Martin-Rinckart-Gymnasium Eilenburg">
+  <meta name="description" content="Dokumentation zu DobotDll.dll und DobotDllType.py fuer den Dobot Magician inklusive Struktur, Startbeispiel und typischer Fehlerquellen.">
   <link rel="stylesheet" href="../../css/my.css">
 </head>
 <body>
   <header>
-    Dobot Studio - <code>DobotDll.dll</code> und <code>DobotDllType.py</code>
+    <h1>DobotDll.dll und DobotDllType.py</h1>
+    <p>Grundlagen, Startbeispiel und typische Fehlerquellen beim Einsatz mit Python</p>
   </header>
 
-  <main>
-    <section>
-      <p>Im Installationsverzeichnis von Dobot Studio befindet sich die Datei <code>DobotDll.dll</code>.
-        Eine Datei <code>DobotDllType.py</code> war nicht zu finden.
-        Diese Dateien sind notwendig, um den Dobot Magician über Python zu steuern.
-     </p>
-     <p>Die Firmware des Dobot Magician ist sicher in C/C++ geschrieben.<br>
-        Die Datei <code>DobotDll.dll</code> ist die Schnittstelle zwischen der Firmware und einem C/C++-Programm auf dem PC.
-        Die Datei <code>DobotDllType.py</code> ist die Python-Schnittstelle zur <code>DobotDll.dll</code>.
-        In ihr wurden die Datentypen und Strukturen, Konstanten und Enumerationen sowie Python-Funktionen definiert, die intern die Funktionen der DLL aufrufen.
-        Diese Art der Umsetzung nennt man Wrapping. Die Datei <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.
-        .....
-        Hier wird noch viel mehr stehen müssen, um die Funktionsweise zu beschreiben.
-     </p>
-
-             <p>
-         <code>DobotDllType.py</code> ist im Wesentlichen die Python-Schnittstelle zur <code>DobotDll.dll</code>.<br>
-          Sie enthält typischerweise:<br>
-           - das Laden der DLL,<br>
-           - Definitionen von Datentypen und Strukturen,<br>
-           - Konstanten und Enumerationen,<br>
-          Python-Funktionen, die intern die Funktionen der DLL aufrufen.
-        </p>
-        <p><code>DobotDll.dll</code> ist die eigentliche Programmbibliothek für die Kommunikation mit dem Dobot Magician.<br>
-          Vereinfacht sieht die Kette so aus:<br>
-        <code>dein Python-Programm<br>
-        ↓<br>
-DobotDllType.py<br>
-        ↓<br>
-DobotDll.dll<br>
-        ↓<br>
-USB / serielle Verbindung<br>
-        ↓<br>
-Dobot Magician</code>
-        </p>
-
-    </section>
-      <section><h3>Befehlsübersicht der <code>DobotDllType.py</code></h3>
-    
-    <p><a href="https://dobot.com.mx/assets/download/magician/user%20guide/Dobot%20Magician%20Demo%20Description.pdf" target="_blank" rel="noopener noreferrer">Dobot Magician Demo Description (PDF)</a></p>
-    <p><a href="Dobot-Python/sdk64/DobotDllType_viewer.html" target="_blank" rel="noopener noreferrer">DobotDllType.py</a></p>
-  
-    <p><a href="Dobot_Magician_portabel/PTPModi.html">PTP Modi - Überblick zu Point to Point - Bewegungsarten</a></p>
-    <p><a href="Dobot-Python-API-Dokumentation.html">Dobot-Python-API-Dokumentation</a></p>
-    <p><a href="Dobot-Python-Hilfsfunktionen.html">Dobot-Python-Hilfsfunktionen</a></p>
-
-     
-  </section>
+  <main class="home-menu">
+    <nav aria-label="Seitennavigation Dobot DLL">
+      <ul>
+        <li><a href="#grundidee" class="active">Grundidee</a></li>
+        <li><a href="#dateien">Dateien</a></li>
+        <li><a href="#struktur">Ordnerstruktur</a></li>
+        <li><a href="#startbeispiel">Startbeispiel</a></li>
+        <li><a href="#fehler">Fehlerbehebung</a></li>
+        <li><a href="#weiter">Weiterfuehrende Seiten</a></li>
+      </ul>
+    </nav>
   </main>
+
+  <main>
+    <section id="grundidee">
+      <h2>Warum diese beiden Dateien wichtig sind</h2>
+      <p>
+        Um den Dobot Magician aus Python zu steuern, werden zwei Ebenen benoetigt:
+        die native Windows-Bibliothek <code>DobotDll.dll</code> und die Python-Datei
+        <code>DobotDllType.py</code>, die diese Bibliothek kapselt.
+      </p>
+      <pre><code>dein Python-Programm
+    -> DobotDllType.py
+    -> DobotDll.dll
+    -> USB / serielle Verbindung
+    -> Dobot Magician</code></pre>
+      <p class="note">
+        Kurz gesagt: <code>DobotDll.dll</code> spricht mit der Hardware,
+        <code>DobotDllType.py</code> macht diese Funktionen in Python nutzbar.
+      </p>
+    </section>
+
+    <section id="dateien">
+      <h2>Aufgabe der einzelnen Dateien</h2>
+      <div class="grid">
+        <article class="project-card">
+          <h3><code>DobotDll.dll</code></h3>
+          <ul>
+            <li>Native Bibliothek (Windows-DLL) fuer den Zugriff auf den Roboter.</li>
+            <li>Wird zur Laufzeit durch Python geladen.</li>
+            <li>Muss zur Python-Architektur passen (32-Bit oder 64-Bit).</li>
+          </ul>
+        </article>
+        <article class="project-card">
+          <h3><code>DobotDllType.py</code></h3>
+          <ul>
+            <li>Python-Wrapper um die Funktionen der DLL.</li>
+            <li>Enthaelt Datentypen, Konstanten, Modi und API-Funktionen.</li>
+            <li>Wird im Code meist als <code>import DobotDllType as dType</code> eingebunden.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="struktur">
+      <h2>Empfohlene Ordnerstruktur</h2>
+      <p>In unseren Projekten hat sich folgende Struktur bewaehrt:</p>
+      <pre><code>Dobot-Projekt/
+|- mein_programm.py
+|- sdk64/
+|  |- DobotDllType.py
+|  |- DobotDll.dll
+|- sdk32/
+   |- DobotDllType.py
+   |- DobotDll.dll</code></pre>
+      <aside>
+        64-Bit-Python benoetigt die 64-Bit-DLL. 32-Bit-Python benoetigt die 32-Bit-DLL.
+        Eine gemischte Kombination fuehrt typischerweise zu Ladefehlern.
+      </aside>
+    </section>
+
+    <section id="startbeispiel">
+      <h2>Minimales Startbeispiel (Windows, 64-Bit)</h2>
+      <p>
+        Das folgende Beispiel registriert den DLL-Ordner sauber und baut danach die Verbindung auf.
+      </p>
+      <pre><code class="language-python">from pathlib import Path
+import os
+from sdk64 import DobotDllType as dType
+
+sdk_verzeichnis = Path(__file__).resolve().parent / "sdk64"
+os.add_dll_directory(str(sdk_verzeichnis))
+
+api = dType.load()
+zustand = dType.ConnectDobot(api, "", 115200)
+
+if zustand[0] == dType.DobotConnect.DobotConnect_NoError:
+    print("Dobot verbunden")
+else:
+    print("Verbindung fehlgeschlagen:", zustand)
+
+dType.DisconnectDobot(api)</code></pre>
+      <p class="note">
+        Bei dieser Variante kann <code>DobotDll.dll</code> in <code>sdk64</code> liegen,
+        ohne dass sie im Systempfad eingetragen werden muss.
+      </p>
+    </section>
+
+    <section id="fehler">
+      <h2>Typische Fehler und schnelle Pruefung</h2>
+      <div class="grid">
+        <article class="project-card">
+          <h3>Fehlerbild</h3>
+          <ul>
+            <li><code>FileNotFoundError: Could not find module 'DobotDll.dll'</code></li>
+            <li>Import von <code>DobotDllType.py</code> klappt, Laden der DLL aber nicht.</li>
+            <li>Verbindung wird nicht hergestellt, obwohl COM-Port vorhanden ist.</li>
+          </ul>
+        </article>
+        <article class="project-card">
+          <h3>Pruefpunkte</h3>
+          <ul>
+            <li>Passt 32/64-Bit von Python und DLL zusammen?</li>
+            <li>Liegt die DLL wirklich im erwarteten Ordner?</li>
+            <li>Wurde der DLL-Ordner mit <code>os.add_dll_directory()</code> registriert?</li>
+            <li>Ist der Roboter eingeschaltet und per USB korrekt verbunden?</li>
+          </ul>
+        </article>
+      </div>
+      <div class="merkbox">
+        Gute Praxis: zuerst nur Laden und Verbinden testen, danach erst Bewegungsbefehle einbauen.
+      </div>
+    </section>
+
+    <section id="weiter">
+      <h2>Weiterfuehrende Seiten</h2>
+      <ul>
+        <li><a href="Dobot-Python/index.html" target="_blank" rel="noopener noreferrer">Dobot-Python (64-Bit Arbeitsumgebung)</a></li>
+        <li><a href="Dobot_Magician_portabel/index.html" target="_blank" rel="noopener noreferrer">Dobot Magician portabel (32-Bit Variante)</a></li>
+        <li><a href="Dobot-Python/sdk64/DobotDllType_viewer.html" target="_blank" rel="noopener noreferrer">DobotDllType.py Viewer (64-Bit)</a></li>
+        <li><a href="Dobot_Magician_portabel/dobot_sdk/DobotDllType_viewer.html" target="_blank" rel="noopener noreferrer">DobotDllType.py Viewer (32-Bit)</a></li>
+        <li><a href="Dobot-Python-API-Dokumentation.html" target="_blank" rel="noopener noreferrer">Dobot-Python-API-Dokumentation</a></li>
+        <li><a href="Dobot-Python-Hilfsfunktionen.html" target="_blank" rel="noopener noreferrer">Dobot-Python-Hilfsfunktionen</a></li>
+        <li><a href="./Dobot%20Magician%20Demo%20Description.pdf" target="_blank" rel="noopener noreferrer">Dobot Magician Demo Description (PDF)</a></li>
+        <li><a href="Dobot_Magician_portabel/PTPModi.html" target="_blank" rel="noopener noreferrer">PTP-Modi: Bewegungsarten im Ueberblick</a></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Hinweis zur Sicherheit</h2>
+      <p>
+        Vor jeder Bewegung sollten Arbeitsraum, Werkzeug und Z-Hoehe geprueft werden.
+        Tests zuerst mit kleinen Geschwindigkeiten und in sicherer Distanz durchfuehren.
+      </p>
+      <p>
+        Zurueck zur Uebersicht: <a href="index.html">Dobot Magician Projekte</a>
+      </p>
+    </section>
+  </main>
+
   <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../../js/script.js"></script>

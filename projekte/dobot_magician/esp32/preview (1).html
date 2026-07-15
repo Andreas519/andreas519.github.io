@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bilderkennung mit ESP32-CAM, OpenCV, YOLO und Dobot Magician</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#5f6b7a;
+      --accent:#0f6cbd;
+      --accent2:#0b4f8a;
+      --border:#d9e2ec;
+      --code:#0f172a;
+      --codeText:#e5eefc;
+      --note:#eef7ff;
+      --warn:#fff7e6;
+      --ok:#edf9f0;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Segoe UI, Arial, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.65;
+    }
+    header{
+      background:linear-gradient(135deg,var(--accent2),var(--accent));
+      color:white;
+      padding:3rem 1.5rem 2.5rem;
+    }
+    header .wrap, main, footer{max-width:1100px;margin:auto}
+    h1{font-size:clamp(2rem,4vw,3.2rem);line-height:1.15;margin:0 0 1rem}
+    header p{max-width:850px;font-size:1.1rem;margin:.5rem 0}
+    .version{
+      display:inline-block;
+      margin-top:1rem;
+      padding:.35rem .7rem;
+      border:1px solid rgba(255,255,255,.45);
+      border-radius:999px;
+      font-size:.92rem;
+      background:rgba(255,255,255,.1);
+    }
+    main{padding:1.5rem}
+    nav{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1rem 1.25rem;
+      margin:0 0 1.5rem;
+      box-shadow:0 4px 16px rgba(15,23,42,.05);
+    }
+    nav h2{margin-top:0}
+    nav ul{columns:2;column-gap:2rem}
+    nav li{break-inside:avoid;margin:.25rem 0}
+    a{color:var(--accent2)}
+    section{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:1.4rem 1.5rem;
+      margin:1.25rem 0;
+      box-shadow:0 4px 16px rgba(15,23,42,.04);
+    }
+    h2{color:var(--accent2);margin-top:0;border-bottom:1px solid var(--border);padding-bottom:.45rem}
+    h3{color:#174a73;margin-top:1.4rem}
+    .lead{font-size:1.12rem}
+    .note,.warning,.good{
+      padding:1rem 1.1rem;
+      border-left:5px solid;
+      border-radius:10px;
+      margin:1rem 0;
+    }
+    .note{background:var(--note);border-color:var(--accent)}
+    .warning{background:var(--warn);border-color:#c77b00}
+    .good{background:var(--ok);border-color:#2e8b57}
+    pre{
+      background:var(--code);
+      color:var(--codeText);
+      padding:1rem 1.1rem;
+      border-radius:10px;
+      overflow:auto;
+      border:1px solid #1e293b;
+      line-height:1.5;
+      tab-size:4;
+    }
+    code{
+      font-family:Consolas, "Courier New", monospace;
+      font-size:.95em;
+    }
+    :not(pre)>code{
+      background:#edf2f7;
+      color:#15314b;
+      padding:.1rem .35rem;
+      border-radius:5px;
+    }
+    .diagram{font-size:.95rem}
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin:1rem 0;
+    }
+    th,td{
+      border:1px solid var(--border);
+      padding:.65rem .75rem;
+      text-align:left;
+      vertical-align:top;
+    }
+    th{background:#eef4fa;color:#173d5f}
+    .steps{
+      counter-reset:step;
+      list-style:none;
+      padding:0;
+    }
+    .steps li{
+      counter-increment:step;
+      position:relative;
+      margin:.7rem 0;
+      padding:.7rem .8rem .7rem 3rem;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:10px;
+    }
+    .steps li::before{
+      content:counter(step);
+      position:absolute;
+      left:.75rem;
+      top:.65rem;
+      width:1.6rem;
+      height:1.6rem;
+      border-radius:50%;
+      background:var(--accent);
+      color:white;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+      font-size:.9rem;
+    }
+    .small{color:var(--muted);font-size:.93rem}
+    footer{
+      padding:1rem 1.5rem 3rem;
+      color:var(--muted);
+    }
+    @media (max-width:750px){
+      nav ul{columns:1}
+      section{padding:1rem}
+    }
+    @media print{
+      body{background:white}
+      header{background:white;color:black;border-bottom:2px solid #444}
+      nav{box-shadow:none}
+      section{box-shadow:none;break-inside:avoid}
+      a{color:black;text-decoration:none}
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Bilderkennung mit ESP32-CAM, OpenCV, YOLO und Dobot Magician</h1>
+    <p>Konzept für die Integration einer ESP32-CAM als WLAN-Kamera in das vorhandene Python-Steuerprogramm des Dobot Magician.</p>
+    <div class="version">Version 1.0 · Stand: 15.07.2026</div>
+  </div>
+</header>
+
+<main>
+  <nav>
+    <h2>Inhalt</h2>
+    <ul>
+      <li><a href="#grundidee">1. Grundidee</a></li>
+      <li><a href="#esp32cam">2. Aufgabe der ESP32-CAM</a></li>
+      <li><a href="#bilduebertragung">3. Bildübertragung nach Python</a></li>
+      <li><a href="#opencv-yolo">4. OpenCV und YOLO</a></li>
+      <li><a href="#yolo">5. YOLO einbinden</a></li>
+      <li><a href="#objekterkennung">6. Objekte erkennen</a></li>
+      <li><a href="#koordinaten">7. Pixel zu Dobot-Koordinate</a></li>
+      <li><a href="#plattenmodell">8. Lochrasterplatte als Zwischenkoordinatensystem</a></li>
+      <li><a href="#perspektive">9. Perspektivische Transformation</a></li>
+      <li><a href="#projektstruktur">10. Projektstruktur</a></li>
+      <li><a href="#startprogramm">11. Ablauf in start.py</a></li>
+      <li><a href="#roboterablauf">12. Sicherer Roboterablauf</a></li>
+      <li><a href="#objektarten">13. Welche Objekte können erkannt werden?</a></li>
+      <li><a href="#hybrid">14. Hybride Erkennung</a></li>
+      <li><a href="#z">15. Problem der Z-Koordinate</a></li>
+      <li><a href="#kalibrierung">16. Lochrasterplatte als Kalibriermuster</a></li>
+      <li><a href="#containerlager">17. Einbindung in das Containerlager</a></li>
+      <li><a href="#umsetzung">18. Empfohlene Umsetzung in Stufen</a></li>
+      <li><a href="#fazit">19. Fazit</a></li>
+      <li><a href="#quellen">20. Quellen</a></li>
+    </ul>
+  </nav>
+
+  <section id="grundidee">
+    <h2>1. Grundidee</h2>
+    <p class="lead">Die ESP32-CAM dient als <strong>drahtloser Bildsensor</strong>. Die rechenintensive Bildverarbeitung läuft auf dem PC im bereits vorhandenen Python-System des Dobot Magician.</p>
+
+    <pre class="diagram"><code>┌────────────────────┐
+│     ESP32-CAM      │
+│                    │
+│  Kamera OV2640     │
+│  Bild aufnehmen    │
+│  WLAN              │
+│  HTTP-Server       │
+└─────────┬──────────┘
+          │
+          │ JPEG-Bild / Videostream über WLAN
+          ▼
+┌──────────────────────────────────────┐
+│              PC mit Python           │
+│                                      │
+│  OpenCV                              │
+│  ├─ Bild empfangen                   │
+│  ├─ Bild bearbeiten                  │
+│  ├─ Koordinaten bestimmen            │
+│  └─ Kamerakalibrierung               │
+│                                      │
+│  YOLO                                │
+│  ├─ Objekt erkennen                  │
+│  ├─ Objektklasse bestimmen           │
+│  └─ Position im Bild bestimmen       │
+│                                      │
+│  vorhandenes Dobot-Programm          │
+│  ├─ dobot.py                         │
+│  ├─ Koordinaten umrechnen            │
+│  ├─ Roboter bewegen                  │
+│  └─ Greifen / Saugen                 │
+└─────────┬────────────────────────────┘
+          │
+          │ DobotDllType / USB
+          ▼
+┌────────────────────┐
+│  Dobot Magician    │
+│                    │
+│  Objekt anfahren   │
+│  aufnehmen         │
+│  transportieren    │
+│  ablegen           │
+└────────────────────┘</code></pre>
+
+    <div class="good">
+      <strong>Empfehlung:</strong> Die klassische ESP32-CAM sollte nicht mit der vollständigen YOLO-Erkennung belastet werden. Sie liefert Bilder; die KI läuft auf dem PC.
+    </div>
+  </section>
+
+  <section id="esp32cam">
+    <h2>2. Aufgabe der ESP32-CAM</h2>
+    <p>Die ESP32-CAM übernimmt nur vier grundlegende Aufgaben:</p>
+    <ol>
+      <li>Kamera initialisieren,</li>
+      <li>WLAN-Verbindung herstellen,</li>
+      <li>Bild aufnehmen,</li>
+      <li>Bild oder Videostream per HTTP bereitstellen.</li>
+    </ol>
+
+    <h3>Variante A: Einzelbilder</h3>
+    <pre class="diagram"><code>Python fordert Bild an
+        ↓
+ESP32-CAM nimmt aktuelles Bild auf
+        ↓
+JPEG wird übertragen
+        ↓
+Python verarbeitet genau dieses Bild
+        ↓
+Dobot führt Aktion aus</code></pre>
+
+    <p>Typischer Endpunkt:</p>
+    <pre><code>http://192.168.1.123/capture</code></pre>
+
+    <p>Für die Robotersteuerung ist das besonders sinnvoll, weil der Dobot während einer Aufnahme möglichst stillstehen sollte.</p>
+
+    <pre class="diagram"><code>Dobot steht still
+      ↓
+Bild aufnehmen
+      ↓
+Objekte erkennen
+      ↓
+Objektposition berechnen
+      ↓
+Dobot bewegt sich
+      ↓
+Objekt aufnehmen
+      ↓
+Dobot steht wieder still
+      ↓
+neues Bild aufnehmen</code></pre>
+
+    <h3>Variante B: permanenter Videostream</h3>
+    <p>Ein Videostream eignet sich für Live-Ansicht, Einrichtung, Testen und Überwachung.</p>
+
+    <pre><code>import cv2
+
+stream_url = "http://192.168.1.123:81/stream"
+
+kamera = cv2.VideoCapture(stream_url)
+
+while True:
+    erfolgreich, bild = kamera.read()
+
+    if not erfolgreich:
+        break
+
+    cv2.imshow("ESP32-CAM", bild)
+
+    if cv2.waitKey(1) == 27:
+        break
+
+kamera.release()
+cv2.destroyAllWindows()</code></pre>
+
+    <p>Eine sinnvolle Aufteilung wäre:</p>
+
+    <table>
+      <thead>
+        <tr><th>Modus</th><th>Aufgabe</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Live-Modus</td><td>Videostream anzeigen</td></tr>
+        <tr><td>Erkennungs-Modus</td><td>Gezielt ein Einzelbild aufnehmen</td></tr>
+        <tr><td>Roboter-Modus</td><td>Einzelbild → Erkennung → Bewegung → Kontrollbild</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="bilduebertragung">
+    <h2>3. Bildübertragung nach Python</h2>
+    <p>Für die Verarbeitung eines Einzelbildes kann Python das JPEG-Bild direkt per HTTP abrufen und mit OpenCV dekodieren.</p>
+
+    <pre><code>import cv2
+import numpy as np
+import requests
+
+
+ESP32_CAM_URL = "http://192.168.1.123/capture"
+
+
+def bild_aufnehmen():
+    antwort = requests.get(
+        ESP32_CAM_URL,
+        timeout=5
+    )
+
+    antwort.raise_for_status()
+
+    daten = np.frombuffer(
+        antwort.content,
+        dtype=np.uint8
+    )
+
+    bild = cv2.imdecode(
+        daten,
+        cv2.IMREAD_COLOR
+    )
+
+    if bild is None:
+        raise RuntimeError(
+            "Das Kamerabild konnte nicht dekodiert werden."
+        )
+
+    return bild</code></pre>
+
+    <p>Die Variable <code>bild</code> enthält danach ein normales OpenCV-Bild und kann direkt weiterverarbeitet werden.</p>
+  </section>
+
+  <section id="opencv-yolo">
+    <h2>4. Rollen von OpenCV und YOLO</h2>
+
+    <h3>OpenCV</h3>
+    <p>OpenCV eignet sich besonders für:</p>
+    <ul>
+      <li>Bild laden und zuschneiden,</li>
+      <li>Helligkeit und Kontrast korrigieren,</li>
+      <li>Farben erkennen,</li>
+      <li>Konturen bestimmen,</li>
+      <li>Kreise und Kanten erkennen,</li>
+      <li>Mittelpunkte berechnen,</li>
+      <li>Winkel bestimmen,</li>
+      <li>Kameraverzerrung korrigieren,</li>
+      <li>Pixelkoordinaten in Roboterkoordinaten umrechnen.</li>
+    </ul>
+
+    <h3>YOLO</h3>
+    <p>YOLO übernimmt die gelernte Objekterkennung. Das Modell kann beispielsweise unterscheiden:</p>
+
+    <pre class="diagram"><code>Das ist ein roter Würfel.
+Das ist ein blauer Zylinder.
+Das ist ein Behälter.
+Das ist Werkstück A.
+Das ist Werkstück B.</code></pre>
+
+    <p>Zusätzlich liefert YOLO die Lage des erkannten Objektes im Bild:</p>
+
+    <pre class="diagram"><code>Klasse: Zylinder
+Sicherheit: 96 %
+
+Bounding Box:
+x1 = 320
+y1 = 180
+x2 = 420
+y2 = 300</code></pre>
+
+    <p>Der Mittelpunkt ergibt sich daraus zu:</p>
+
+    <pre><code>u = (x1 + x2) / 2
+v = (y1 + y2) / 2</code></pre>
+  </section>
+
+  <section id="yolo">
+    <h2>5. YOLO in Python einbinden</h2>
+
+    <p>Installation:</p>
+    <pre><code>pip install ultralytics</code></pre>
+
+    <p>Ein eigenes trainiertes Modell könnte beispielsweise <code>best.pt</code> heißen.</p>
+
+    <pre><code>from ultralytics import YOLO
+
+modell = YOLO("best.pt")</code></pre>
+
+    <div class="note">
+      Das Modell wird einmal beim Programmstart geladen und nicht bei jedem einzelnen Kamerabild neu.
+    </div>
+
+    <pre><code># richtig
+modell = YOLO("best.pt")
+
+while True:
+    bild = bild_aufnehmen()
+    ergebnis = modell.predict(bild)</code></pre>
+  </section>
+
+  <section id="objekterkennung">
+    <h2>6. Erkennung eines Objekts</h2>
+
+    <pre><code>from ultralytics import YOLO
+
+
+modell = YOLO("best.pt")
+
+
+def objekte_erkennen(bild, mindest_sicherheit=0.60):
+
+    ergebnisse = modell.predict(
+        source=bild,
+        conf=mindest_sicherheit,
+        verbose=False
+    )
+
+    erkannte_objekte = []
+
+    for ergebnis in ergebnisse:
+
+        for box in ergebnis.boxes:
+
+            klasse_id = int(box.cls[0])
+            sicherheit = float(box.conf[0])
+
+            x1, y1, x2, y2 = (
+                box.xyxy[0]
+                .cpu()
+                .tolist()
+            )
+
+            mitte_x = (x1 + x2) / 2
+            mitte_y = (y1 + y2) / 2
+
+            klassenname = ergebnis.names[klasse_id]
+
+            objekt = {
+                "klasse": klassenname,
+                "sicherheit": sicherheit,
+                "pixel_x": mitte_x,
+                "pixel_y": mitte_y,
+                "box": (x1, y1, x2, y2)
+            }
+
+            erkannte_objekte.append(objekt)
+
+    return erkannte_objekte</code></pre>
+
+    <p>Beispiel für das Ergebnis:</p>
+
+    <pre><code>[
+    {
+        "klasse": "roter_wuerfel",
+        "sicherheit": 0.94,
+        "pixel_x": 417.5,
+        "pixel_y": 283.0,
+        "box": (375, 240, 460, 326)
+    },
+    {
+        "klasse": "blauer_zylinder",
+        "sicherheit": 0.88,
+        "pixel_x": 632.0,
+        "pixel_y": 391.5,
+        "box": (590, 344, 674, 439)
+    }
+]</code></pre>
+  </section>
+
+  <section id="koordinaten">
+    <h2>7. Vom Kamerapixel zur Dobot-Koordinate</h2>
+
+    <p>Die Kamera liefert Pixelkoordinaten:</p>
+
+    <pre class="diagram"><code>Pixel:
+u = 417
+v = 283</code></pre>
+
+    <p>Der Dobot benötigt dagegen Roboterkoordinaten:</p>
+
+    <pre class="diagram"><code>x = 215.3 mm
+y = -126.7 mm
+z = ...
+r = ...</code></pre>
+
+    <h3>Kamerakoordinatensystem</h3>
+    <pre class="diagram"><code>(0,0) ───────────────────────────► u
+  │
+  │
+  │             Objekt
+  │               ●
+  │           (u = 417,
+  │            v = 283)
+  │
+  ▼
+  v</code></pre>
+
+    <h3>Dobot-Koordinatensystem</h3>
+    <pre class="diagram"><code>                 y
+                 ▲
+                 │
+                 │
+                 │
+                 └──────────────► x</code></pre>
+
+    <p>Die Verbindung zwischen beiden Koordinatensystemen ist der wichtigste geometrische Teil des Projekts.</p>
+  </section>
+
+  <section id="plattenmodell">
+    <h2>8. Lochrasterplatte als Zwischenkoordinatensystem</h2>
+
+    <p>Für das vorhandene Dobot-Projekt ist folgende Dreiteilung besonders sinnvoll:</p>
+
+    <pre class="diagram"><code>Kamerabild
+Pixel (u, v)
+     │
+     ▼
+Lochrasterplatte
+Plattenkoordinate (Spalte, Zeile)
+     │
+     ▼
+Dobot
+Roboterkoordinate (x, y)</code></pre>
+
+    <p>Damit bleiben Kamera, Platte und Roboter logisch getrennt.</p>
+
+    <p>Beispiel:</p>
+
+    <pre class="diagram"><code>Pixel:
+(417, 283)
+
+entspricht:
+
+Spalte = 12.7
+Zeile  = 8.4</code></pre>
+
+    <p>Danach übernimmt <code>dobot.py</code> die Umrechnung in die tatsächlichen Roboterkoordinaten.</p>
+
+    <pre><code>x, y = dobot.plattenkoordinate(
+    spalte=12.73,
+    zeile=8.41
+)</code></pre>
+
+    <div class="note">
+      Für die Bilderkennung sollten die Plattenkoordinaten auch Fließkommazahlen zulassen. Damit können Objekte zwischen den Löchern exakt angefahren werden.
+    </div>
+  </section>
+
+  <section id="perspektive">
+    <h2>9. Perspektivische Transformation</h2>
+
+    <p>Auch bei scheinbar senkrechter Kamera ist das Bild meist nicht perfekt maßstabsgleich. Schon eine leichte Schrägstellung verändert den Maßstab innerhalb des Bildes.</p>
+
+    <pre class="diagram"><code>oben:    1 Lochabstand = 25 Pixel
+unten:   1 Lochabstand = 31 Pixel</code></pre>
+
+    <p>Eine einfache Multiplikation mit einem festen Faktor reicht dann nicht aus.</p>
+
+    <h3>Direkte Transformation von Bildpunkten zu Dobot-Punkten</h3>
+
+    <pre><code>import cv2
+import numpy as np
+
+
+bildpunkte = np.float32([
+    [120, 100],
+    [1100, 105],
+    [115, 700],
+    [1090, 695]
+])
+
+
+dobotpunkte = np.float32([
+    [-73.8, -311.1],
+    [x2, y2],
+    [x3, y3],
+    [x4, y4]
+])
+
+
+transformationsmatrix = cv2.getPerspectiveTransform(
+    bildpunkte,
+    dobotpunkte
+)</code></pre>
+
+    <h3>Empfohlene Variante</h3>
+    <p>Für unser Projekt ist jedoch die Transformation</p>
+
+    <pre class="diagram"><code>Pixel
+  ↓
+Plattenkoordinate
+  ↓
+Dobot-Koordinate</code></pre>
+
+    <p>übersichtlicher und besser mit dem bestehenden Lochrastermodell kombinierbar.</p>
+  </section>
+
+  <section id="projektstruktur">
+    <h2>10. Sinnvolle Projektstruktur</h2>
+
+    <pre class="diagram"><code>Dobot-Python/
+│
+├── start.py
+├── dobot.py
+├── containerlager.py
+│
+├── bilderkennung/
+│   │
+│   ├── __init__.py
+│   ├── kamera.py
+│   ├── erkennung.py
+│   ├── kalibrierung.py
+│   └── visualisierung.py
+│
+├── modelle/
+│   └── best.pt
+│
+└── sdk64/
+    ├── __init__.py
+    ├── DobotDllType.py
+    └── DobotDll.dll</code></pre>
+
+    <table>
+      <thead>
+        <tr><th>Datei</th><th>Aufgabe</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>kamera.py</code></td><td>ESP32-CAM ansprechen, Bild aufnehmen, Stream öffnen</td></tr>
+        <tr><td><code>erkennung.py</code></td><td>YOLO laden, Objekte erkennen, Ergebnisse zurückgeben</td></tr>
+        <tr><td><code>kalibrierung.py</code></td><td>Bildkoordinaten in Plattenkoordinaten umrechnen</td></tr>
+        <tr><td><code>visualisierung.py</code></td><td>Erkennungen und Markierungen im Bild anzeigen</td></tr>
+        <tr><td><code>dobot.py</code></td><td>Plattenkoordinaten in Roboterbewegungen umsetzen</td></tr>
+        <tr><td><code>containerlager.py</code></td><td>Lagerplätze, Container und Stapel verwalten</td></tr>
+        <tr><td><code>start.py</code></td><td>Gesamtablauf steuern</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="startprogramm">
+    <h2>11. Beispiel für den Ablauf in <code>start.py</code></h2>
+
+    <pre><code>import dobot
+
+from bilderkennung.kamera import bild_aufnehmen
+from bilderkennung.erkennung import objekte_erkennen
+from bilderkennung.kalibrierung import pixel_zu_platte
+
+
+def hauptprogramm():
+
+    # 1. Dobot verbinden
+    dobot.verbinden()
+
+    # 2. Home-Fahrt
+    dobot.home()
+
+    # 3. Bild aufnehmen
+    bild = bild_aufnehmen()
+
+    # 4. Objekte erkennen
+    objekte = objekte_erkennen(bild)
+
+    # 5. Ergebnisse ausgeben
+    for objekt in objekte:
+
+        print(
+            objekt["klasse"],
+            objekt["sicherheit"],
+            objekt["pixel_x"],
+            objekt["pixel_y"]
+        )
+
+    # 6. Gewünschtes Objekt auswählen
+    objekt = objekte[0]
+
+    # 7. Pixelposition umrechnen
+    spalte, zeile = pixel_zu_platte(
+        objekt["pixel_x"],
+        objekt["pixel_y"]
+    )
+
+    # 8. Dobot-Koordinaten bestimmen
+    x, y = dobot.plattenkoordinate(
+        spalte,
+        zeile
+    )
+
+    # 9. Objekt anfahren
+    dobot.fahre_zu(
+        x=x,
+        y=y,
+        z=20
+    )</code></pre>
+
+    <div class="warning">
+      Dieses Beispiel zeigt die Architektur. Für den realen Roboterbetrieb müssen Sicherheitsbewegungen, Reichweitenprüfung, Fehlerbehandlung und Greiflogik ergänzt werden.
+    </div>
+  </section>
+
+  <section id="roboterablauf">
+    <h2>12. Sicherer Roboterablauf</h2>
+
+    <p>Eine erkannte YOLO-Position sollte niemals ungeprüft direkt in eine Abwärtsbewegung umgesetzt werden.</p>
+
+    <ol class="steps">
+      <li>Objekt erkennen.</li>
+      <li>Plausibilität prüfen: bekannte Klasse, ausreichende Sicherheit, erlaubter Arbeitsbereich, erreichbare Koordinate.</li>
+      <li>Sicherheitsposition oberhalb des Objektes anfahren.</li>
+      <li>Position bei Bedarf erneut prüfen.</li>
+      <li>Absenken.</li>
+      <li>Sauger oder Greifer einschalten.</li>
+      <li>Anheben.</li>
+      <li>Zielposition anfahren.</li>
+      <li>Absenken.</li>
+      <li>Sauger oder Greifer ausschalten.</li>
+      <li>Anheben.</li>
+      <li>Kontrollbild aufnehmen.</li>
+    </ol>
+
+    <p>Beispiel:</p>
+
+    <pre class="diagram"><code>Erkannte Position:
+
+x = 210 mm
+y = -120 mm
+
+Greifhöhe:
+z = -35 mm
+
+Sicherheitshöhe:
+z = +30 mm
+
+
+Bewegung:
+
+(210, -120, +30)
+        ↓
+(210, -120, -35)
+        ↓
+Sauger EIN
+        ↓
+(210, -120, +30)</code></pre>
+
+    <div class="good">
+      Die Bilderkennung ist ein Sensor. Die Robotersteuerung entscheidet, ob und wie eine erkannte Position tatsächlich angefahren werden darf.
+    </div>
+  </section>
+
+  <section id="objektarten">
+    <h2>13. Welche Objekte können erkannt werden?</h2>
+
+    <h3>Einfache ebene Formen</h3>
+    <p>Für Kreis, Dreieck, Quadrat oder Rechteck reicht häufig klassische Bildverarbeitung mit OpenCV.</p>
+
+    <pre class="diagram"><code>Graustufen
+      ↓
+Schwellwert
+      ↓
+Kontur
+      ↓
+Anzahl der Ecken
+      ↓
+Form bestimmen</code></pre>
+
+    <h3>Räumliche Körper</h3>
+    <p>Für Klassen wie Würfel, Quader, Zylinder oder Kegel kann YOLO mit trainierten Beispielen eingesetzt werden.</p>
+
+    <pre class="diagram"><code>Klasse 0 = Würfel
+Klasse 1 = Quader
+Klasse 2 = Zylinder
+Klasse 3 = Kegel</code></pre>
+
+    <p>Dazu werden Trainingsbilder aus unterschiedlichen Positionen, Drehwinkeln, Beleuchtungen, Abständen und Hintergründen benötigt.</p>
+  </section>
+
+  <section id="hybrid">
+    <h2>14. Hybride Erkennung: YOLO + OpenCV</h2>
+
+    <p>Die Kombination aus YOLO und OpenCV ist besonders leistungsfähig:</p>
+
+    <pre class="diagram"><code>YOLO
+  ↓
+Welche Art von Objekt ist das?
+
+OpenCV
+  ↓
+Wo liegt der geometrisch beste Greifpunkt?
+Wie ist das Objekt gedreht?
+
+Dobot
+  ↓
+Objekt aufnehmen</code></pre>
+
+    <p>Beispiel:</p>
+
+    <pre class="diagram"><code>YOLO:
+
+„Das ist ein Quader.“
+
+Bounding Box:
+x1 = 300
+y1 = 200
+x2 = 500
+y2 = 350</code></pre>
+
+    <p>OpenCV kann innerhalb dieses Bildausschnittes den Mittelpunkt und gegebenenfalls den Drehwinkel genauer bestimmen.</p>
+
+    <pre class="diagram"><code>Mittelpunkt:
+(u, v)
+
+Drehwinkel:
+37°</code></pre>
+
+    <p>Danach kann der Dobot beispielsweise folgende Zielwerte erhalten:</p>
+
+    <pre class="diagram"><code>x = 213.2
+y = -118.7
+r = 37.0</code></pre>
+
+    <p>Für reine Sauggreif-Aufgaben kann <code>r</code> zunächst konstant bleiben.</p>
+  </section>
+
+  <section id="z">
+    <h2>15. Das Problem der Z-Koordinate</h2>
+
+    <p>Eine einzelne ESP32-CAM liefert zunächst nur zweidimensionale Bildkoordinaten:</p>
+
+    <pre class="diagram"><code>u
+v</code></pre>
+
+    <p>Der Dobot benötigt jedoch:</p>
+
+    <pre class="diagram"><code>x
+y
+z
+r</code></pre>
+
+    <h3>Lösung A: bekannte Objekthöhe</h3>
+
+    <pre><code>OBJEKTHOEHEN = {
+    "wuerfel": 30.0,
+    "zylinder": 50.0,
+    "quader": 40.0
+}</code></pre>
+
+    <h3>Lösung B: alle Objekte gleich hoch</h3>
+
+    <pre><code>GREIF_Z = -35.0</code></pre>
+
+    <h3>Lösung C: echte 3D-Erfassung</h3>
+
+    <p>Dafür wären zusätzliche Sensoren nötig, beispielsweise:</p>
+    <ul>
+      <li>zweite Kamera,</li>
+      <li>Stereo-Kamera,</li>
+      <li>Tiefenkamera,</li>
+      <li>Time-of-Flight-Sensor.</li>
+    </ul>
+
+    <div class="good">
+      Für den ersten Aufbau ist eine bekannte oder konstante Greifhöhe die sinnvollste Lösung.
+    </div>
+  </section>
+
+  <section id="kalibrierung">
+    <h2>16. Die Lochrasterplatte als Kalibriermuster</h2>
+
+    <p>Die vorhandene Platte mit <strong>40 Spalten × 27 Zeilen</strong> bietet bereits ein sehr gutes geometrisches Bezugssystem.</p>
+
+    <p>Beispielsweise können vier bekannte Löcher verwendet werden:</p>
+
+    <pre class="diagram"><code>Loch (2, 2)
+Loch (39, 2)
+Loch (2, 26)
+Loch (39, 26)</code></pre>
+
+    <p>Deren Pixelpositionen werden im Kamerabild bestimmt:</p>
+
+    <pre><code>BILDPUNKTE = [
+    [124, 88],
+    [1120, 93],
+    [130, 704],
+    [1111, 698]
+]</code></pre>
+
+    <p>Dazu sind die Plattenkoordinaten bekannt:</p>
+
+    <pre><code>PLATTENPUNKTE = [
+    [2, 2],
+    [39, 2],
+    [2, 26],
+    [39, 26]
+]</code></pre>
+
+    <p>Damit entsteht die Zuordnung:</p>
+
+    <pre class="diagram"><code>Pixel
+  ↓
+Lochrasterkoordinate</code></pre>
+
+    <p>Langfristig könnten zusätzliche Markierungen oder ArUco-Marker an der Platte angebracht werden, um die Lage der Kamera automatisch zu kontrollieren.</p>
+  </section>
+
+  <section id="containerlager">
+    <h2>17. Einbindung in das vorhandene Containerlager</h2>
+
+    <pre class="diagram"><code>Kamera nimmt Bild auf
+        ↓
+YOLO erkennt Container
+        ↓
+Container werden klassifiziert
+        ↓
+Position auf Lochrasterplatte bestimmen
+        ↓
+Position mit containerlager.py vergleichen
+        ↓
+Lagerzustand aktualisieren
+        ↓
+Dobot führt Einlagerung oder Auslagerung aus
+        ↓
+Kamera nimmt Kontrollbild auf
+        ↓
+Erfolg überprüfen</code></pre>
+
+    <p>Beispiel:</p>
+
+    <pre class="diagram"><code>Erkannt:
+
+Container ROT
+
+Position:
+Spalte 8.4
+Zeile 5.5</code></pre>
+
+    <p>Das Programm könnte daraus ableiten:</p>
+
+    <pre class="diagram"><code>Container befindet sich auf:
+"Lagerplatz links"</code></pre>
+
+    <p>oder:</p>
+
+    <pre class="diagram"><code>Container befindet sich außerhalb
+eines definierten Lagerplatzes.</code></pre>
+
+    <p>Damit wachsen die bisherigen Projektteile zusammen:</p>
+
+    <pre class="diagram"><code>dobot.py
+      +
+Lochrasterplatte
+      +
+containerlager.py
+      +
+ESP32-CAM
+      +
+OpenCV
+      +
+YOLO</code></pre>
+  </section>
+
+  <section id="umsetzung">
+    <h2>18. Empfohlene Umsetzung in Stufen</h2>
+
+    <ol class="steps">
+      <li>ESP32-CAM liefert ein Bild an Python.</li>
+      <li>OpenCV zeigt das Bild an.</li>
+      <li>Ein Mausklick im Bild liefert die Pixelposition.</li>
+      <li>Die Pixelposition wird in eine Position auf der Lochrasterplatte umgerechnet.</li>
+      <li>Ein Mausklick im Kamerabild erzeugt eine Dobot-Zielposition.</li>
+      <li>Einfache OpenCV-Objekterkennung ergänzen.</li>
+      <li>YOLO erkennt Objekte automatisch.</li>
+      <li>YOLO + OpenCV + Dobot führen automatisches Pick-and-Place aus.</li>
+      <li>Integration in <code>containerlager.py</code>.</li>
+    </ol>
+
+    <div class="note">
+      Der wichtigste Zwischenschritt ist: <strong>Auf ein Objekt im Kamerabild klicken und den Dobot genau zu dieser Position fahren lassen.</strong>
+    </div>
+
+    <p>Wenn diese geometrische Verbindung zuverlässig funktioniert, kann die Zielposition später beliebig erzeugt werden, zum Beispiel durch:</p>
+
+    <pre class="diagram"><code>Mausklick
+OpenCV
+YOLO
+QR-Code
+ArUco-Marker
+Farberkennung</code></pre>
+  </section>
+
+  <section id="fazit">
+    <h2>19. Fazit</h2>
+
+    <table>
+      <thead>
+        <tr><th>Komponente</th><th>Rolle</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ESP32-CAM</td><td>Drahtloser Bildsensor</td></tr>
+        <tr><td>OpenCV</td><td>Bildverarbeitung und geometrische Verbindung zwischen Kamera und Dobot</td></tr>
+        <tr><td>YOLO</td><td>Erkennung und Klassifizierung der Objekte</td></tr>
+        <tr><td><code>dobot.py</code></td><td>Robotersteuerung und Koordinatensystem</td></tr>
+        <tr><td><code>containerlager.py</code></td><td>Logische Verwaltung der Werkstücke und Lagerplätze</td></tr>
+      </tbody>
+    </table>
+
+    <p class="lead"><strong>Empfohlener nächster praktischer Schritt:</strong> ESP32-CAM-Bild in Python anzeigen, vier Punkte der Lochrasterplatte kalibrieren und anschließend per Mausklick im Kamerabild eine Dobot-Zielposition berechnen.</p>
+  </section>
+
+  <section id="quellen">
+    <h2>20. Quellen</h2>
+    <ul>
+      <li>ChatGPT-Quelle des Ausgangsansatzes: <code>https://chatgpt.com/s/t_6a5712d25c6481919f7a5ab95aa1c0c0</code></li>
+      <li>Espressif Arduino-ESP32 CameraWebServer: <code>https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer</code></li>
+      <li>OpenCV VideoCapture: <code>https://docs.opencv.org/4.x/d8/dfe/classcv_1_1VideoCapture.html</code></li>
+      <li>OpenCV Bilddekodierung: <code>https://docs.opencv.org/4.x/d4/da8/group__imgcodecs.html</code></li>
+      <li>OpenCV geometrische Transformationen: <code>https://docs.opencv.org/4.x/da/d54/group__imgproc__transform.html</code></li>
+      <li>Ultralytics YOLO Python-Nutzung: <code>https://docs.ultralytics.com/usage/python/</code></li>
+      <li>Ultralytics Predict-Modus: <code>https://docs.ultralytics.com/modes/predict/</code></li>
+    </ul>
+
+    <p class="small">Hinweis: Die HTML-Datei ist vollständig eigenständig und benötigt für Darstellung und Formatierung keine CDN-Verbindung.</p>
+  </section>
+</main>
+
+<footer>
+  <p>Dokumentation: ESP32-CAM als Kamera, OpenCV und YOLO im vorhandenen Python-Steuerprogramm des Dobot Magician.</p>
+</footer>
+</body>
+</html>

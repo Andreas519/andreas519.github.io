@@ -1,4 +1,7 @@
-"""Hilfsfunktionen zur Steuerung eines Dobot Magician.
+"""
+Hilfsfunktionen zur Steuerung eines Dobot Magician auf der Basis der DobotDllType.py  .
+
+Stand: 13.07.2026 - 06:34
 
 Die Datei liegt im Hauptordner ``Dobot_Python``. Die 64-Bit-Version des
 Dobot-SDK wird aus dem Unterordner ``sdk64`` geladen.
