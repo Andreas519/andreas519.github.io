@@ -1,3 +1,9 @@
+Traceback (most recent call last):
+  File "...\dobot.py-testen\x-test.py", line 3, in <module>
+    from sdk64 import DobotDllType as dType
+ModuleNotFoundError: No module named 'sdk64'
+
+'''
 from pathlib import Path
 import os
 from sdk64 import DobotDllType as dType
@@ -14,3 +20,4 @@ else:
     print("Verbindung fehlgeschlagen:", zustand)
 
 dType.DisconnectDobot(api)
+'''

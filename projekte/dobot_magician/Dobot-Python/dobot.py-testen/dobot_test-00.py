@@ -14,7 +14,15 @@ api = dobot.init()
 
 dobot.position_anzeigen(api)
 
+while dobot.alarme_lesen!=[]:
+    print("Dobot-Alarmmeldungen")
+    dobot.alarme_anzeigen(api)
+    eing = input("Fehlerursachen beseitigt? j/(n)")
+    if eing=="j":
+        break
+print()    
+    
 
 # dobot.plattenkalibrierung_anzeigen()
-# dType.ClearAllAlarmsState(api)
-# dobot.home(api)
+
+dobot.home(api)
