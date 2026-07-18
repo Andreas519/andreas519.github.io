@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arbitsplatte - Bilderkennung</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Bilderkennung auf der Arbeitplatte">
+  <link rel="stylesheet" href="../../../../css/my.css">
+</head>
+<body>
+  <header>
+   Erkennen von Formen auf der Abbildung der Arbeitsplatte mit OpenCV
+  </header>
+
+  <main>
+    <section>
+      <h2>Experimente mit OpenCV und Formen auf der Arbeitsplatte - zweidimensional</h2>
+      <p>
+        Wir untersuchen, in wie weit das Bild der Arbeitsplatte die Erkennung der Formen beeinträchtigt.
+      </p>
+      Als Testbild wird ein schematisches Bild der Arbeitsplatte mit den darauf liegenden einfachen Formen verwendet.
+
+      <div class="grid">
+        
+        <article class="project-card">
+          Das Bild der Arbeitsplatte liegt auch im SVG-Format vor und wird in dem Bildbearbeitungsprogramm Gimpe bearbeitet.<br>
+          Es verfügt über eine transparente Hintergrundebene mit Arbeitsplatte und weitere Ebenen für die Formen, Containerstellplätze, Beschriftungen und Bemassungen.<br>
+          Daraus kann das Bild der Arbeitsplatte mit den Formen in verschiedenen Varianten erzeugt werden, um die Erkennung mit verschiedenen Bildgrößen und Grafikformaten zu testen.
+          <br>
+          <a href="./bilder/arbeitsplatte.svg" target="_blank">
+            arbeitsplatte.svg
+          </a>
+        </article>
+        <article class="project-card project-card-center">
+          <a href ="./bilder/arbeitsplatte.png" target="_blank">
+            <img src="./arbeitsplatte.png" alt="Arbeitsplatte" height="200">
+          </a>
+         </article>
+
+      </div>
+      
+      <p>
+
+      <ul>
+  
+        <li><h3>Erste Experimente mit OpenCV</h3>
+        Ein Testbild mit einfachen Formen und Farben wird für erste Experimente mit OpenCV verwendet.
+
+        
+          <article class="project-card">Farbsättigung und Kontrast des Testbildes werden verändert, um die Erkennung der Formen zu verbessern.<br>          
+            <a href ="bild-laden.py.png" target="_blank">
+              <img src="./bild-laden.py.png" alt="Bild laden" height="200">
+            </a><br>
+            <a href="./code-viewer.html?file=bild-laden.py&lang=python&title=bild-laden.py" target="_blank" rel="noopener noreferrer">bild-laden.py</a><br>
+            Es werden verschiedene Dateiformate (jpg, png, bmp) geladen und angezeigt.<br>
+            Die Bildgröße wird ermittelt und die Bilddaten werden in einem Array gespeichert.
+          </article>
+
+          <article class="project-card">Referenzbild der leeren Arbeitsplatte wird geladen und mit dem aktuellen Bild verglichen.<br>
+            <a href ="bild-auswerten.py.png" target="_blnk">
+              <img src="./bild-auswerten.py.png" alt="Bild auswerten erweitert" height="200">
+            </a><br>
+            <a href="./code-viewer.html?file=bild-auswerten.py&lang=python&title=bild-auswerten.py" target="_blank" rel="noopener noreferrer">bild-auswerten.py</a>
+          </article>
+
+          <article class="project-card">
+            <img src="./bild-erkennen.py.png" alt="Bild erkennen" height="200"><br>
+            <a href="./code-viewer.html?file=bild-erkennen.py&lang=python&title=bild-erkennen.py" target="_blank" rel="noopener noreferrer">bild-erkennen.py</a>
+          </article>
+
+          <article class="project-card">
+            <img src="./bild-auswerten-farben.py.png" alt="Bild auswerten mit Farben" height="200"><br>
+            <a href="./code-viewer.html?file=bild-auswerten-farben.py&lang=python&title=bild-auswerten-farben.py" target="_blank" rel="noopener noreferrer">bild-auswerten-farben.py</a>
+          </article>
+
+        </li>
+      </ul>
+      Die Ergebnisse der Bildauswertung sind vielversprechend und werden in den nächsten Schritten weiter vertieft.<br>
+      Weitere Experimente mit der Erkennung von Objekten und Merkmalen werden folgen.
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

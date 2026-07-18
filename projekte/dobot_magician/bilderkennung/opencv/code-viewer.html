@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Viewer</title>
+  <meta name="author" content="Andreas Sigismund">
+  <link rel="stylesheet" href="../../../../css/my.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+  <style>
+    main {
+      max-width: 1400px;
+    }
+
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .code-panel {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    pre.line-numbers {
+      width: 100%;
+      margin: 0;
+      max-height: 75vh;
+      overflow: auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .action-link {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .action-link:hover {
+      text-decoration: none;
+      background: #dce9ff;
+    }
+
+    #error {
+      color: #b91c1c;
+      margin: 0;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h3 id="viewer-title">Code Viewer</h3>
+  </header>
+
+  <main>
+    <section>
+      <div class="viewer-header">
+        <p id="file-info"></p>
+        <div class="actions">
+          <a id="download-link" class="action-link" href="#" download>Datei herunterladen</a>
+          <a class="action-link" href="./index.html">Zurück</a>
+        </div>
+      </div>
+      <p id="error"></p>
+      <div class="code-panel">
+        <pre class="line-numbers"><code id="code" class="language-none">Lade Datei ...</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get('file') || 'bild-auswerten.py';
+      const language = params.get('lang') || 'python';
+      const title = params.get('title') || file;
+
+      const codeEl = document.getElementById('code');
+      const titleEl = document.getElementById('viewer-title');
+      const fileInfoEl = document.getElementById('file-info');
+      const downloadLinkEl = document.getElementById('download-link');
+      const errorEl = document.getElementById('error');
+
+      titleEl.textContent = title;
+      document.title = title + ' · Code Viewer';
+      fileInfoEl.textContent = 'Datei: ' + file;
+
+      codeEl.className = 'language-' + language;
+      downloadLinkEl.href = file;
+      downloadLinkEl.setAttribute('download', file.split('/').pop());
+
+      fetch(file)
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+          return response.text();
+        })
+        .then(function(text) {
+          codeEl.textContent = text;
+          Prism.highlightElement(codeEl);
+        })
+        .catch(function(error) {
+          errorEl.textContent = 'Datei konnte nicht geladen werden: ' + error.message;
+          errorEl.style.display = 'block';
+          codeEl.textContent = '';
+        });
+    })();
+  </script>
+</body>
+</html>
