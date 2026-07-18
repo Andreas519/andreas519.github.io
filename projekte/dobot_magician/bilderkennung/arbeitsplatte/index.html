@@ -19,28 +19,31 @@
       <p>
         Wir untersuchen, in wie weit das Bild der Arbeitsplatte die Erkennung der Formen beeinträchtigt.
       </p>
-      Als Testbild wird ein schematisches Bild der Arbeitsplatte mit den darauf liegenden einfachen Formen verwendet.
+      <!-- Als Testbild wird ein schematisches Bild der Arbeitsplatte mit den darauf liegenden einfachen Formen verwendet. -->
 
       <div class="grid">
-        
         <article class="project-card">
-          Das Bild der Arbeitsplatte liegt auch im SVG-Format vor und wird in dem Bildbearbeitungsprogramm Gimpe bearbeitet.<br>
-          Es verfügt über eine transparente Hintergrundebene mit Arbeitsplatte und weitere Ebenen für die Formen, Containerstellplätze, Beschriftungen und Bemassungen.<br>
-          Daraus kann das Bild der Arbeitsplatte mit den Formen in verschiedenen Varianten erzeugt werden, um die Erkennung mit verschiedenen Bildgrößen und Grafikformaten zu testen.
+          Das Bild der Arbeitsplatte liegt im SVG-Format vor.<br>
+          Es verfügt über eine transparente Hintergrundebene mit Arbeitsplatte und Ebenen für die<br> 
+          - Formen, <br>
+          - Containerstellplätze, <br>
+          - Beschriftungen und Bemassungen.<br>
+          Daraus kann das Bild der Arbeitsplatte mit den Formen in verschiedenen Varianten erzeugt werden, 
+          um die Erkennung mit verschiedenen Bildgrößen und Grafikformaten zu testen.
           <br>
-          <a href="./bilder/arbeitsplatte.svg" target="_blank">
-            arbeitsplatte.svg
-          </a>
+          Wir nutzen das Bildbearbeitungsprogramm <strong>GIMP</strong>.
         </article>
         <article class="project-card project-card-center">
           <a href ="./bilder/arbeitsplatte.png" target="_blank">
-            <img src="./arbeitsplatte.png" alt="Arbeitsplatte" height="200">
-          </a>
+            <img src="./bilder/arbeitsplatte_mit_objekten.png" alt="Arbeitsplatte" height="200">
+          </a><br>
+           <a href="./bilder/arbeitsplatte.svg" target="_blank">arbeitsplatte.svg</a>
+           / 
+           <a href="./bilder/arbeitsplatte_leer.png" target="_blank">leer.png</a> 
+            / 
+            <a href="./bilder/arbeitsplatte_mitObjekte.png" target="_blank">mit_Objekte.png</a>
          </article>
-
       </div>
-      
-      <p>
 
       <ul>
   
@@ -49,10 +52,10 @@
 
         
           <article class="project-card">Farbsättigung und Kontrast des Testbildes werden verändert, um die Erkennung der Formen zu verbessern.<br>          
-            <a href ="bild-laden.py.png" target="_blank">
-              <img src="./bild-laden.py.png" alt="Bild laden" height="200">
+            <a href ="./bilder/bildauswertung-erweitert.py.png" target="_blank">
+              <img src="./bilder/bildauswertung-erweitert.py.png" alt="Bild laden" height="200">
             </a><br>
-            <a href="./code-viewer.html?file=bild-laden.py&lang=python&title=bild-laden.py" target="_blank" rel="noopener noreferrer">bild-laden.py</a><br>
+            <a href="./code-viewer.html?file=bildauswerten-erweitert.py&lang=python&title=bild-auswerten-erweitert.py" target="_blank" rel="noopener noreferrer">bild-auswerten-erweitert.py</a><br>
             Es werden verschiedene Dateiformate (jpg, png, bmp) geladen und angezeigt.<br>
             Die Bildgröße wird ermittelt und die Bilddaten werden in einem Array gespeichert.
           </article>

@@ -84,14 +84,22 @@ def form_bestimmen(kontur):
 # ------------------------------------------------------------
 
 ordner = Path(__file__).resolve().parent
-bildpfad = ordner / "arbeitsplatte.png"
+bildpfad = ordner / "bilder/arbeitsplatte.png"
 
-bild = cv2.imread(str(bildpfad))
+orginal_bild = cv2.imread(str(bildpfad))
 
-if bild is None:
+if orginal_bild is None:
     raise FileNotFoundError(
         f"Das Bild wurde nicht gefunden:\n{bildpfad}"
     )
+
+bild = cv2.resize(
+    orginal_bild,
+    None,
+    fx=0.15,
+    fy=0.15,                 # Breite, Höhe
+    interpolation=cv2.INTER_AREA
+)
 
 ergebnis = bild.copy()
 
