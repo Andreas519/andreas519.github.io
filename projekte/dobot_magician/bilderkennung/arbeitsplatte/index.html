@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Arbitsplatte - Bilderkennung</title>
+  <title>Arbeitsplatte - Bilderkennung</title>
   <meta name="author" content="Andreas Sigismund">
-  <meta name="description" content="Bilderkennung auf der Arbeitplatte">
+  <meta name="description" content="Bilderkennung auf der Arbeitsplatte, Dobot MagiCian">
   <link rel="stylesheet" href="../../../../css/my.css">
 </head>
 <body>
@@ -35,59 +35,53 @@
         </article>
         <article class="project-card project-card-center">
           <a href ="./bilder/arbeitsplatte.png" target="_blank">
-            <img src="./bilder/arbeitsplatte_mit_objekten.png" alt="Arbeitsplatte" height="200">
+            <img src="./bilder/arbeitsplatte.png" alt="Arbeitsplatte" height="200">
           </a><br>
            <a href="./bilder/arbeitsplatte.svg" target="_blank">arbeitsplatte.svg</a>
            / 
            <a href="./bilder/arbeitsplatte_leer.png" target="_blank">leer.png</a> 
             / 
-            <a href="./bilder/arbeitsplatte_mitObjekte.png" target="_blank">mit_Objekte.png</a>
+            <a href="./bilder/arbeitsplatte_mit_objekten.png" target="_blank">mit_Objekte.png</a>
          </article>
       </div>
-
-      <ul>
-  
-        <li><h3>Erste Experimente mit OpenCV</h3>
-        Ein Testbild mit einfachen Formen und Farben wird für erste Experimente mit OpenCV verwendet.
-
-        
-          <article class="project-card">Farbsättigung und Kontrast des Testbildes werden verändert, um die Erkennung der Formen zu verbessern.<br>          
+      </section>
+      <section><h3>Erkennung ohne Referenzbild</h3> 
+          Der erste Test mit dem Bild der Arbeitsplatte und den darauf liegenden Formen zeigt, dass die Erkennung der Formen nicht zuverlässig funktioniert.<br>       
+          <article class="project-card">
             <a href ="./bilder/bildauswertung-erweitert.py.png" target="_blank">
               <img src="./bilder/bildauswertung-erweitert.py.png" alt="Bild laden" height="200">
             </a><br>
-            <a href="./code-viewer.html?file=bildauswerten-erweitert.py&lang=python&title=bild-auswerten-erweitert.py" target="_blank" rel="noopener noreferrer">bild-auswerten-erweitert.py</a><br>
-            Es werden verschiedene Dateiformate (jpg, png, bmp) geladen und angezeigt.<br>
-            Die Bildgröße wird ermittelt und die Bilddaten werden in einem Array gespeichert.
+            <a href="./code-viewer.html?file=bild-auswerten-erweitert.py&lang=python&title=bild-auswerten-erweitert.py" target="_blank" rel="noopener noreferrer">bild-auswerten-erweitert.py</a>
           </article>
-
-          <article class="project-card">Referenzbild der leeren Arbeitsplatte wird geladen und mit dem aktuellen Bild verglichen.<br>
-            <a href ="bild-auswerten.py.png" target="_blnk">
-              <img src="./bild-auswerten.py.png" alt="Bild auswerten erweitert" height="200">
-            </a><br>
-            <a href="./code-viewer.html?file=bild-auswerten.py&lang=python&title=bild-auswerten.py" target="_blank" rel="noopener noreferrer">bild-auswerten.py</a>
-          </article>
-
-          <article class="project-card">
-            <img src="./bild-erkennen.py.png" alt="Bild erkennen" height="200"><br>
-            <a href="./code-viewer.html?file=bild-erkennen.py&lang=python&title=bild-erkennen.py" target="_blank" rel="noopener noreferrer">bild-erkennen.py</a>
-          </article>
-
-          <article class="project-card">
-            <img src="./bild-auswerten-farben.py.png" alt="Bild auswerten mit Farben" height="200"><br>
-            <a href="./code-viewer.html?file=bild-auswerten-farben.py&lang=python&title=bild-auswerten-farben.py" target="_blank" rel="noopener noreferrer">bild-auswerten-farben.py</a>
-          </article>
-
-        </li>
-      </ul>
-      Die Ergebnisse der Bildauswertung sind vielversprechend und werden in den nächsten Schritten weiter vertieft.<br>
-      Weitere Experimente mit der Erkennung von Objekten und Merkmalen werden folgen.
+      In weiteren Experimenten werden die Möglichkeiten zur Verbesserung der Formenerkennung untersucht.
     </section>
+    <section><h3>Erkennung mit Referenzbild</h3> 
+      Durch die Verwendung eines Referenzbildes ist die Erkennung der Formen wesentlich zuverlässiger.<br>
+      <article class="project-card">
+        <a href ="./bilder/bild-auswerten_referenzbild-erweitert.py.png" target="_blank">
+          <img src="./bilder/bild-auswerten_referenzbild-erweitert.py.png" alt="Bild laden" height="200">
+        </a><br>
+        <a href="./code-viewer.html?file=bild-auswerten_referenzbild-erweitert.py&lang=python&title=bild-auswerten_referenzbild-erweitert.py" target="_blank" rel="noopener noreferrer">bild-auswerten_referenzbild-erweitert.py</a>
+      </article>
+      In weiteren Experimenten werden die Grenzen der Formenerkennung untersucht.
+    </section>    
+    <section><h3>Nutzung von Bereichsmasken</h3> 
+      Durch die Verwendung von Bereichsmasken kann der Erkennungsbereich gezielt eingegrenzt werden.<br>
+      <article class="project-card">
+        <a href ="./bilder/bereichsmaske.py.png" target="_blank">
+          <img src="./bilder/bereichsmaske.py.png" alt="Bild laden" height="200">
+        </a><br>
+        <a href="./code-viewer.html?file=bereichsmaske.py&lang=python&title=bereichsmaske.py" target="_blank" rel="noopener noreferrer">bereichsmaske.py</a>
+      </article>
+      In weiteren Experimenten werden die Grenzen der Formenerkennung untersucht.
+    </section>
+
   </main>
 
   <footer>
     © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
-    <script src="../../../js/script.js"></script>
+    <script src="../../../../js/script.js"></script>
   </footer>
 </body>
 </html>

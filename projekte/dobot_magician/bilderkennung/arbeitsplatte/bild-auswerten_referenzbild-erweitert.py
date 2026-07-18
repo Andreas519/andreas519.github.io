@@ -6,15 +6,25 @@ import numpy as np
 
 
 # ------------------------------------------------------------
-# Farbe anhand des HSV-Farbtons bestimmen
+# Einstellungen
 # ------------------------------------------------------------
 
-def farbe_bestimmen(farbton):
-    """
-    Bestimmt den Farbnamen anhand des mittleren HSV-Farbtons.
+SCHWELLWERT = 30
+MIN_FLAECHE = 1000
 
-    OpenCV verwendet für den Farbton Werte von 0 bis 179.
+
+# ------------------------------------------------------------
+# Farbe bestimmen
+# ------------------------------------------------------------
+
+def farbe_bestimmen(farbton, saettigung):
     """
+    Bestimmt eine vereinfachte Farbbezeichnung
+    aus Farbton und Sättigung.
+    """
+
+    if saettigung < 40:
+        return "Grau/Weiss"
 
     if farbton < 10 or farbton >= 170:
         return "Rot"
@@ -43,9 +53,8 @@ def form_bestimmen(kontur):
     umfang = cv2.arcLength(kontur, True)
 
     if umfang == 0:
-        return "Unbekannt", 0, 0
+        return "Unbekannt", 0, 0.0
 
-    # Kontur auf wenige Eckpunkte vereinfachen
     naeherung = cv2.approxPolyDP(
         kontur,
         0.02 * umfang,
@@ -56,14 +65,12 @@ def form_bestimmen(kontur):
 
     x, y, breite, hoehe = cv2.boundingRect(kontur)
 
-    # Kreisförmigkeit:
-    # Ein idealer Kreis hat den Wert 1.
     kreisfoermigkeit = (
-        4 * math.pi * flaeche / (umfang * umfang)
+        4 * math.pi * flaeche
+        / (umfang * umfang)
     )
 
-    # Kreis zuerst prüfen
-    if kreisfoermigkeit > 0.84:
+    if kreisfoermigkeit > 0.82:
         form = "Kreis"
 
     elif anzahl_ecken == 3:
@@ -82,42 +89,68 @@ def form_bestimmen(kontur):
 
     return form, anzahl_ecken, kreisfoermigkeit
 
-
+    
 # ------------------------------------------------------------
-# Bild laden
+# Bilder laden
 # ------------------------------------------------------------
 
 ordner = Path(__file__).resolve().parent
-#bildpfad = ordner / "Dobot-Arbeitsplatte.png"
-bildpfad = ordner / "testbild-01.png"
 
-bild = cv2.imread(str(bildpfad))
+pfad_leer = ordner / "bilder/arbeitsplatte_leer.png"
+pfad_objekte = ordner / "bilder/arbeitsplatte.png"
 
-if bild is None:
+bild_leer_orginal = cv2.imread(str(pfad_leer))
+bild_objekte_orginal = cv2.imread(str(pfad_objekte))
+
+
+bild_leer = cv2.resize(bild_leer_orginal, None, fx=0.15, fy=0.15, interpolation=cv2.INTER_AREA )
+
+bild_objekte = cv2.resize(bild_objekte_orginal, None, fx=0.15, fy=0.15, interpolation=cv2.INTER_AREA )
+
+if bild_leer is None:
     raise FileNotFoundError(
-        f"Das Bild wurde nicht gefunden:\n{bildpfad}"
+        f"Referenzbild nicht gefunden:\n{pfad_leer}"
     )
 
-ergebnis = bild.copy()
+if bild_objekte is None:
+    raise FileNotFoundError(
+        f"Objektbild nicht gefunden:\n{pfad_objekte}"
+    )
+
+if bild_leer.shape != bild_objekte.shape:
+    raise ValueError(
+        "Referenzbild und Objektbild müssen gleich groß sein."
+    )
+
+ergebnis = bild_objekte.copy()
 
 
 # ------------------------------------------------------------
-# Farbige Flächen auswählen
+# Referenzbild vom Objektbild abziehen
 # ------------------------------------------------------------
 
-# BGR-Bild in den HSV-Farbraum umwandeln
-hsv = cv2.cvtColor(bild, cv2.COLOR_BGR2HSV)
-
-# Auswahl deutlich gesättigter Farben:
-# - weißer Hintergrund wird ausgeschlossen
-# - schwarze Löcher und Linien werden ausgeschlossen
-maske = cv2.inRange(
-    hsv,
-    np.array([0, 80, 60]),
-    np.array([179, 255, 255])
+differenz = cv2.absdiff(
+    bild_objekte,
+    bild_leer
 )
 
-# Kleine Störungen entfernen
+differenz_grau = cv2.cvtColor(
+    differenz,
+    cv2.COLOR_BGR2GRAY
+)
+
+_, maske = cv2.threshold(
+    differenz_grau,
+    SCHWELLWERT,
+    255,
+    cv2.THRESH_BINARY
+)
+
+
+# ------------------------------------------------------------
+# Maske bereinigen
+# ------------------------------------------------------------
+
 kernel = cv2.getStructuringElement(
     cv2.MORPH_ELLIPSE,
     (5, 5)
@@ -132,7 +165,8 @@ maske = cv2.morphologyEx(
 maske = cv2.morphologyEx(
     maske,
     cv2.MORPH_CLOSE,
-    kernel
+    kernel,
+    iterations=2
 )
 
 
@@ -146,6 +180,11 @@ konturen, _ = cv2.findContours(
     cv2.CHAIN_APPROX_SIMPLE
 )
 
+hsv = cv2.cvtColor(
+    bild_objekte,
+    cv2.COLOR_BGR2HSV
+)
+
 objekte = []
 
 
@@ -156,41 +195,35 @@ objekte = []
 for kontur in konturen:
     flaeche = cv2.contourArea(kontur)
 
-    # Kleine rote Striche des Arbeitsbereiches und andere
-    # kleine Bildbestandteile ignorieren
-    if flaeche < 2000:
+    if flaeche < MIN_FLAECHE:
         continue
 
     umfang = cv2.arcLength(kontur, True)
 
     x, y, breite, hoehe = cv2.boundingRect(kontur)
 
-    # Mittelpunkt über die Bildmomente bestimmen
+    # Mittelpunkt bestimmen
     momente = cv2.moments(kontur)
 
     if momente["m00"] != 0:
         mitte_x = int(
             momente["m10"] / momente["m00"]
         )
+
         mitte_y = int(
             momente["m01"] / momente["m00"]
         )
+
     else:
         mitte_x = x + breite // 2
         mitte_y = y + hoehe // 2
 
-    # --------------------------------------------------------
-    # Form erkennen
-    # --------------------------------------------------------
-
+    # Form bestimmen
     form, ecken, kreisfoermigkeit = form_bestimmen(
         kontur
     )
 
-    # --------------------------------------------------------
-    # Mittlere Farbe innerhalb der Kontur bestimmen
-    # --------------------------------------------------------
-
+    # Maske für genau dieses Objekt erzeugen
     objektmaske = np.zeros(
         maske.shape,
         dtype=np.uint8
@@ -204,18 +237,24 @@ for kontur in konturen:
         -1
     )
 
+    # Mittlere Farbe innerhalb des Objektes
     mittlere_hsv_farbe = cv2.mean(
         hsv,
         mask=objektmaske
     )
 
     farbton = mittlere_hsv_farbe[0]
-    farbe = farbe_bestimmen(farbton)
+    saettigung = mittlere_hsv_farbe[1]
+
+    farbe = farbe_bestimmen(
+        farbton,
+        saettigung
+    )
 
     objekt = {
         "kontur": kontur,
-        "form": form,
         "farbe": farbe,
+        "form": form,
         "x": x,
         "y": y,
         "mitte_x": mitte_x,
@@ -225,8 +264,7 @@ for kontur in konturen:
         "flaeche": flaeche,
         "umfang": umfang,
         "ecken": ecken,
-        "kreisfoermigkeit": kreisfoermigkeit,
-        "farbton": farbton,
+        "kreisfoermigkeit": kreisfoermigkeit
     }
 
     objekte.append(objekt)
@@ -236,20 +274,76 @@ for kontur in konturen:
 # Objekte sortieren
 # ------------------------------------------------------------
 
-# Sortierung von links nach rechts
 objekte.sort(
-    key=lambda objekt: objekt["mitte_x"]
+    key=lambda objekt: (
+        objekt["mitte_y"],
+        objekt["mitte_x"]
+    )
 )
 
 
 # ------------------------------------------------------------
-# Ergebnisbild erzeugen
+# Textausgabe in Thonny
 # ------------------------------------------------------------
+
+print()
+print("AUSWERTUNG MIT REFERENZBILD")
+print("=" * 116)
+
+print(
+    f'{"Nr.":>3} '
+    f'{"Farbe":<12} '
+    f'{"Form":<16} '
+    f'{"Mitte x":>8} '
+    f'{"Mitte y":>8} '
+    f'{"Breite":>8} '
+    f'{"Hoehe":>8} '
+    f'{"Flaeche":>10} '
+    f'{"Umfang":>10} '
+    f'{"Ecken":>6}'
+)
+
+print("-" * 116)
 
 for nummer, objekt in enumerate(objekte, start=1):
     objekt["nummer"] = nummer
 
-    # Kontur zeichnen
+    print(
+        f'{nummer:>3} '
+        f'{objekt["farbe"]:<12} '
+        f'{objekt["form"]:<16} '
+        f'{objekt["mitte_x"]:>8} '
+        f'{objekt["mitte_y"]:>8} '
+        f'{objekt["breite"]:>8} '
+        f'{objekt["hoehe"]:>8} '
+        f'{objekt["flaeche"]:>10.1f} '
+        f'{objekt["umfang"]:>10.1f} '
+        f'{objekt["ecken"]:>6}'
+    )
+
+print("-" * 116)
+print(f"Anzahl erkannter Objekte: {len(objekte)}")
+
+print()
+
+for objekt in objekte:
+    print(
+        f'Objekt {objekt["nummer"]}: '
+        f'{objekt["farbe"]}, '
+        f'{objekt["form"]}, '
+        f'Mittelpunkt=({objekt["mitte_x"]}, '
+        f'{objekt["mitte_y"]}), '
+        f'Groesse={objekt["breite"]} x '
+        f'{objekt["hoehe"]} Pixel, '
+        f'Flaeche={objekt["flaeche"]:.1f} Pixel²'
+    )
+
+
+# ------------------------------------------------------------
+# Ergebnisbild beschriften
+# ------------------------------------------------------------
+
+for objekt in objekte:
     cv2.drawContours(
         ergebnis,
         [objekt["kontur"]],
@@ -258,7 +352,6 @@ for nummer, objekt in enumerate(objekte, start=1):
         3
     )
 
-    # Begrenzungsrechteck zeichnen
     cv2.rectangle(
         ergebnis,
         (objekt["x"], objekt["y"]),
@@ -270,7 +363,6 @@ for nummer, objekt in enumerate(objekte, start=1):
         2
     )
 
-    # Mittelpunkt markieren
     cv2.circle(
         ergebnis,
         (
@@ -282,85 +374,44 @@ for nummer, objekt in enumerate(objekte, start=1):
         -1
     )
 
-    beschriftung = (
-        f'{nummer}: {objekt["farbe"]} '
+    text = (
+        f'{objekt["nummer"]}: '
+        f'{objekt["farbe"]} '
         f'{objekt["form"]}'
     )
 
     cv2.putText(
         ergebnis,
-        beschriftung,
+        text,
         (
             objekt["x"],
-            max(objekt["y"] - 10, 20)
+            max(objekt["y"] - 8, 20)
         ),
         cv2.FONT_HERSHEY_SIMPLEX,
-        0.55,
+        0.5,
         (0, 0, 0),
         2
     )
 
 
 # ------------------------------------------------------------
-# Liste in der Befehlszeile ausgeben
+# Ergebnis anzeigen
 # ------------------------------------------------------------
 
-print()
-print("Erkannte Objekte")
-print("-" * 110)
-
-print(
-    f'{"Nr.":>3} '
-    f'{"Farbe":<10} '
-    f'{"Form":<12} '
-    f'{"Mitte x":>8} '
-    f'{"Mitte y":>8} '
-    f'{"Breite":>8} '
-    f'{"Hoehe":>8} '
-    f'{"Flaeche":>10} '
-    f'{"Umfang":>10}'
+cv2.imshow(
+    "Differenz zum Referenzbild",
+    differenz
 )
 
-print("-" * 110)
-
-for objekt in objekte:
-    print(
-        f'{objekt["nummer"]:>3} '
-        f'{objekt["farbe"]:<10} '
-        f'{objekt["form"]:<12} '
-        f'{objekt["mitte_x"]:>8} '
-        f'{objekt["mitte_y"]:>8} '
-        f'{objekt["breite"]:>8} '
-        f'{objekt["hoehe"]:>8} '
-        f'{objekt["flaeche"]:>10.1f} '
-        f'{objekt["umfang"]:>10.1f}'
-    )
-
-print("-" * 110)
-print(f"Anzahl erkannter Objekte: {len(objekte)}")
-
-
-# ------------------------------------------------------------
-# Ergebnis speichern und anzeigen
-# ------------------------------------------------------------
-
-ausgabepfad = (
-    ordner / "Dobot-Arbeitsplatte-ausgewertet.png"
+cv2.imshow(
+    "Objektmaske",
+    maske
 )
 
-cv2.imwrite(
-    str(ausgabepfad),
+cv2.imshow(
+    "Erkannte Objekte",
     ergebnis
 )
-
-cv2.imshow("Farbmaske", maske)
-cv2.imshow("Formen und Farben", ergebnis)
-
-print()
-print(f"Ergebnis gespeichert unter:")
-print(ausgabepfad)
-print()
-print("Zum Beenden eine Taste druecken.")
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
