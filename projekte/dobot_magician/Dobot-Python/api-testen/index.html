@@ -20,6 +20,7 @@
       <p><a href="https://download.dobot.cc/product-manual/dobot-magician/Dobot%20Magician%20Demo%20Description.pdf" target="_blank">Dobot Magician Demo Description (englisch)</a><br>
       ab Seite 30 - 1.8. Python Demo</p>
       <p><a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python#peripherals" target="_blank">Starter Guide Dobot Magician with Python: Peripherals</a></p>
+      <p><a href="./DobotDllType-Test-DLL-Laden.html" target="_blank">DobotDllType Test: DLL Laden</a></p>
       <p>
         In diesem Bereich wird der direkte Zugriff auf die Datei <code>DobotDll.dll</code> getestet.
         Ziel ist es, typische Fehlerquellen zu erkennen und stabile Lösungen zu dokumentieren.
@@ -58,6 +59,14 @@
         </li>
         <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-4.py&test-4.py" target="_blank">test-4.py</a>
           <p>Neu gegenüber test-3.py: Erweitert den Test um Timeout, Endauswertung mit Zielabweichung/Erfolgsstatus, robustere Vorprüfungen und ein abgesichertes Cleanup beim Trennen.</p>
+        </li>
+        <hr>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-0.py&test-0.py" target="_blank">test-0.py</a>
+        <br>
+          <p>Testet die Verbindung zur Dobot-DLL und die Funktion <code>GetDeviceVersion</code>.</p>
+          <p>Das Skript ist ein reiner Lade-/Umgebungstest für die Dobot-API.
+Es setzt den Projektpfad, ermittelt das SDK-Verzeichnis, zeigt Python- und DLL-Infos an, importiert DobotDllType, registriert das sdk64-Verzeichnis als Windows-DLL-Suchpfad und versucht anschließend, DobotDll.dll zu laden.
+Wenn das Laden klappt, gibt es Erfolgsmeldungen aus und beendet sich; bei Fehlern bricht es mit einer klaren Fehlermeldung und Exit-Code 1 ab.</p>
         </li>
         <hr>
         <li><a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/readme.md" target="_blank">readme.md</a></li>
