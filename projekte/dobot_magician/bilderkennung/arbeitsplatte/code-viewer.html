@@ -113,10 +113,23 @@
       fileInfoEl.textContent = 'Datei: ' + file;
 
       codeEl.className = 'language-' + language;
-      downloadLinkEl.href = file;
+
+      // Bestimme die tatsächliche Datei-URL
+      let fileUrl = file;
+      if (!file.startsWith('/')) {
+        // Versuche, das Verzeichnis aus dem Referrer zu extrahieren
+        if (document.referrer) {
+          const referrerUrl = new URL(document.referrer);
+          const referrerPath = referrerUrl.pathname;
+          const referrerDir = referrerPath.substring(0, referrerPath.lastIndexOf('/') + 1);
+          fileUrl = (referrerDir + file).replace(/\/+/g, '/'); // Normalisiere doppelte Slashes
+        }
+      }
+
+      downloadLinkEl.href = fileUrl;
       downloadLinkEl.setAttribute('download', file.split('/').pop());
 
-      fetch(file)
+      fetch(fileUrl)
         .then(function(response) {
           if (!response.ok) {
             throw new Error('HTTP ' + response.status);

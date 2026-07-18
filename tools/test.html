@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test – Verzeichnis auslesen</title>
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
+  <link rel="stylesheet" href="../css/my.css">
+</head>
+<body>
+  <header>
+    Test – Verzeichnis auslesen
+  </header>
+
+  <main>
+    <section>
+      <h2>Verzeichnis aus URL extrahieren</h2>
+      <p>Die aktuelle Seite liegt im Verzeichnis:</p>
+      <pre id="output">Wird geladen...</pre>
+    </section>
+
+    <section>
+      <h2>Links zu Dateien im aktuellen Verzeichnis</h2>
+      <div id="links-container">
+        <p>Wird geladen...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://andreas519.github.io">AG Young Engineers</a> · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Auftraggeber: Andreas Sigismund · Autor: GitHub Copilot<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../js/script.js"></script>
+  </footer>
+
+  <script>
+    function verzeichnisAusgeben() {
+      const url = new URL(window.location.href);
+      const verzeichnis = url.pathname.substring(
+        0,
+        url.pathname.lastIndexOf("/") + 1
+      );
+
+      console.log("Verzeichnis:", verzeichnis);
+      return verzeichnis;
+    }
+
+    function erstelleLink(dateiname) {
+      const verzeichnis = verzeichnisAusgeben();
+      const vollstaendigerPfad = verzeichnis + dateiname;
+      const codeViewerUrl = "/tools/code-viewer.html?file=" + encodeURIComponent(vollstaendigerPfad);
+      
+      const link = document.createElement("a");
+      link.href = codeViewerUrl;
+      link.textContent = dateiname;
+      link.target = "_blank";
+      
+      console.log("Link zu code-viewer erstellt:", codeViewerUrl);
+      return link;
+    }
+
+    // Test: Seite laden und Links erstellen
+    document.addEventListener("DOMContentLoaded", function() {
+      const verzeichnis = verzeichnisAusgeben();
+      document.getElementById("output").textContent = verzeichnis;
+      
+      // Liste mit Dateien zum Verlinken
+      const dateien = [
+        "code-viewer.html",
+        "md-viewer.html",
+        "index.html",
+        "test.html"
+      ];
+
+      // Container mit Links füllen
+      const container = document.getElementById("links-container");
+      container.innerHTML = "";
+
+      const liste = document.createElement("ul");
+      dateien.forEach(function(datei) {
+        const link = erstelleLink(datei);
+        const listItem = document.createElement("li");
+        listItem.appendChild(link);
+        liste.appendChild(listItem);
+      });
+
+      container.appendChild(liste);
+    });
+  </script>
+</body>
+</html>
+

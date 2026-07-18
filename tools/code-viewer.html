@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Code Viewer</title>
-  <meta name="author" content="Andreas Sigismund">
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
   <link rel="stylesheet" href="../../../../css/my.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
@@ -87,13 +88,17 @@
   </main>
 
   <footer>
-    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    <a href="https://andreas519.github.io">AG Young Engineers</a> · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Auftraggeber: Andreas Sigismund · Autor: GitHub Copilot<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
-    <script src="../../../../js/script.js"></script>
+    <script src="../js/script.js"></script>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-python.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-javascript.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-html.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-css.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
   <script>
     (function() {
@@ -113,10 +118,23 @@
       fileInfoEl.textContent = 'Datei: ' + file;
 
       codeEl.className = 'language-' + language;
-      downloadLinkEl.href = file;
+
+      // Bestimme die tatsächliche Datei-URL
+      let fileUrl = file;
+      if (!file.startsWith('/')) {
+        // Versuche, das Verzeichnis aus dem Referrer zu extrahieren
+        if (document.referrer) {
+          const referrerUrl = new URL(document.referrer);
+          const referrerPath = referrerUrl.pathname;
+          const referrerDir = referrerPath.substring(0, referrerPath.lastIndexOf('/') + 1);
+          fileUrl = referrerDir + file;
+        }
+      }
+
+      downloadLinkEl.href = fileUrl;
       downloadLinkEl.setAttribute('download', file.split('/').pop());
 
-      fetch(file)
+      fetch(fileUrl)
         .then(function(response) {
           if (!response.ok) {
             throw new Error('HTTP ' + response.status);

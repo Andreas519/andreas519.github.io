@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tools - Code & Markdown Viewer</title>
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
+  <meta name="description" content="Viewer-Tools für Code- und Markdown-Dateien">
+  <link rel="stylesheet" href="../css/my.css">
+  <style>
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .tool-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .tool-card h3 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    .tool-card p {
+      line-height: 1.6;
+      margin: 12px 0;
+      font-size: 0.95em;
+    }
+
+    .tool-card .example {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85em;
+      overflow-x: auto;
+    }
+
+    .tool-card .example-title {
+      font-weight: 600;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      color: #333;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 6px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9em;
+    }
+
+    .btn:hover {
+      text-decoration: none;
+      opacity: 0.8;
+    }
+
+    .btn-secondary {
+      background: #eef4ff;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+
+    .btn-secondary:hover {
+      background: #dce9ff;
+    }
+
+    .params-table {
+      width: 100%;
+      font-size: 0.9em;
+      margin-top: 12px;
+      border-collapse: collapse;
+    }
+
+    .params-table th,
+    .params-table td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: left;
+    }
+
+    .params-table th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+
+    .params-table code {
+      background: #fff;
+      padding: 0;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    Tools – Code & Markdown Viewer
+  </header>
+
+  <main>
+    <section>
+      <h2>Übersicht</h2>
+      <p>
+        Hier sind Viewer-Tools für die Anzeige von Code- und Markdown-Dateien aus verschiedenen 
+        Verzeichnissen des Projekts. Sie ermöglichen, Dateien relativ zum Aufrufer-Verzeichnis 
+        zu laden.
+      </p>
+    </section>
+
+    <section>
+      <h2>Verfügbare Tools</h2>
+
+      <div class="tools-grid">
+        
+        <!-- Code Viewer -->
+        <div class="tool-card">
+          <h3>📄 Code Viewer</h3>
+          <p>
+            Zeigt Quellcode-Dateien mit Syntax-Highlighting und Zeilennummern an.
+            Unterstützte Sprachen: <strong>Python, JavaScript, HTML, CSS</strong> und mehr.
+          </p>
+
+          <p><strong>Parameter:</strong></p>
+          <table class="params-table">
+            <tr>
+              <th>Parameter</th>
+              <th>Beschreibung</th>
+              <th>Beispiel</th>
+            </tr>
+            <tr>
+              <td><code>file</code></td>
+              <td>Dateiname oder Pfad (erforderlich)</td>
+              <td><code>script.py</code></td>
+            </tr>
+            <tr>
+              <td><code>lang</code></td>
+              <td>Sprache für Syntax-Highlighting</td>
+              <td><code>python</code>, <code>javascript</code>, <code>html</code>, <code>css</code></td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td>Angezeigter Titel (optional)</td>
+              <td><code>Mein Script</code></td>
+            </tr>
+          </table>
+
+          <p><strong>Aufrufsbeispiele:</strong></p>
+
+          <div class="example">
+            <div class="example-title">1. Python-Datei (relativ):</div>
+            &lt;a href="../../tools/code-viewer.html?file=bild-auswerten.py&amp;title=Bildauswertung"&gt;
+            <br>&nbsp;&nbsp;Code ansehen
+            <br>&lt;/a&gt;
+          </div>
+
+          <div class="example">
+            <div class="example-title">2. HTML-Datei (absolut):</div>
+            &lt;a href="../../tools/code-viewer.html?file=/tools/index.html&amp;lang=html&amp;title=Tools%20Übersicht"&gt;
+            <br>&nbsp;&nbsp;HTML-Quelle
+            <br>&lt;/a&gt;
+          </div>
+
+          <div class="button-group">    
+            <a href="code-viewer.html?file=/tools/code-viewer.html&lang=html" class="btn">Direkt öffnen</a>
+            <a href="md-viewer.html?file=/tools/code-viewer.md&title=Code%20Viewer%20Dokumentation" class="btn btn-secondary">
+              Dokumentation
+            </a>
+          </div>
+        </div>
+
+        <!-- Markdown Viewer -->
+        <div class="tool-card">
+          <h3>📝 Markdown Viewer</h3>
+          <p>
+            Konvertiert und zeigt Markdown-Dateien (.md) mit formatiertem Text, 
+            Code-Blöcken und Syntax-Highlighting an.
+          </p>
+
+          <p><strong>Parameter:</strong></p>
+          <table class="params-table">
+            <tr>
+              <th>Parameter</th>
+              <th>Beschreibung</th>
+              <th>Beispiel</th>
+            </tr>
+            <tr>
+              <td><code>file</code></td>
+              <td>Dateiname oder Pfad (erforderlich)</td>
+              <td><code>inhalt.md</code></td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td>Angezeigter Titel (optional)</td>
+              <td><code>Dokumentation</code></td>
+            </tr>
+          </table>
+
+          <p><strong>Aufrufsbeispiele:</strong></p>
+
+          <div class="example">
+            <div class="example-title">1. Relativer Pfad (aus Unterordner):</div>
+            &lt;a href="../../tools/md-viewer.html?file=inhalt.md&amp;title=Inhaltsübersicht"&gt;
+            <br>&nbsp;&nbsp;Dokumentation ansehen
+            <br>&lt;/a&gt;
+          </div>
+
+          <div class="example">
+            <div class="example-title">2. Absoluter Pfad (von überall):</div>
+            &lt;a href="../../tools/md-viewer.html?file=/projekte/dobot_magician/README.md"&gt;
+            <br>&nbsp;&nbsp;Readme
+            <br>&lt;/a&gt;
+          </div>
+
+          <div class="button-group">
+            <a href="code-viewer.html?file=/tools/md-viewer.html&lang=html" class="btn">Direkt öffnen</a>
+
+            <a href="md-viewer.html?file=/tools/md-viewer.md&title=Markdown%20Viewer%20Dokumentation" class="btn btn-secondary">
+              Dokumentation
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Wie es funktioniert</h2>
+      <p>
+        <strong>Relative Pfade:</strong> Der Viewer versucht, das Aufrufer-Verzeichnis zu ermitteln 
+        (mittels <code>document.referrer</code>) und löst die Datei relativ dazu auf.
+      </p>
+      <p>
+        <strong>Absolute Pfade:</strong> Pfade, die mit <code>/</code> beginnen, werden direkt geladen.
+      </p>
+      <p>
+        <strong>Download:</strong> Beide Viewer bieten einen „Herunterladen"-Button für die angezeigte Datei.
+      </p>
+    </section>
+
+    <section>
+      <h2>Projektbeispiele</h2>
+      <p>
+        <strong>Dobot Bilderkennung – Arbeitsplatte:</strong><br>
+        <a href="../projekte/dobot_magician/bilderkennung/arbeitsplatte/index.html">
+          zur Projekt-Seite
+        </a>
+        (nutzt <code>code-viewer.html</code> mit relativen Pfaden)
+      </p>
+    </section>
+
+    <section>
+      <h2>Dateien in diesem Verzeichnis</h2>
+      <ul>
+        <li><strong>index.html</strong> – Diese Seite (Überblick)</li>
+        <li><strong>code-viewer.html</strong> – Viewer für Quellcode-Dateien</li>
+        <li><strong>md-viewer.html</strong> – Viewer für Markdown-Dateien</li>
+        <li><strong>code-viewer.md</strong> – Dokumentation zum Code Viewer</li>
+        <li><strong>prism/</strong> – Prism.js Syntax-Highlighting Dateien</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <a href="https://andreas519.github.io">AG Young Engineers</a> · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Auftraggeber: Andreas Sigismund · Autor: GitHub Copilot<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../js/script.js"></script>
+  </footer>
+</body>
+</html>

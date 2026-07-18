@@ -12,11 +12,11 @@ hoehe, breite = bild.shape[:2]
 
 print("Höhe: ",hoehe, "Breite: ",breite)
 
-# Bereichsdefinitionen
-#  - Gesamtes Bild zunächst freigeben
+# Bereichsdefinitionen -   0-sperren / 255 - freigebe
+#  - Gesamtes Bild zunächst sperren
 bereichsmaske = np.full((hoehe, breite), 0, dtype=np.uint8)
 
-#  - Dobot-Standplatz ausschließen
+#  - Bereiche freigeben
 cv2.rectangle( bereichsmaske, ( 10, 10), (385, 150), 255, -1 )
 cv2.rectangle( bereichsmaske, ( 10, 10), (100, 270), 255, -1 )
 cv2.rectangle( bereichsmaske, (385, 10), (285, 270), 255, -1 )

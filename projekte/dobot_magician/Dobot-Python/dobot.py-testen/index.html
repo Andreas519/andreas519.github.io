@@ -22,12 +22,13 @@
       </p>
     </section>
 
-    <section>
+    <section id="dobot-test-1">
       <p>Verbindung zum Dobot herstellen und Position anzeigen</p>
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
-          <pre class="codebereich"><code class="language-python">from pathlib import Path
+          <pre class="codebereich"><code class="language-python"># dobot-test-1.py
+from pathlib import Path
 import sys
 
 # Übergeordneten Ordner "Dobot-Python" in den Python-Suchpfad aufnehmen
@@ -40,8 +41,27 @@ from sdk64 import DobotDllType as dType
 import dobot
 
 api = dobot.init()
+dobot.alarme_anzeigen(api)
+dobot.position_anzeigen(api)
 
-dobot.position_anzeigen(api)</code></pre>
+# bisher keine Aktionen des Dobot
+</code></pre>
+        </div>
+        Ausgabe in der Konsole:
+        <div c><pre>Python-Version:     3.14.5
+Python-Architektur: 64bit
+SDK-Verzeichnis:    D:\projekte\dobot_magician\Dobot-Python\sdk64
+DLL-Datei:          D:\projekte\dobot_magician\Dobot-Python\sdk64\DobotDll.dll
+DLL vorhanden:      True
+Serielle Schnittstelle: COM10 ist vorhanden.
+ConnectDobot-Ergebnis: [0, '', '']
+Gerätename:    Dobot Magician - AG Young Engineers - Martin-Rinckart-Gymnasium
+Seriennummer:  D1318040883
+Keine Alarme aktiv.
+X=199.9 mm, Y=100.0 mm, Z=111.0 mm, R=0.0°
+
+        </pre>
+
         </div>
       </div>
 
@@ -49,14 +69,59 @@ dobot.position_anzeigen(api)</code></pre>
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
-          <pre class="codebereich"><code class="language-python"># nach api = dobot.init() einfügen
-dobot.home(api)
-dobot.position_anzeigen(api)
+          <pre class="codebereich">
+            <code class="language-python">
+# bisher keine Aktionen des Dobot
 
-dType.ClearAllAlarmsState(api)
-dType.DisconnectDobot(api)</code></pre>
+dobot.queue_starten(api)
+dobot.test_z(api)</code>
+          </pre>
         </div>
       </div>
+      Ausgabe in der Konsole:
+      <div class="console-output"><pre>
+Interaktiver Test der Z-Koordinate
+----------------------------------
+
+Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 100
+X=199.9 mm, Y=100.0 mm, Z=100.0 mm, R=0.0°
+
+Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 200
+X=199.9 mm, Y=100.0 mm, Z=170.4 mm, R=0.0°
+
+Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: x
+Alarme löschen
+1 Alarm(e) aktiv:
+
+  Alarm  34 (0x22): Bewegung überschreitet einen Gelenkgrenzwert
+
+Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: -50
+X=199.9 mm, Y=100.0 mm, Z=-50.0 mm, R=0.0°
+
+Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: a
+Z-Test beendet.
+>>> </pre>
+        </div>
+        Achte genau auf den Dialog in der Konsole. <br>
+        Die Eingabe 200 führt zu einer Begrenzung der Z-Koordinate auf 170.4 mm.
+        Der Dobot hält an und meldet einen Alarm. 
+        <br>Die Eingabe 'x' löscht den Alarm und danach kann eine neue Z-Koordinate vorgegeben werden.<br>
+        MERKE: <strong>Alarme können die Bewegung des Dobots verhindern.</strong>
+      </div>  
+<section id="dobot-test-2"> Tastatursteuerung des Dobot
+      <p>Die Tastatursteuerung des Dobot wird in <code>dobot.py</code> implementiert und getestet.</p>
+      <div class="code-wrap">
+        <button class="copy-button" type="button">Kopieren</button>
+        <div class="code-panel">
+          <pre class="codebereich">
+            <code class="language-python"># dobot-test-2.py
+            </code>
+          </pre>
+        </div>
+      </div>
+</section>
+
+
 
       <p><a href="../Dobot-Python-Hilfsfunktionen.html#programmstart">Empfohlener Programmstart und de</a></p>
     </section>

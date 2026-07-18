@@ -17,8 +17,8 @@ import sys
 from sdk64 import DobotDllType as dType
 
 
-VERSION = "1.2.0"
-VERSIONSDATUM = "15.07.2026"
+VERSION = "1.2.1"
+VERSIONSDATUM = "18.07.2026"
 
 
 def version():
@@ -26,6 +26,107 @@ def version():
 
     return f"dobot.py Version {VERSION} - Stand {VERSIONSDATUM}"
 
+# ---------------------------------------------------------------------------
+# Alarmfunktionen
+# ---------------------------------------------------------------------------
+
+ALARM_MELDUNGEN = {
+    # Allgemeine Fehler
+    0x00: "Reset-Alarm",
+    0x01: "Unbekannter oder ungültiger Befehl",
+    0x02: "Dateisystemfehler",
+    0x03: "Kommunikationsfehler zwischen MCU und FPGA",
+    0x04: "Fehler des Winkelsensors",
+
+    # Planungsfehler
+    0x10: "Zielposition liegt in einer Singularität",
+    0x11: "Zielposition liegt außerhalb des Arbeitsbereichs",
+    0x12: "Zielposition überschreitet einen Gelenkgrenzwert",
+    0x13: "Doppelte oder ungeeignete Punkte bei ARC/JUMP",
+    0x14: "Ungültige Eingabeparameter für ARC",
+    0x15: "Ungültige JUMP-Parameter",
+
+    # Bewegungsfehler
+    0x20: "Bewegungsbahn führt durch eine Singularität",
+    0x21: "Bewegungsbahn liegt außerhalb des Arbeitsbereichs",
+    0x22: "Bewegung überschreitet einen Gelenkgrenzwert",
+
+    # Geschwindigkeitsfehler
+    0x30: "Gelenk 1: Geschwindigkeit zu hoch",
+    0x31: "Gelenk 2: Geschwindigkeit zu hoch",
+    0x32: "Gelenk 3: Geschwindigkeit zu hoch",
+    0x33: "Gelenk 4: Geschwindigkeit zu hoch",
+
+    # Grenzwertfehler
+    0x40: "Gelenk 1: positiver Grenzwert erreicht",
+    0x41: "Gelenk 1: negativer Grenzwert erreicht",
+    0x42: "Gelenk 2: positiver Grenzwert erreicht",
+    0x43: "Gelenk 2: negativer Grenzwert erreicht",
+    0x44: "Gelenk 3: positiver Grenzwert erreicht",
+    0x45: "Gelenk 3: negativer Grenzwert erreicht",
+    0x46: "Gelenk 4: positiver Grenzwert erreicht",
+    0x47: "Gelenk 4: negativer Grenzwert erreicht",
+    0x48: "Parallelogramm: positiver Grenzwert erreicht",
+    0x49: "Parallelogramm: negativer Grenzwert erreicht",
+
+    # Schrittverluste
+    0x50: "Gelenk 1: Schrittverlust erkannt",
+    0x51: "Gelenk 2: Schrittverlust erkannt",
+    0x52: "Gelenk 3: Schrittverlust erkannt",
+    0x53: "Gelenk 4: Schrittverlust erkannt",
+}
+
+def alarme_loeschen(api):
+    """Löscht alle gespeicherten Alarmzustände des Dobot.
+
+    Achtung:
+        Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
+    """
+
+    if api is None:
+        raise RuntimeError("Der Dobot ist nicht verbunden.")
+
+    dType.ClearAllAlarmsState(api)
+
+def alarme_lesen(api):
+    """Liest die aktuell gesetzten Alarmnummern des Dobot."""
+
+    alarmdaten, laenge = dType.GetAlarmsState(api)
+
+    aktive_alarme = []
+
+    for byte_index, wert in enumerate(alarmdaten[:laenge]):
+        for bit_index in range(8):
+            if wert & (1 << bit_index):
+                alarmnummer = byte_index * 8 + bit_index
+                aktive_alarme.append(alarmnummer)
+
+    return aktive_alarme
+
+
+def alarme_anzeigen(api):
+    """Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an."""
+
+    aktive_alarme = alarme_lesen(api)
+
+    if not aktive_alarme:
+        print("Keine Alarme aktiv.")
+        return
+
+    print(f"{len(aktive_alarme)} Alarm(e) aktiv:")
+    print()
+
+    for alarmnummer in aktive_alarme:
+        meldung = ALARM_MELDUNGEN.get(
+            alarmnummer,
+            "Unbekannter Alarm"
+        )
+
+        print(
+            f"  Alarm {alarmnummer:3d} "
+            f"(0x{alarmnummer:02X}): "
+            f"{meldung}"
+        )
 
 def com_ports_ermitteln():
     """Gibt die vom Betriebssystem erkannten seriellen Schnittstellen zurück.
@@ -708,43 +809,38 @@ def home(api):
 def test_z(api):
     """Erlaubt das interaktive Verändern der aktuellen Z-Koordinate."""
 
-    print()
-    print("Interaktiver Test der Z-Koordinate")
+    print("\nInteraktiver Test der Z-Koordinate")
     print("----------------------------------")
 
     while True:
         x, y, z, r = position_lesen(api)
-
-        print(
-            f"Position: X={x:.1f}, Y={y:.1f}, "
-            f"Z={z:.1f}, R={r:.1f}"
-        )
-
+        print()
         eingabe = input(
-            "Neue Z-Koordinate oder 'a' zum Abbrechen: "
-        ).strip()
+            "Neue Z-Koordinate, "
+            "'x' zum Löschen der Alarme oder "
+            "'a' zum Abbrechen: "
+        ).strip().lower()
+        
 
         if eingabe.lower() == "a":
             break
-
-        # Auch eine Eingabe mit deutschem Dezimalkomma wird akzeptiert.
+        elif eingabe.lower() == "x":
+            print("Alarme löschen")
+            alarme_anzeigen(api)
+            alarme_loeschen(api)
+            continue
         try:
             neue_z = float(eingabe.replace(",", "."))
         except ValueError:
-            print("Ungültige Eingabe. Bitte eine Zahl oder 'a' eingeben.")
+            print("Ungültige Eingabe. Bitte eine Zahl, 'x' oder'a' eingeben.")
             continue
 
-        fahre_zu(
-            api,
-            x,
-            y,
-            neue_z,
-            r,
-            dType.PTPMode.PTPMOVLXYZMode,
-        )
-
-        print("Erreichte Position:")
-        position_anzeigen(api)
+        if alarme_lesen(api)==[]:
+            fahre_zu(api, x, y, neue_z, r, dType.PTPMode.PTPMOVLXYZMode, )
+#             print("Erreichte Position:")
+            position_anzeigen(api)
+        else:
+            alarme_loeschen(api)
 
     print("Z-Test beendet.")
 
@@ -812,107 +908,6 @@ def ausfuehren(api):
 
         print()
         print("Roboterprogramm beendet.")
-# ---------------------------------------------------------------------------
-# Alarmfunktionen
-# ---------------------------------------------------------------------------
-
-ALARM_MELDUNGEN = {
-    # Allgemeine Fehler
-    0x00: "Reset-Alarm",
-    0x01: "Unbekannter oder ungültiger Befehl",
-    0x02: "Dateisystemfehler",
-    0x03: "Kommunikationsfehler zwischen MCU und FPGA",
-    0x04: "Fehler des Winkelsensors",
-
-    # Planungsfehler
-    0x10: "Zielposition liegt in einer Singularität",
-    0x11: "Zielposition liegt außerhalb des Arbeitsbereichs",
-    0x12: "Zielposition überschreitet einen Gelenkgrenzwert",
-    0x13: "Doppelte oder ungeeignete Punkte bei ARC/JUMP",
-    0x14: "Ungültige Eingabeparameter für ARC",
-    0x15: "Ungültige JUMP-Parameter",
-
-    # Bewegungsfehler
-    0x20: "Bewegungsbahn führt durch eine Singularität",
-    0x21: "Bewegungsbahn liegt außerhalb des Arbeitsbereichs",
-    0x22: "Bewegung überschreitet einen Gelenkgrenzwert",
-
-    # Geschwindigkeitsfehler
-    0x30: "Gelenk 1: Geschwindigkeit zu hoch",
-    0x31: "Gelenk 2: Geschwindigkeit zu hoch",
-    0x32: "Gelenk 3: Geschwindigkeit zu hoch",
-    0x33: "Gelenk 4: Geschwindigkeit zu hoch",
-
-    # Grenzwertfehler
-    0x40: "Gelenk 1: positiver Grenzwert erreicht",
-    0x41: "Gelenk 1: negativer Grenzwert erreicht",
-    0x42: "Gelenk 2: positiver Grenzwert erreicht",
-    0x43: "Gelenk 2: negativer Grenzwert erreicht",
-    0x44: "Gelenk 3: positiver Grenzwert erreicht",
-    0x45: "Gelenk 3: negativer Grenzwert erreicht",
-    0x46: "Gelenk 4: positiver Grenzwert erreicht",
-    0x47: "Gelenk 4: negativer Grenzwert erreicht",
-    0x48: "Parallelogramm: positiver Grenzwert erreicht",
-    0x49: "Parallelogramm: negativer Grenzwert erreicht",
-
-    # Schrittverluste
-    0x50: "Gelenk 1: Schrittverlust erkannt",
-    0x51: "Gelenk 2: Schrittverlust erkannt",
-    0x52: "Gelenk 3: Schrittverlust erkannt",
-    0x53: "Gelenk 4: Schrittverlust erkannt",
-}
-
-def alarme_loeschen(api):
-    """Löscht alle gespeicherten Alarmzustände des Dobot.
-
-    Achtung:
-        Besteht die Ursache weiterhin, wird der Alarm erneut ausgelöst.
-    """
-
-    if api is None:
-        raise RuntimeError("Der Dobot ist nicht verbunden.")
-
-    dType.ClearAllAlarmsState(api)
-
-def alarme_lesen(api):
-    """Liest die aktuell gesetzten Alarmnummern des Dobot."""
-
-    alarmdaten, laenge = dType.GetAlarmsState(api)
-
-    aktive_alarme = []
-
-    for byte_index, wert in enumerate(alarmdaten[:laenge]):
-        for bit_index in range(8):
-            if wert & (1 << bit_index):
-                alarmnummer = byte_index * 8 + bit_index
-                aktive_alarme.append(alarmnummer)
-
-    return aktive_alarme
-
-
-def alarme_anzeigen(api):
-    """Liest die aktiven Alarme und zeigt Nummer und Fehlermeldung an."""
-
-    aktive_alarme = alarme_lesen(api)
-
-    if not aktive_alarme:
-        print("Keine Alarme aktiv.")
-        return
-
-    print(f"{len(aktive_alarme)} Alarm(e) aktiv:")
-    print()
-
-    for alarmnummer in aktive_alarme:
-        meldung = ALARM_MELDUNGEN.get(
-            alarmnummer,
-            "Unbekannter Alarm"
-        )
-
-        print(
-            f"  Alarm {alarmnummer:3d} "
-            f"(0x{alarmnummer:02X}): "
-            f"{meldung}"
-        )
 
 def main():
     """Hinweis beim direkten Start dieser Bibliotheksdatei."""

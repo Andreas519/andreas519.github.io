@@ -157,3 +157,48 @@ initialisiereCodebloecke();
   tab.document.close();
 }
 // Marker
+
+// Code-Viewer Links mit lokalem Pfad generieren
+function erstelleCodeViewerLink(dateiname, sprache, titel) {
+  const url = new URL(window.location.href);
+  const verzeichnis = url.pathname.substring(
+    0,
+    url.pathname.lastIndexOf("/") + 1
+  );
+  // Stelle sicher, dass der Pfad mit nur einem / beginnt
+  const vollstaendigerPfad = verzeichnis.replace(/^\/+/, "/") + dateiname;
+  const lang = sprache || "python";
+  const title = titel || dateiname;
+  
+  const link = document.createElement("a");
+  link.href = "/tools/code-viewer.html?file=" + encodeURIComponent(vollstaendigerPfad) + "&lang=" + lang + "&title=" + encodeURIComponent(title);
+  link.textContent = dateiname;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  
+  return link;
+}
+
+// Verarbeite alle Links mit class="code-link"
+function initializeCodeLinks() {
+  const codeLinks = document.querySelectorAll("a.code-link");
+  codeLinks.forEach(function(linkEl) {
+    const dateiname = linkEl.getAttribute("data-file");
+    const sprache = linkEl.getAttribute("data-lang") || "python";
+    const titel = linkEl.getAttribute("data-title") || dateiname;
+    
+    if (!dateiname) return;
+    
+    const neuerLink = erstelleCodeViewerLink(dateiname, sprache, titel);
+    linkEl.href = neuerLink.href;
+    linkEl.target = "_blank";
+    linkEl.rel = "noopener noreferrer";
+  });
+}
+
+// Zusätzlich direkt aufrufen, falls DOM schon geladen ist
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeCodeLinks);
+} else {
+  initializeCodeLinks();
+}
