@@ -21,13 +21,18 @@
         Ziel ist es, typische Fehlerquellen und Möglichkeiten zu erkennen und stabile Lösungen in der <code>DobotDllType.py</code> zu dokumentieren.  
       </p>
       <ul>
-        <li><a href="../../Dobot-Python-API-Dokumentation.html.pdf" target="_blank">Dobot Magician – Deutsche Python-API-Dokumentation</a><br>
+        <li><a href="../Dobot-Python-API-Dokumentation.html" target="_blank">Dobot Magician – Deutsche Python-API-Dokumentation</a><br>
            - von uns mittels ChatGPT erstellt und gepflegt</li>
         <li><a href="./DobotDllType-Test-DLL-Laden.html" target="_blank">DobotDllType Test: DLL Laden</a></li>
-        <li><a href="https://ecksteinimg.de/Datasheet/Dobot/dobot-api-en.pdf" target="_blank">Dobot API Dokumentation (englisch)</a></li>
-        <li><a href="https://download.dobot.cc/product-manual/dobot-magician/Dobot%20Magician%20Demo%20Description.pdf" target="_blank">Dobot Magician Demo Description (englisch)</a><br>
-        ab Seite 30 - 1.8. Python Demo</li>
-        <li><a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python#peripherals" target="_blank">Starter Guide Dobot Magician with Python: Peripherals</a></li>
+        <li><a href="../../Dobot-Magician-ALARM-Description.pdf" target="_blank">Dobot-Magician-ALARM-Description</a></li>
+        <li><a href="https://ecksteinimg.de/Datasheet/Dobot/dobot-api-en.pdf" target="_blank">Dobot Magician - Dobot API</a><br>
+          Englische API-Referenz mit Entwicklungsübersicht.
+        </li>
+        <li><a href="../../Dobot Magician Demo Description.pdf#page=30" target="_blank">Dobot Magician Demo Description (englisch)</a><br>
+           Das Dokument beschreibt den Aufbau der Entwicklungsumgebung und Beispielprogramme für die Ansteuerung des Dobot Magician in verschiedenen Programmiersprachen und Systemen, darunter Python, Java, C#, Arduino und STM32.</li>
+        <li><a href="https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python#peripherals" target="_blank">Starter Guide Dobot Magician with Python: Peripherals</a><br>
+          Informationen zu den Peripheriegeräten des Dobot Magician und deren Ansteuerung mit Python.
+        </li>
       </ul>
 
 
@@ -48,6 +53,60 @@
 </a>
 -->
       <ul>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-00-dll-laden.py&api-test-00-dll-laden" target="_blank">api-test-00-dll-laden.py</a><br>
+          <p>Testet die Verbindung zur Dobot-DLL und die Funktion <code>GetDeviceVersion</code>.</p>
+          <p>Das Skript ist ein reiner Lade-/Umgebungstest für die Dobot-API. Es setzt den Projektpfad, ermittelt das SDK-Verzeichnis, zeigt Python- und DLL-Infos an, importiert DobotDllType, registriert das sdk64-Verzeichnis als Windows-DLL-Suchpfad und versucht anschließend, DobotDll.dll zu laden.
+          Wenn das Laden klappt, gibt es Erfolgsmeldungen aus und beendet sich; bei Fehlern bricht es mit einer klaren Fehlermeldung und Exit-Code 1 ab.</p>
+        </li>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-01-verbinden.py&api-test-01-verbinden" target="_blank">api-test-01-verbinden.py</a>
+          <p>Testet die Verbindung zur Dobot und grundlegende API-Funktionen werden die Seriennummer, der Name und die Version des Geräts sowie aktuelle Pose/Gelenkwinkel und aktive Alarme ausgelesen.</p>
+        </li>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-02-namen-aendern.py&api-test-02-namen-aendern" target="_blank">api-test-02-namen-aendern.py</a>
+          <p>Testet das Ändern des Namens der Dobot.</p>
+        </li>
+
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-03-position-lesen.py&api-test-03-position-lesen" target="_blank">api-test-03-position-lesen.py</a>
+          <p>Testet das Auslesen der aktuellen Position der Dobot.</p>
+        </li>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-04-alarme-lesen.py&api-test-04-alarme-lesen" target="_blank">api-test-04-alarme-lesen.py</a>
+          <p>Testet das Auslesen von Alarmen der Dobot.</p>
+        </li>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-05-alarme-loeschen.py&api-test-05-alarme-loeschen" target="_blank">api-test-05-alarme-loeschen.py</a>
+          <p>Testet das Löschen von Alarmen der Dobot.</p>
+        </li>
+        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/api-test-06-sofort-fahren.py&api-test-06-sofort-fahren" target="_blank">api-test-06-sofort-fahren.py</a>
+          <p>Testet das sofortige Fahren der Dobot zu einer festen Zielposition.</p>
+        </li>
+        <hr>
+<pre>
+Genau. 👍 DobotDllType.py stellt vor allem die technischen API-Funktionen bereit, während dobot.py daraus verständliche und sichere Befehle macht.
+
+Zum Beispiel:
+
+dType.GetAlarmsState(api)
+
+liefert nur rohe Alarmbits. Unsere Funktion
+
+dobot.alarme_sofort_zeigen(api)
+
+kann daraus hingegen machen:
+
+Alarm 72 (0x48):
+Grenzstellung des Parallelogramms erreicht
+(Achsen 2 und 3 gemeinsam)
+
+Damit übernimmt dobot.py mehrere wichtige Aufgaben:
+
+technische Rückgabewerte übersetzen,
+verständliche Fehlermeldungen ausgeben,
+komplizierte API-Aufrufe vereinfachen,
+Queue- und Sofortbefehle sauber trennen,
+typische Fehler früh erkennen,
+schülergerechte Funktionsnamen anbieten.
+
+DobotDllType.py ist die technische Schnittstelle zur DLL; dobot.py wird unsere verständliche Arbeitsbibliothek für Unterricht und Projekte. 🤖
+
+</pre>
         <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-1.py&test-1.py" target="_blank">test-1.py</a>
           <ol>
             <li>Es richtet die Pfade zum SDK und zur DLL ein und zeigt Python-/Systeminfos an.</li>
@@ -67,12 +126,8 @@
           <p>Neu gegenüber test-3.py: Erweitert den Test um Timeout, Endauswertung mit Zielabweichung/Erfolgsstatus, robustere Vorprüfungen und ein abgesichertes Cleanup beim Trennen.</p>
         </li>
         <hr>
-        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-0.py&test-0.py" target="_blank">test-0.py</a>
-        <br>
-          <p>Testet die Verbindung zur Dobot-DLL und die Funktion <code>GetDeviceVersion</code>.</p>
-          <p>Das Skript ist ein reiner Lade-/Umgebungstest für die Dobot-API.
-Es setzt den Projektpfad, ermittelt das SDK-Verzeichnis, zeigt Python- und DLL-Infos an, importiert DobotDllType, registriert das sdk64-Verzeichnis als Windows-DLL-Suchpfad und versucht anschließend, DobotDll.dll zu laden.
-Wenn das Laden klappt, gibt es Erfolgsmeldungen aus und beendet sich; bei Fehlern bricht es mit einer klaren Fehlermeldung und Exit-Code 1 ab.</p>
+
+          
         </li>
         <hr>
         <li><a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/readme.md" target="_blank">readme.md</a></li>
@@ -85,10 +140,6 @@ Wenn das Laden klappt, gibt es Erfolgsmeldungen aus und beendet sich; bei Fehler
         <li><a href="./DobotDllType-Test-DLL-Laden.html">DobotDllType Test: DLL Laden</a></li> 
 -->
       </ul>
-    </section>
-
-    <section>
-      <p>Zurück zu <a href="../index.html">Dobot-Python</a></p>
     </section>
   </main>
 
