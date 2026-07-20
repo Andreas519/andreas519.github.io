@@ -1,5 +1,5 @@
 _ablage/
-!test-0.py
+!test-*.py
 testen*
 readme.md 
 _readme.md
