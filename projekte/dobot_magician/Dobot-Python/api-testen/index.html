@@ -79,35 +79,6 @@
           Sollte der Fahrbefehl einen Alarm auslösen, wird der Befehl nicht ausgeführt.</p>
         </li>
         <hr>
-<pre>
-Genau. 👍 DobotDllType.py stellt vor allem die technischen API-Funktionen bereit, während dobot.py daraus verständliche und sichere Befehle macht.
-
-Zum Beispiel:
-
-dType.GetAlarmsState(api)
-
-liefert nur rohe Alarmbits. Unsere Funktion
-
-dobot.alarme_sofort_zeigen(api)
-
-kann daraus hingegen machen:
-
-Alarm 72 (0x48):
-Grenzstellung des Parallelogramms erreicht
-(Achsen 2 und 3 gemeinsam)
-
-Damit übernimmt dobot.py mehrere wichtige Aufgaben:
-
-technische Rückgabewerte übersetzen,
-verständliche Fehlermeldungen ausgeben,
-komplizierte API-Aufrufe vereinfachen,
-Queue- und Sofortbefehle sauber trennen,
-typische Fehler früh erkennen,
-schülergerechte Funktionsnamen anbieten.
-
-DobotDllType.py ist die technische Schnittstelle zur DLL; dobot.py wird unsere verständliche Arbeitsbibliothek für Unterricht und Projekte. 🤖
-
-</pre>
         <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-1.py&test-1.py" target="_blank">test-1.py</a>
           <ol>
             <li>Es richtet die Pfade zum SDK und zur DLL ein und zeigt Python-/Systeminfos an.</li>

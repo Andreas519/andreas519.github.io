@@ -49,7 +49,8 @@ main li {
 
 .merkbox {   background: #f1f7ff;   border-left: 5px solid var(--accent);   padding: 10px 14px;   border-radius: 8px; }
 
-nav[aria-label="Shelly Schritt Navigation"] {
+nav[aria-label="Shelly Schritt Navigation"],
+nav.section-nav {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 14px;

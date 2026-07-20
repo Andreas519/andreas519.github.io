@@ -14,16 +14,52 @@
     Projektbereich <code>dobot.py-testen</code> im Projekt <a href="../index.html">Dobot-Python</a>
   </header>
   <main>
-    <section>
-      <p>
+    <nav class="section-nav" aria-label="Abschnitt Navigation">
+      <ul>
+        <li><a href="#einfuehrung">Start</a></li>
+        <li><a href="#hinweis">Hinweis</a></li>
+        <li><a href="#dobot-test-1">Verbinden</a></li>
+        <li><a href="#dobot-test-2">Sofort-Befehle</a></li>
+        <li><a href="#dobot-test-3">Queue-Befehle</a></li>
+        <li><a href="#dateien">Dateien</a></li>
+      </ul>
+    </nav>
+    <section id="einfuehrung"><h3>Einführung</h3>
         Hier werden neue Befehle und Funktionen in <code>dobot.py</code> implementiert und getestet.
-        Die erprobten Funktionen werden anschliessend in weiteren Projekten genutzt.
-        Die aktuelle Version von <code>dobot.py</code> ist im Projekt <a href="../index.html">Dobot-Python</a> zu finden.
-      </p>
+        Die erprobten Funktionen werden anschliessend in weiteren Projekten genutzt.<br>
+        Die aktuelle Version von <code>dobot.py</code> ist im Projekt <a href="../index.html">Dobot-Python</a> zu finden.<br>
+        Eine vorläufige Zusammenstellung der Funktionen des Moduls <code>dobot.py</code> ist in <a href="../Dobot-Python-Hilfsfunktionen.html">Dobot-Python-Hilfsfunktionen</a> zu finden.
+    </section>
+    <section id="hinweis">
+      <span class="info">👍 Hinweis:<br>
+Das Modul <code>DobotDllType.py</code> stellt vor allem die technischen API-Funktionen bereit,<br> 
+während das Modul <code>dobot.py</code> daraus verständliche und sichere Befehle macht.<br>
+
+Zum Beispiel:
+<br>
+<code class="language-python">dType.GetAlarmsState(api)</code> liefert nur rohe Alarmbits.<br>
+<br>Unsere Funktion <code class="language-python">dobot.alarme_sofort_zeigen(api)</code> kann daraus hingegen machen:
+<br>
+<code> 
+Alarm 72 (0x48):<br>
+Grenzstellung des Parallelogramms erreicht<br>
+(Achsen 2 und 3 gemeinsam)<br>
+</code>
+<br>
+Damit übernimmt <code>dobot.py</code> mehrere wichtige Aufgaben:<br>
+ - technische Rückgabewerte übersetzen,<br>
+ - verständliche Fehlermeldungen ausgeben,<br>
+ - komplizierte API-Aufrufe vereinfachen,<br>
+ - Queue- und Sofortbefehle sauber trennen,<br>
+ - typische Fehler früh erkennen,<br>
+ - schülergerechte Funktionsnamen anbieten.<br>
+
+<code>DobotDllType.py</code> ist die technische Schnittstelle zur DLL.<br>
+Die Datei <code>dobot.py</code> bildet unser verständliches Python-Modul für unsere Projekte mit dem Dobot Magician und wird ständig weiterentwickelt.
+</span>
     </section>
 
-    <section id="dobot-test-1">
-      <p>Verbindung zum Dobot herstellen und Position anzeigen</p>
+    <section id="dobot-test-1"><h3>Verbindung zum Dobot herstellen und Position anzeigen</h3>
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
@@ -64,79 +100,103 @@ X=199.9 mm, Y=100.0 mm, Z=111.0 mm, R=0.0°
 
         </div>
       </div>
+    </section>
+    <section id="dobot-test-2"><h3>Sofortbefehle ...</h3>
+    ... können direkt ausgeführt werden, ohne dass sie in die Queue (Befehlskette) eingereiht werden. <br>
+    Sie können unmittelbar in das bisherige Testprogramm eingefügt werden.<br>
+    Danach ist das Programm erneut zu starten. <br>
+    Da am Ende des Programms aktuell die Verbindung zum Dobot nicht beendet wird,
+    kann über die Befehlszeile mit dem Dobot interagiert werden.<br>
+    Entsprechende Befehle bitte sorgfältig einsetzten!<br>
+    Teste Befehle zum Homing, Alarme anzeigen und löschen, ... und Dobot trennen
+        
+        <div class="code-wrap">
+          <button class="copy-button" type="button">Kopieren</button>
+          <div class="code-panel">
+            <pre class="codebereich">
+              <code class="language-python">
+    # bisher keine Aktionen des Dobot
 
-      <p>Programm erweitert: Homing, Alarme löschen und Dobot trennen</p>
+    dobot.queue_starten(api)
+    dobot.test_z(api)</code>
+            </pre>
+          </div>
+        </div>
+        Ausgabe in der Konsole:
+        <div class="console-output"><pre>
+    Interaktiver Test der Z-Koordinate
+    ----------------------------------
+
+    Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 100
+    X=199.9 mm, Y=100.0 mm, Z=100.0 mm, R=0.0°
+
+    Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 200
+    X=199.9 mm, Y=100.0 mm, Z=170.4 mm, R=0.0°
+
+    Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: x
+    Alarme löschen
+    1 Alarm(e) aktiv:
+
+    Alarm  34 (0x22): Bewegung überschreitet einen Gelenkgrenzwert
+
+    Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: -50
+    X=199.9 mm, Y=100.0 mm, Z=-50.0 mm, R=0.0°
+
+    Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: a
+    Z-Test beendet.
+    >>> </pre>
+        </div>
+        Achte genau auf den Dialog in der Konsole. <br>
+        In diesem Beispiel führt die Eingabe 200 zu einer Begrenzung der Z-Koordinate auf 170.4 mm, da der Dobot seine Bewegung unterbricht und einen Alarm auslöst. 
+        Dieser wird oben an der Dobot-Konsole durch das Leuchten einer roten LED angezeigt.
+        <br>Die Eingabe 'x' löscht den Alarm und danach kann eine neue Z-Koordinate vorgegeben werden.<br>
+        MERKE: <strong>Alarme können die Bewegung des Dobots verhindern.</strong>
+      </div>  
+    </section>
+    <section id="dobot-test-3"><h3>Befehlskette - Queue</h3>
+      
       <div class="code-wrap">
         <button class="copy-button" type="button">Kopieren</button>
         <div class="code-panel">
           <pre class="codebereich">
             <code class="language-python">
-# bisher keine Aktionen des Dobot
-
-dobot.queue_starten(api)
-dobot.test_z(api)</code>
-          </pre>
-        </div>
-      </div>
-      Ausgabe in der Konsole:
-      <div class="console-output"><pre>
-Interaktiver Test der Z-Koordinate
-----------------------------------
-
-Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 100
-X=199.9 mm, Y=100.0 mm, Z=100.0 mm, R=0.0°
-
-Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: 200
-X=199.9 mm, Y=100.0 mm, Z=170.4 mm, R=0.0°
-
-Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: x
-Alarme löschen
-1 Alarm(e) aktiv:
-
-  Alarm  34 (0x22): Bewegung überschreitet einen Gelenkgrenzwert
-
-Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: -50
-X=199.9 mm, Y=100.0 mm, Z=-50.0 mm, R=0.0°
-
-Neue Z-Koordinate, 'x' zum Löschen der Alarme oder 'a' zum Abbrechen: a
-Z-Test beendet.
->>> </pre>
-        </div>
-        Achte genau auf den Dialog in der Konsole. <br>
-        Die Eingabe 200 führt zu einer Begrenzung der Z-Koordinate auf 170.4 mm.
-        Der Dobot hält an und meldet einen Alarm. 
-        <br>Die Eingabe 'x' löscht den Alarm und danach kann eine neue Z-Koordinate vorgegeben werden.<br>
-        MERKE: <strong>Alarme können die Bewegung des Dobots verhindern.</strong>
-      </div>  
-<section id="dobot-test-2"> Tastatursteuerung des Dobot
-      <p>Die Tastatursteuerung des Dobot wird in <code>dobot.py</code> implementiert und getestet.</p>
-      <div class="code-wrap">
-        <button class="copy-button" type="button">Kopieren</button>
-        <div class="code-panel">
-          <pre class="codebereich">
-            <code class="language-python"># dobot-test-2.py
+# dobot-test-3.py
+.... wird nachgereicht
             </code>
           </pre>
         </div>
       </div>
-</section>
-
-
-
-      <p><a href="../Dobot-Python-Hilfsfunktionen.html#programmstart">Empfohlener Programmstart und de</a></p>
+    </section>
+    <section id="dobot-test-4"><h3>Tastatursteuerung des Dobot</h3>
+          <p>Die Tastatursteuerung des Dobot wird in <code>dobot.py</code> implementiert und getestet.</p>
+          <div class="code-wrap">
+            <button class="copy-button" type="button">Kopieren</button>
+            <div class="code-panel">
+              <pre class="codebereich">
+                <code class="language-python">
+# dobot-test-4.py
+.... wird nachgereicht
+                </code>
+              </pre>
+            </div>
+          </div>
     </section>
 
-    <section>
+
+   <!--    <p><a href="../Dobot-Python-Hilfsfunktionen.html#programmstart">Empfohlener Programmstart und de</a></p> -->
+   
+<!-- 
+    <section id="dateien">
       <h3>Dateien im Projekt</h3>
       <ul>
         <li><a href="readme.md">readme.md</a></li>
         <li><a href="start.py">start.py</a></li>
         <li><a href="dobot-test-01.py">dobot-test-01.py</a></li>
         <li><a href="dobot-positioniere.py">dobot-positioniere.py</a></li>
-        
+        <li><a href="dobot-test-2.py">dobot-test-2.py</a></li>
         <li><a href="dobot_Plattenkalibrierung.html">Dobot Plattenkalibrierung</a></li>
       </ul>
-    </section>
+    </section> -->
 
     <section>
       <p>Zurueck zu <a href="../index.html">Dobot-Python</a></p>
