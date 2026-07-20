@@ -78,31 +78,33 @@
           <p>Testet das sofortige Fahren der Dobot zu einer festen Zielposition.<br>
           Sollte der Fahrbefehl einen Alarm auslösen, wird der Befehl nicht ausgeführt.</p>
         </li>
-        <hr>
-        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-1.py&test-1.py" target="_blank">test-1.py</a>
-          <ol>
-            <li>Es richtet die Pfade zum SDK und zur DLL ein und zeigt Python-/Systeminfos an.</li>
-            <li>Es lädt das Modul DobotDllType und registriert das SDK-Verzeichnis als DLL-Suchpfad.</li>
-            <li>Es lädt die Dobot-DLL, verbindet sich über COM10 mit 115200 Baud und prüft den Verbindungsstatus.</li>
-            <li>Bei erfolgreicher Verbindung liest es Geräteinfos aus (Seriennummer, Name, Version), aktuelle Pose/Gelenkwinkel und aktive Alarme.</li>
-            <li>Am Ende trennt es die Verbindung in jedem Fall sauber wieder (auch bei Fehlern).</li>
-          </ol>
-        </li>
-        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-2.py&test-2.py" target="_blank">test-2.py</a>
-          <p>Neu gegenüber test-1.py: Löscht Alarme, setzt PTP-Parameter und sendet anschließend einen sofortigen Fahrbefehl zu einer festen Zielposition.</p>
-        </li>
-        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-3.py&test-3.py" target="_blank">test-3.py</a>
-          <p>Neu gegenüber test-2.py: Nutzt die Queue mit Überwachung (Alarm/Index), stoppt und leert zunächst laufende Befehle und bricht bei nicht löschbaren Alarmen vor der Bewegung ab.</p>
-        </li>
-        <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-4.py&test-4.py" target="_blank">test-4.py</a>
-          <p>Neu gegenüber test-3.py: Erweitert den Test um Timeout, Endauswertung mit Zielabweichung/Erfolgsstatus, robustere Vorprüfungen und ein abgesichertes Cleanup beim Trennen.</p>
-        </li>
-        <hr>
-
-          
-        </li>
-        <hr>
-        <li><a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/readme.md" target="_blank">readme.md</a></li>
+        </section>
+        <section>
+        <h3>Ausführlich dokumentierte Beispiele</h3>
+        <ul>
+          <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-1.py&test-1.py" target="_blank">test-1.py</a>
+            <ol>
+              <li>Es richtet die Pfade zum SDK und zur DLL ein und zeigt Python-/Systeminfos an.</li>
+              <li>Es lädt das Modul DobotDllType und registriert das SDK-Verzeichnis als DLL-Suchpfad.</li>
+              <li>Es lädt die Dobot-DLL, verbindet sich über COM10 mit 115200 Baud und prüft den Verbindungsstatus.</li>
+              <li>Bei erfolgreicher Verbindung liest es Geräteinfos aus (Seriennummer, Name, Version), aktuelle Pose/Gelenkwinkel und aktive Alarme.</li>
+              <li>Am Ende trennt es die Verbindung in jedem Fall sauber wieder (auch bei Fehlern).</li>
+            </ol>
+          </li>
+          <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-2.py&test-2.py" target="_blank">test-2.py</a>
+            <p>Neu gegenüber test-1.py: Löscht Alarme, setzt PTP-Parameter und sendet anschließend einen sofortigen Fahrbefehl zu einer festen Zielposition.</p>
+          </li>
+          <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-3.py&test-3.py" target="_blank">test-3.py</a>
+            <p>Neu gegenüber test-2.py: Nutzt die Queue mit Überwachung (Alarm/Index), stoppt und leert zunächst laufende Befehle und bricht bei nicht löschbaren Alarmen vor der Bewegung ab.</p>
+          </li>
+          <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/test-4.py&test-4.py" target="_blank">test-4.py</a>
+            <p>Neu gegenüber test-3.py: Erweitert den Test um Timeout, Endauswertung mit Zielabweichung/Erfolgsstatus, robustere Vorprüfungen und ein abgesichertes Cleanup beim Trennen.</p>
+          </li>
+        </ul>
+        </section>  
+        <section> 
+        
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/api-testen/readme.md" target="_blank">readme.md</a></li>
         
 <!--
         <li><a href="test.py">test.py</a></li>
@@ -111,7 +113,7 @@
         <li><a href="https://chatgpt.com/share/6a56965c-8a60-83eb-881d-695e78749ede">ChatGPT Share: Dobot Magician 'api-testen'</a></li>
         <li><a href="./DobotDllType-Test-DLL-Laden.html">DobotDllType Test: DLL Laden</a></li> 
 -->
-      </ul>
+      
     </section>
   </main>
 
