@@ -1,106 +1,60 @@
+"""
+test-01-verbinden.py
+
+Verbindet den Dobot Magician und:
+1. liest den aktuellen Gerätenamen,
+
+"""
+
 from pathlib import Path
 import os
-import platform
 import sys
 
-# Übergeordneten Ordner "Dobot-Python" in den Python-Suchpfad aufnehmen
-PROJEKTORDNER = Path(__file__).resolve().parent.parent
 
-if str(PROJEKTORDNER) not in sys.path:
-    sys.path.insert(0, str(PROJEKTORDNER))
+COM_PORT = "COM10"
+BAUDRATE = 115200
 
-sdk_verzeichnis = PROJEKTORDNER / "sdk64"
-dll_datei = sdk_verzeichnis / "DobotDll.dll"
+PROGRAMMORDNER = Path(__file__).resolve().parent
+DOBOT_ORDNER = PROGRAMMORDNER.parent
+SDK_ORDNER = DOBOT_ORDNER / "sdk64"
 
-print("Python-Version:    ", platform.python_version())
-print("Python-Architektur:", platform.architecture()[0])
-print("SDK-Verzeichnis:   ", sdk_verzeichnis)
-print("DLL-Datei:         ", dll_datei)
-print("DLL vorhanden:     ", dll_datei.exists())
+# DobotDllType.py für Python auffindbar machen.
+sys.path.insert(0, str(SDK_ORDNER))
 
-print()
+# DobotDll.dll für Windows auffindbar machen.
+_dll_verzeichnis = os.add_dll_directory(str(SDK_ORDNER))
 
-# DobotDllType.py importieren
-from sdk64 import DobotDllType as dType
-
-print("DobotDllType.py:   ", dType.__file__)
-
-print()
-print("DLL-Verzeichnis wird zum Windows-DLL-Suchpfad hinzugefügt ...")
-
-# Das Verzeichnis sdk64 für die DLL-Suche registrieren.
-# Das Handle muss während des Ladens der DLL erhalten bleiben.
-dll_verzeichnis_handle = os.add_dll_directory(str(sdk_verzeichnis))
-
-print("DLL-Verzeichnis registriert.")
-print()
-print("DobotDll.dll wird geladen ...")
+import DobotDllType as dType
 
 
-
-# --------------------------------------------------
-# Einstellungen
-# --------------------------------------------------
-
-PORT = "COM13"
-
-PUNKTE = [
-    (200.0,   0.0, 20.0, 0.0),
-    (200.0,  50.0, 20.0, 0.0),
-    (200.0, -50.0, 20.0, 0.0),
-]
-
+api = dType.load()
+verbunden = False
 
 try:
-    api = dType.load()
+    verbindung = dType.ConnectDobot(
+        api,
+        COM_PORT,
+        BAUDRATE,
+    )
 
-    print("DobotDll.dll wurde erfolgreich geladen.")
-    print("API-Objekt:", api)
+    print("Verbindungsrückgabe:", verbindung)
 
-
-    print("Queue stoppen.")
-    dType.SetQueuedCmdStopExec(api)
-    dType.dSleep(200)
-    
-    print("# Alte Queue-Befehle entfernen")
-    dType.SetQueuedCmdClear(api)
-    dType.dSleep(200)
-    print("# Bewegungsparameter:")
-    # Geschwindigkeit und Beschleunigung jeweils in Prozent
-    dType.SetPTPCommonParams(api, 50, 50, isQueued=1)
-
-    letzter_index = 0
-
-    print("# Drei Punkte in die Befehlswarteschlange eintragen")
-    for nummer, punkt in enumerate(PUNKTE, start=1):
-        x, y, z, r = punkt
-
-        print(
-            f"Punkt {nummer}: "
-            f"X={x:.1f}, Y={y:.1f}, Z={z:.1f}, R={r:.1f}"
+    if verbindung[0] != 0:
+        raise ConnectionError(
+            f"Verbindung über {COM_PORT} fehlgeschlagen "
+            f"(Fehlercode {verbindung[0]})."
         )
 
-        letzter_index = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVJXYZMode, x, y, z, r, isQueued=1)[0]
-
-    print("# Befehlswarteschlange starten")
-    dType.SetQueuedCmdStartExec(api)
-
-    # Warten, bis der letzte Fahrbefehl ausgeführt wurde
-    while dType.GetQueuedCmdCurrentIndex(api)[0] < letzter_index:
-        dType.dSleep(100)
-
-    print("Alle drei Punkte wurden angefahren.")
-
-
-
-except Exception as fehler:
+    verbunden = True
+    print("Dobot erfolgreich verbunden.")
     print()
-    print("FEHLER beim Laden der DobotDll.dll:")
-    print(type(fehler).__name__ + ":", fehler)
 
-    sys.exit(1)
+    alter_name = dType.GetDeviceName(api)
+    print("Aktueller Gerätename:", alter_name)
 
-print()
-print("Test erfolgreich beendet.")
 
-sys.exit()
+finally:
+    if verbunden:
+        dType.DisconnectDobot(api)
+        print()
+        print("Verbindung zum Dobot getrennt.")
