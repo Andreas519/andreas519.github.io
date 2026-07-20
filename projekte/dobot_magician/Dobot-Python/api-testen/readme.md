@@ -1,5 +1,42 @@
 # Testen von 'Dobot-Python-API'
-Genau. 👍 DobotDllType.py stellt vor allem die technischen API-Funktionen bereit, während dobot.py daraus verständliche und sichere Befehle macht.
+
+## hier geht es weiter
+https://chatgpt.com/share/6a5d5dac-f1dc-83eb-a6f1-4eec1d0075e9
+
+## merken
+''' Zeile 99
+    verbunden = True
+    print("Dobot erfolgreich verbunden.")
+    print()
+
+    aktive_alarme = alarme_lesen(api)
+
+    if aktive_alarme:
+        raise RuntimeError(
+            "Vor der Fahrt sind Alarme aktiv: "
+            + ", ".join(
+                f"0x{nummer:02X}"
+                for nummer in aktive_alarme
+            )
+        )
+'''
+
+
+## Positionstausch
+
+Auf zwei Plattenpositionen stehen je ein Würfel, der mittels Sauger angehoben werden kann.
+
+Würfel A: 300,100,-10 Oberfläche
+Würfel B: 400,100,-10 Oberfläche
+freier Platz : 500,100, -72 Unterseite
+Die Würfel sollen ihre Positionen tauschen.
+
+Wir arbeiten nur mit Funktionen aus der `DobotDllType.py`
+
+`test-10-plaetze-tauschen.py`
+## Merke
+
+👍 DobotDllType.py stellt vor allem die technischen API-Funktionen bereit, während dobot.py daraus verständliche und sichere Befehle macht.
 
 Zum Beispiel:
 

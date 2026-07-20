@@ -96,24 +96,7 @@ try:
             f"Verbindung über {COM_PORT} fehlgeschlagen "
             f"(Fehlercode {verbindung[0]})."
         )
-
-    verbunden = True
-    print("Dobot erfolgreich verbunden.")
-    print()
-
-    aktive_alarme = alarme_lesen(api)
-
-    if aktive_alarme:
-        raise RuntimeError(
-            "Vor der Fahrt sind Alarme aktiv: "
-            + ", ".join(
-                f"0x{nummer:02X}"
-                for nummer in aktive_alarme
-            )
-        )
-
     pose = dType.GetPose(api)
-
     ziel_x = pose[0]
     ziel_y = pose[1]
     ziel_z = pose[2] + 10.0

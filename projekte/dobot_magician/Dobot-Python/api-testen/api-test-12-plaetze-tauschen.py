@@ -24,9 +24,11 @@ COM_PORT = "COM10"
 BAUDRATE = 115200
 
 # Angegebene direkte Dobot-Koordinaten in Millimetern.
-PLATZ_A = (300.0, 100.0)
-PLATZ_B = (400.0, 100.0)
-FREIER_PLATZ = (500.0, 100.0)
+PLATZ_A = (180.0, 100.0)
+PLATZ_B = (200.0, 100.0)
+FREIER_PLATZ = (220.0, 100.0)
+
+
 
 # Die Platte liegt bei Z = -72 mm.
 # Der Würfel ist 62 mm hoch:

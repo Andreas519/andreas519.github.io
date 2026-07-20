@@ -100,7 +100,7 @@ try:
     verbunden = True
     print("Dobot erfolgreich verbunden.")
     print()
-
+    print(alarme_lesen(api))
     home = dType.GetHOMEParams(api)
 
     print("aktuell voreingestelle HOME-Koordinaten:\n   ", home)
