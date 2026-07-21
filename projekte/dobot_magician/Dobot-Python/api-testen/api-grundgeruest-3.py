@@ -1,12 +1,8 @@
-"""
-api-grundgeruest-1.py
-Verbindet den Dobot Magician 
-"""
+# api-grundgeruest-3.py - Befehle werden eine Befehlswarteschlange geschrieben und ausgeführt.
 
 from pathlib import Path
 import os
 import sys
-
 
 COM_PORT = "COM10"
 BAUDRATE = 115200
@@ -14,23 +10,16 @@ BAUDRATE = 115200
 PROGRAMMORDNER = Path(__file__).resolve().parent
 DOBOT_ORDNER = PROGRAMMORDNER.parent
 SDK_ORDNER = DOBOT_ORDNER / "sdk64"
-
-# DobotDllType.py für Python auffindbar machen.
 sys.path.insert(0, str(SDK_ORDNER))
-
-# DobotDll.dll für Windows auffindbar machen.
 _dll_verzeichnis = os.add_dll_directory(str(SDK_ORDNER))
 
 import DobotDllType as dType
-
 api = dType.load()
 verbunden = False
 
 try:
     verbindung = dType.ConnectDobot(api, COM_PORT, BAUDRATE, )
-
     print("Verbindungsrückgabe:", verbindung)
-
     if verbindung[0] != 0:
         raise ConnectionError(
             f"Verbindung über {COM_PORT} fehlgeschlagen "
@@ -55,16 +44,17 @@ try:
     i = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode, pos[0], pos[1], pos[2], pos[3], isQueued=1, )[0]
     befehle[i] = f"Fahre zu Punkt 2: X={pos[0]}, Y={pos[1]}, Z={pos[2]}" 
 
-    pos = [240, 140, 70, 0]
+    pos = [340, 120, 0, 0]
     i = dType.SetPTPCmd(api, dType.PTPMode.PTPMOVLXYZMode, pos[0], pos[1], pos[2], pos[3], isQueued=1, )[0]
     befehle[i] = f"Fahre zu Punkt 3: X={pos[0]}, Y={pos[1]}, Z={pos[2]}" 
 
+    letzter_index = i
     print("Eingereihte Befehle:")
     for i, beschreibung in befehle.items():
         print(i, beschreibung)
 
     vorheriger_index = -1
-
+    print("\nBefehlskette wird abgearbeitet:")
     dType.SetQueuedCmdStartExec(api)
     while True:
         aktueller_index = dType.GetQueuedCmdCurrentIndex(api)[0]
@@ -78,7 +68,7 @@ try:
 
             vorheriger_index = aktueller_index
 
-        if aktueller_index >= index_3:
+        if aktueller_index >= letzter_index:
             break
 
         dType.dSleep(100)

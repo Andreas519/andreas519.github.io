@@ -49,8 +49,10 @@ try:
     print("Dobot erfolgreich verbunden.")
     print()
 
-    alter_name = dType.GetDeviceName(api)
-    print("Aktueller Gerätename:", alter_name)
+    name = dType.GetDeviceName(api)
+    print("DeviceName:    ", name)
+    print("DeviceSN:      ", dType.GetDeviceSN(api))
+    print("DeviceVersion: ", dType.GetDeviceVersion(api))
 
 
 finally:
