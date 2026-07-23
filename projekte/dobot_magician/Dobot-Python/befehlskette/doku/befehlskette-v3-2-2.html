@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Didaktische und organisatorische Zwischenversion vor der ESP32-Anbindung">
+<title>Befehlskette Version 3.2.2</title>
+<style>
+:root {
+    color-scheme: light;
+    --bg: #eef3f8;
+    --panel: #ffffff;
+    --text: #17212b;
+    --muted: #526273;
+    --line: #ccd7e3;
+    --blue: #1557a0;
+    --blue-dark: #0d396b;
+    --blue-light: #eaf3ff;
+    --green: #176b3a;
+    --green-light: #eaf8f0;
+    --amber: #8a5700;
+    --amber-light: #fff5da;
+    --red: #a12622;
+    --red-light: #fff0ef;
+    --code: #f4f7fa;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+}
+header {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: white;
+    padding: 2.4rem 1.2rem;
+}
+.header-inner, main, footer {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+}
+header h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 5vw, 3.2rem); }
+header p { margin: .3rem 0; max-width: 850px; }
+.version-badge {
+    display: inline-block;
+    margin-top: .8rem;
+    padding: .35rem .7rem;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 999px;
+    background: rgba(255,255,255,.13);
+    font-weight: 700;
+}
+nav {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+nav .nav-inner {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    gap: .45rem;
+    flex-wrap: wrap;
+    padding: .7rem 0;
+}
+nav a {
+    color: var(--blue-dark);
+    text-decoration: none;
+    font-weight: 650;
+    padding: .35rem .55rem;
+    border-radius: .4rem;
+}
+nav a:hover, nav a:focus { background: var(--blue-light); }
+main { padding: 1.3rem 0 2.5rem; }
+section, article.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .8rem;
+    margin: 1rem 0;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 4px 13px rgba(20, 45, 70, .06);
+}
+h2 {
+    color: var(--blue-dark);
+    border-bottom: 2px solid var(--blue-light);
+    padding-bottom: .35rem;
+    margin-top: 0;
+}
+h3 { color: var(--blue); margin-bottom: .3rem; }
+ul, ol { padding-left: 1.35rem; }
+li + li { margin-top: .35rem; }
+code {
+    font-family: "Cascadia Code", Consolas, monospace;
+    background: var(--code);
+    padding: .08rem .28rem;
+    border-radius: .28rem;
+}
+pre {
+    background: #18222d;
+    color: #edf6ff;
+    padding: 1rem;
+    border-radius: .6rem;
+    overflow-x: auto;
+    line-height: 1.45;
+}
+pre code { background: transparent; padding: 0; }
+.note, .warning, .success, .source-state {
+    border-left: .35rem solid;
+    padding: .85rem 1rem;
+    margin: 1rem 0;
+    border-radius: .25rem;
+}
+.note { background: var(--blue-light); border-color: var(--blue); }
+.success { background: var(--green-light); border-color: var(--green); }
+.warning { background: var(--amber-light); border-color: var(--amber); }
+.source-state { background: var(--red-light); border-color: var(--red); }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+th, td {
+    border: 1px solid var(--line);
+    padding: .65rem;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: var(--blue-light); color: var(--blue-dark); }
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: .7rem;
+}
+.meta-item {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: .55rem;
+    padding: .75rem;
+}
+.meta-item strong { display: block; color: var(--blue-dark); }
+.next-prev {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.next-prev a, .button {
+    display: inline-block;
+    color: white;
+    background: var(--blue);
+    text-decoration: none;
+    padding: .55rem .8rem;
+    border-radius: .45rem;
+    font-weight: 700;
+}
+.next-prev a:hover, .button:hover { background: var(--blue-dark); }
+.small { color: var(--muted); font-size: .93rem; }
+footer {
+    color: var(--muted);
+    padding: 1.4rem 0 2.3rem;
+    text-align: center;
+}
+@media (max-width: 650px) {
+    header { padding-top: 1.6rem; }
+    section, article.card { padding: 1rem; }
+    th, td { padding: .5rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>Befehlskette Version 3.2.2</h1>
+    <p>Didaktische und organisatorische Zwischenversion vor der ESP32-Anbindung</p>
+    <span class="version-badge">Rekonstruierter Zwischenstand</span>
+  </div>
+</header>
+<nav><div class="nav-inner"><a href="index.html">Übersicht</a><a href="befehlskette-v3-1.html">v3.1</a><a href="befehlskette-v3-2.html">v3.2</a><a href="befehlskette-v3-2-1.html">v3.2.1</a><a href="befehlskette-v3-2-2.html">v3.2.2</a><a href="befehlskette-v3-3.html">v3.3</a></div></nav>
+<main>
+
+<section>
+<h2>Versionsdaten</h2>
+<div class="meta-grid">
+  <div class="meta-item"><strong>Version</strong>3.2.2</div>
+  <div class="meta-item"><strong>Datum</strong>22.07.2026 · rekonstruierter Zwischenstand</div>
+  <div class="meta-item"><strong>Modul</strong><code>kein eindeutig archivierter Quellstand gefunden</code></div>
+  <div class="meta-item"><strong>Beispiel</strong><code>Übergang zu v3.3</code></div>
+  <div class="meta-item"><strong>Grundlage</strong>Version 3.2.1</div>
+</div>
+</section>
+
+<section class="source-state">
+<h2>Quellenstatus</h2>
+<p>Für die Version 3.2.2 wurde in den derzeit verfügbaren Projektdateien keine eindeutig benannte Datei <code>befehlskette_v3_2_2.py</code> gefunden. Diese Seite dokumentiert deshalb den aus dem Entwicklungsverlauf nachvollziehbaren Zwischenstand. Sie darf nicht als zeilengenaue Beschreibung einer archivierten Quelldatei verstanden werden.</p>
+</section>
+<section class=""><h2>Einordnung</h2>
+<p>Version 3.2.2 war offenbar weniger eine große technische Erweiterung als eine didaktische und organisatorische Bereinigung vor der ESP32-Anbindung. Im Mittelpunkt stand eine für Schüler und Lehrkraft überschaubare Darstellung der Befehlsfolge.</p>
+</section><section class=""><h2>Nachvollziehbare Änderungen</h2><ul><li>Die Befehlsliste wurde als klarer, unmittelbar lesbarer Programmteil hervorgehoben.</li><li>Jeder Befehl sollte vollständig in einer Zeile stehen, damit Bewegungsziel, Text und Pause auf einen Blick erkennbar sind.</li><li>Die Trennung zwischen dem vom Nutzer anzupassenden Bereich und dem internen Programmteil wurde konsequenter.</li><li>Versionsnummern und zueinander passende Modul- und Beispielnamen wurden stärker beachtet.</li><li>Die vorhandenen Bewegungs-, Sauger- und Tastaturbefehle blieben die funktionale Grundlage.</li><li>Die Architektur wurde gedanklich auf eine weitere Steuerquelle vorbereitet: Ein ESP32 sollte später seine Befehle nicht direkt an den Dobot senden, sondern dieselbe Steuerbefehls-Queue wie die Tastatur verwenden.</li></ul></section><section class=""><h2>Bevorzugte Darstellung der Befehlsliste</h2><pre><code>befehle = [
+    (&quot;fahre_zu&quot;, 180, 160, 50, 0, &quot;Fahre zu Punkt 1&quot;, 500),
+    (&quot;sauger_ein&quot;, &quot;Sauger einschalten&quot;, 500),
+    (&quot;fahre_zu&quot;, 240, 140, 70, 0, &quot;Fahre zu Punkt 2&quot;, 500),
+    (&quot;sauger_aus&quot;, &quot;Sauger ausschalten&quot;, 500),
+]</code></pre>
+<p>Diese Schreibweise wurde als übersichtlicher für Unterricht und AG-Arbeit bewertet und in späteren Versionen beibehalten.</p>
+</section><section class=""><h2>Probleme und offene Punkte</h2><ul><li>Die genaue Abgrenzung zur Version 3.2.1 ist ohne archivierte Quelldatei nicht vollständig belegbar.</li><li>Der umfangreiche Fehlerbetrieb aus Version 3.2.1 stand im Spannungsfeld zur gewünschten Einfachheit.</li><li>Eine externe Steuerquelle war noch nicht praktisch angeschlossen.</li><li>Für die geplante ESP32-Verbindung mussten Thread, COM-Port, pySerial, Wiederverbindung und die sichere Übergabe an die Hauptschleife noch entworfen werden.</li><li>Die Versions- und Dateibenennung war noch nicht durchgehend einheitlich; Punkte und Unterstriche wurden teilweise gemischt.</li></ul></section><section class=""><h2>Übergang zu Version 3.3</h2>
+<p>Der nächste klar dokumentierte Entwicklungsschritt war die serielle ESP32-Anbindung. Aus der vorbereiteten gemeinsamen Queue entstand in Version 3.3 eine Architektur mit mehreren Steuerquellen.</p>
+</section><section><div class="next-prev"><a href="befehlskette-v3-2-1.html">← Version 3.2.1</a><a href="befehlskette-v3-3.html">Version 3.3 →</a></div></section>
+</main>
+<footer>
+  <p>Dobot Magician · Entwicklung einer verständlichen Python-Befehlskette</p>
+  <p>Stand der Dokumentation: 23.07.2026</p>
+</footer>
+</body>
+</html>

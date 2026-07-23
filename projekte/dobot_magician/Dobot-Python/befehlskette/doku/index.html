@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Ausführliche Versionsgeschichte mit Änderungen, Erweiterungen und bekannten Problemen">
+<title>Befehlskette v3.1 bis v3.3</title>
+<style>
+:root {
+    color-scheme: light;
+    --bg: #eef3f8;
+    --panel: #ffffff;
+    --text: #17212b;
+    --muted: #526273;
+    --line: #ccd7e3;
+    --blue: #1557a0;
+    --blue-dark: #0d396b;
+    --blue-light: #eaf3ff;
+    --green: #176b3a;
+    --green-light: #eaf8f0;
+    --amber: #8a5700;
+    --amber-light: #fff5da;
+    --red: #a12622;
+    --red-light: #fff0ef;
+    --code: #f4f7fa;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+}
+header {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: white;
+    padding: 2.4rem 1.2rem;
+}
+.header-inner, main, footer {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+}
+header h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 5vw, 3.2rem); }
+header p { margin: .3rem 0; max-width: 850px; }
+.version-badge {
+    display: inline-block;
+    margin-top: .8rem;
+    padding: .35rem .7rem;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 999px;
+    background: rgba(255,255,255,.13);
+    font-weight: 700;
+}
+nav {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+nav .nav-inner {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    gap: .45rem;
+    flex-wrap: wrap;
+    padding: .7rem 0;
+}
+nav a {
+    color: var(--blue-dark);
+    text-decoration: none;
+    font-weight: 650;
+    padding: .35rem .55rem;
+    border-radius: .4rem;
+}
+nav a:hover, nav a:focus { background: var(--blue-light); }
+main { padding: 1.3rem 0 2.5rem; }
+section, article.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .8rem;
+    margin: 1rem 0;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 4px 13px rgba(20, 45, 70, .06);
+}
+h2 {
+    color: var(--blue-dark);
+    border-bottom: 2px solid var(--blue-light);
+    padding-bottom: .35rem;
+    margin-top: 0;
+}
+h3 { color: var(--blue); margin-bottom: .3rem; }
+ul, ol { padding-left: 1.35rem; }
+li + li { margin-top: .35rem; }
+code {
+    font-family: "Cascadia Code", Consolas, monospace;
+    background: var(--code);
+    padding: .08rem .28rem;
+    border-radius: .28rem;
+}
+pre {
+    background: #18222d;
+    color: #edf6ff;
+    padding: 1rem;
+    border-radius: .6rem;
+    overflow-x: auto;
+    line-height: 1.45;
+}
+pre code { background: transparent; padding: 0; }
+.note, .warning, .success, .source-state {
+    border-left: .35rem solid;
+    padding: .85rem 1rem;
+    margin: 1rem 0;
+    border-radius: .25rem;
+}
+.note { background: var(--blue-light); border-color: var(--blue); }
+.success { background: var(--green-light); border-color: var(--green); }
+.warning { background: var(--amber-light); border-color: var(--amber); }
+.source-state { background: var(--red-light); border-color: var(--red); }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+th, td {
+    border: 1px solid var(--line);
+    padding: .65rem;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: var(--blue-light); color: var(--blue-dark); }
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: .7rem;
+}
+.meta-item {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: .55rem;
+    padding: .75rem;
+}
+.meta-item strong { display: block; color: var(--blue-dark); }
+.next-prev {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.next-prev a, .button {
+    display: inline-block;
+    color: white;
+    background: var(--blue);
+    text-decoration: none;
+    padding: .55rem .8rem;
+    border-radius: .45rem;
+    font-weight: 700;
+}
+.next-prev a:hover, .button:hover { background: var(--blue-dark); }
+.small { color: var(--muted); font-size: .93rem; }
+footer {
+    color: var(--muted);
+    padding: 1.4rem 0 2.3rem;
+    text-align: center;
+}
+@media (max-width: 650px) {
+    header { padding-top: 1.6rem; }
+    section, article.card { padding: 1rem; }
+    th, td { padding: .5rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>Befehlskette v3.1 bis v3.3</h1>
+    <p>Ausführliche Versionsgeschichte mit Änderungen, Erweiterungen und bekannten Problemen</p>
+    <span class="version-badge">Fünf Entwicklungsstände</span>
+  </div>
+</header>
+<nav><div class="nav-inner"><a href="index.html">Übersicht</a><a href="befehlskette-v3-1.html">v3.1</a><a href="befehlskette-v3-2.html">v3.2</a><a href="befehlskette-v3-2-1.html">v3.2.1</a><a href="befehlskette-v3-2-2.html">v3.2.2</a><a href="befehlskette-v3-3.html">v3.3</a></div></nav>
+<main>
+
+<section>
+<h2>Überblick</h2>
+<p>Die Versionen 3.1 bis 3.3 zeigen den Übergang von einer linearen Dobot-Queue zu einer interaktiv bedienbaren und schließlich von mehreren Quellen steuerbaren Befehlskette.</p>
+<table>
+<thead><tr><th>Version</th><th>Schwerpunkt</th><th>Wichtigste Erweiterung</th><th>Wesentliche Grenze</th></tr></thead>
+<tbody>
+<tr><td><a href="befehlskette-v3-1.html"><strong>3.1</strong></a></td><td>Tastatursteuerung</td><td>Pause, Weiter, Halt und Status während der Queue-Ausführung.</td><td>Alarmbehandlung noch abrupt; keine externe Steuerquelle.</td></tr>
+<tr><td><a href="befehlskette-v3-2.html"><strong>3.2</strong></a></td><td>Sauger</td><td><code>sauger_ein</code>, <code>sauger_aus</code> und <code>sauger_status</code>.</td><td>Status ist nur Pumpenschaltzustand; nicht queuefähige Abfrage benötigt Marker.</td></tr>
+<tr><td><a href="befehlskette-v3-2-1.html"><strong>3.2.1</strong></a></td><td>Fehlerbetrieb</td><td>Queue verwerfen, Alarme anzeigen, Sofortfahrten und kontrolliertes Programmende.</td><td>Deutlich komplexer; sichere Zielwahl bleibt Bedienverantwortung.</td></tr>
+<tr><td><a href="befehlskette-v3-2-2.html"><strong>3.2.2</strong></a></td><td>Übersichtlichkeit</td><td>Einzeilige Befehle, klarere Projekt- und Versionsorganisation.</td><td>Kein eindeutig archivierter Quellstand gefunden; Seite ist rekonstruiert.</td></tr>
+<tr><td><a href="befehlskette-v3-3.html"><strong>3.3</strong></a></td><td>ESP32-COM</td><td>Tastatur und ESP32 schreiben in dieselbe Steuerbefehls-Queue.</td><td>Nur Steuerbefehle; COM-/Treiberfragen; noch keine Sensorwerte.</td></tr>
+</tbody>
+</table>
+</section>
+<section>
+<h2>Entwicklungslinie</h2>
+<ol>
+<li><strong>v3.1:</strong> Die laufende Queue wird über die PC-Tastatur bedienbar.</li>
+<li><strong>v3.2:</strong> Bewegungen werden um Saugerbefehle ergänzt.</li>
+<li><strong>v3.2.1:</strong> Alarm, Timeout und Halt führen in einen kontrollierten Fehlerbetrieb.</li>
+<li><strong>v3.2.2:</strong> Die Darstellung und Projektorganisation werden für Unterricht und Weiterentwicklung bereinigt.</li>
+<li><strong>v3.3:</strong> Ein ESP32 wird als zweite Steuerquelle über COM eingebunden.</li>
+</ol>
+</section>
+<section>
+<h2>Gemeinsame Grundprinzipien</h2>
+<ul><li>Die eigentlichen Roboterbewegungen werden als Dobot-Queue-Befehle ausgeführt.</li><li>Pausen in Bewegungsfolgen werden als echte WAIT-Befehle in die Dobot-Queue eingetragen.</li><li>Befehle werden mit verständlichen deutschen Texten versehen.</li><li>Version und Beispielprogramm werden aufeinander abgestimmt und beim Start kontrolliert.</li><li>Ab Version 3.1 greifen Hintergrundthreads nicht direkt auf die Dobot-API zu.</li><li>Die Entwicklung legt Wert auf eine für Schüler lesbare Befehlsliste.</li></ul>
+</section>
+<section class="warning">
+<h2>Hinweis zur Version 3.2.2</h2>
+<p>Für v3.2.2 wurde keine eindeutig archivierte Quelldatei gefunden. Die betreffende Seite ist daher als transparente Rekonstruktion des Zwischenstands gekennzeichnet. Die übrigen vier Seiten beruhen auf den gefundenen Modulen und Beispielprogrammen.</p>
+</section>
+<section>
+<h2>Dateien dieses Pakets</h2>
+<ul><li><a href="befehlskette-v3-1.html"><code>befehlskette-v3-1.html</code></a></li><li><a href="befehlskette-v3-2.html"><code>befehlskette-v3-2.html</code></a></li><li><a href="befehlskette-v3-2-1.html"><code>befehlskette-v3-2-1.html</code></a></li><li><a href="befehlskette-v3-2-2.html"><code>befehlskette-v3-2-2.html</code></a></li><li><a href="befehlskette-v3-3.html"><code>befehlskette-v3-3.html</code></a></li></ul>
+</section>
+
+</main>
+<footer>
+  <p>Dobot Magician · Entwicklung einer verständlichen Python-Befehlskette</p>
+  <p>Stand der Dokumentation: 23.07.2026</p>
+</footer>
+</body>
+</html>

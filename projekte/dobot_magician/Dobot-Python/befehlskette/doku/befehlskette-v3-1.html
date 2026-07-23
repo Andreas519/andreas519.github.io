@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Tastatursteuerung für Pause, Weiter, Halt und Status">
+<title>Befehlskette Version 3.1</title>
+<style>
+:root {
+    color-scheme: light;
+    --bg: #eef3f8;
+    --panel: #ffffff;
+    --text: #17212b;
+    --muted: #526273;
+    --line: #ccd7e3;
+    --blue: #1557a0;
+    --blue-dark: #0d396b;
+    --blue-light: #eaf3ff;
+    --green: #176b3a;
+    --green-light: #eaf8f0;
+    --amber: #8a5700;
+    --amber-light: #fff5da;
+    --red: #a12622;
+    --red-light: #fff0ef;
+    --code: #f4f7fa;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+}
+header {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: white;
+    padding: 2.4rem 1.2rem;
+}
+.header-inner, main, footer {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+}
+header h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 5vw, 3.2rem); }
+header p { margin: .3rem 0; max-width: 850px; }
+.version-badge {
+    display: inline-block;
+    margin-top: .8rem;
+    padding: .35rem .7rem;
+    border: 1px solid rgba(255,255,255,.55);
+    border-radius: 999px;
+    background: rgba(255,255,255,.13);
+    font-weight: 700;
+}
+nav {
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+nav .nav-inner {
+    width: min(1050px, calc(100% - 2rem));
+    margin: 0 auto;
+    display: flex;
+    gap: .45rem;
+    flex-wrap: wrap;
+    padding: .7rem 0;
+}
+nav a {
+    color: var(--blue-dark);
+    text-decoration: none;
+    font-weight: 650;
+    padding: .35rem .55rem;
+    border-radius: .4rem;
+}
+nav a:hover, nav a:focus { background: var(--blue-light); }
+main { padding: 1.3rem 0 2.5rem; }
+section, article.card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: .8rem;
+    margin: 1rem 0;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 4px 13px rgba(20, 45, 70, .06);
+}
+h2 {
+    color: var(--blue-dark);
+    border-bottom: 2px solid var(--blue-light);
+    padding-bottom: .35rem;
+    margin-top: 0;
+}
+h3 { color: var(--blue); margin-bottom: .3rem; }
+ul, ol { padding-left: 1.35rem; }
+li + li { margin-top: .35rem; }
+code {
+    font-family: "Cascadia Code", Consolas, monospace;
+    background: var(--code);
+    padding: .08rem .28rem;
+    border-radius: .28rem;
+}
+pre {
+    background: #18222d;
+    color: #edf6ff;
+    padding: 1rem;
+    border-radius: .6rem;
+    overflow-x: auto;
+    line-height: 1.45;
+}
+pre code { background: transparent; padding: 0; }
+.note, .warning, .success, .source-state {
+    border-left: .35rem solid;
+    padding: .85rem 1rem;
+    margin: 1rem 0;
+    border-radius: .25rem;
+}
+.note { background: var(--blue-light); border-color: var(--blue); }
+.success { background: var(--green-light); border-color: var(--green); }
+.warning { background: var(--amber-light); border-color: var(--amber); }
+.source-state { background: var(--red-light); border-color: var(--red); }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+}
+th, td {
+    border: 1px solid var(--line);
+    padding: .65rem;
+    text-align: left;
+    vertical-align: top;
+}
+th { background: var(--blue-light); color: var(--blue-dark); }
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: .7rem;
+}
+.meta-item {
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: .55rem;
+    padding: .75rem;
+}
+.meta-item strong { display: block; color: var(--blue-dark); }
+.next-prev {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.next-prev a, .button {
+    display: inline-block;
+    color: white;
+    background: var(--blue);
+    text-decoration: none;
+    padding: .55rem .8rem;
+    border-radius: .45rem;
+    font-weight: 700;
+}
+.next-prev a:hover, .button:hover { background: var(--blue-dark); }
+.small { color: var(--muted); font-size: .93rem; }
+footer {
+    color: var(--muted);
+    padding: 1.4rem 0 2.3rem;
+    text-align: center;
+}
+@media (max-width: 650px) {
+    header { padding-top: 1.6rem; }
+    section, article.card { padding: 1rem; }
+    th, td { padding: .5rem; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>Befehlskette Version 3.1</h1>
+    <p>Tastatursteuerung für Pause, Weiter, Halt und Status</p>
+    <span class="version-badge">Version 3.1 · 21.07.2026</span>
+  </div>
+</header>
+<nav><div class="nav-inner"><a href="index.html">Übersicht</a><a href="befehlskette-v3-1.html">v3.1</a><a href="befehlskette-v3-2.html">v3.2</a><a href="befehlskette-v3-2-1.html">v3.2.1</a><a href="befehlskette-v3-2-2.html">v3.2.2</a><a href="befehlskette-v3-3.html">v3.3</a></div></nav>
+<main>
+
+<section>
+<h2>Versionsdaten</h2>
+<div class="meta-grid">
+  <div class="meta-item"><strong>Version</strong>3.1</div>
+  <div class="meta-item"><strong>Datum</strong>21.07.2026</div>
+  <div class="meta-item"><strong>Modul</strong><code>befehlskette_v3_1.py</code></div>
+  <div class="meta-item"><strong>Beispiel</strong><code>befehlskette_beispiel_v3.1.py</code></div>
+  <div class="meta-item"><strong>Grundlage</strong>Version 2.4</div>
+</div>
+</section>
+<section class=""><h2>Ziel der Version</h2>
+<p>Version 3.1 machte aus einer ausschließlich automatisch laufenden Queue eine während der Ausführung bedienbare Befehlskette. Die Dobot-Bewegungen blieben weiterhin Queue-Befehle; zusätzlich entstand jedoch eine unabhängige Tastatureingabe.</p>
+<div class="success"><strong>Wesentlicher Entwicklungsschritt:</strong> Der Nutzer konnte die laufende Befehlskette erstmals anhalten, fortsetzen, endgültig abbrechen und ihren Zustand abfragen.</div>
+</section><section class=""><h2>Änderungen und Erweiterungen</h2><ul><li>Ein eigener Daemon-Thread liest Tastatureingaben, ohne die Dobot-Ausführungsschleife zu blockieren.</li><li>Die Tastatur schreibt ausschließlich in eine <code>queue.Queue</code>. Nur die Hauptschleife greift auf <code>DobotDllType.py</code> und damit auf den Dobot zu.</li><li>Neue Steuerbefehle: <code>p</code> für Pause, <code>w</code> für Weiter, <code>h</code> für Halt und <code>?</code> für Status.</li><li>Die Funktion <code>befehlskette_ausfuehren_steuerbar()</code> ergänzt die bisherige automatische Ausführung.</li><li>Der jeweils nächste Bewegungsbefehl wird vor seiner Ausführung mit Text und Queue-Index angekündigt.</li><li>Die bereits vorhandenen individuellen Pausen bleiben echte Dobot-Queue-Befehle und werden nicht mit <code>time.sleep()</code> erzeugt.</li><li>Die während einer Bedienpause verstrichene Zeit wird nicht als reguläre Ausführungszeit behandelt.</li><li>Nach einem Halt wird die Befehlskette nicht fortgesetzt; der Zustand lautet dauerhaft <code>Halt</code>.</li></ul></section><section class=""><h2>Bedienung</h2><pre><code>p + Enter   Pause
+w + Enter   Weiter
+h + Enter   Halt
+? + Enter   Status</code></pre>
+<p>Die Statusabfrage zeigt den aktuellen Betriebszustand sowie den aktuellen und den letzten Queue-Index.</p>
+</section><section class=""><h2>Technische Umsetzung</h2>
+<p>Die Trennung zwischen Eingabe und Robotersteuerung war sicherheitsrelevant:</p>
+<ol>
+<li>Der Tastaturthread liest nur Zeichen ein.</li>
+<li>Er legt den Steuerbefehl in einer gemeinsamen Queue ab.</li>
+<li>Die Hauptschleife entnimmt den Befehl.</li>
+<li>Erst die Hauptschleife führt <code>SetQueuedCmdStopExec()</code>, <code>SetQueuedCmdStartExec()</code> oder <code>SetQueuedCmdForceStopExec()</code> aus.</li>
+</ol>
+<p>Damit gab es nur eine Stelle, die gleichzeitig mit der Dobot-API arbeitete.</p>
+</section><section class=""><h2>Bekannte Probleme und Grenzen</h2><ul><li>Ein Halt ist absichtlich endgültig. Vor einem Neustart müssen Dobot, Werkzeug und Arbeitsbereich kontrolliert und gegebenenfalls in eine sichere Ausgangsstellung gebracht werden.</li><li>Für den sofortigen Halt wird <code>SetQueuedCmdForceStopExec()</code> benötigt. Fehlt diese Funktion in der verwendeten <code>DobotDllType.py</code>, kann der Halt nicht wie vorgesehen ausgeführt werden.</li><li>Ein Dobot-Alarm führte weiterhin zu einer Ausnahme und damit zum Abbruch des normalen Programmlaufs; ein kontrollierter Fehlerbetrieb war noch nicht vorhanden.</li><li>Steuerbefehle konnten nur über die PC-Tastatur eingegeben werden. Externe Geräte waren noch nicht angebunden.</li><li>Der Eingabethread wartet intern auf <code>input()</code>. Als Daemon-Thread verhindert er zwar nicht das Programmende, lässt sich aber nicht wie ein normaler nicht blockierender Eingabekanal behandeln.</li></ul></section><section class=""><h2>Bedeutung für die weitere Entwicklung</h2>
+<p>Version 3.1 führte die zentrale Steuerbefehls-Queue ein. Diese Architektur war später die Voraussetzung dafür, Tastatur, ESP32-COM und weitere Steuerquellen zusammenzuführen.</p>
+</section><section><div class="next-prev"><a href="index.html">← Übersicht</a><a href="befehlskette-v3-2.html">Version 3.2 →</a></div></section>
+</main>
+<footer>
+  <p>Dobot Magician · Entwicklung einer verständlichen Python-Befehlskette</p>
+  <p>Stand der Dokumentation: 23.07.2026</p>
+</footer>
+</body>
+</html>
