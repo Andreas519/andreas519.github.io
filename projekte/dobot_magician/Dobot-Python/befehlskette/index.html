@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Befehlskette · Dobot Python · Young Engineers</title>
   <meta name="author" content="Andreas Sigismund">
-  <meta name="description" content="Projektbereich api-testen für Dobot Python">
+  <meta name="description" content="Befehlskette für Dobot Python">
   <link rel="stylesheet" href="../../../../css/my.css">
 </head>
 <body>
@@ -66,6 +66,11 @@
         <li><a href="./doku/befehlskette-v3-2-2.html" target="_blank">Dokumentation zu den Versionen 3.1 bis 3.3</a></li>
       </ul>
       <h4>ESP32 Microcontroller beeinflussen die Abarbeitung der Befehlskette durch Unterbrechungen oder Verzögerungen</h4>
+      <p>Zunächst sollte die serielle Kommunikation mit einem virtuellen COM-Port-Paar von <a href="https://sourceforge.net/projects/com0com/" target="_blank">
+          <code>com0com</code></a> simuliert werden. <br>
+        Wegen Treiberproblemen wurde dieser Ansatz verworfen.<br>
+        Stattdessen kommunizieren befehlskette_beispiel_v3_3_1.py und esp-simulator.py direkt über eine lokale TCP-Verbindung.</p>
+        <p>Für die Simulation eines ESP32 Microcontrollers kann der <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/esp-simulator.py" target="_blank">esp-simulator.py</a> genutzt werden.<br>
       <ul>
         <li><a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/v3_3/befehlskette_beispiel_v3.3.py" target="_blank">befehlskette_beispiel_v3.3.py</a>,
           <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/v3_3/befehlskette_v3_3.py" target="_blank">befehlskette_v3_3.py</a>, 
@@ -84,12 +89,9 @@
         </li>
       </ul>
       <h4>ESP32 Microcontroller fügen neue Daten und Befehle in die Befehlskette ein. </h4>
-      <p>hier geht es weiter</p>
-      <h3>Simulation eines ESP32 Microcontrollers bzw des Steuerprogrammes des Dobot Magician</h3>
-      <p>Für die Simulation eines ESP32 Microcontrollers kann der <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/esp-simulator.py" target="_blank">esp-simulator.py</a> genutzt werden.<br>
-        Versuche eine Datenübertragung über virtuelle Com-Ports zu simulieren mittels <a href="https://sourceforge.net/projects/com0com/" target="_blank">
-          <code>com0com</code></a> scheitert nach vielen Anläufen.<br>
-       ChatGPT machte den Vorschlag, die virtuelle Verbindung über "<code>TCP-Serial</code>" auszuführen.</p>
+      <p>Die Befehlskette kann durch den ESP32 Microcontroller erweitert werden, indem neue Befehle und Daten in die Warteschlange eingefügt werden. <br>
+        Dies ermöglicht eine flexible Anpassung der Abläufe während der Ausführung des Programms.<br>
+        Die Kommunikation zwischen dem Dobot Magician und dem ESP32 Microcontroller erfolgt über eine serielle Schnittstelle oder eine TCP-Verbindung, je nach Konfiguration.
 
       
       
