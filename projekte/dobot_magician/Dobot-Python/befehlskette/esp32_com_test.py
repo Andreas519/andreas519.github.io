@@ -8,7 +8,7 @@ from esp32_seriell_v1_0 import (
 )
 
 
-ESP32_PORT = "COM11"
+ESP32_PORT = "COM5"
 ESP32_BAUDRATE = 115200
 
 

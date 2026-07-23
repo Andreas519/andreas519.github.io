@@ -16,9 +16,29 @@
   <main>
     <section>
       <h2>Überblick</h2>
+      <p>Der Aufwand zum Programmieren des Dobot ist erheblich und für Anfänger nicht immer einfach zu bewältigen.<br>
+      Die Idee "Wir beschreiben die Aufgabe in einer einfachen und übersichtlichen Darstellung.", die das Steuerprogramm auf dem PC umsetzt.
+      </p>
       <p>
-        In diesem Bereich wird der direkte Zugriff auf die Datei <code>DobotDll.dll</code> über die <code> DobotDllType.py</code> getestet.
-        Ziel ist es, typische Fehlerquellen und Möglichkeiten zu erkennen und stabile Lösungen in der <code>DobotDllType.py</code> zu dokumentieren.  
+        In diesem Projektbereich werden die Möglichkeiten der Befehlskette des Dobot Magician untersucht. 
+        Die Befehlskette ist eine Funktion, die es ermöglicht, mehrere Befehle in einer Warteschlange zu speichern 
+        und nacheinander auszuführen. Dies kann nützlich sein, um komplexe Bewegungen oder Aufgaben zu automatisieren.<br>
+      </p>
+      <p>
+        Die Befehlskette kann verwendet werden, um eine Reihe von Befehlen zu erstellen, die der Dobot Magician ausführen soll. 
+        Diese Befehle können Bewegungen, Greifaktionen, Wartezeiten und andere Funktionen umfassen. 
+        Durch die Verwendung der Befehlskette können Benutzer komplexe Abläufe erstellen, ohne jeden Befehl einzeln ausführen zu müssen.
+      </p>
+    </section>
+    <section><h3>Umsetzung der Projektidee</h3>  
+      <p>Die ersten Schritte zur Umsetzung erfolgten voller Unterstützung von ChatGPT.<br>
+        Die Zusammenarbeit mit ChatGPT gestaltete sich anfangs schwierig. <br>
+        Nach der ersten erfolgreichen Umsetzung der Befehlskette, die aus dem Steuerprogramm <code>befehlskette_beispiel.py</code> und dem zugehörigen Modul <code>befehlskette.py</code> bestand,
+        wurden unsere Änderungswünsche von CChatGPT nicht sofort in wiederholbaren Ergebnissen umgesetzt. <br>
+        Wir haben uns dann auf eine schrittweise Vorgehensweise geeinigt, 
+        die jeweils in der Bereitstellung einer neuen Version beider Daeteien <code>befehlskette_beispiel_vx.x.py</code> und dem zugehörigen Modul <code>befehlskette_vx.x.py</code> bestehen.<br>
+        Diese brauchen dann nur noch heruntergeladen und in der Entwicklungsumgebung ausgeführt werden.<br>
+        Diese Vorgehensweise hat sich als sehr erfolgreich erwiesen und wir konnten so die Befehlskette Schritt für Schritt weiterentwickeln.
       </p>
       <ul>
         <li>
@@ -27,14 +47,36 @@
         <li>
             <a href="./Dobot_Befehlskette_Problem_mit_der_Pause.pdf" target="_blank">Dobot Befehlskette Problem mit der Pause</a>
         </li>
+        <li>
+            <a href="./Dobot_Befehlskette_Kurzzusammenfassung.pdf" target="_blank">Dobot Befehlskette Kurzzusammenfassung</a>
+        </li>
         <li><a href="./befehlskette_beispiel.py" target="_blank">befehlskette_beispiel.py</a> und <a href="./befehlskette.py" target="_blank">befehlskette.py</a></li>
         <li><a href="./befehlskette_beispiel_v2.4.py" target="_blank">befehlskette_beispiel_v2.4.py</a> und <a href="./befehlskette_v2_4.py" target="_blank">befehlskette_v2_4.py</a></li>
         <li><a href="./befehlskette_beispiel_v2.5.py" target="_blank">befehlskette_beispiel_v2.5.py</a> und <a href="./befehlskette_v2_5.py" target="_blank">befehlskette_v2_5.py</a></li>
+       </ul>
+    </section>
+    <section><h3>Verbindung der Befehlskette mit Nutzer und Microcontroller</h3>
+      <p>Während der Abarbeitung eines Programms können eine Unterbrechung und zusätzliche Pausen notwendig sein.<br>
+      Diese können durch den Nutzer oder den Microcontroller gesteuert werden.</p>
+      <h4>Nutzeraktionen beeinflüssen die Abarbeitung der Befehlskette </h4>
+      <p>...</p>
+      <ul>   
         <li><a href="./befehlskette_beispiel_v3.1.py" target="_blank">befehlskette_beispiel_v3.1.py</a> und <a href="./befehlskette_v3_1.py" target="_blank">befehlskette_v3_1.py</a></li>
         <li><a href="./befehlskette_beispiel_v3.2.py" target="_blank">befehlskette_beispiel_v3.2.py</a> und <a href="./befehlskette_v3_2.py" target="_blank">befehlskette_v3_2.py</a></li>
+        <li><a href="./befehlskette_beispiel_v3.2.1.py" target="_blank">befehlskette_beispiel_v3.2.1.py</a> und <a href="./befehlskette_v3_2_1.py" target="_blank">befehlskette_v3_2_1.py</a></li>
+        <li><a href="./befehlskette_beispiel_v3.2.2.py" target="_blank">befehlskette_beispiel_v3.2.2.py</a> und <a href="./befehlskette_v3_2_2.py" target="_blank">befehlskette_v3_2_2.py</a><br>
+             Muß noch erstellt werden. Pausenzeiten vor der Ausführung werden nicht mehrangezeigt</li>
+      </ul>
+      <h4>ESP32 Microcontroller beeinflussen die Abarbeitung der Befehlskette durch Unterbrechungen oder Verzögerungen</h4>
+      <p>Für die Simulation eines ESP32 Microcontrollers kann der pc-simuliert-esp.py genutzt werden.</p>
+      <ul>
         <li><a href="./befehlskette_beispiel_v3.3.py" target="_blank">befehlskette_beispiel_v3.3.py</a> und <a href="./befehlskette_v3_3.py" target="_blank">befehlskette_v3_3.py</a></li>
-
+        <li><a href="./esp32_com_test.py" target="_blank">esp32_com_test.py</a> testet die Verbindung zum ESP32 Microcontroller</li>
         
+      </ul>
+      <h4>ESP32 Microcontroller fügen neue Daten und Befehle in die Befehlskette ein. </h4>
+      <ul>...
+        <!--  --><li><a href="./befehlskette_beispiel_v3.3.py" target="_blank">befehlskette_beispiel_v3.3.py</a> und <a href="./befehlskette_v3_3.py" target="_blank">befehlskette_v3_3.py</a></li>
       </ul>
     </section>
     <section>        

@@ -1,9 +1,13 @@
 """Testprogramm für Dobot und ESP32.
 
-Programmversion 3.3
+Programmversion 3.3.1
 
-Die Tastatur und der ESP32 schreiben in dieselbe
-Steuerbefehls-Queue:
+Die ESP32-Kommunikation wird mit ``COM_MODUS`` ausgewählt:
+
+    COM_MODUS = "serial"   USB-COM-Verbindung zum ESP32
+    COM_MODUS = "tcp"      TCP-Verbindung zum ESP-Simulator
+
+Tastatur und ESP32 schreiben in dieselbe Steuerbefehls-Queue:
 
     p / PAUSE   Pause
     w / WEITER  Weiter
@@ -21,29 +25,49 @@ import sys
 # Diese Zeilen anpassen
 # ------------------------------------------------------------
 
+COM_MODUS = "tcp"  # "serial" oder "tcp"
+
 DOBOT_PORT = "COM10"
 DOBOT_BAUDRATE = 115200
 
-ESP32_AKTIV = True
-ESP32_PORT = "COM26"
-ESP32_BAUDRATE = 115200
-ESP32_VERBINDUNGS_TIMEOUT = 5.0
+# Beide Schalter werden zuerst definiert. Dadurch sind sie auch
+# im jeweils anderen Kommunikationsmodus sicher vorhanden.
+ESP32_COM_AKTIV = False
+ESP32_TCP_AKTIV = False
+
+if COM_MODUS == "serial":
+    ESP32_COM_AKTIV = True
+    ESP32_COM_PORT = "COM26"
+    ESP32_COM_BAUDRATE = 115200
+    ESP32_COM_VERBINDUNGS_TIMEOUT = 5.0
+
+elif COM_MODUS == "tcp":
+    ESP32_TCP_AKTIV = True
+    ESP32_TCP_HOST = "127.0.0.1"
+    ESP32_TCP_PORT = 5000
+    ESP32_TCP_VERBINDUNGS_TIMEOUT = 5.0
+
+else:
+    raise ValueError(
+        "COM_MODUS muss 'serial' oder 'tcp' sein."
+    )
 
 STANDARD_PAUSE_MS = 1000
 TIMEOUT_SEKUNDEN = 90.0
 
-PROGRAMM_VERSION = "3.3"
-ERWARTETE_MODULVERSION = "3.3"
-ERWARTETE_ESP32_MODULVERSION = "1.0"
+PROGRAMM_VERSION = "3.3.1"
+ERWARTETE_BEFEHLSKETTENVERSION = "3.3"
+ERWARTETE_ESP32_MODULVERSION = "1.1"
 
 
 befehle = [
     ("fahre_zu", 180, 160, 50, 0, "Fahre zu Punkt 1"),
     ("sauger_ein", "Sauger einschalten", 1000),
-    ("sauger_status", "Status nach dem Einschalten anzeigen", 0),
-    ("fahre_zu", 240, 140, 70, 0, "Fahre zu Punkt 2", 2500),
+    ("sauger_status","Status nach dem Einschalten anzeigen",100,),
+    ("sauger_aus", "Sauger schnell wieder AUS - wegen Lautstärke", 1000),
+    ("fahre_zu", 240, 140, 70,  0, "Fahre zu Punkt 2", 2500, ),
     ("sauger_aus", "Sauger ausschalten", 500),
-    ("sauger_status", "Status nach dem Ausschalten anzeigen", 0),
+    ("sauger_status", "Status nach dem Ausschalten anzeigen", 0,),
     ("fahre_zu", 200, 180, 50, 0, "Fahre zu Punkt 3", 0),
 ]
 
@@ -58,7 +82,10 @@ SDK_ORDNER = HAUPTORDNER / "sdk64"
 DLL_DATEI = SDK_ORDNER / "DobotDll.dll"
 
 
-if DOBOT_PORT.upper() == ESP32_PORT.upper() and ESP32_AKTIV:
+if (
+    ESP32_COM_AKTIV
+    and DOBOT_PORT.upper() == ESP32_COM_PORT.upper()
+):
     raise ValueError(
         "Dobot und ESP32 benötigen verschiedene COM-Ports."
     )
@@ -81,6 +108,7 @@ if str(PROJEKTORDNER) not in sys.path:
 if str(HAUPTORDNER) not in sys.path:
     sys.path.insert(1, str(HAUPTORDNER))
 
+
 dll_verzeichnis_handle = None
 
 if os.name == "nt":
@@ -92,51 +120,55 @@ if os.name == "nt":
 from sdk64 import DobotDllType as dType
 
 from befehlskette_v3_3 import (
-    VERSION,
-    VERSIONSDATUM,
+    VERSION as BEFEHLSKETTENVERSION,
+    VERSIONSDATUM as BEFEHLSKETTENDATUM,
     ZUSTAND_HALT,
     befehlskette_erstellen,
     befehlskette_anzeigen,
     befehlskette_ausfuehren_steuerbar,
 )
 
-from esp32_seriell_v1_0 import (
+from esp32_kommunikation_v1_1 import (
     VERSION as ESP32_MODULVERSION,
     ESP32SerielleSteuerung,
+    ESP32TCPSteuerung,
     serielle_ports_auflisten,
 )
 
 
+if (
+    BEFEHLSKETTENVERSION
+    != ERWARTETE_BEFEHLSKETTENVERSION
+):
+    raise RuntimeError(
+        "Versionskonflikt beim Befehlskettenmodul: "
+        f"erwartet {ERWARTETE_BEFEHLSKETTENVERSION}, "
+        f"geladen {BEFEHLSKETTENVERSION}."
+    )
+
+if (
+    ESP32_MODULVERSION
+    != ERWARTETE_ESP32_MODULVERSION
+):
+    raise RuntimeError(
+        "Versionskonflikt beim ESP32-Kommunikationsmodul: "
+        f"erwartet {ERWARTETE_ESP32_MODULVERSION}, "
+        f"geladen {ESP32_MODULVERSION}."
+    )
+
+
 print(f"Testprogramm Version {PROGRAMM_VERSION}")
+print(f"Kommunikationsmodus: {COM_MODUS}")
+print(
+    f"Befehlskettenmodul Version "
+    f"{BEFEHLSKETTENVERSION} vom {BEFEHLSKETTENDATUM}"
+)
+print(f"ESP32-Kommunikationsmodul Version {ESP32_MODULVERSION}")
 print("Programmordner:", PROJEKTORDNER)
 print("Hauptordner:   ", HAUPTORDNER)
 print("SDK-Ordner:    ", SDK_ORDNER)
 print("DobotDllType:  ", Path(dType.__file__).resolve())
 print("DLL-Datei:     ", DLL_DATEI)
-
-
-if ERWARTETE_MODULVERSION != VERSION:
-    raise RuntimeError(
-        f"Versionskonflikt beim Befehlskettenmodul: "
-        f"erwartet {ERWARTETE_MODULVERSION}, "
-        f"geladen {VERSION}."
-    )
-
-if (
-    ESP32_AKTIV
-    and ERWARTETE_ESP32_MODULVERSION
-    != ESP32_MODULVERSION
-):
-    raise RuntimeError(
-        f"Versionskonflikt beim ESP32-Modul: "
-        f"erwartet {ERWARTETE_ESP32_MODULVERSION}, "
-        f"geladen {ESP32_MODULVERSION}."
-    )
-
-print(
-    f"Korrekte Befehlskettenversion {VERSION} "
-    f"vom {VERSIONSDATUM} wird verwendet."
-)
 
 
 steuerbefehle = queue.Queue()
@@ -146,7 +178,7 @@ dobot_verbunden = False
 
 
 try:
-    if ESP32_AKTIV:
+    if ESP32_COM_AKTIV:
         print("\nVon pySerial gefundene COM-Ports:")
 
         for port in serielle_ports_auflisten():
@@ -157,21 +189,49 @@ try:
 
         esp32 = ESP32SerielleSteuerung(
             steuerbefehle=steuerbefehle,
-            port=ESP32_PORT,
-            baudrate=ESP32_BAUDRATE,
+            port=ESP32_COM_PORT,
+            baudrate=ESP32_COM_BAUDRATE,
         )
+
         esp32.starten()
 
         if not esp32.auf_verbindung_warten(
-            ESP32_VERBINDUNGS_TIMEOUT
+            ESP32_COM_VERBINDUNGS_TIMEOUT
         ):
             print(
                 f"\nWARNUNG: Der ESP32 wurde über "
-                f"{ESP32_PORT} noch nicht verbunden."
+                f"{ESP32_COM_PORT} noch nicht verbunden."
             )
             print(
                 "Die Tastatursteuerung bleibt verfügbar; "
                 "der ESP32-Thread versucht die Verbindung weiter."
+            )
+
+    elif ESP32_TCP_AKTIV:
+        print(
+            f"\nTCP-Verbindung zum ESP-Simulator: "
+            f"{ESP32_TCP_HOST}:{ESP32_TCP_PORT}"
+        )
+
+        esp32 = ESP32TCPSteuerung(
+            steuerbefehle=steuerbefehle,
+            host=ESP32_TCP_HOST,
+            port=ESP32_TCP_PORT,
+        )
+
+        esp32.starten()
+
+        if not esp32.auf_verbindung_warten(
+            ESP32_TCP_VERBINDUNGS_TIMEOUT
+        ):
+            print(
+                f"\nWARNUNG: Der TCP-Server unter "
+                f"{ESP32_TCP_HOST}:{ESP32_TCP_PORT} "
+                "ist noch nicht verbunden."
+            )
+            print(
+                "Starte esp-simulator.py. "
+                "Der TCP-Thread versucht die Verbindung weiter."
             )
 
     api = dType.load()
@@ -237,10 +297,7 @@ except KeyboardInterrupt:
     print("\nProgrammabbruch über die Tastatur.")
 
     if api is not None and dobot_verbunden:
-        if hasattr(
-            dType,
-            "SetQueuedCmdForceStopExec",
-        ):
+        if hasattr(dType, "SetQueuedCmdForceStopExec"):
             dType.SetQueuedCmdForceStopExec(api)
         else:
             dType.SetQueuedCmdStopExec(api)
@@ -249,7 +306,7 @@ except KeyboardInterrupt:
 finally:
     if esp32 is not None:
         esp32.beenden()
-        print("ESP32-COM-Thread beendet.")
+        print(f"ESP32-{COM_MODUS}-Thread beendet.")
 
     if api is not None and dobot_verbunden:
         dType.SetQueuedCmdStopExec(api)
