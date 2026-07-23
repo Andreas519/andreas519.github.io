@@ -1,3 +1,13 @@
+befehle = [
+    ("fahre_zu", 180, 160, 50, 0, "Fahre zu Punkt 1"),
+    ("sauger_ein", "Sauger einschalten", 1000),
+    ("sauger_status","Status nach dem Einschalten anzeigen",100,),
+    ("sauger_aus", "Sauger schnell wieder AUS - wegen Lautstärke", 1000),
+    ("fahre_zu", 240, 140, 70,  0, "Fahre zu Punkt 2", 2500, ),
+    ("sauger_aus", "Sauger ausschalten", 500),
+    ("sauger_status", "Status nach dem Ausschalten anzeigen", 0,),
+    ("fahre_zu", 200, 180, 50, 0, "Fahre zu Punkt 3", 0),
+]
 """Testprogramm für Dobot und ESP32.
 
 Programmversion 3.3.1
@@ -56,7 +66,7 @@ STANDARD_PAUSE_MS = 1000
 TIMEOUT_SEKUNDEN = 90.0
 
 PROGRAMM_VERSION = "3.3.1"
-ERWARTETE_BEFEHLSKETTENVERSION = "3.3"
+ERWARTETE_BEFEHLSKETTENVERSION = "3.3.1"
 ERWARTETE_ESP32_MODULVERSION = "1.1"
 
 
@@ -119,7 +129,7 @@ if os.name == "nt":
 
 from sdk64 import DobotDllType as dType
 
-from befehlskette_v3_3 import (
+from befehlskette_v3_3_1 import (
     VERSION as BEFEHLSKETTENVERSION,
     VERSIONSDATUM as BEFEHLSKETTENDATUM,
     ZUSTAND_HALT,

@@ -1,6 +1,6 @@
 """Verständliche Dobot-Befehlsketten mit mehreren Steuerquellen.
 
-Version 3.3 basiert auf Version 3.2.
+Version 3.3.1 basiert auf Version 3.3.
 
 Neu:
 - gemeinsame Steuerbefehls-Queue für Tastatur und ESP32,
@@ -8,7 +8,7 @@ Neu:
 - lange Befehle wie PAUSE oder STATUS werden ebenfalls erkannt.
 
 Passendes Testprogramm:
-    befehlskette_beispiel_v3.3.py
+    befehlskette_beispiel_v3_3_1.py
 """
 
 from pathlib import Path
@@ -18,7 +18,7 @@ import threading
 import time
 
 
-VERSION = "3.3"
+VERSION = "3.3.1"
 VERSIONSDATUM = "21.07.2026"
 
 ZUSTAND_LAEUFT = "läuft"

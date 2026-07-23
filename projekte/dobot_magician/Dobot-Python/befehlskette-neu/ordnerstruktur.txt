@@ -1,0 +1,23 @@
+Meine Projektstruktur ist :
+
+`Dobot-Python/
+
+├── sdk64/
+│   ├── __init__.py
+│   ├── DobotDllType.py
+│   └── DobotDll.dll
+│
+└── befehlskette/
+│   ├── befehlskette_beispiel_v3_3.py
+│   ├── befehlskette_v3_3.py
+│    ...
+│   └── esp-simulator.py
+│
+└── befehlskette-neu/
+    ├── befehlskette_beispiel_v3_3_1.py
+    ├── befehlskette_v3_3.py
+    ├── befehlskette_beispiel_v3_3_1.py
+    ├── befehlskette_v3_3.py
+    ├── esp32_kommunikation_v1_1.py
+    └── esp-simulator.py
+`
