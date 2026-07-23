@@ -1,3 +1,0 @@
-In dieser Version erfolgt die Ausgabe des aktuellen Befehles erst nach seiner Ausführung.
-
-Den aktuellen Befehl anzeigen, dann Ausführen.

@@ -8,5 +8,5 @@ DobotDllType.py
 DoBotArm.py
 test*.*
 StarterGuide-Dobot-Magician-with-Python-master.zip
-befehlskette-v*/.
-tcp-sim*/.
+befehlskette-v*/
+tcp-sim*/
