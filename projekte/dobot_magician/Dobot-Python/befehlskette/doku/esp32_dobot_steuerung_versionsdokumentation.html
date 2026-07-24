@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Versionsdokumentation des MicroPython-Steuerprogramms esp32_dobot_steuerung für die Dobot-Befehlskette.">
+<title>ESP32-Dobot-Steuerung – Versionsdokumentation</title>
+<style>
+:root {
+  --bg: #eef3f7;
+  --panel: #ffffff;
+  --text: #1d2733;
+  --muted: #5a6877;
+  --line: #cbd6e2;
+  --blue: #175b9c;
+  --blue-dark: #103b67;
+  --blue-light: #eaf3fb;
+  --green: #216e45;
+  --green-light: #ebf7ef;
+  --yellow: #8a5a00;
+  --yellow-light: #fff6d9;
+  --red: #9d2a24;
+  --red-light: #fff0ef;
+  --code: #f3f6f8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.6;
+}
+header {
+  color: white;
+  background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+  padding: 2.2rem 1rem;
+}
+header > div, main, footer {
+  width: min(1050px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 5vw, 3rem); }
+header p { margin: .25rem 0; max-width: 850px; }
+.badge {
+  display: inline-block;
+  margin-top: .7rem;
+  padding: .28rem .65rem;
+  border: 1px solid rgba(255,255,255,.55);
+  border-radius: 999px;
+  background: rgba(255,255,255,.12);
+  font-weight: 700;
+}
+main { padding: 1.2rem 0 2.3rem; }
+section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: .8rem;
+  margin: 1rem 0;
+  padding: 1.2rem 1.35rem;
+  box-shadow: 0 4px 14px rgba(20,45,70,.06);
+}
+h2 {
+  margin-top: 0;
+  color: var(--blue-dark);
+  border-bottom: 2px solid var(--blue-light);
+  padding-bottom: .35rem;
+}
+h3 { color: var(--blue); margin-bottom: .3rem; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+th, td {
+  border: 1px solid var(--line);
+  padding: .65rem;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--blue-light); color: var(--blue-dark); }
+code {
+  font-family: "Cascadia Code", Consolas, monospace;
+  background: var(--code);
+  padding: .08rem .25rem;
+  border-radius: .25rem;
+}
+pre {
+  background: #17212b;
+  color: #edf6ff;
+  padding: 1rem;
+  border-radius: .6rem;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+pre code { background: transparent; padding: 0; }
+.note, .ok, .warning, .open {
+  border-left: .35rem solid;
+  padding: .85rem 1rem;
+  margin: 1rem 0;
+  border-radius: .25rem;
+}
+.note { background: var(--blue-light); border-color: var(--blue); }
+.ok { background: var(--green-light); border-color: var(--green); }
+.warning { background: var(--yellow-light); border-color: var(--yellow); }
+.open { background: var(--red-light); border-color: var(--red); }
+ul, ol { padding-left: 1.35rem; }
+li + li { margin-top: .35rem; }
+.small { color: var(--muted); font-size: .92rem; }
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem 0 2rem;
+}
+@media (max-width: 700px) {
+  th, td { padding: .5rem; }
+  section { padding: 1rem; }
+  a, code { overflow-wrap: anywhere; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>ESP32-Dobot-Steuerung</h1>
+    <p>Dokumentation der Änderungen am MicroPython-Programm für Taster, LEDs und die Kommunikation mit der Dobot-Befehlskette.</p>
+    <span class="badge">Versionen 1.0 bis 1.2</span>
+  </div>
+</header>
+
+<main>
+<section>
+<h2>Zweck des Programms</h2>
+<p>Das Programm läuft auf einem ESP32 und kommuniziert über die USB-COM-Schnittstelle mit dem Dobot-Steuerprogramm auf dem PC.</p>
+<ul>
+  <li>Sechs Taster senden Steuerbefehle und Freigabemeldungen.</li>
+  <li>Eine blaue LED zeigt die bestätigte PC-Verbindung an.</li>
+  <li>Eine gelbe LED dient als simulierter, veränderlicher Ausgang.</li>
+  <li>Änderungen überwachter Signale werden als <code>WERT;Name;Wert</code> an den PC gesendet.</li>
+  <li>Nachrichten vom PC werden ohne Blockieren eingelesen.</li>
+</ul>
+</section>
+
+<section>
+<h2>Anschlussbelegung</h2>
+<table>
+<thead>
+<tr><th>GPIO</th><th>Signal</th><th>Nachricht beziehungsweise Funktion</th></tr>
+</thead>
+<tbody>
+<tr><td>25</td><td>Taster Pause</td><td><code>PAUSE</code></td></tr>
+<tr><td>26</td><td>Taster Weiter</td><td><code>WEITER</code></td></tr>
+<tr><td>27</td><td>Taster Halt</td><td><code>HALT</code></td></tr>
+<tr><td>33</td><td>Taster Status</td><td><code>STATUS</code></td></tr>
+<tr><td>18</td><td>Taster Frei 1</td><td><code>FREI_1</code></td></tr>
+<tr><td>32</td><td>Taster Frei 2</td><td><code>FREI_2</code></td></tr>
+<tr><td>2</td><td>Blaue LED</td><td>Leuchtet nach Empfang von <code>PC_BEREIT</code></td></tr>
+<tr><td>19</td><td>Gelbe LED</td><td>Simulierter Ausgang <code>LED_gelb</code></td></tr>
+</tbody>
+</table>
+<div class="note"><strong>Tasterlogik:</strong> Die Taster sind zwischen GPIO und GND angeschlossen. Durch <code>Pin.PULL_UP</code> bedeutet der Wert <code>0</code>: Taster gedrückt.</div>
+</section>
+
+<section>
+<h2>Versionsübersicht</h2>
+<table>
+<thead>
+<tr><th>Version</th><th>Schwerpunkt</th><th>Status</th></tr>
+</thead>
+<tbody>
+<tr><td><strong>1.0</strong></td><td>Erste Erweiterung um Signalüberwachung und zufällige LED-Simulation</td><td>Fehlerhaft</td></tr>
+<tr><td><strong>1.1</strong></td><td>Initialisierung und Sendefunktion korrigiert</td><td>LED-Thread im Test unzuverlässig</td></tr>
+<tr><td><strong>1.2</strong></td><td>LED-Simulation ohne zusätzlichen Thread</td><td>Aktueller Teststand</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Version 1.0</h2>
+<h3>Erweiterungen</h3>
+<ul>
+  <li>Neue gelbe LED an GPIO 19.</li>
+  <li>Dictionary <code>UEBERWACHTE_SIGNALE</code> zur allgemeinen Überwachung von Ein- und Ausgängen.</li>
+  <li>Neue Funktion <code>ueberwache()</code>, die Signaländerungen erkennt.</li>
+  <li>Neue Funktion <code>simulation_led_aendert_sich(min_sekunden, max_sekunden)</code>.</li>
+  <li>Die LED-Simulation lief in einem eigenen MicroPython-Thread.</li>
+  <li>Die gelbe LED sollte nach zufälligen Zeitabständen ihren Zustand ändern.</li>
+</ul>
+
+<h3>Vorgesehenes Nachrichtenformat</h3>
+<pre><code>WERT;LED_gelb;1
+WERT;LED_gelb;0</code></pre>
+
+<h3>Festgestellte Probleme</h3>
+<div class="warning">
+<ul>
+  <li>Die Dictionaries <code>letzte_rohwerte</code>, <code>stabile_werte</code> und <code>aenderungszeiten</code> wurden vor dem ersten Aufruf von <code>ueberwache()</code> nicht initialisiert.</li>
+  <li>Dadurch trat der Fehler <code>KeyError: LED_gelb</code> auf.</li>
+  <li>In <code>ueberwache()</code> wurde irrtümlich <code>sende_zeile()</code> aufgerufen, obwohl die vorhandene Funktion <code>zeile_senden()</code> heißt.</li>
+  <li>Der Simulationsthread sendete die LED-Meldung selbst, obwohl dies bereits Aufgabe von <code>ueberwache()</code> sein sollte.</li>
+  <li>Die Module <code>_thread</code>, <code>random</code> und <code>time</code> wurden teilweise doppelt importiert.</li>
+</ul>
+</div>
+</section>
+
+<section>
+<h2>Version 1.1</h2>
+<h3>Korrekturen</h3>
+<ul>
+  <li>Neue Funktion <code>ueberwachung_initialisieren()</code>.</li>
+  <li>Die Anfangszustände aller überwachten Signale werden vor dem Start der Hauptschleife gespeichert.</li>
+  <li><code>sende_zeile()</code> wurde zu <code>zeile_senden()</code> korrigiert.</li>
+  <li>Der Simulationsthread verändert nur noch den Pinzustand.</li>
+  <li>Die Meldung über die Änderung wird ausschließlich von <code>ueberwache()</code> erzeugt.</li>
+  <li>Doppelte Importe wurden entfernt.</li>
+</ul>
+
+<h3>Wichtige Startreihenfolge</h3>
+<pre><code>ueberwachung_initialisieren()
+zeile_senden("ESP32_BEREIT")
+simulation_led_aendert_sich(30, 60)</code></pre>
+
+<h3>Verbleibendes Problem</h3>
+<div class="warning">
+<p>Im praktischen Test änderte die gelbe LED ihren Zustand nicht mehr zuverlässig. Als wahrscheinlichste Ursache wurde der zusätzliche MicroPython-Thread betrachtet. Ein Thread kann auf dem ESP32 ohne gut sichtbare Fehlermeldung beendet werden oder sich ungünstig mit der seriellen Ein- und Ausgabe verhalten.</p>
+</div>
+</section>
+
+<section>
+<h2>Version 1.2</h2>
+<h3>Wesentliche Änderung</h3>
+<p>Die LED-Simulation verwendet keinen zusätzlichen Thread mehr. Stattdessen arbeitet sie nicht blockierend in der bereits vorhandenen Hauptschleife.</p>
+
+<h3>Neue Funktionen</h3>
+<ul>
+  <li><code>simulation_led_aendert_sich(min_sekunden, max_sekunden)</code> legt den Zeitbereich fest und berechnet den ersten Schaltzeitpunkt.</li>
+  <li><code>simulation_led_pruefen()</code> prüft bei jedem Schleifendurchlauf, ob der nächste zufällige Schaltzeitpunkt erreicht wurde.</li>
+  <li>Nach jeder Änderung berechnet das Programm einen neuen zufälligen Zeitpunkt.</li>
+</ul>
+
+<h3>Aktuelle Hauptschleife</h3>
+<pre><code>while True:
+    tasten_pruefen()
+    simulation_led_pruefen()
+    ueberwache()
+    pc_nachrichten_lesen()
+    time.sleep_ms(SCHLEIFENPAUSE_MS)</code></pre>
+
+<h3>Signalweg der gelben LED</h3>
+<ol>
+  <li><code>simulation_led_pruefen()</code> ändert den Pinzustand.</li>
+  <li><code>ueberwache()</code> erkennt die Änderung.</li>
+  <li><code>zeile_senden()</code> sendet den neuen Zustand an den PC.</li>
+</ol>
+
+<pre><code>led_gelb.value(not led_gelb.value())
+
+WERT;LED_gelb;1
+WERT;LED_gelb;0</code></pre>
+
+<div class="ok"><strong>Vorteil:</strong> Die Simulation blockiert weder die Tasterabfrage noch den Empfang von PC-Nachrichten und benötigt keinen zweiten Ausführungsthread.</div>
+</section>
+
+<section>
+<h2>Kommunikationsrichtungen</h2>
+<table>
+<thead>
+<tr><th>Richtung</th><th>Funktion</th><th>Beispiel</th></tr>
+</thead>
+<tbody>
+<tr><td>ESP32 → PC</td><td><code>zeile_senden()</code></td><td><code>zeile_senden("FREI_1")</code></td></tr>
+<tr><td>PC → ESP32</td><td><code>pc_nachrichten_lesen()</code></td><td><code>PC_BEREIT</code></td></tr>
+</tbody>
+</table>
+
+<p>Das PC-Programm sendet Texte mit:</p>
+<pre><code>esp32.senden("LED_GELB_EIN")</code></pre>
+</section>
+
+<section>
+<h2>Aktuell bereits verarbeitete PC-Nachricht</h2>
+<pre><code>if nachricht == "PC_BEREIT":
+    led.on()</code></pre>
+<p>Dadurch wird die blaue Online-LED eingeschaltet.</p>
+</section>
+
+<section>
+<h2>Noch nicht in Version 1.2 umgesetzt</h2>
+<div class="open">
+<p>Das PC-Steuerprogramm der Befehlskette kann ab Version 3.3.5 beliebige Texte mit dem Befehl <code>esp_senden</code> übertragen. Das ESP32-Programm 1.2 verarbeitet bisher jedoch nur <code>PC_BEREIT</code>.</p>
+</div>
+
+<p>Vorgeschlagene zukünftige Befehle:</p>
+<pre><code>LED_GELB_EIN
+LED_GELB_AUS
+LED_GELB_UMSCHALTEN</code></pre>
+
+<p>Dafür muss <code>pc_nachrichten_lesen()</code> später erweitert werden:</p>
+<pre><code>if nachricht == "PC_BEREIT":
+    led.on()
+
+elif nachricht == "LED_GELB_EIN":
+    led_gelb.on()
+
+elif nachricht == "LED_GELB_AUS":
+    led_gelb.off()
+
+elif nachricht == "LED_GELB_UMSCHALTEN":
+    led_gelb.value(not led_gelb.value())
+
+else:
+    zeile_senden(
+        f"UNBEKANNTER_BEFEHL;{nachricht}"
+    )</code></pre>
+
+<div class="note"><strong>Wichtig:</strong> Dieser Abschnitt dokumentiert die geplante nächste Erweiterung. Er ist im aktuellen Stand 1.2 noch nicht enthalten.</div>
+</section>
+
+<section>
+<h2>Empfohlene Tests</h2>
+<ol>
+  <li>Alle sechs Taster einzeln drücken und die empfangenen Meldungen am PC kontrollieren.</li>
+  <li>Die LED-Simulation vorübergehend mit <code>simulation_led_aendert_sich(3, 6)</code> testen.</li>
+  <li>Prüfen, ob jede LED-Änderung genau einmal als <code>WERT;LED_gelb;...</code> gesendet wird.</li>
+  <li><code>PC_BEREIT</code> vom PC senden und kontrollieren, ob die blaue LED eingeschaltet wird.</li>
+  <li>Das Programm mit <code>KeyboardInterrupt</code> beenden und prüfen, ob beide LEDs ausgeschaltet werden.</li>
+</ol>
+</section>
+
+<section>
+<h2>Empfohlene nächste Version</h2>
+<p>Für die nächste Version wäre die Bezeichnung <strong>1.3</strong> sinnvoll. Schwerpunkt:</p>
+<ul>
+  <li>Verarbeitung allgemeiner PC-Befehle in <code>pc_nachrichten_lesen()</code>.</li>
+  <li>Bestätigung ausgeführter Befehle an den PC.</li>
+  <li>Optionales Ein- und Ausschalten der LED-Simulation durch PC-Befehle.</li>
+  <li>Saubere Meldung unbekannter Befehle.</li>
+</ul>
+</section>
+
+<section>
+<h2>Dateinamen</h2>
+<table>
+<thead><tr><th>Datei</th><th>Bedeutung</th></tr></thead>
+<tbody>
+<tr><td><code>esp32_dobot_steuerung_v1.py</code></td><td>Ursprünglicher Stand 1.0 mit Fehlern.</td></tr>
+<tr><td><code>esp32_dobot_steuerung_v1_1.py</code></td><td>Korrigierter Stand 1.1 mit Thread-Simulation.</td></tr>
+<tr><td><code>esp32_dobot_steuerung_v1_2.py</code></td><td>Aktueller Stand 1.2 ohne zusätzlichen Thread.</td></tr>
+</tbody>
+</table>
+</section>
+</main>
+
+<footer>
+<p>ESP32-Steuerung für die Dobot-Befehlskette · Dokumentationsstand 24.07.2026</p>
+</footer>
+</body>
+</html>
