@@ -1,6 +1,6 @@
 """ESP32-Steuerung für die Dobot-Befehlskette.
 
-MicroPython-Version 1.0
+MicroPython-Version 1.2
 
 Sechs Taster senden über die USB-COM-Schnittstelle:
 
@@ -33,7 +33,6 @@ der ESP per RESET-Knopf neu gestartet werden.
 from machine import Pin
 import sys
 import time
-import _thread
 import random
 
 
@@ -43,8 +42,8 @@ except ImportError:
     import select
 
 
-VERSION = "1.0"
-VERSIONSDATUM = "22.07.2026"
+VERSION = "1.2"
+VERSIONSDATUM = "24.07.2026"
 
 
 # ------------------------------------------------------------
@@ -187,44 +186,81 @@ def pc_nachrichten_lesen():
         if nachricht == "PC_BEREIT":
             led.on()
 
-import _thread
-import random
-import time
-
 
 simulation_led_aktiv = False
+simulation_led_min_ms = 0
+simulation_led_max_ms = 0
+simulation_led_naechste_aenderung = 0
 
 
 def simulation_led_aendert_sich(min_sekunden, max_sekunden):
-    global simulation_led_aktiv
+    """Startet die nicht blockierende Simulation der gelben LED."""
 
-    if simulation_led_aktiv:
-        print("Die LED-Simulation läuft bereits.")
-        return
+    global simulation_led_aktiv
+    global simulation_led_min_ms
+    global simulation_led_max_ms
+    global simulation_led_naechste_aenderung
 
     if min_sekunden <= 0 or max_sekunden < min_sekunden:
         raise ValueError("Ungültiger Zeitbereich.")
 
+    simulation_led_min_ms = int(min_sekunden * 1000)
+    simulation_led_max_ms = int(max_sekunden * 1000)
     simulation_led_aktiv = True
 
-    def simulation():
-        global simulation_led_aktiv
+    wartezeit_ms = random.randint(
+        simulation_led_min_ms,
+        simulation_led_max_ms,
+    )
 
-        while simulation_led_aktiv:
-            wartezeit = random.randint(min_sekunden, max_sekunden)
-            time.sleep(wartezeit)
+    simulation_led_naechste_aenderung = time.ticks_add(
+        time.ticks_ms(),
+        wartezeit_ms,
+    )
 
-            if not simulation_led_aktiv:
-                break
 
-            led_gelb.value(not led_gelb.value())
+def simulation_led_pruefen():
+    """Ändert die LED, sobald die nächste Zufallszeit erreicht ist."""
 
-            print(
-                "WERT;LED_gelb;"
-                + str(led_gelb.value())
-            )
+    global simulation_led_naechste_aenderung
 
-    _thread.start_new_thread(simulation, ())
+    if not simulation_led_aktiv:
+        return
+
+    jetzt = time.ticks_ms()
+
+    if time.ticks_diff(
+        jetzt,
+        simulation_led_naechste_aenderung,
+    ) < 0:
+        return
+
+    led_gelb.value(not led_gelb.value())
+
+    wartezeit_ms = random.randint(
+        simulation_led_min_ms,
+        simulation_led_max_ms,
+    )
+
+    simulation_led_naechste_aenderung = time.ticks_add(
+        jetzt,
+        wartezeit_ms,
+    )
+
+
+def ueberwachung_initialisieren():
+    """Speichert die aktuellen Anfangszustände aller Signale."""
+
+    jetzt = time.ticks_ms()
+
+    for name, signal in UEBERWACHTE_SIGNALE.items():
+        pin, entprellzeit = signal
+        wert = pin.value()
+
+        letzte_rohwerte[name] = wert
+        stabile_werte[name] = wert
+        aenderungszeiten[name] = jetzt
+
 
 def ueberwache():
     jetzt = time.ticks_ms()
@@ -250,7 +286,7 @@ def ueberwache():
         ):
             stabile_werte[name] = aktueller_wert
 
-            sende_zeile(
+            zeile_senden(
                 f"WERT;{name};{aktueller_wert}"
             )
 
@@ -262,13 +298,16 @@ def hauptprogramm():
     """Startet die dauerhafte Taster- und COM-Abfrage."""
 
     time.sleep_ms(STARTWARTEZEIT_MS)
+
+    ueberwachung_initialisieren()
     zeile_senden("ESP32_BEREIT")
 
-    simulation_led_aendert_sich(30,60)
+    simulation_led_aendert_sich(30, 60)
     
     while True:
-        tasten_pruefen()   # speziell für Taster und Schalter
-        ueberwache()       # allgmeine Ein- und Ausgänge
+        tasten_pruefen()          # speziell für Taster und Schalter
+        simulation_led_pruefen()  # zufällige LED-Änderung prüfen
+        ueberwache()              # allgemeine Ein- und Ausgänge
         pc_nachrichten_lesen()
         time.sleep_ms(SCHLEIFENPAUSE_MS)
 

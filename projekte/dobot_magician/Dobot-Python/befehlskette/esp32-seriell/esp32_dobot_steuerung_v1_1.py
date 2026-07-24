@@ -1,6 +1,6 @@
 """ESP32-Steuerung für die Dobot-Befehlskette.
 
-MicroPython-Version 1.0
+MicroPython-Version 1.1
 
 Sechs Taster senden über die USB-COM-Schnittstelle:
 
@@ -43,8 +43,8 @@ except ImportError:
     import select
 
 
-VERSION = "1.0"
-VERSIONSDATUM = "22.07.2026"
+VERSION = "1.1"
+VERSIONSDATUM = "24.07.2026"
 
 
 # ------------------------------------------------------------
@@ -187,10 +187,6 @@ def pc_nachrichten_lesen():
         if nachricht == "PC_BEREIT":
             led.on()
 
-import _thread
-import random
-import time
-
 
 simulation_led_aktiv = False
 
@@ -219,12 +215,22 @@ def simulation_led_aendert_sich(min_sekunden, max_sekunden):
 
             led_gelb.value(not led_gelb.value())
 
-            print(
-                "WERT;LED_gelb;"
-                + str(led_gelb.value())
-            )
-
     _thread.start_new_thread(simulation, ())
+
+
+def ueberwachung_initialisieren():
+    """Speichert die aktuellen Anfangszustände aller Signale."""
+
+    jetzt = time.ticks_ms()
+
+    for name, signal in UEBERWACHTE_SIGNALE.items():
+        pin, entprellzeit = signal
+        wert = pin.value()
+
+        letzte_rohwerte[name] = wert
+        stabile_werte[name] = wert
+        aenderungszeiten[name] = jetzt
+
 
 def ueberwache():
     jetzt = time.ticks_ms()
@@ -250,7 +256,7 @@ def ueberwache():
         ):
             stabile_werte[name] = aktueller_wert
 
-            sende_zeile(
+            zeile_senden(
                 f"WERT;{name};{aktueller_wert}"
             )
 
@@ -262,13 +268,15 @@ def hauptprogramm():
     """Startet die dauerhafte Taster- und COM-Abfrage."""
 
     time.sleep_ms(STARTWARTEZEIT_MS)
+
+    ueberwachung_initialisieren()
     zeile_senden("ESP32_BEREIT")
 
-    simulation_led_aendert_sich(30,60)
+    simulation_led_aendert_sich(30, 60)
     
     while True:
         tasten_pruefen()   # speziell für Taster und Schalter
-        ueberwache()       # allgmeine Ein- und Ausgänge
+        ueberwache()       # allgemeine Ein- und Ausgänge
         pc_nachrichten_lesen()
         time.sleep_ms(SCHLEIFENPAUSE_MS)
 

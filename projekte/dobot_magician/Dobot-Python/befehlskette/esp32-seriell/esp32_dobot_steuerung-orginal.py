@@ -2,18 +2,13 @@
 
 MicroPython-Version 1.0
 
-Sechs Taster senden über die USB-COM-Schnittstelle:
+Vier Taster senden über die USB-COM-Schnittstelle:
 
     GPIO 25 -> PAUSE
     GPIO 26 -> WEITER
     GPIO 27 -> HALT
     GPIO 33 -> STATUS
-    GPIO 18 -> PIN_FREI1
-    GPIO 32 -> PIN_FREI2
-Zwei Led    
-    GPIO 02 -> PIN_LED ( blaue Online-LED neben der roten Power-LED)
-    GPIO 19 -> PIN_LED_GELB
-    
+
 Jeder Taster wird zwischen dem GPIO und GND angeschlossen.
 Pin.PULL_UP aktiviert den internen Pull-up-Widerstand.
 
@@ -22,20 +17,11 @@ PC_BEREIT gesendet hat.
 
 Achtung:
 HALT bricht die laufende Dobot-Aufgabe endgültig ab.
-
-Hinweis:
-Zum Testen der Taster braucht keine Verbindung zum Steuerung des Dobot bestehen.
-Somit kann die Verbindung mit Thonny bleiben.
-Sonst muß Thonny auf einen anderen Port oder WebREPL gestellt und
-der ESP per RESET-Knopf neu gestartet werden.
 """
 
 from machine import Pin
 import sys
 import time
-import _thread
-import random
-
 
 try:
     import uselect as select
@@ -55,16 +41,8 @@ PIN_PAUSE = 25
 PIN_WEITER = 26
 PIN_HALT = 27
 PIN_STATUS = 33
-PIN_FREI1 = 18   # 35 geht nicht
-PIN_FREI2 = 32
+
 PIN_LED = 2
-PIN_LED_GELB = 19
-
-led = Pin(PIN_LED, Pin.OUT)
-led.off()
-
-led_gelb = Pin(PIN_LED_GELB, Pin.OUT)
-led_gelb.on()
 
 
 # ------------------------------------------------------------
@@ -124,26 +102,18 @@ class Taste:
 
         return None
 
-# ------------------------------------------------------------
-# Überwachung der Ein- und Ausgänge
-# ------------------------------------------------------------
+
+led = Pin(PIN_LED, Pin.OUT)
+led.off()
+
+
 tasten = [
     Taste(PIN_PAUSE, "PAUSE"),
     Taste(PIN_WEITER, "WEITER"),
     Taste(PIN_HALT, "HALT"),
     Taste(PIN_STATUS, "STATUS"),
-    Taste(PIN_FREI1, "FREI_1"),
-    Taste(PIN_FREI2, "FREI_2"),
 ]
 
-
-UEBERWACHTE_SIGNALE = {
-    "LED_gelb":      (led_gelb, 0),  # 0 keine Entprellung, 40 für 40 ms Entprellung
-}
-
-letzte_rohwerte = {}
-stabile_werte = {}
-aenderungszeiten = {}
 
 eingabe_poll = select.poll()
 eingabe_poll.register(
@@ -187,76 +157,6 @@ def pc_nachrichten_lesen():
         if nachricht == "PC_BEREIT":
             led.on()
 
-import _thread
-import random
-import time
-
-
-simulation_led_aktiv = False
-
-
-def simulation_led_aendert_sich(min_sekunden, max_sekunden):
-    global simulation_led_aktiv
-
-    if simulation_led_aktiv:
-        print("Die LED-Simulation läuft bereits.")
-        return
-
-    if min_sekunden <= 0 or max_sekunden < min_sekunden:
-        raise ValueError("Ungültiger Zeitbereich.")
-
-    simulation_led_aktiv = True
-
-    def simulation():
-        global simulation_led_aktiv
-
-        while simulation_led_aktiv:
-            wartezeit = random.randint(min_sekunden, max_sekunden)
-            time.sleep(wartezeit)
-
-            if not simulation_led_aktiv:
-                break
-
-            led_gelb.value(not led_gelb.value())
-
-            print(
-                "WERT;LED_gelb;"
-                + str(led_gelb.value())
-            )
-
-    _thread.start_new_thread(simulation, ())
-
-def ueberwache():
-    jetzt = time.ticks_ms()
-
-    for name, signal in UEBERWACHTE_SIGNALE.items():
-        pin, entprellzeit = signal
-        aktueller_wert = pin.value()
-
-        # Eine mögliche Änderung wurde erkannt.
-        if aktueller_wert != letzte_rohwerte[name]:
-            letzte_rohwerte[name] = aktueller_wert
-            aenderungszeiten[name] = jetzt
-
-        # Der neue Zustand muss lange genug stabil sein.
-        zeit_stabil = time.ticks_diff(
-            jetzt,
-            aenderungszeiten[name],
-        )
-
-        if (
-            aktueller_wert != stabile_werte[name]
-            and zeit_stabil >= entprellzeit
-        ):
-            stabile_werte[name] = aktueller_wert
-
-            sende_zeile(
-                f"WERT;{name};{aktueller_wert}"
-            )
-
-def simulation_led_beenden():
-    global simulation_led_aktiv
-    simulation_led_aktiv = False    
 
 def hauptprogramm():
     """Startet die dauerhafte Taster- und COM-Abfrage."""
@@ -264,28 +164,14 @@ def hauptprogramm():
     time.sleep_ms(STARTWARTEZEIT_MS)
     zeile_senden("ESP32_BEREIT")
 
-    simulation_led_aendert_sich(30,60)
-    
     while True:
-        tasten_pruefen()   # speziell für Taster und Schalter
-        ueberwache()       # allgmeine Ein- und Ausgänge
+        tasten_pruefen()
         pc_nachrichten_lesen()
         time.sleep_ms(SCHLEIFENPAUSE_MS)
 
-def Tasten_testen():
-    while True:
-        for taste in tasten:
-            befehl = taste.pruefen()
-            if befehl is not None:
-                print(befehl)
-                led.value(not led.value())
-            else:
-                pass
 
 try:
     hauptprogramm()
 
 except KeyboardInterrupt:
     led.off()
-    simulation_led_beenden()
-    led_gelb.off()
