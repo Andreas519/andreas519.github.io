@@ -1,0 +1,980 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Schrittweiser Einstieg in die Dobot-Befehlskette Version 3.3.5 – vom TCP-Simulator über den ESP32 bis zur sicheren Dobot-Steuerung.">
+  <meta name="author" content="Andreas Sigismund · AG Young Engineers">
+  <title>Befehlskette 3.3.5 – Schrittweiser Einstieg für Schüler</title>
+  <style>
+    :root {
+      --bg: #eef3f7;
+      --paper: #ffffff;
+      --ink: #1c2733;
+      --muted: #5c6977;
+      --line: #c9d5df;
+      --blue-950: #0d2e4d;
+      --blue-800: #164f7c;
+      --blue-700: #1e669d;
+      --blue-100: #e7f2fa;
+      --blue-050: #f5faff;
+      --green-700: #1f6b45;
+      --green-100: #eaf7ef;
+      --amber-800: #815400;
+      --amber-100: #fff4d6;
+      --red-800: #932d28;
+      --red-100: #fff0ee;
+      --violet-800: #5b3f8c;
+      --violet-100: #f2edfb;
+      --shadow: 0 9px 26px rgba(18, 52, 78, .09);
+      --radius: 14px;
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font: 17px/1.62 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    }
+    a { color: var(--blue-700); text-underline-offset: .18em; }
+    a:hover { text-decoration-thickness: 2px; }
+    img, svg { max-width: 100%; }
+    code, kbd, pre { font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace; }
+    code {
+      padding: .07em .28em;
+      border-radius: .3em;
+      background: #edf2f6;
+      font-size: .93em;
+    }
+    kbd {
+      display: inline-block;
+      padding: .08rem .42rem;
+      border: 1px solid #aebdca;
+      border-bottom-width: 2px;
+      border-radius: .35rem;
+      background: #fff;
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+      font-size: .9em;
+    }
+    pre {
+      position: relative;
+      margin: .9rem 0 1.25rem;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      border: 1px solid #2b465c;
+      border-radius: 10px;
+      color: #edf7ff;
+      background: #172838;
+      line-height: 1.48;
+      tab-size: 4;
+    }
+    pre code { padding: 0; color: inherit; background: transparent; font-size: .91rem; }
+    .copy-button {
+      position: absolute;
+      top: .55rem;
+      right: .55rem;
+      padding: .28rem .55rem;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: .4rem;
+      color: #fff;
+      background: rgba(255,255,255,.1);
+      cursor: pointer;
+      font: inherit;
+      font-size: .78rem;
+    }
+    .copy-button:hover { background: rgba(255,255,255,.2); }
+
+    .skip-link {
+      position: absolute;
+      left: -10000px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      z-index: 1000;
+      width: auto;
+      height: auto;
+      padding: .65rem .9rem;
+      color: #fff;
+      background: #000;
+    }
+
+    header {
+      color: #fff;
+      background:
+        radial-gradient(circle at 85% 18%, rgba(255,255,255,.16), transparent 24%),
+        linear-gradient(135deg, var(--blue-950), var(--blue-700));
+      border-bottom: 5px solid #77b9df;
+    }
+    .hero {
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 3.2rem 0 2.6rem;
+    }
+    .eyebrow {
+      margin: 0 0 .4rem;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      opacity: .86;
+    }
+    h1 {
+      margin: 0;
+      max-width: 950px;
+      font-size: clamp(2.25rem, 6vw, 4.5rem);
+      line-height: 1.03;
+      letter-spacing: -.035em;
+    }
+    .subtitle {
+      max-width: 850px;
+      margin: 1rem 0 0;
+      font-size: clamp(1.05rem, 2.3vw, 1.35rem);
+      opacity: .93;
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      margin-top: 1.45rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .32rem .72rem;
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: 999px;
+      background: rgba(255,255,255,.09);
+      font-weight: 700;
+      font-size: .92rem;
+    }
+
+    .page-shell {
+      display: grid;
+      grid-template-columns: 255px minmax(0, 1fr);
+      gap: 1.35rem;
+      width: min(var(--max), calc(100% - 2rem));
+      margin: 1.35rem auto 2.5rem;
+      align-items: start;
+    }
+    nav.toc {
+      position: sticky;
+      top: 1rem;
+      max-height: calc(100vh - 2rem);
+      overflow: auto;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    nav.toc strong { display: block; margin-bottom: .45rem; color: var(--blue-950); }
+    nav.toc ol { margin: 0; padding-left: 1.2rem; font-size: .9rem; }
+    nav.toc li + li { margin-top: .25rem; }
+    nav.toc a { color: var(--ink); text-decoration: none; }
+    nav.toc a:hover { color: var(--blue-700); text-decoration: underline; }
+
+    main { min-width: 0; }
+    section, .panel {
+      margin: 0 0 1.25rem;
+      padding: clamp(1rem, 2.5vw, 1.65rem);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      box-shadow: var(--shadow);
+    }
+    section > :first-child, .panel > :first-child { margin-top: 0; }
+    section > :last-child, .panel > :last-child { margin-bottom: 0; }
+    h2 {
+      margin: 2.25rem 0 .85rem;
+      color: var(--blue-950);
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      line-height: 1.15;
+      letter-spacing: -.015em;
+    }
+    section > h2:first-child { margin-top: 0; }
+    h3 {
+      margin: 1.55rem 0 .55rem;
+      color: var(--blue-800);
+      font-size: 1.28rem;
+      line-height: 1.2;
+    }
+    h4 { margin: 1.2rem 0 .45rem; color: var(--blue-950); }
+    p { margin: .65rem 0 1rem; }
+    ul, ol { padding-left: 1.35rem; }
+    li + li { margin-top: .32rem; }
+
+    .lead {
+      font-size: 1.12rem;
+      color: #273849;
+    }
+    .muted { color: var(--muted); }
+    .small { font-size: .9rem; }
+    .nowrap { white-space: nowrap; }
+
+    .grid-2, .grid-3, .grid-4 {
+      display: grid;
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      background: #fbfdff;
+    }
+    .card h3, .card h4 { margin-top: 0; }
+    .card-number {
+      display: inline-grid;
+      place-items: center;
+      width: 2.1rem;
+      height: 2.1rem;
+      margin-bottom: .55rem;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--blue-700);
+      font-weight: 900;
+    }
+
+    .callout {
+      margin: 1rem 0;
+      padding: .85rem 1rem;
+      border-left: .38rem solid var(--blue-700);
+      border-radius: 7px;
+      background: var(--blue-100);
+    }
+    .callout.success { border-color: var(--green-700); background: var(--green-100); }
+    .callout.warning { border-color: var(--amber-800); background: var(--amber-100); }
+    .callout.danger { border-color: var(--red-800); background: var(--red-100); }
+    .callout.edit { border-color: var(--violet-800); background: var(--violet-100); }
+    .callout strong:first-child { color: var(--blue-950); }
+    .callout.edit strong:first-child { color: var(--violet-800); }
+
+    .step {
+      position: relative;
+      margin: 1.25rem 0;
+      padding: 1.2rem 1.2rem 1.2rem 4.25rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+    .step::before {
+      content: attr(data-step);
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      display: grid;
+      place-items: center;
+      width: 2.45rem;
+      height: 2.45rem;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--blue-700);
+      font-weight: 900;
+    }
+    .step h3 { margin-top: 0; }
+    .goal {
+      display: inline-block;
+      margin: .2rem 0 .55rem;
+      padding: .2rem .55rem;
+      border-radius: 999px;
+      color: var(--green-700);
+      background: var(--green-100);
+      font-weight: 800;
+      font-size: .88rem;
+    }
+
+    .checklist { list-style: none; padding: 0; }
+    .checklist li {
+      position: relative;
+      padding-left: 1.8rem;
+    }
+    .checklist li::before {
+      content: "□";
+      position: absolute;
+      left: 0;
+      top: -.08rem;
+      color: var(--blue-700);
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table {
+      width: 100%;
+      min-width: 650px;
+      border-collapse: collapse;
+      background: #fff;
+    }
+    caption {
+      padding: 0 0 .55rem;
+      color: var(--blue-950);
+      text-align: left;
+      font-weight: 800;
+    }
+    th, td {
+      padding: .68rem .72rem;
+      border: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+    th { color: var(--blue-950); background: var(--blue-100); }
+    tbody tr:nth-child(even) { background: #f9fbfd; }
+
+    details {
+      margin: .7rem 0;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+    }
+    summary {
+      padding: .75rem .9rem;
+      color: var(--blue-950);
+      background: #f7fafc;
+      cursor: pointer;
+      font-weight: 800;
+    }
+    details > div { padding: 0 .9rem .9rem; }
+
+    .flow {
+      margin: 1rem 0;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(#fbfdff, #f2f7fb);
+    }
+    .flow svg { display: block; width: 100%; height: auto; }
+
+    .downloads {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .8rem;
+      margin: 1rem 0;
+    }
+    .button-link {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 92px;
+      padding: .9rem 1rem;
+      border: 1px solid #8ab7d4;
+      border-radius: 10px;
+      color: var(--blue-950);
+      background: var(--blue-100);
+      text-decoration: none;
+      font-weight: 800;
+    }
+    .button-link span { margin-top: .2rem; color: var(--muted); font-weight: 500; font-size: .88rem; }
+    .button-link:hover { border-color: var(--blue-700); background: #dceefa; }
+
+    .worksheet {
+      border: 2px dashed #8da4b5;
+      background: #fcfeff;
+    }
+    .write-line {
+      min-height: 2.2rem;
+      margin: .35rem 0 .85rem;
+      border-bottom: 1px solid #9dafbd;
+    }
+    .write-box {
+      min-height: 5.5rem;
+      margin: .35rem 0 .85rem;
+      border: 1px solid #9dafbd;
+      border-radius: 6px;
+      background: #fff;
+    }
+
+    footer {
+      padding: 2rem 1rem 3rem;
+      color: #dbe9f3;
+      background: var(--blue-950);
+      text-align: center;
+    }
+    footer a { color: #fff; }
+
+    @media (max-width: 980px) {
+      .page-shell { grid-template-columns: 1fr; }
+      nav.toc { position: static; max-height: none; }
+      nav.toc ol { columns: 2; }
+      .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .downloads { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      body { font-size: 16px; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      nav.toc ol { columns: 1; }
+      .step { padding-left: 1rem; padding-top: 4.3rem; }
+      .step::before { left: 1rem; top: 1rem; }
+      .hero { padding-top: 2.3rem; }
+    }
+
+    @media print {
+      body { background: #fff; font-size: 11pt; }
+      header { color: #000; background: #fff; border-bottom: 2px solid #000; }
+      .hero { padding: 1cm 0; }
+      nav.toc, .copy-button { display: none !important; }
+      .page-shell { display: block; width: 100%; margin: 0; }
+      section, .panel, .step, .card, details { box-shadow: none; break-inside: avoid; }
+      details > div { display: block; }
+      a { color: #000; text-decoration: none; }
+      a[href]::after { content: " (" attr(href) ")"; font-size: .8em; }
+      pre { white-space: pre-wrap; word-break: break-word; color: #000; background: #f4f4f4; border-color: #777; }
+      footer { color: #000; background: #fff; border-top: 1px solid #000; }
+      .worksheet { break-before: page; }
+    }
+  </style>
+</head>
+<body>
+<a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+
+<header>
+  <div class="hero">
+    <p class="eyebrow">Dobot Magician · Befehlskette</p>
+    <h1>Version 3.3.5 – Schrittweiser Einstieg für Schüler</h1>
+    <p class="subtitle">Vom ersten Test mit dem TCP-Simulator über den echten ESP32 bis zur eigenen, sicher geprüften Dobot-Befehlskette.</p>
+    <div class="hero-meta">
+      <span class="badge">PC-Befehlskette 3.3.5</span>
+      <span class="badge">Kommunikation 1.4</span>
+      <span class="badge">ESP32 / Simulator 1.3</span>
+      <span class="badge">Stand: 25.07.2026</span>
+    </div>
+  </div>
+</header>
+
+<div class="page-shell">
+  <nav class="toc" aria-label="Inhaltsverzeichnis">
+    <strong>Auf dieser Seite</strong>
+    <ol>
+      <li><a href="#idee">Projektidee</a></li>
+      <li><a href="#lernweg">Lernweg</a></li>
+      <li><a href="#dateien">Projektdateien</a></li>
+      <li><a href="#architektur">Architektur</a></li>
+      <li><a href="#vorbereitung">Vorbereitung</a></li>
+      <li><a href="#stufen">Unterrichtsstufen</a></li>
+      <li><a href="#befehle">Befehlsübersicht</a></li>
+      <li><a href="#fehler">Typische Fehler</a></li>
+      <li><a href="#aufgaben">Schüleraufgaben</a></li>
+      <li><a href="#erfahrungen">Eigene Erfahrungen</a></li>
+      <li><a href="#protokoll">Testprotokoll</a></li>
+      <li><a href="#downloads">Downloads</a></li>
+      <li><a href="#lehrer">Hinweise für Lehrkräfte</a></li>
+    </ol>
+  </nav>
+
+  <main id="inhalt">
+    <section id="idee">
+      <h2>1. Die Projektidee</h2>
+      <p class="lead">Der Dobot Magician wird nicht direkt mit vielen schwer verständlichen API-Aufrufen programmiert. Stattdessen beschreibt eine übersichtliche Liste, <strong>was der Roboter und der angeschlossene ESP32 nacheinander tun sollen</strong>.</p>
+
+      <pre><code>befehle = [
+    ("fahre_zu", 200, 0, 80, 0, "Fahre zur sicheren Startposition"),
+    ("esp_senden", "LED_GELB_EIN", "Gelbe LED am ESP32 einschalten"),
+    ("warte_bis", "FREI_1", "Warte auf Taster FREI 1", None),
+    ("esp_senden", "LED_GELB_AUS", "Gelbe LED am ESP32 ausschalten"),
+]</code></pre>
+
+      <div class="grid-3">
+        <div class="card"><span class="card-number">1</span><h3>Lesbar</h3><p>Jede Zeile beschreibt einen klaren Arbeitsschritt.</p></div>
+        <div class="card"><span class="card-number">2</span><h3>Prüfbar</h3><p>Die gesamte Liste wird vor der Dobot-Verbindung kontrolliert.</p></div>
+        <div class="card"><span class="card-number">3</span><h3>Erweiterbar</h3><p>ESP32, Simulator, Bedingungen, Marken und Sprünge lassen sich schrittweise ergänzen.</p></div>
+      </div>
+
+      <div class="callout success"><strong>Merksatz für Schüler:</strong> Am Anfang wird fast ausschließlich die Datei <code>befehlskette_beispiel_v3_3_5.py</code> bearbeitet. Die anderen Dateien stellen die benötigten Funktionen bereit.</div>
+    </section>
+
+    <section id="lernweg">
+      <h2>2. Warum ein schrittweiser Lernweg sinnvoll ist</h2>
+      <p>Das Gesamtsystem besteht aus mehreren Geräten, Programmen und Datenwegen. Werden Dobot, ESP32, COM-Port, TCP-Simulator und Befehlskette sofort gleichzeitig eingesetzt, ist die Ursache eines Fehlers nur schwer zu erkennen.</p>
+
+      <div class="grid-4">
+        <div class="card"><h3>Stufe A</h3><p><strong>Dateien verstehen</strong><br>Welche Datei wird gestartet? Welche Datei wird verändert?</p></div>
+        <div class="card"><h3>Stufe B</h3><p><strong>Kommunikation testen</strong><br>Zunächst ohne Dobot und ohne mechanische Bewegung.</p></div>
+        <div class="card"><h3>Stufe C</h3><p><strong>ESP32 einbinden</strong><br>Taster, LEDs, Meldungen und Werte untersuchen.</p></div>
+        <div class="card"><h3>Stufe D</h3><p><strong>Dobot bewegen</strong><br>Erst danach sichere Einzelbewegungen und eigene Abläufe.</p></div>
+      </div>
+
+      <div class="callout warning"><strong>Didaktischer Grundsatz:</strong> In jeder Lernstufe wird nur <em>eine neue Schwierigkeit</em> ergänzt. Erst wenn diese Stufe zuverlässig funktioniert, folgt die nächste.</div>
+    </section>
+
+    <section id="dateien">
+      <h2>3. Die Projektdateien</h2>
+      <div class="table-wrap">
+        <table>
+          <caption>Empfohlener Inhalt des Projektordners</caption>
+          <thead><tr><th>Datei</th><th>Version</th><th>Aufgabe</th><th>Vom Schüler verändern?</th></tr></thead>
+          <tbody>
+            <tr><td><code>befehlskette_beispiel_v3_3_5.py</code></td><td>3.3.5</td><td>Konfiguration, Startmenü und eigene Befehlsliste.</td><td><strong>Ja</strong> – hier beginnt die Arbeit.</td></tr>
+            <tr><td><code>befehlskette_v3_3_5.py</code></td><td>3.3.5</td><td>Prüft, zeigt und verarbeitet die Befehlsliste.</td><td>Zunächst nein.</td></tr>
+            <tr><td><code>esp32_kommunikation_v1_4.py</code></td><td>1.4</td><td>Gemeinsame Kommunikation über COM oder TCP.</td><td>Zunächst nein.</td></tr>
+            <tr><td><code>esp-simulator.py</code></td><td>1.3</td><td>Ersetzt beim ersten Test den echten ESP32.</td><td>Später für eigene Simulationen.</td></tr>
+            <tr><td><code>esp32_dobot_steuerung_v1_3.py</code></td><td>1.3</td><td>MicroPython-Programm für Taster, LEDs und PC-Befehle.</td><td>Später auf dem ESP32.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <pre><code>befehlskette-v3_3_5/
+├── befehlskette_beispiel_v3_3_5.py
+├── befehlskette_v3_3_5.py
+├── esp32_kommunikation_v1_4.py
+├── esp-simulator.py
+└── esp32_dobot_steuerung_v1_3.py</code></pre>
+
+      <div class="callout danger"><strong>Nicht mischen:</strong> Eine Beispieldatei 3.3.5 sollte nicht versehentlich mit einem älteren Modul 3.3.4 oder 3.3.3 betrieben werden. Die Versionsprüfung soll genau solche Verwechslungen sichtbar machen.</div>
+
+      <details>
+        <summary>Warum sind die Dateien getrennt?</summary>
+        <div>
+          <p>Die Trennung hält das Schülerprogramm übersichtlich. Die komplizierte Prüfung, Warteschlangensteuerung und Kommunikation befinden sich in eigenen Modulen. Dadurch kann ein Schüler zunächst Abläufe formulieren, ohne den gesamten technischen Unterbau verstehen zu müssen.</p>
+        </div>
+      </details>
+    </section>
+
+    <section id="architektur">
+      <h2>4. Wie die Teile zusammenarbeiten</h2>
+      <div class="flow" role="img" aria-label="Ablauf von der Befehlsliste über das Steuerprogramm und die Kommunikation zum Dobot sowie zum ESP32 oder Simulator">
+        <svg viewBox="0 0 1000 350" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#1e669d"/></marker>
+          </defs>
+          <rect x="25" y="120" width="205" height="105" rx="15" fill="#e7f2fa" stroke="#1e669d" stroke-width="3"/>
+          <text x="127" y="155" text-anchor="middle" font-size="22" font-weight="700" fill="#0d2e4d">Befehlsliste</text>
+          <text x="127" y="185" text-anchor="middle" font-size="16" fill="#1c2733">Schülerprogramm</text>
+          <text x="127" y="210" text-anchor="middle" font-size="15" fill="#5c6977">einzeilige Tupel</text>
+
+          <rect x="300" y="70" width="250" height="205" rx="15" fill="#ffffff" stroke="#164f7c" stroke-width="3"/>
+          <text x="425" y="110" text-anchor="middle" font-size="22" font-weight="700" fill="#0d2e4d">Befehlskettenmodul</text>
+          <text x="425" y="142" text-anchor="middle" font-size="16" fill="#1c2733">prüfen · anzeigen · ausführen</text>
+          <text x="425" y="176" text-anchor="middle" font-size="15" fill="#5c6977">PAUSE · WEITER · HALT</text>
+          <text x="425" y="202" text-anchor="middle" font-size="15" fill="#5c6977">Marken · Werte · Bedingungen</text>
+          <text x="425" y="228" text-anchor="middle" font-size="15" fill="#5c6977">esp_senden</text>
+
+          <rect x="645" y="28" width="300" height="105" rx="15" fill="#eaf7ef" stroke="#1f6b45" stroke-width="3"/>
+          <text x="795" y="65" text-anchor="middle" font-size="22" font-weight="700" fill="#1f6b45">Dobot Magician</text>
+          <text x="795" y="94" text-anchor="middle" font-size="16" fill="#1c2733">Bewegung · HOME · Sauger</text>
+
+          <rect x="645" y="205" width="300" height="115" rx="15" fill="#fff4d6" stroke="#815400" stroke-width="3"/>
+          <text x="795" y="242" text-anchor="middle" font-size="22" font-weight="700" fill="#815400">ESP32 oder Simulator</text>
+          <text x="795" y="272" text-anchor="middle" font-size="16" fill="#1c2733">Taster · LEDs · Werte</text>
+          <text x="795" y="298" text-anchor="middle" font-size="15" fill="#5c6977">COM oder TCP</text>
+
+          <line x1="230" y1="173" x2="292" y2="173" stroke="#1e669d" stroke-width="4" marker-end="url(#arrow)"/>
+          <line x1="550" y1="118" x2="635" y2="82" stroke="#1e669d" stroke-width="4" marker-end="url(#arrow)"/>
+          <line x1="550" y1="225" x2="635" y2="252" stroke="#1e669d" stroke-width="4" marker-end="url(#arrow)"/>
+          <line x1="638" y1="287" x2="558" y2="260" stroke="#1e669d" stroke-width="3" stroke-dasharray="8 7" marker-end="url(#arrow)"/>
+        </svg>
+      </div>
+
+      <h3>Drei Nachrichtenarten vom ESP32 zum PC</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nachrichtenart</th><th>Beispiele</th><th>Verwendung</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Steuerbefehle</strong></td><td><code>PAUSE</code>, <code>WEITER</code>, <code>HALT</code>, <code>STATUS</code></td><td>Beeinflussen den Ablauf unmittelbar.</td></tr>
+            <tr><td><strong>Einmalige Meldungen</strong></td><td><code>FREI_1</code>, <code>FREIGABE</code></td><td>Werden mit <code>warte_bis</code> erwartet und anschließend verbraucht.</td></tr>
+            <tr><td><strong>Dauerhafte Werte</strong></td><td><code>WERT;TEMPERATUR;23.7</code></td><td>Bleiben gespeichert, bis ein neuer Wert eintrifft.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="vorbereitung">
+      <h2>5. Vorbereitung des Arbeitsplatzes</h2>
+      <ul class="checklist">
+        <li>Das ZIP-Paket wurde vollständig in einen eigenen Ordner entpackt.</li>
+        <li>Alle zusammengehörigen Dateien liegen im selben Projektordner.</li>
+        <li>Die PC-Dateien werden mit dem normalen Python-Interpreter ausgeführt.</li>
+        <li>Das ESP32-Programm wird mit MicroPython auf dem ESP32 ausgeführt.</li>
+        <li>Dobot und ESP32 verwenden im seriellen Betrieb verschiedene COM-Ports.</li>
+        <li>Der ESP32-COM-Port ist nicht gleichzeitig in Thonny und im PC-Programm geöffnet.</li>
+        <li>Vor Dobot-Bewegungen ist der Arbeitsraum frei und eine sichere Testposition bekannt.</li>
+      </ul>
+
+      <h3>Grundkonfiguration im Beispielprogramm</h3>
+      <pre><code>COM_MODUS = "tcp"       # zuerst Simulator verwenden
+
+DOBOT_PORT = "COM10"
+DOBOT_BAUDRATE = 115200
+
+ESP32_COM_PORT = "COM26"
+ESP32_COM_BAUDRATE = 115200
+
+ESP32_TCP_HOST = "127.0.0.1"
+ESP32_TCP_PORT = 5000</code></pre>
+
+      <div class="callout warning"><strong>Wichtig:</strong> Beim ersten Kommunikationstest bleibt der Dobot ausgeschaltet beziehungsweise unverbunden. So kann die Datenübertragung untersucht werden, ohne dass sich der Roboter bewegt.</div>
+    </section>
+
+    <section id="stufen">
+      <h2>6. Der schrittweise Einstieg</h2>
+
+      <article class="step" data-step="0">
+        <h3>Projektordner untersuchen</h3>
+        <span class="goal">Lernziel: Dateien und Zuständigkeiten unterscheiden</span>
+        <ol>
+          <li>ZIP-Datei in einen neuen Ordner entpacken.</li>
+          <li>Die fünf Dateinamen mit der Dateiliste auf dieser Seite vergleichen.</li>
+          <li><code>befehlskette_beispiel_v3_3_5.py</code> öffnen.</li>
+          <li>Die Befehlsliste suchen, aber zunächst nichts verändern.</li>
+        </ol>
+        <p><strong>Kontrollfrage:</strong> Welche Datei enthält das eigene Ablaufprogramm?</p>
+      </article>
+
+      <article class="step" data-step="1">
+        <h3>TCP-Simulator ohne Dobot starten</h3>
+        <span class="goal">Lernziel: Server und Client unterscheiden</span>
+        <ol>
+          <li><code>esp-simulator.py</code> in einem eigenen Python-Prozess starten.</li>
+          <li>Der Simulator meldet, dass er auf <code>127.0.0.1:5000</code> wartet.</li>
+          <li>Im Beispielprogramm <code>COM_MODUS = "tcp"</code> einstellen.</li>
+          <li>Danach <code>befehlskette_beispiel_v3_3_5.py</code> starten.</li>
+        </ol>
+        <pre><code>ESP-Simulator 1.3 wartet auf 127.0.0.1:5000 ...
+TCP-Client verbunden: 127.0.0.1:...</code></pre>
+        <div class="callout"><strong>Beobachtung:</strong> Der Simulator wartet als Server. Das Beispielprogramm verbindet sich als Client.</div>
+      </article>
+
+      <article class="step" data-step="2">
+        <h3>Das Startmenü und den Sendetest verwenden</h3>
+        <span class="goal">Lernziel: Kommunikation prüfen, ohne den Dobot zu starten</span>
+        <pre><code>Befehlskette starten?
+  s = Start
+  a = Abbruch
+  t = Testen
+Eingabe:</code></pre>
+        <p><kbd>t</kbd> öffnet den freien Sendetest. Zuerst werden diese Nachrichten eingegeben:</p>
+        <pre><code>PING
+ESP32_STATUS
+HILFE</code></pre>
+        <p>Erwartet werden Antworten wie:</p>
+        <pre><code>PONG
+ESP32_STATUS;VERSION=1.3-SIMULATOR;LED_BLAU=1;LED_GELB=1;SIMULATION=0
+ESP32_BEFEHLE;...</code></pre>
+        <p>Mit <kbd>q</kbd> wird nur der Sendetest beendet. Danach erscheint wieder das Startmenü.</p>
+      </article>
+
+      <article class="step" data-step="3">
+        <h3>Gelbe LED und Zustandswerte untersuchen</h3>
+        <span class="goal">Lernziel: Befehl, Aktion und Rückmeldung zuordnen</span>
+        <p>Im Sendetest nacheinander eingeben:</p>
+        <pre><code>LED_GELB_EIN
+LED_GELB_STATUS
+LED_GELB_AUS
+LED_GELB_UMSCHALTEN</code></pre>
+        <p>Der Simulator beziehungsweise ESP32 bestätigt den Befehl und sendet den neuen Wert:</p>
+        <pre><code>BEFEHL_AUSGEFUEHRT;LED_GELB_EIN
+WERT;LED_gelb;1</code></pre>
+        <p>Die Zufallssimulation kann ebenfalls getestet werden:</p>
+        <pre><code>SIMULATION_LED_START;3;6
+SIMULATION_LED_STOP</code></pre>
+      </article>
+
+      <article class="step" data-step="4">
+        <h3><code>esp_senden</code> in der Befehlsliste verwenden</h3>
+        <span class="goal">Lernziel: Eine PC-zu-ESP32-Aktion in den Ablauf einbauen</span>
+        <pre><code>befehle = [
+    ("esp_senden", "LED_GELB_EIN", "Gelbe LED am ESP32 einschalten"),
+    ("warte_bis", "FREI_1", "Warte auf Taster FREI 1", None),
+    ("esp_senden", "LED_GELB_AUS", "Gelbe LED am ESP32 ausschalten"),
+]</code></pre>
+        <p>Beim Simulator wird <code>FREI_1</code> über die Tastatur des Simulatorfensters gesendet. Beim echten ESP32 entsteht die Meldung durch den zugehörigen Taster.</p>
+        <div class="callout success"><strong>Wichtige Erkenntnis:</strong> <code>esp_senden</code> überträgt einen Text vom PC zum ESP32. <code>warte_bis</code> wartet in der Gegenrichtung auf eine einmalige Meldung.</div>
+      </article>
+
+      <article class="step" data-step="5">
+        <h3>Dauerhafte Werte anzeigen und vergleichen</h3>
+        <span class="goal">Lernziel: Ereignis und Zustand unterscheiden</span>
+        <p>Der Simulator kann beispielsweise senden:</p>
+        <pre><code>WERT;TEMPERATUR;25</code></pre>
+        <p>Die Befehlskette kann den Wert anzeigen:</p>
+        <pre><code>("wert_anzeigen", "TEMPERATUR", "Aktuelle Temperatur")</code></pre>
+        <p>Sie kann auch auf einen Wert warten:</p>
+        <pre><code>("warte_bis_wert", "TEMPERATUR", ">=", 30, "Warte auf mindestens 30 °C", None)</code></pre>
+        <p>Oder abhängig vom Wert einen Befehl auswählen:</p>
+        <pre><code>("wenn_wert", "TEMPERATUR", ">=", 30, ("esp_senden", "LED_GELB_EIN", "Warnanzeige einschalten"), ("esp_senden", "LED_GELB_AUS", "Warnanzeige ausschalten"))</code></pre>
+      </article>
+
+      <article class="step" data-step="6">
+        <h3>Vom Simulator zum echten ESP32 wechseln</h3>
+        <span class="goal">Lernziel: Gleiche Protokolle über unterschiedliche Verbindungen nutzen</span>
+        <ol>
+          <li><code>esp32_dobot_steuerung_v1_3.py</code> als <code>main.py</code> oder entsprechend der eigenen Arbeitsweise auf den ESP32 übertragen.</li>
+          <li>Verdrahtung der Taster und LEDs prüfen.</li>
+          <li>Thonny vom verwendeten ESP32-COM-Port trennen.</li>
+          <li>Im Beispielprogramm <code>COM_MODUS = "serial"</code> einstellen.</li>
+          <li><code>ESP32_COM_PORT</code> anpassen.</li>
+          <li>Die Tests aus den Stufen 2 und 3 wiederholen.</li>
+        </ol>
+        <div class="callout warning"><strong>Vergleichstest:</strong> Simulator und echter ESP32 sollten auf dieselben Befehle möglichst gleich reagieren. Abweichungen werden im Testprotokoll festgehalten.</div>
+      </article>
+
+      <article class="step" data-step="7">
+        <h3>Erst jetzt den Dobot einbeziehen</h3>
+        <span class="goal">Lernziel: Eine sichere Roboterbewegung kontrolliert ergänzen</span>
+        <ol>
+          <li>Arbeitsraum freiräumen.</li>
+          <li>Sichere, bereits getestete Koordinate verwenden.</li>
+          <li>Geschwindigkeit zunächst niedrig einstellen.</li>
+          <li>Nur eine Bewegung einbauen und beobachten.</li>
+          <li>Erst danach weitere Befehle ergänzen.</li>
+        </ol>
+        <pre><code>befehle = [
+    ("geschwindigkeit", 30, 30, "Geschwindigkeit und Beschleunigung auf 30 % setzen", 0),
+    ("fahre_zu", 200, 0, 80, 0, "Fahre zur sicheren Testposition", 500),
+    ("esp_senden", "LED_GELB_EIN", "Gelbe LED einschalten"),
+]</code></pre>
+        <div class="callout danger"><strong>Sicherheitsgrenze der Softwareprüfung:</strong> Eine syntaktisch korrekte Koordinate kann mechanisch trotzdem ungeeignet oder unerreichbar sein.</div>
+      </article>
+
+      <article class="step" data-step="8">
+        <h3>Eigene Ablaufprogramme entwickeln</h3>
+        <span class="goal">Lernziel: Planung, Umsetzung, Test und Dokumentation verbinden</span>
+        <p>Geeignete erste Projekte:</p>
+        <ul>
+          <li>Startfreigabe über einen ESP32-Taster.</li>
+          <li>LED-Anzeige während einer Dobot-Aufgabe.</li>
+          <li>Auswahl zwischen zwei Positionen über einen gespeicherten Wert.</li>
+          <li>Wiederholung eines Ablaufs mit <code>marke</code> und <code>gehe_zu_befehl</code>.</li>
+          <li>Statusanzeige auf einem später ergänzten ESP32-Display.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="befehle">
+      <h2>7. Befehle der Version 3.3.5</h2>
+      <p>Die folgende Übersicht dient als schnelle Orientierung. Die vollständige technische Beschreibung befindet sich in der PDF-Projektdokumentation.</p>
+
+      <details open>
+        <summary>Bewegung und Werkzeug</summary>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Befehl</th><th>Grundform</th><th>Zweck</th></tr></thead>
+          <tbody>
+            <tr><td><code>fahre_zu</code></td><td><code>("fahre_zu", x, y, z, r, Text[, Pause_ms])</code></td><td>Absolute lineare Fahrt.</td></tr>
+            <tr><td><code>fahre_um</code></td><td><code>("fahre_um", dx, dy, dz, dr, Text[, Pause_ms])</code></td><td>Relative lineare Bewegung.</td></tr>
+            <tr><td><code>springe_auf</code></td><td><code>("springe_auf", x, y, z, r, Text[, Pause_ms])</code></td><td>JUMP-Bewegung zu einer Position.</td></tr>
+            <tr><td><code>home</code></td><td><code>("home"[, Text[, Pause_ms]])</code></td><td>HOME-Fahrt.</td></tr>
+            <tr><td><code>geschwindigkeit</code></td><td><code>("geschwindigkeit", Geschw.[, Beschl.], Text[, Pause_ms])</code></td><td>Geschwindigkeit und Beschleunigung einstellen.</td></tr>
+            <tr><td><code>sauger_ein</code></td><td><code>("sauger_ein"[, Text[, Pause_ms]])</code></td><td>Sauger einschalten.</td></tr>
+            <tr><td><code>sauger_aus</code></td><td><code>("sauger_aus"[, Text[, Pause_ms]])</code></td><td>Sauger ausschalten.</td></tr>
+            <tr><td><code>sauger_status</code></td><td><code>("sauger_status"[, Text[, Pause_ms]])</code></td><td>Saugerzustand anzeigen.</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <details>
+        <summary>Kommunikation, Werte und Entscheidungen</summary>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Befehl</th><th>Grundform</th><th>Zweck</th></tr></thead>
+          <tbody>
+            <tr><td><code>esp_senden</code></td><td><code>("esp_senden", Nachricht[, Text])</code></td><td>Text an ESP32 oder Simulator senden.</td></tr>
+            <tr><td><code>warte_bis</code></td><td><code>("warte_bis", Meldung[, Text[, Timeout_s]])</code></td><td>Auf eine einmalige Meldung warten.</td></tr>
+            <tr><td><code>wert_anzeigen</code></td><td><code>("wert_anzeigen", Name[, Text])</code></td><td>Dauerhaft gespeicherten Wert anzeigen.</td></tr>
+            <tr><td><code>warte_bis_wert</code></td><td><code>("warte_bis_wert", Name[, Operator], Sollwert[, Text[, Timeout_s]])</code></td><td>Auf einen Wertvergleich warten.</td></tr>
+            <tr><td><code>wenn_wert</code></td><td><code>("wenn_wert", Name[, Operator], Sollwert, Wahr-Befehl, Falsch-Befehl)</code></td><td>Abhängig vom Wert einen eingebetteten Befehl ausführen.</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <details>
+        <summary>Ablaufsteuerung</summary>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Befehl</th><th>Grundform</th><th>Zweck</th></tr></thead>
+          <tbody>
+            <tr><td><code>marke</code></td><td><code>("marke", Name)</code></td><td>Sprungstelle definieren.</td></tr>
+            <tr><td><code>gehe_zu_befehl</code></td><td><code>("gehe_zu_befehl", Markenname)</code></td><td>Programmzeiger zu einer Marke setzen.</td></tr>
+          </tbody>
+        </table></div>
+      </details>
+
+      <div class="callout"><strong>Vergleichsoperatoren:</strong> <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>&gt;</code> und <code>&gt;=</code>. Die Aliase <code>=</code> und <code>&lt;&gt;</code> werden normalisiert.</div>
+    </section>
+
+    <section id="fehler">
+      <h2>8. Typische Fehler und ihre Ursachen</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Beobachtung</th><th>Wahrscheinliche Ursache</th><th>Prüfung</th></tr></thead>
+          <tbody>
+            <tr><td><code>ModuleNotFoundError</code></td><td>Datei fehlt, liegt im falschen Ordner oder wurde umbenannt.</td><td>Ordnerstruktur und Importnamen vergleichen.</td></tr>
+            <tr><td>Simulator wartet dauerhaft.</td><td>Das Beispielprogramm wurde noch nicht gestartet oder TCP-Einstellungen stimmen nicht.</td><td><code>COM_MODUS</code>, Host und Port prüfen.</td></tr>
+            <tr><td>TCP-Verbindung wird abgelehnt.</td><td>Simulator läuft nicht oder falscher Port.</td><td>Simulator zuerst starten.</td></tr>
+            <tr><td>Serieller Port kann nicht geöffnet werden.</td><td>Falscher COM-Port oder Port ist bereits durch Thonny belegt.</td><td>Interpreter trennen und Geräte-Manager prüfen.</td></tr>
+            <tr><td>ESP32 reagiert nicht auf LED-Befehl.</td><td>Ältere ESP32-Programmversion oder falscher Nachrichtenname.</td><td>Version 1.3 und exakte Schreibweise prüfen.</td></tr>
+            <tr><td><code>warte_bis</code> bleibt stehen.</td><td>Die erwartete einmalige Meldung wurde nicht gesendet.</td><td>Meldungsnamen und Simulatorausgabe vergleichen.</td></tr>
+            <tr><td><code>warte_bis_wert</code> bleibt stehen.</td><td>Wert fehlt oder erfüllt den Vergleich nicht.</td><td>Mit <code>wert_anzeigen</code> den Istwert prüfen.</td></tr>
+            <tr><td>Falsches Modul wird geladen.</td><td>Alte gleichnamige Datei liegt in einem Suchpfad.</td><td>Versionsausgabe und aktuellen Arbeitsordner kontrollieren.</td></tr>
+            <tr><td>Dobot bewegt sich unerwartet.</td><td>Koordinate, Reihenfolge oder Geschwindigkeit ungeeignet.</td><td>HALT, Arbeitsraum sichern und Einzelbewegung separat testen.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Fehlermeldungen richtig festhalten</h3>
+      <p>Nicht nur die letzte Zeile kopieren. Für die Auswertung werden möglichst folgende Angaben benötigt:</p>
+      <pre><code>Gestartete Datei:
+Verwendeter Modus: tcp / serial
+Versionsausgaben:
+Eingegebener Befehl:
+Vollständige Konsolenausgabe:
+Beobachtetes Verhalten:</code></pre>
+    </section>
+
+    <section id="aufgaben">
+      <h2>9. Vorschläge für Schüleraufgaben</h2>
+      <div class="grid-2">
+        <div class="card"><h3>Aufgabe 1 · Verbindung</h3><p>Sende <code>PING</code>, notiere die Antwort und erkläre die Bedeutung.</p></div>
+        <div class="card"><h3>Aufgabe 2 · Status</h3><p>Fordere <code>ESP32_STATUS</code> an und ordne die einzelnen Felder zu.</p></div>
+        <div class="card"><h3>Aufgabe 3 · LED</h3><p>Schalte die gelbe LED ein, aus und um. Dokumentiere jede Rückmeldung.</p></div>
+        <div class="card"><h3>Aufgabe 4 · Ereignis</h3><p>Erstelle einen Ablauf, der auf <code>FREI_1</code> wartet.</p></div>
+        <div class="card"><h3>Aufgabe 5 · Wert</h3><p>Sende unterschiedliche Temperaturwerte und zeige sie mit <code>wert_anzeigen</code> an.</p></div>
+        <div class="card"><h3>Aufgabe 6 · Bedingung</h3><p>Schalte die LED bei mindestens 30 °C ein, sonst aus.</p></div>
+        <div class="card"><h3>Aufgabe 7 · Vergleich</h3><p>Führe dieselben Tests mit Simulator und echtem ESP32 aus und vergleiche die Ergebnisse.</p></div>
+        <div class="card"><h3>Aufgabe 8 · Roboter</h3><p>Ergänze eine bereits geprüfte sichere Dobot-Bewegung.</p></div>
+        <div class="card"><h3>Aufgabe 9 · Ablauf</h3><p>Nutze eine Marke und einen Sprung für eine kontrollierte Wiederholung.</p></div>
+        <div class="card"><h3>Aufgabe 10 · Eigenes Projekt</h3><p>Plane, programmiere, teste und dokumentiere einen kleinen automatisierten Ablauf.</p></div>
+      </div>
+    </section>
+
+    <section id="erfahrungen">
+      <h2>10. Erfahrungen im Umgang mit den Projektdateien</h2>
+      <p>Dieser Abschnitt ist als Grundlage für eigene Beobachtungen gedacht. Die vorbereiteten Aussagen können geändert, ergänzt oder durch konkrete Beispiele ersetzt werden.</p>
+
+      <div class="callout edit"><strong>Eigene Erfahrung ergänzen:</strong> Welche Schwierigkeiten traten beim Entpacken, Öffnen oder Starten der Dateien auf?</div>
+      <h3>Bewährte Arbeitsweise</h3>
+      <ul>
+        <li>Für jede Version wird ein eigener Ordner verwendet.</li>
+        <li>Dateien verschiedener Versionen werden nicht miteinander vermischt.</li>
+        <li>Vor einer Änderung wird die funktionierende Ausgangsversion gesichert.</li>
+        <li>Es wird immer nur eine Änderung vorgenommen und anschließend getestet.</li>
+        <li>Der Dateiname und die interne Versionsnummer werden gemeinsam kontrolliert.</li>
+        <li>Testergebnisse werden sofort notiert, bevor die nächste Änderung beginnt.</li>
+      </ul>
+
+      <div class="callout edit"><strong>Eigene Erfahrung ergänzen:</strong> Welche Dateinamen oder Ordnerstrukturen waren für Schüler besonders verständlich?</div>
+      <h3>Was Schüler zunächst nicht verändern sollten</h3>
+      <p>Die Module <code>befehlskette_v3_3_5.py</code> und <code>esp32_kommunikation_v1_4.py</code> enthalten die gemeinsame Infrastruktur. Anfänger sollten dort nicht gleichzeitig mit der Befehlsliste Änderungen vornehmen. Andernfalls ist später schwer festzustellen, ob ein Fehler aus dem eigenen Ablauf oder aus dem Modul stammt.</p>
+
+      <div class="callout edit"><strong>Eigene Erfahrung ergänzen:</strong> Welche Fehlermeldungen waren besonders lehrreich? Welche Erklärung hat Schülern geholfen?</div>
+      <h3>Warum der Simulator wertvoll ist</h3>
+      <p>Mit dem Simulator lassen sich Datenwege, Meldungen und Bedingungen ohne Mikrocontroller und ohne Dobot untersuchen. Ein Schüler kann dadurch zuerst das Protokoll verstehen und erst später die Hardware ergänzen.</p>
+
+      <div class="callout edit"><strong>Eigene Erfahrung ergänzen:</strong> Welche Unterschiede wurden zwischen Simulator und echtem ESP32 beobachtet?</div>
+    </section>
+
+    <section id="protokoll" class="worksheet">
+      <h2>11. Test- und Dokumentationsbogen</h2>
+      <p class="muted">Dieser Abschnitt kann ausgedruckt oder für eine digitale Schülerdokumentation übernommen werden.</p>
+
+      <div class="grid-2">
+        <div><strong>Name:</strong><div class="write-line"></div></div>
+        <div><strong>Datum:</strong><div class="write-line"></div></div>
+        <div><strong>Getestete Datei:</strong><div class="write-line"></div></div>
+        <div><strong>Versionsnummer:</strong><div class="write-line"></div></div>
+        <div><strong>Verbindung:</strong><div class="write-line">□ TCP-Simulator &nbsp;&nbsp; □ ESP32-COM &nbsp;&nbsp; □ Dobot</div></div>
+        <div><strong>Verwendete Ports:</strong><div class="write-line"></div></div>
+      </div>
+
+      <strong>Ziel des Tests:</strong><div class="write-box"></div>
+      <strong>Durchgeführte Schritte:</strong><div class="write-box"></div>
+      <strong>Erwartetes Ergebnis:</strong><div class="write-box"></div>
+      <strong>Tatsächliches Ergebnis:</strong><div class="write-box"></div>
+      <strong>Vollständige Fehlermeldung oder auffällige Ausgabe:</strong><div class="write-box"></div>
+      <strong>Auswertung und nächste Änderung:</strong><div class="write-box"></div>
+
+      <p><strong>Ergebnis:</strong> □ erfolgreich &nbsp;&nbsp; □ teilweise erfolgreich &nbsp;&nbsp; □ nicht erfolgreich</p>
+    </section>
+
+    <section id="downloads">
+      <h2>12. Dateien und weiterführende Dokumentation</h2>
+      <p>Die folgenden relativen Links sind für den gemeinsamen Ordner der Webseite vorgesehen. Dateinamen und Pfade können vor der Veröffentlichung angepasst werden.</p>
+      <div class="downloads">
+        <a class="button-link" href="../v3_3/befehlskette-v3_3_5.zip">Projektdateien 3.3.5<span>PC-Dateien, Simulator und ESP32-Programm</span></a>
+        <a class="button-link" href="Befehlskette_3_3_5_Projektdokumentation.pdf">Ausführliche PDF<span>Technische Gesamtdokumentation des Entwicklungsstands</span></a>
+        <a class="button-link" href="esp32_dobot_steuerung_versionsdokumentation.html">ESP32-Dokumentation<span>Entwicklung des ESP32-Steuerprogramms</span></a>
+      </div>
+      <p><a href="index.html">← Zur bisherigen Projektentwicklung der Befehlskette</a></p>
+      <div class="callout warning"><strong>Vor der Veröffentlichung prüfen:</strong> Liegen die verlinkten Dateien wirklich unter genau diesen Namen im selben Verzeichnis?</div>
+    </section>
+
+    <section id="lehrer">
+      <h2>13. Hinweise für Lehrkräfte und Projektbetreuer</h2>
+      <h3>Empfohlene Unterrichtsorganisation</h3>
+      <ul>
+        <li>Eine funktionierende Referenzinstallation bleibt unverändert.</li>
+        <li>Jede Schülergruppe arbeitet mit einer eigenen Kopie des Projektordners.</li>
+        <li>Die ersten Aufgaben werden ausschließlich im TCP-Modus ausgeführt.</li>
+        <li>Der Wechsel zum ESP32 erfolgt erst nach einem dokumentierten erfolgreichen Kommunikationstest.</li>
+        <li>Dobot-Bewegungen werden zunächst gemeinsam kontrolliert und einzeln freigegeben.</li>
+        <li>Eigene Erweiterungen müssen vor dem Praxistest in Worten oder als Ablaufplan beschrieben werden.</li>
+      </ul>
+
+      <h3>Mögliche Leistungsbewertung</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Bereich</th><th>Beobachtbare Leistung</th></tr></thead>
+        <tbody>
+          <tr><td>Projektorganisation</td><td>Dateien richtig zuordnen, Versionen sauber trennen und Arbeitsordner nachvollziehbar führen.</td></tr>
+          <tr><td>Technisches Verständnis</td><td>Unterschied zwischen TCP, COM, Ereignis, Wert und Steuerbefehl erklären.</td></tr>
+          <tr><td>Programmierung</td><td>Eine lesbare und funktionierende Befehlsliste erstellen.</td></tr>
+          <tr><td>Teststrategie</td><td>Erwartung formulieren, schrittweise testen und Fehler eingrenzen.</td></tr>
+          <tr><td>Dokumentation</td><td>Ausgaben vollständig festhalten und Änderungen begründen.</td></tr>
+          <tr><td>Sicherheit</td><td>Arbeitsraum, Geschwindigkeit und Koordinaten vor Bewegungen prüfen.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="callout"><strong>Rolle dieser Seite:</strong> Sie ist kein starres Arbeitsblatt, sondern ein Ausgangspunkt. Eigene Erfahrungen, Fotos, Konsolenausgaben, Schülerlösungen und neue Aufgaben können schrittweise ergänzt werden.</div>
+    </section>
+
+    <section>
+      <h2>14. Versionsstand und offene Tests</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Bestandteil</th><th>Version</th><th>Aktueller Stand</th></tr></thead>
+        <tbody>
+          <tr><td>Befehlskettenmodul</td><td>3.3.5</td><td>Prüfung, Ablaufsteuerung und <code>esp_senden</code> vorhanden.</td></tr>
+          <tr><td>Beispielprogramm</td><td>3.3.5</td><td>Startmenü mit Start, Abbruch und wiederholtem Sendetest.</td></tr>
+          <tr><td>Kommunikationsmodul</td><td>1.4</td><td>Serielle und TCP-Kommunikation mit gemeinsamen Queues und Wertespeicher.</td></tr>
+          <tr><td>ESP32-Programm</td><td>1.3</td><td>PC-Befehle, Taster, LEDs und nicht blockierende Simulation vorbereitet.</td></tr>
+          <tr><td>TCP-Simulator</td><td>1.3</td><td>Gleiche LED- und Statusbefehle wie die reale ESP32-Gegenstelle.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Der praktische Vergleich von TCP-Simulator, echtem ESP32 und realem Dobot wird fortlaufend getestet und dokumentiert. Bestätigte Ergebnisse können in den Abschnitt „Erfahrungen“ übernommen werden.</p>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <p><strong>Befehlskette 3.3.5 – Schrittweiser Einstieg für Schüler</strong></p>
+  <p>Grundlage für die weitere Bearbeitung · AG Young Engineers · Dobot Magician</p>
+  <p>Dokumentationsstand: 25.07.2026 · <a href="#">Nach oben</a></p>
+</footer>
+
+<script>
+  document.querySelectorAll('pre').forEach(function(pre) {
+    const button = document.createElement('button');
+    button.className = 'copy-button';
+    button.type = 'button';
+    button.textContent = 'Kopieren';
+    button.addEventListener('click', async function() {
+      const code = pre.querySelector('code');
+      const text = code ? code.innerText : pre.innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        button.textContent = 'Kopiert';
+        setTimeout(function() { button.textContent = 'Kopieren'; }, 1400);
+      } catch (error) {
+        button.textContent = 'Nicht möglich';
+        setTimeout(function() { button.textContent = 'Kopieren'; }, 1600);
+      }
+    });
+    pre.appendChild(button);
+  });
+</script>
+</body>
+</html>

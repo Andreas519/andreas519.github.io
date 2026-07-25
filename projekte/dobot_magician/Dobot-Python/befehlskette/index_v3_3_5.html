@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Befehlskette v3.3.5 · Dobot Python · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Befehlskette für Dobot Python">
+  <link rel="stylesheet" href="../../../../css/my.css">
+</head>
+<body>
+  <header>
+    <h1>Projektbereich Befehlskette Version `v3.3.5`</h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Ausgangspunkt</h2>
+      <ul>
+        <li>
+          <a href="./v3_5/befehlskette-v3_3_5-komplett.zip" target="_blank" rel="noopener noreferrer">befehlskette-v3_3_5-komplett.zip</a>
+        </li>
+        <li>
+          <a href="./doku/Befehlskette_3_3_5_Projektdokumentation.pdf" target="_blank" rel="noopener noreferrer">Projektdokumentation "Befehlskette v3.3.5"</a>
+        </li>
+        <li>
+          <a href="./doku/v3.3.5-schrittweiser-einstieg.html" target="_blank" rel="noopener noreferrer">Schrittweiser Einstieg in die Arbeit mit "Befehlskette v3.3.5"</a> - Erstell von ChatGPT
+        </li>
+      </ul>
+    </section>
+  
+    <section>
+      <h2>Mein Vorgehen</h2>
+      <ul>
+        <li>Testen des Programmes <code>esp32_dobot_steuerung.py</code> auf dem ESP32<br>
+         - direkt über Thonny IDE, so kann dieses Programm auf dem ESP32 getestet werden,<br>
+           ohne Verbindung zum Dobot-Steuerungsprogramm auf dem PC herzustellen.<br>
+           Alle Funktionen des ESP32-Programmes können im Dialog mit dem Benutzer getestet werden.
+        </li>
+        <li>Testen des Dobot-Steuerungsprogrammes <code>befehlskette_beispiel_v3_3_5.py</code> auf dem PC in einer neuen Thonny Instanz.</li>
+        <li>Testen des Zusammenspiels von ESP32-Programm und Dobot-Steuerungsprogramm auf dem PC:<br>
+          Beide Programme werden von <br>
+         - kontrolliere und passe an: <br>
+          - Zeile 45: <code>COM_MODUS = "serial"  # "serial" oder "tcp"</code> <br>
+          - Zeile 47: <code>DOBOT_PORT = "COM10"</code> <br>
+          - Zeile 55: <code>ESP32_COM_PORT = "COM26"</code> <br>
+          - Zeile 55: <code>ESP32_COM_PORT = "COM26"</code> <br>
+           Bis zur Frage "Befehlskette starten?" beantwortet ist.<br>
+           Alle Funktionen des ESP32-Programmes können im Dialog mit dem Benutzer getestet werden.<br>
+           Das war mein Plan.
+        </li>
+        <li>Auf Anraten von ChatGPT habe ich auf <code>OpenAI Codex</code> hinzugezogen. <br>
+          Codex hat von mir den Link auf das Projekt <code>befehlskette-v3_3_5-komplett.zip</code> erhalten 
+          und das Projekt in eine eigene lokale Arbeitsumgebung entpackt, auf die auch ich zugreifen kann.<br>
+          Danach erfolgte die Analyse. Umwerfend!
+        </li>
+        <li>Mein Prompt, als die Eingabe an die KI lautete:<br>
+          <pre>Ich teste das ESP32-Programm zusammen mit dem Dobot-Steuerungsprogramm auf dem PC.<br>
+Dazu übertrage ich das ESP32-Programm aus deiner Arbeitsumgebung auf den ESP32 und
+richte den Autostart beim Einschalten beziehungsweise nach einem Reset ein.
+Anschließend gebe ich in Thonny den COM-Port frei, indem ich auf WebREPL umstelle
+oder zu einem anderen freien COM-Port wechsle. Danach starte ich den ESP32 neu.
+Ist dieser Ablauf korrekt?"</pre>
+      Die für mich verblüffende Antwort von Codex ist <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-01.md&amp;title=CodexChat-01" target="_blank" rel="noopener noreferrer">hier</a> zu finden:
+        </li>
+        <li>Der nachfolgende Test ergab eine Endloskommunikation zwischen den beiden Programmen .<br>
+        Die Fehlersuche übernahm erfolgreich OpenAI Codex.<br>
+        Die vorgeschlagenen Änderungen am Programm nahm ich vor.
+        </li>
+        <li>
+        Die durchgeführten Änderungen wurden von Codex 
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-02.md&amp;title=CodexChat-02" target="_blank" rel="noopener noreferrer">hier</a>
+        dokumentiert<br>
+        Hier ging mir eine Licht für die weitere Vorgehensweise auf.
+      </li>
+      </ul>
+      Ich habe Codex gebeten, einen DHT11-Sensor in das Projekt zu integrieren.<br>
+      Die Antwort von Codex ist <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodesChat-03.md&amp;title=DHT11-Integration" target="_blank" rel="noopener noreferrer">hier</a> zu finden.
+    </section>
+    <section><h2>Neue Verfahrensweise für die weitere Projektentwicklung - OpenAI Codex</h2>
+    <p> Codex wird nun die Softwareentwicklung vollständig übernehmen.<br>
+          Codex hat das Projekt in eine eigene Arbeitsumgebung entpackt  <br>
+          Codex kann die einzelene Programmdateien analysieren und auch Testläufe durchführen. <br>
+          Lediglich das Aufspielen der Software auf dem ESP32 und das praktische Zusammenspiel aller Komponenten mit dem Dobot muss ich selbst organisieren. 
+        </p>
+          <ul>
+            <li>Ich und auch Codex können die Programme testen.</li>
+            <li>Ich werde keine Änderungen an den Programmen vornehmen, ich informiere Codex über feststellte Fehler.</li>
+            <li>Ich formuliere meine Änderungswünsche.</li>
+            <li>Codex übernimmt die Entwicklung, teilweise das Testen und auch das Dokumentieren.</li>
+            <li>Jede Änderung an einer Softwarekomponente wird von Codex mit einer internen Versionsnummer versehen.</li>
+            <li>Wir wiederholen diesen Prozess, bis die Software den Anforderungen entspricht.</li>
+          </ul>
+          <p>Der Vorteil dieser Vorgehensweise ist, dass ich mich auf die praktische Arbeit mit dem Dobot
+             und seinem Umfeld konzentrieren kann und Codex die Softwareentwicklung übernimmt. <br>
+             Ich plaziere Sensoren und Aktoren, die ich für die Arbeit mit dem Dobot plane.<br>
+             Ich teste mit kleinen Testprogrammen, die ich von Codex anfordere, die hinzugefügten Komponenten<br>
+             Codex bindet dies in das Gesamtprojekt ein und entwickelt die Software, die diese Komponenten steuert. 
+          </p>
+          <p>Der gesamte Entwicklungsprozess wird so organisiert, dass ich mich auf die praktische Arbeit konzentrieren kann, 
+             während Codex die Softwareentwicklung übernimmt und alle Versionen sichert.</p>
+        </li>
+        <li>Änderungsprotokoll – wird von Codex veröffentlicht.</li>
+
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
