@@ -3,6 +3,14 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 25.07.2026, 23:40 Uhr – Aktueller Download
+
+- Die neuesten vorhandenen v3.3.5-Programmdateien wurden in den aktiven
+  Projektordner `befehlskette` übernommen.
+- Das Downloadpaket `befehlskette-aktuell.zip` wurde erstellt.
+- Die Projektseite unterscheidet nun zwischen dem aktuellen Download und
+  der unveränderten Ausgangsversion.
+
 ## 25.07.2026 – DHT11-Integration
 
 ### Geänderte Komponenten
@@ -36,4 +44,3 @@ Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 - Stabilen Projektstand als `befehlskette-v3_3_5-komplett.zip` bereitgestellt.
 - Projektdokumentation und schrittweisen Einstieg ergänzt.
 - Versionsbezogene Entwicklungsdokumentation unter `doku` gesammelt.
-
