@@ -1,27 +1,11 @@
-"""TCP-Server als Ersatz für einen ESP32.
-
-Passend zu:
-    befehlskette_v3_3_5.py
-    esp32_dobot_steuerung_v1_3.py
-
-Der Simulator kann:
-
-- Steuerbefehle und Werte an das PC-Programm senden,
-- Befehle des PC-Programms verarbeiten,
-- den Zustand einer gelben LED verwalten,
-- die gelbe LED in zufälligen Abständen umschalten,
-- Zustandsänderungen als WERT;LED_gelb;0/1 melden,
-- Status, Hilfe, Bestätigungen und Fehlermeldungen senden.
-"""
-
 import random
 import socket
 import threading
 import time
 
 
-VERSION = "1.3.2"
-VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
+VERSION = "1.3.3"
+VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
 
 HOST = "127.0.0.1"
 PORT = 5000

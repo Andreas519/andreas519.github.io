@@ -1,25 +1,3 @@
-"""Verständliche, steuerbare Dobot-Befehlsketten.
-
-Unterstützte Funktionen:
-- ``warte_bis`` wartet auf eine frei wählbare COM-/TCP-Meldung,
-- ``marke`` kennzeichnet eine Stelle in der Befehlsliste,
-- ``gehe_zu_befehl`` springt zu einer Marke,
-- ``home`` führt eine HOME-Fahrt aus,
-- ``geschwindigkeit`` ändert Geschwindigkeit und Beschleunigung.
-- ``wenn_wert`` verzweigt abhängig von einem gespeicherten ESP-Wert,
-- ``warte_bis_wert`` wartet auf einen bestimmten ESP-Wert,
-- ``wert_anzeigen`` zeigt einen gespeicherten ESP-Wert an.
-- Die Befehlskette wird vor dem Verbindungsaufbau vollständig geprüft.
-- ``wenn_wert`` und ``warte_bis_wert`` unterstützen Vergleichsoperatoren.
-- Ablaufzustände können fortlaufend an ESP32 oder Simulator gesendet werden.
-- ``esp_senden`` sendet einen frei wählbaren Text an ESP32 oder Simulator.
-
-Wichtig:
-Die Befehle werden nicht mehr vollständig im Voraus in die Dobot-Queue
-übertragen. Jeder Roboterbefehl wird einzeln eingereiht und beendet.
-Dadurch sind Sprünge innerhalb der Befehlsliste möglich.
-"""
-
 from pathlib import Path
 import queue
 import sys
@@ -27,8 +5,8 @@ import threading
 import time
 
 
-VERSION = "3.3.5.1"
-VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
+VERSION = "3.3.5.2"
+VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
 
 ZUSTAND_LAEUFT = "läuft"
 ZUSTAND_PAUSIERT = "pausiert"

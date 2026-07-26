@@ -1,29 +1,11 @@
-"""ESP32-Kommunikation wahlweise über COM oder TCP.
-
-Zwei getrennte Queues werden verwendet:
-
-``steuerbefehle``
-    PAUSE, WEITER, HALT und STATUS.
-
-``meldungen``
-    Beliebige andere Textzeilen, zum Beispiel FREIGABE oder FERTIG.
-    Diese Meldungen können von ``warte_bis`` ausgewertet werden.
-
-``werte``
-    Dauerhaft gespeicherte ESP-Werte aus Zeilen wie
-    ``WERT;POSITION;POS_A`` oder ``WERT;TEMPERATUR;23.7``.
-    Der Empfangsthread aktualisiert diese Werte unabhängig von der
-    laufenden Befehlskette.
-"""
-
 import socket
 import sys
 import threading
 import time
 
 
-VERSION = "1.4.2"
-VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
+VERSION = "1.4.3"
+VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
 
 BEFEHLE = {
     "p": "p",

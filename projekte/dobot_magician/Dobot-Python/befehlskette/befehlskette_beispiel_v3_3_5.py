@@ -1,34 +1,3 @@
-"""Testprogramm für Dobot und ESP32.
-
-COM_MODUS:
-    "serial"  USB-COM-Verbindung zum ESP32
-    "tcp"     TCP-Verbindung zum ESP-Simulator
-
-Neue Befehle:
-    warte_bis
-    marke
-    gehe_zu_befehl
-    home
-    geschwindigkeit
-    wenn_wert
-    warte_bis_wert
-    wert_anzeigen
-    esp_senden
-
-Weitere Funktionen:
-    vollständige Prüfung vor der Dobot-Verbindung
-    Vergleichsoperatoren ==, !=, <, <=, >, >=
-    laufende Zustandsmeldungen an ESP32 oder Simulator
-
-    esp_senden überträgt frei wählbare Texte an den ESP32
-    Startmenü mit Start, Abbruch und Sendetest
-    Im Sendetest werden Texte bis zur Eingabe q übertragen
-
-ESP-Werte werden als Textzeilen empfangen, zum Beispiel:
-    WERT;POSITION;POS_A
-    WERT;TEMPERATUR;23.7
-"""
-
 from pathlib import Path
 import os
 import queue
@@ -66,10 +35,10 @@ STANDARD_PAUSE_MS = 500
 TIMEOUT_SEKUNDEN = 90.0
 MAX_SCHRITTE = 1000
 
-PROGRAMM_VERSION = "3.3.5.2"
-PROGRAMM_VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
-ERWARTETE_BEFEHLSKETTENVERSION = "3.3.5.1"
-ERWARTETE_ESP32_MODULVERSION = "1.4.2"
+PROGRAMM_VERSION = "3.3.5.3"
+PROGRAMM_VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
+ERWARTETE_BEFEHLSKETTENVERSION = "3.3.5.2"
+ERWARTETE_ESP32_MODULVERSION = "1.4.3"
 
 
 # Die Meldung FREIGABE wird im TCP-Simulator einfach eingetippt.

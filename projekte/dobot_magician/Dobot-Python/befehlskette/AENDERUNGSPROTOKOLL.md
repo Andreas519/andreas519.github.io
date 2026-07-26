@@ -3,6 +3,14 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 26.07.2026, 10:42 Uhr – Einleitungskommentare entfernt
+
+- Die vollständigen einleitenden Mehrzeilenkommentare wurden aus den fünf
+  aktiven Programmdateien entfernt.
+- Versionsnummer und Versionszeitpunkt bleiben als eindeutige Konstanten erhalten.
+- Der lokale Simulatorbefehl `gs` bleibt unverändert: Er wird im Simulator
+  verarbeitet; nur die erzeugte Statusmeldung wird an den PC gesendet.
+
 ## 26.07.2026, 10:32 Uhr – Versionsangaben vereinheitlicht
 
 - Doppelte Versionsangaben wurden aus den einleitenden Kommentaren der fünf

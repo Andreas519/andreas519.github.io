@@ -1,45 +1,3 @@
-"""ESP32-Steuerung für die Dobot-Befehlskette.
-
-Sechs Taster senden über die USB-COM-Schnittstelle:
-
-    GPIO 25 -> PAUSE
-    GPIO 26 -> WEITER
-    GPIO 27 -> HALT
-    GPIO 33 -> STATUS
-    GPIO 18 -> PIN_FREI1
-    GPIO 32 -> PIN_FREI2
-Zwei Led    
-    GPIO 02 -> PIN_LED ( blaue Online-LED neben der roten Power-LED)
-    GPIO 19 -> PIN_LED_GELB
-    
-Jeder Taster wird zwischen dem GPIO und GND angeschlossen.
-Pin.PULL_UP aktiviert den internen Pull-up-Widerstand.
-
-Die LED an GPIO 2 leuchtet, sobald der PC die Nachricht
-PC_BEREIT gesendet hat.
-
-Das Programm verarbeitet zusätzlich Befehle aus der
-Dobot-Befehlskette, zum Beispiel:
-
-    LED_GELB_EIN
-    LED_GELB_AUS
-    LED_GELB_UMSCHALTEN
-    LED_GELB_STATUS
-    SIMULATION_LED_START;30;60
-    SIMULATION_LED_STOP
-    ESP32_STATUS
-    HILFE
-
-Achtung:
-HALT bricht die laufende Dobot-Aufgabe endgültig ab.
-
-Hinweis:
-Zum Testen der Taster braucht keine Verbindung zum Steuerung des Dobot bestehen.
-Somit kann die Verbindung mit Thonny bleiben.
-Sonst muß Thonny auf einen anderen Port oder WebREPL gestellt und
-der ESP per RESET-Knopf neu gestartet werden.
-"""
-
 from machine import Pin
 import sys
 import time
@@ -52,8 +10,8 @@ except ImportError:
     import select
 
 
-VERSION = "1.3.1"
-VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
+VERSION = "1.3.2"
+VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
 
 
 # ------------------------------------------------------------
