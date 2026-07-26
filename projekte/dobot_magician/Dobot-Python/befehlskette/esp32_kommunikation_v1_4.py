@@ -24,8 +24,8 @@ import threading
 import time
 
 
-VERSION = "1.4"
-VERSIONSDATUM = "23.07.2026"
+VERSION = "1.4.1"
+VERSIONSDATUM = "26.07.2026"
 
 BEFEHLE = {
     "p": "p",
@@ -264,7 +264,11 @@ class _ESP32SteuerungBasis:
             f"ESP32-Kommunikationsmeldung empfangen: "
             f"{nachricht!r} von {quelle}"
         )
-        senden(f"EMPFANGEN {nachricht}")
+        # Allgemeine Status-, Bestätigungs- und Fehlermeldungen werden nur
+        # gespeichert. Eine pauschale Rückbestätigung würde bei einer
+        # unbekannten Nachricht eine Endloskommunikation auslösen:
+        # PC:  EMPFANGEN <nachricht>
+        # ESP: UNBEKANNTER_BEFEHL;EMPFANGEN <nachricht>
 
 
 class ESP32SerielleSteuerung(_ESP32SteuerungBasis):

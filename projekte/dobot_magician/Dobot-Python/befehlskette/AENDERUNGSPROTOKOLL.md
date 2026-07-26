@@ -3,6 +3,15 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 26.07.2026 – Kommunikationsmodul 1.4.1
+
+- Eine noch aktive pauschale Rückbestätigung allgemeiner ESP32-Nachrichten
+  wurde aus `esp32_kommunikation_v1_4.py` entfernt.
+- Diese Rückbestätigung erzeugte zusammen mit der Antwort
+  `UNBEKANNTER_BEFEHL` eine Endloskommunikation zwischen PC und Simulator.
+- Die erwartete Kommunikationsmodulversion im Startprogramm wurde auf
+  `1.4.1` erhöht.
+
 ## 25.07.2026, 23:40 Uhr – Aktueller Download
 
 - Die neuesten vorhandenen v3.3.5-Programmdateien wurden in den aktiven
