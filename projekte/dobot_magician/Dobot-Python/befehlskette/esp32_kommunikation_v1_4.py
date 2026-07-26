@@ -25,7 +25,7 @@ import time
 
 
 VERSION = "1.4.1"
-VERSIONSDATUM = "26.07.2026"
+VERSIONSDATUM = "26.07.2026, 09:03 Uhr"
 
 BEFEHLE = {
     "p": "p",

@@ -3,6 +3,14 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 26.07.2026, 10:13 Uhr – Einheitliche Versionszeitpunkte
+
+- `VERSIONSDATUM` enthält bei neuen Änderungen neben dem Datum künftig auch
+  die Uhrzeit.
+- Das geänderte Startprogramm erhielt nachträglich die interne Version
+  `3.3.5.1` und ein eigenes `PROGRAMM_VERSIONSDATUM`.
+- Das Befehlskettenmodul bleibt unverändert auf Version `3.3.5`.
+
 ## 26.07.2026 – ESP-Simulator 1.3.1
 
 - Eingaben, die nach dem Ende der PC-Verbindung noch im Simulatorfenster

@@ -1,6 +1,6 @@
 """Testprogramm für Dobot und ESP32.
 
-Programmversion 3.3.5
+Programmversion 3.3.5.1
 
 COM_MODUS:
     "serial"  USB-COM-Verbindung zum ESP32
@@ -69,7 +69,8 @@ STANDARD_PAUSE_MS = 500
 TIMEOUT_SEKUNDEN = 90.0
 MAX_SCHRITTE = 1000
 
-PROGRAMM_VERSION = "3.3.5"
+PROGRAMM_VERSION = "3.3.5.1"
+PROGRAMM_VERSIONSDATUM = "26.07.2026, 10:13 Uhr"
 ERWARTETE_BEFEHLSKETTENVERSION = "3.3.5"
 ERWARTETE_ESP32_MODULVERSION = "1.4.1"
 
@@ -181,7 +182,10 @@ programm = befehlskette_pruefen(
     standard_pause_ms=STANDARD_PAUSE_MS,
 )
 
-print(f"Testprogramm Version {PROGRAMM_VERSION}")
+print(
+    f"Testprogramm Version {PROGRAMM_VERSION} "
+    f"vom {PROGRAMM_VERSIONSDATUM}"
+)
 print(f"Kommunikationsmodus: {COM_MODUS}")
 print(
     f"Befehlskettenmodul Version "
