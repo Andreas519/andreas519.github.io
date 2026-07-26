@@ -3,6 +3,16 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 26.07.2026, 10:32 Uhr – Versionsangaben vereinheitlicht
+
+- Doppelte Versionsangaben wurden aus den einleitenden Kommentaren der fünf
+  aktiven Programmdateien entfernt.
+- Die Kommentare enthalten nur noch dauerhaft gültige Funktionsbeschreibungen.
+- Versionsnummer und Versionszeitpunkt stehen jeweils ausschließlich in den
+  dafür vorgesehenen Konstanten.
+- Die internen Patch-Versionen wurden wegen der Änderungen an allen fünf
+  Dateien erhöht.
+
 ## 26.07.2026, 10:13 Uhr – Einheitliche Versionszeitpunkte
 
 - `VERSIONSDATUM` enthält bei neuen Änderungen neben dem Datum künftig auch

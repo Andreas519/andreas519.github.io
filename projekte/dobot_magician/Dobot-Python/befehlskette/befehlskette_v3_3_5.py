@@ -1,8 +1,6 @@
 """Verständliche, steuerbare Dobot-Befehlsketten.
 
-Version 3.3.5
-
-Neu gegenüber Version 3.3:
+Unterstützte Funktionen:
 - ``warte_bis`` wartet auf eine frei wählbare COM-/TCP-Meldung,
 - ``marke`` kennzeichnet eine Stelle in der Befehlsliste,
 - ``gehe_zu_befehl`` springt zu einer Marke,
@@ -29,8 +27,8 @@ import threading
 import time
 
 
-VERSION = "3.3.5"
-VERSIONSDATUM = "24.07.2026"
+VERSION = "3.3.5.1"
+VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
 
 ZUSTAND_LAEUFT = "läuft"
 ZUSTAND_PAUSIERT = "pausiert"

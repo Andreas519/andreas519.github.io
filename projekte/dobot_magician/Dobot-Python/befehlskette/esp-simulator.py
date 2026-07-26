@@ -1,6 +1,5 @@
 """TCP-Server als Ersatz für einen ESP32.
 
-Simulator-Version 1.3
 Passend zu:
     befehlskette_v3_3_5.py
     esp32_dobot_steuerung_v1_3.py
@@ -21,8 +20,8 @@ import threading
 import time
 
 
-VERSION = "1.3.1"
-VERSIONSDATUM = "26.07.2026, 09:47 Uhr"
+VERSION = "1.3.2"
+VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
 
 HOST = "127.0.0.1"
 PORT = 5000

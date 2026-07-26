@@ -1,7 +1,5 @@
 """ESP32-Kommunikation wahlweise über COM oder TCP.
 
-Version 1.4
-
 Zwei getrennte Queues werden verwendet:
 
 ``steuerbefehle``
@@ -24,8 +22,8 @@ import threading
 import time
 
 
-VERSION = "1.4.1"
-VERSIONSDATUM = "26.07.2026, 09:03 Uhr"
+VERSION = "1.4.2"
+VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
 
 BEFEHLE = {
     "p": "p",

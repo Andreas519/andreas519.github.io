@@ -1,7 +1,5 @@
 """ESP32-Steuerung für die Dobot-Befehlskette.
 
-MicroPython-Version 1.3
-
 Sechs Taster senden über die USB-COM-Schnittstelle:
 
     GPIO 25 -> PAUSE
@@ -20,8 +18,8 @@ Pin.PULL_UP aktiviert den internen Pull-up-Widerstand.
 Die LED an GPIO 2 leuchtet, sobald der PC die Nachricht
 PC_BEREIT gesendet hat.
 
-Version 1.3 verarbeitet zusätzlich Befehle aus der
-Dobot-Befehlskette 3.3.5, zum Beispiel:
+Das Programm verarbeitet zusätzlich Befehle aus der
+Dobot-Befehlskette, zum Beispiel:
 
     LED_GELB_EIN
     LED_GELB_AUS
@@ -54,8 +52,8 @@ except ImportError:
     import select
 
 
-VERSION = "1.3"
-VERSIONSDATUM = "24.07.2026"
+VERSION = "1.3.1"
+VERSIONSDATUM = "26.07.2026, 10:32 Uhr"
 
 
 # ------------------------------------------------------------
