@@ -21,8 +21,8 @@ import threading
 import time
 
 
-VERSION = "1.3"
-VERSIONSDATUM = "24.07.2026"
+VERSION = "1.3.1"
+VERSIONSDATUM = "26.07.2026"
 
 HOST = "127.0.0.1"
 PORT = 5000
@@ -628,6 +628,13 @@ def eingaben_senden(
             eingabe = input("ESP> ").strip()
         except (EOFError, KeyboardInterrupt):
             eingabe = "q"
+
+        if beenden.is_set():
+            print(
+                "\nDie PC-Verbindung wurde bereits beendet. "
+                "Die Eingabe wird nicht mehr gesendet."
+            )
+            return
 
         if eingabe.lower() in ("q", "ende"):
             beenden.set()

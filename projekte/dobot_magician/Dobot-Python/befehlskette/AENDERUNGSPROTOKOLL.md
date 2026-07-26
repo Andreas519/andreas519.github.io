@@ -3,6 +3,13 @@
 Dieses Protokoll dokumentiert die Weiterentwicklung des Projekts
 **Dobot Befehlskette** ab Version 3.3.5.
 
+## 26.07.2026 – ESP-Simulator 1.3.1
+
+- Eingaben, die nach dem Ende der PC-Verbindung noch im Simulatorfenster
+  bestätigt werden, werden nicht mehr an den geschlossenen Socket gesendet.
+- Statt des Windows-Socketfehlers `WinError 10053` erscheint eine verständliche
+  Meldung, und der Simulator wird kontrolliert beendet.
+
 ## 26.07.2026 – Kommunikationsmodul 1.4.1
 
 - Eine noch aktive pauschale Rückbestätigung allgemeiner ESP32-Nachrichten
