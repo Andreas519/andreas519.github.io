@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Befehlskette v3.3.5 · Dobot Python · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Projektstand, Entwicklungsgeschichte und Zusammenarbeit bei der Dobot-Befehlskette v3.3.5">
+  <link rel="stylesheet" href="../../../../css/my.css">
+  <style>
+    .intro {
+      max-width: 850px;
+      margin: 12px auto 0;
+      font-size: 1.08rem;
+      opacity: .96;
+    }
+
+    .section-nav {
+      max-width: 1050px;
+      margin: 18px auto 0;
+    }
+
+    .statuszeile {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      align-items: center;
+      margin: .8rem 0 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      background: #e0ecff;
+      color: #1e40af;
+      font-size: .84rem;
+      font-weight: 700;
+    }
+
+    .badge-test {
+      background: #fff3cd;
+      color: #715500;
+    }
+
+    .badge-offen {
+      background: #fde8e8;
+      color: #8a1c1c;
+    }
+
+    .kurzkarte {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fbfdff;
+    }
+
+    .kurzkarte h3 {
+      margin-top: 0;
+      color: var(--accent-dark);
+    }
+
+    .kurzkarte p:last-child {
+      margin-bottom: 0;
+    }
+
+    .aktionsleiste {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .75rem;
+      margin-top: 1rem;
+    }
+
+    .aktionsleiste a {
+      display: inline-block;
+      padding: .65rem .95rem;
+      border: 1px solid #bfd0ea;
+      border-radius: 10px;
+      background: #eef4ff;
+    }
+
+    .aktionsleiste a:hover {
+      background: #dfeaff;
+      text-decoration: none;
+    }
+
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 0;
+      counter-reset: schritt;
+    }
+
+    .timeline li {
+      position: relative;
+      margin: 0 0 1rem 1.1rem;
+      padding: 0 0 1rem 2.1rem;
+      border-left: 3px solid #cbd8ec;
+    }
+
+    .timeline li::before {
+      counter-increment: schritt;
+      content: counter(schritt);
+      position: absolute;
+      left: -1rem;
+      top: -.1rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .timeline li:last-child {
+      border-left-color: transparent;
+      padding-bottom: 0;
+    }
+
+    .timeline h3 {
+      margin: 0 0 .35rem;
+    }
+
+    .rollenkarte {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      background: #fbfdff;
+    }
+
+    .rollenkarte h3 {
+      margin-top: 0;
+    }
+
+    .warnbox {
+      background: #fff8e1;
+      border-left: 5px solid #d99a00;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    .erfolgbox {
+      background: #edf9f0;
+      border-left: 5px solid #2f855a;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .85rem 1rem;
+      margin: .8rem 0;
+      background: #fbfdff;
+    }
+
+    summary {
+      cursor: pointer;
+      color: var(--accent-dark);
+      font-weight: 700;
+    }
+
+    details[open] summary {
+      margin-bottom: .8rem;
+    }
+
+    .checkliste li::marker {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .klein {
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    @media (max-width: 720px) {
+      .aktionsleiste a {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projektbereich Befehlskette v3.3.5</h1>
+    <p class="intro">
+      Vom gemeinsam entwickelten Grundsystem zur strukturierten Projektarbeit
+      mit Dobot, ESP32, ChatGPT und OpenAI Codex.
+    </p>
+  </header>
+
+  <nav class="section-nav" aria-label="Seitennavigation">
+    <ul>
+      <li><a href="#schnellueberblick">Schnellüberblick</a></li>
+      <li><a href="#downloads">Downloads</a></li>
+      <li><a href="#geschichte">Entwicklungsgeschichte</a></li>
+      <li><a href="#zusammenarbeit">Zusammenarbeit</a></li>
+      <li><a href="#testen">Testablauf</a></li>
+      <li><a href="#naechste-schritte">Nächste Schritte</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <section id="schnellueberblick">
+      <h2>Schnellüberblick</h2>
+
+      <div class="merkbox">
+        <strong>Mein Ziel:</strong>
+        Ich möchte meine Ideen möglichst schnell praktisch umsetzen.
+        Gleichzeitig soll nachvollziehbar bleiben, wie das Projekt entstanden ist,
+        welche Probleme auftraten und wie ChatGPT, Codex und ich zusammenarbeiten.
+      </div>
+
+      <div class="statuszeile" aria-label="Projektstatus">
+        <span class="badge">Grundversion: v3.3.5</span>
+        <span class="badge badge-test">Weiterentwicklung läuft</span>
+        <span class="badge badge-offen">Praxistests teilweise offen</span>
+      </div>
+
+      <div class="grid" style="margin-top: 1rem;">
+        <article class="kurzkarte">
+          <h3>Wo stehen wir?</h3>
+          <p>
+            Die Befehlskette verbindet das Dobot-Steuerprogramm auf dem PC mit
+            einem ESP32 oder einem ESP-Simulator. Die stabile Version
+            <code>v3.3.5</code> bildet den Ausgangspunkt.
+          </p>
+        </article>
+
+        <article class="kurzkarte">
+          <h3>Was ist neu?</h3>
+          <p>
+            OpenAI Codex wurde in die Entwicklung einbezogen. Codex analysiert
+            die Projektdateien, nimmt gezielte Änderungen vor, führt mögliche
+            Tests aus und dokumentiert die Ergebnisse.
+          </p>
+        </article>
+
+        <article class="kurzkarte">
+          <h3>Was mache ich?</h3>
+          <p>
+            Ich formuliere Anforderungen, baue Sensoren und Aktoren auf, übertrage
+            Programme auf den ESP32 und prüfe das reale Zusammenspiel mit dem Dobot.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section id="downloads">
+      <h2>Downloads und Dokumente</h2>
+      <p>
+        Hier befinden sich die wichtigsten Dateien. Die unveränderte Ausgangsversion
+        bleibt erhalten, damit spätere Änderungen jederzeit nachvollzogen werden können.
+      </p>
+
+      <div class="aktionsleiste">
+        <a href="./befehlskette-aktuell.zip" target="_blank" rel="noopener noreferrer">
+          Aktuelle Projektdateien herunterladen
+        </a>
+        <a href="./v3_5/befehlskette-v3_3_5-komplett-original.zip" target="_blank" rel="noopener noreferrer">
+          Unveränderte Ausgangsversion herunterladen
+        </a>
+        <a href="./doku/Befehlskette_3_3_5_Projektdokumentation.pdf" target="_blank" rel="noopener noreferrer">
+          Projektdokumentation öffnen
+        </a>
+        <a href="./doku/v3.3.5-schrittweiser-einstieg.html" target="_blank" rel="noopener noreferrer">
+          Schrittweisen Einstieg öffnen
+        </a>
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/AENDERUNGSPROTOKOLL.md&amp;title=Änderungsprotokoll"
+           target="_blank" rel="noopener noreferrer">
+          Änderungsprotokoll öffnen
+        </a>
+      </div>
+
+      <div class="warnbox">
+        <strong>Wichtiger Hinweis:</strong>
+        Das Änderungsprotokoll beschreibt bereits Erweiterungen zur DHT11-Integration.
+        Vor der nächsten Freigabe muss geprüft werden, ob die veröffentlichten
+        Programmdateien, ihre internen Versionsnummern und das Downloadpaket denselben
+        Entwicklungsstand enthalten.
+      </div>
+    </section>
+
+    <section id="geschichte">
+      <h2>Die Geschichte des Projekts</h2>
+      <p>
+        Diese Seite dokumentiert nicht nur Programme. Sie zeigt auch, wie sich meine
+        Arbeitsweise mit künstlicher Intelligenz Schritt für Schritt verändert hat.
+      </p>
+
+      <ol class="timeline">
+        <li>
+          <h3>Eine verständliche Befehlskette entsteht</h3>
+          <p>
+            Gemeinsam mit ChatGPT wurde aus einzelnen Dobot-Befehlen ein übersichtliches
+            System. Die Befehle werden als gut lesbare Tupel notiert und vor der
+            Ausführung geprüft. Dadurch bleibt der Programmablauf auch für Schülerinnen
+            und Schüler nachvollziehbar.
+          </p>
+        </li>
+
+        <li>
+          <h3>Der ESP32 wird einbezogen</h3>
+          <p>
+            Zusätzlich zur Robotersteuerung entstand eine Kommunikation mit dem ESP32.
+            Taster, LEDs, Sensoren und weitere Komponenten können dadurch in die
+            Befehlskette eingebunden werden.
+          </p>
+        </li>
+
+        <li>
+          <h3>Die Version v3.3.5 wird zum Ausgangspunkt</h3>
+          <p>
+            Die Projektdateien, die Dokumentation und ein schrittweiser Einstieg wurden
+            zu einem nachvollziehbaren Entwicklungsstand zusammengeführt. Diese Version
+            bleibt als unveränderte Referenz erhalten.
+          </p>
+        </li>
+
+        <li>
+          <h3>OpenAI Codex kommt hinzu</h3>
+          <p>
+            Auf Anregung von ChatGPT habe ich OpenAI Codex mit dem vollständigen
+            Projektpaket arbeiten lassen. Codex konnte die zusammengehörenden Dateien
+            untersuchen und den geplanten Ablauf direkt am Projekt erklären.
+          </p>
+          <p>
+            <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-01.md&amp;title=CodexChat-01"
+               target="_blank" rel="noopener noreferrer">
+              Erster dokumentierter Dialog mit Codex
+            </a>
+          </p>
+        </li>
+
+        <li>
+          <h3>Eine Endloskommunikation wird gefunden</h3>
+          <p>
+            Beim gemeinsamen Test von PC-Programm und Simulator entstand eine endlose
+            Folge gegenseitiger Antworten. Codex analysierte die Ursache, änderte die
+            Kommunikationslogik und ergänzte interne Versionsnummern.
+          </p>
+          <p>
+            <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-02.md&amp;title=CodexChat-02"
+               target="_blank" rel="noopener noreferrer">
+              Dokumentation der Fehlerbehebung
+            </a>
+          </p>
+        </li>
+
+        <li>
+          <h3>Der DHT11 wird zur ersten Erweiterungsaufgabe</h3>
+          <p>
+            Als nächster Schritt erhielt Codex die Aufgabe, einen DHT11-Sensor in das
+            Projekt einzubinden. Damit begann eine neue Form der Zusammenarbeit:
+            Ich beschreibe die praktische Aufgabe, Codex bearbeitet die Software und
+            ich teste das Ergebnis an der realen Hardware.
+          </p>
+          <p>
+            <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodesChat-03.md&amp;title=DHT11-Integration"
+               target="_blank" rel="noopener noreferrer">
+              Bisherige Notizen zur DHT11-Integration
+            </a>
+          </p>
+        </li>
+      </ol>
+    </section>
+
+    <section id="zusammenarbeit">
+      <h2>Unsere Zusammenarbeit</h2>
+      <p>
+        Die drei Rollen ergänzen sich. Die Projektleitung und die praktische Freigabe
+        bleiben bei mir.
+      </p>
+
+      <div class="grid">
+        <article class="rollenkarte">
+          <h3>Andreas – Idee, Aufbau und Praxistest</h3>
+          <ul>
+            <li>formuliert Ziele und Änderungswünsche,</li>
+            <li>entscheidet über den Aufbau des Projekts,</li>
+            <li>verdrahtet Sensoren und Aktoren,</li>
+            <li>überträgt Programme auf den ESP32,</li>
+            <li>testet Dobot, ESP32 und PC gemeinsam,</li>
+            <li>gibt eine Version nach dem Praxistest frei.</li>
+          </ul>
+        </article>
+
+        <article class="rollenkarte">
+          <h3>ChatGPT – Konzept, Erklärung und Dokumentation</h3>
+          <ul>
+            <li>entwickelt mit mir verständliche Lösungswege,</li>
+            <li>ordnet technische Zusammenhänge ein,</li>
+            <li>unterstützt die didaktische Aufbereitung,</li>
+            <li>erstellt und überarbeitet Dokumentationen,</li>
+            <li>hilft bei der Planung der nächsten Schritte.</li>
+          </ul>
+        </article>
+
+        <article class="rollenkarte">
+          <h3>OpenAI Codex – Arbeit an den Projektdateien</h3>
+          <ul>
+            <li>analysiert zusammengehörende Programmdateien,</li>
+            <li>führt gezielte Codeänderungen durch,</li>
+            <li>prüft Syntax und testbare Programmteile,</li>
+            <li>dokumentiert Änderungen und Versionen,</li>
+            <li>reagiert auf meine Testergebnisse und Fehlerberichte.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="erfolgbox">
+        <strong>Der entscheidende Vorteil:</strong>
+        Ich kann mich stärker auf den realen Aufbau, den Dobot und die Unterrichtsideen
+        konzentrieren. Gleichzeitig bleiben Softwareänderungen systematisch dokumentiert
+        und überprüfbar.
+      </div>
+    </section>
+
+    <section id="testen">
+      <h2>Praktischer Testablauf</h2>
+      <p>
+        Der Test erfolgt bewusst in kleinen Stufen. So lässt sich ein Fehler leichter
+        einer einzelnen Komponente zuordnen.
+      </p>
+
+      <ol class="checkliste">
+        <li>
+          <strong>Einzelne Hardwarekomponente testen:</strong>
+          beispielsweise den DHT11 mit einem kleinen Testprogramm auf dem ESP32.
+        </li>
+        <li>
+          <strong>ESP32-Programm allein testen:</strong>
+          direkt in Thonny, noch ohne Verbindung zum PC-Steuerungsprogramm.
+        </li>
+        <li>
+          <strong>PC-Programm vorbereiten:</strong>
+          Kommunikationsmodus und die tatsächlich verwendeten COM-Ports kontrollieren.
+        </li>
+        <li>
+          <strong>COM-Port freigeben:</strong>
+          Thonny auf „Lokales Python“, WebREPL oder einen anderen Anschluss umstellen
+          beziehungsweise Thonny schließen.
+        </li>
+        <li>
+          <strong>ESP32 neu starten:</strong>
+          das Hauptprogramm muss auf dem ESP32 als <code>main.py</code> gespeichert sein.
+        </li>
+        <li>
+          <strong>Kommunikation ohne Dobot-Bewegung prüfen:</strong>
+          Meldungen, LEDs, Taster und Sensorwerte kontrollieren.
+        </li>
+        <li>
+          <strong>Gesamtsystem testen:</strong>
+          erst danach PC, ESP32 und Dobot gemeinsam betreiben.
+        </li>
+      </ol>
+
+      <details>
+        <summary>Wichtige Einstellungen im PC-Programm</summary>
+        <pre><code>COM_MODUS = "serial"       # "serial" oder "tcp"
+DOBOT_PORT = "COM10"       # tatsächlichen Dobot-Port eintragen
+ESP32_COM_PORT = "COM26"   # tatsächlichen ESP32-Port eintragen
+ESP32_COM_BAUDRATE = 115200</code></pre>
+        <p class="klein">
+          Die COM-Portnummern sind Beispiele und müssen vor jedem Test mit dem
+          Windows-Geräte-Manager beziehungsweise mit Thonny abgeglichen werden.
+        </p>
+      </details>
+
+      <details>
+        <summary>Mein erster Testplan mit Codex</summary>
+        <p>
+          Das ESP32-Programm wird auf den Mikrocontroller übertragen und als
+          <code>main.py</code> gespeichert. Danach wird der von Thonny belegte COM-Port
+          freigegeben, der ESP32 neu gestartet und das PC-Programm im seriellen Modus
+          ausgeführt. Wichtig ist, dass Thonny und das Steuerprogramm den ESP32-Port
+          nicht gleichzeitig geöffnet haben.
+        </p>
+      </details>
+    </section>
+
+    <section id="naechste-schritte">
+      <h2>Nächste Schritte</h2>
+      <ol>
+        <li>Die DHT11-Erweiterung an der realen Hardware testen.</li>
+        <li>Die internen Versionsnummern aller geänderten Dateien kontrollieren.</li>
+        <li>Aktiven Projektordner und Downloadpaket miteinander vergleichen.</li>
+        <li>Die vollständige Codex-Dokumentation zur DHT11-Integration ergänzen.</li>
+        <li>Erst nach erfolgreichem Praxistest einen neuen freigegebenen Projektstand festlegen.</li>
+      </ol>
+
+      <div class="merkbox">
+        <strong>Grundsatz für die weitere Entwicklung:</strong>
+        Eine Version gilt erst dann als freigegeben, wenn die Softwareprüfung und der
+        praktische Test mit den beteiligten Geräten abgeschlossen sind.
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Überarbeiteter Seitenentwurf: 26.07.2026 ·
+    Letzte Dateiänderung: <span id="lastModified">wird ermittelt</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

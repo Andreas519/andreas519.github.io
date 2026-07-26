@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Befehlskette v3.3.5 · Dobot Python · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Projektstand und persönliche Entwicklungsgeschichte der Befehlskette v3.3.5 mit ChatGPT und OpenAI Codex">
+  <link rel="stylesheet" href="../../../../css/my.css">
+  <style>
+    .persoenlicher-hinweis {
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 5px solid #4d72a8;
+      background: #f5f8fc;
+    }
+
+    .gedankenstuetze {
+      margin: 1rem 0;
+      padding: 1rem 1.2rem;
+      border-left: 5px solid #c78a18;
+      background: #fff9ec;
+    }
+
+    .offen {
+      margin-top: 0.8rem;
+      padding: 0.8rem 1rem;
+      border: 1px dashed #9b6a16;
+      background: #fffdf7;
+    }
+
+    .ablauf li,
+    .rollen li {
+      margin-bottom: 0.55rem;
+    }
+
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Projektbereich Befehlskette Version <code>v3.3.5</code></h1>
+  </header>
+
+  <main>
+    <section>
+      <h2>Aktueller Stand</h2>
+
+      <p>
+        Die technischen Änderungen an den Programmdateien werden künftig gemeinsam
+        mit OpenAI Codex dokumentiert. Deshalb soll diese Seite nicht jede einzelne
+        Änderung wiederholen. Sie enthält den Ausgangspunkt, meine praktische
+        Vorgehensweise und vor allem die Geschichte, wie sich die Zusammenarbeit
+        mit ChatGPT und Codex entwickelt.
+      </p>
+
+      <p id="letzte_anderung">
+        Letzte Änderung am 26.07.2026 um 07:34 Uhr:
+        Dieser Seitenentwurf wurde inhaltlich überarbeitet. Der aktuelle Download,
+        das Änderungsprotokoll und die internen Versionsstände müssen vor der nächsten
+        Freigabe noch miteinander verglichen werden.
+      </p>
+
+      <ul>
+        <li>
+          <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/AENDERUNGSPROTOKOLL.md&amp;title=Änderungsprotokoll"
+             target="_blank" rel="noopener noreferrer">Technisches Änderungsprotokoll</a>
+        </li>
+        <li>
+          <a href="./befehlskette-aktuell.zip" target="_blank" rel="noopener noreferrer">Aktuellen Entwicklungsstand herunterladen</a>
+        </li>
+      </ul>
+
+      <p class="offen">
+        <strong>Noch nicht freigegeben:</strong>
+        Das Änderungsprotokoll beschreibt bereits die DHT11-Integration. Vor der
+        nächsten Freigabe wird geprüft, ob die veröffentlichten Programmdateien,
+        ihre internen Versionsnummern und das Downloadpaket denselben Stand enthalten.
+        Der praktische Test mit der realen Hardware steht ebenfalls noch aus.
+      </p>
+    </section>
+
+    <section>
+      <h2>Ausgangspunkt</h2>
+
+      <ul>
+        <li>
+          <a href="./v3_5/befehlskette-v3_3_5-komplett-original.zip"
+             target="_blank" rel="noopener noreferrer">Unveränderte Ausgangsversion herunterladen</a>
+        </li>
+        <li>
+          <a href="./doku/Befehlskette_3_3_5_Projektdokumentation.pdf"
+             target="_blank" rel="noopener noreferrer">Projektdokumentation „Befehlskette v3.3.5“</a>
+        </li>
+        <li>
+          <a href="./doku/v3.3.5-schrittweiser-einstieg.html"
+             target="_blank" rel="noopener noreferrer">Schrittweiser Einstieg in die Arbeit mit „Befehlskette v3.3.5“</a>
+          – erstellt von ChatGPT
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Warum ich diese Seite schreibe</h2>
+
+      <div class="persoenlicher-hinweis">
+        <p>
+          Eigentlich möchte ich möglichst schnell mit der Umsetzung meiner Gedanken
+          vorankommen. Dabei lese ich manchmal zu unkonzentriert und bin ungeduldig.
+          Trotzdem ist es mir wichtig, nicht nur das fertige Ergebnis zu zeigen.
+        </p>
+        <p>
+          Ich möchte auch meine Geschichte in der Zusammenarbeit mit ChatGPT und
+          OpenAI Codex festhalten. Gerade die Situationen, in denen mich eine Antwort
+          überrascht, begeistert oder auf eine neue Idee gebracht hat, sind für mich
+          wichtige Bestandteile dieses Projekts.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Mein ursprünglicher Plan</h2>
+
+      <ol class="ablauf">
+        <li>
+          <strong>Das ESP32-Programm allein testen</strong><br>
+          Das Programm <code>esp32_dobot_steuerung.py</code> wird direkt mit der
+          Thonny IDE auf dem ESP32 ausgeführt. Dadurch kann ich die Funktionen des
+          ESP32-Programms im Dialog testen, ohne bereits eine Verbindung zum
+          Dobot-Steuerungsprogramm auf dem PC herzustellen.
+        </li>
+
+        <li>
+          <strong>Das Dobot-Steuerungsprogramm auf dem PC testen</strong><br>
+          Das Programm <code>befehlskette_beispiel_v3_3_5.py</code> wird in einer
+          zweiten Thonny-Instanz auf dem PC gestartet.
+        </li>
+
+        <li>
+          <strong>Das Zusammenspiel beider Programme testen</strong><br>
+          Vor dem Start kontrolliere ich im PC-Programm die Einstellungen und passe
+          sie an die verwendeten Anschlüsse an:
+
+          <pre><code>COM_MODUS = "serial"       # "serial" oder "tcp"
+DOBOT_PORT = "COM10"
+ESP32_COM_PORT = "COM26"</code></pre>
+
+          Zunächst lasse ich das PC-Programm nur bis zur Frage
+          <q>Befehlskette starten?</q> laufen. Währenddessen kann ich die
+          Kommunikation und die Funktionen des ESP32-Programms prüfen, ohne bereits
+          eine Roboterbewegung auszulösen.
+        </li>
+      </ol>
+
+      <p><strong>Das war mein Plan.</strong></p>
+    </section>
+
+    <section>
+      <h2>ChatGPT empfiehlt OpenAI Codex</h2>
+
+      <p>
+        Auf Anraten von ChatGPT habe ich OpenAI Codex hinzugezogen. Codex erhielt
+        von mir den Link auf das Projektpaket
+        <code>befehlskette-v3_3_5-komplett.zip</code> und analysierte die
+        zusammengehörenden Dateien. Inzwischen arbeiten Codex und ich direkt im
+        lokalen Git-Repository des Projekts.
+      </p>
+
+      <p><strong>Danach erfolgte die Analyse. Umwerfend!</strong></p>
+
+      <p>Mein Prompt an Codex lautete:</p>
+
+      <pre><code>Ich teste das ESP32-Programm zusammen mit dem Dobot-Steuerungsprogramm auf dem PC.
+Dazu übertrage ich das ESP32-Programm aus deiner Arbeitsumgebung auf den ESP32 und
+richte den Autostart beim Einschalten beziehungsweise nach einem Reset ein.
+Anschließend gebe ich in Thonny den COM-Port frei, indem ich auf WebREPL umstelle
+oder zu einem anderen freien COM-Port wechsle. Danach starte ich den ESP32 neu.
+Ist dieser Ablauf korrekt?</code></pre>
+
+      <p>
+        Die für mich verblüffende Antwort von Codex ist
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-01.md&amp;title=CodexChat-01"
+           target="_blank" rel="noopener noreferrer">hier</a> zu finden.
+      </p>
+    </section>
+
+    <section>
+      <h2>Die erste gemeinsame Fehlersuche</h2>
+
+      <p>
+        Der nachfolgende Test ergab eine Endloskommunikation zwischen den beiden
+        Programmen. Die Fehlersuche übernahm OpenAI Codex erfolgreich. Codex
+        untersuchte die zusammengehörenden Dateien, fand die Ursache und schlug die
+        notwendigen Änderungen vor.
+      </p>
+
+      <p>
+        Die durchgeführten Änderungen wurden von Codex
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodexChat-02.md&amp;title=CodexChat-02"
+           target="_blank" rel="noopener noreferrer">hier</a> dokumentiert.
+      </p>
+
+      <p><strong>Hier ging mir ein Licht für die weitere Vorgehensweise auf.</strong></p>
+    </section>
+
+    <section>
+      <h2>Die erste von mir angeregte Erweiterung</h2>
+
+      <p>
+        Ich habe Codex gebeten, einen DHT11-Sensor in das Projekt zu integrieren.
+        Damit wollte ich erproben, wie eine von mir formulierte praktische Idee von
+        Codex in mehreren zusammengehörenden Programmdateien umgesetzt und
+        dokumentiert wird.
+      </p>
+
+      <p>
+        Die Antwort von Codex ist
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/doku/CodesChat-03.md&amp;title=DHT11-Integration"
+           target="_blank" rel="noopener noreferrer">hier</a> zu finden.
+      </p>
+
+      <p class="offen">
+        <strong>Hinweis:</strong> Dieser letzte Chat ist noch unvollständig.
+        Ich werde ihn vervollständigen.
+      </p>
+    </section>
+
+    <section>
+      <h2>Warum mir die drei „hier“-Links wichtig sind</h2>
+
+      <div class="gedankenstuetze">
+        <p>
+          Die drei Links im Text habe ich vor allem für mich als Gedankenstütze
+          eingebaut. Sie führen zu konkreten Beispielen, an denen ich später wieder
+          nachvollziehen kann, was mich in diesem Moment überrascht und begeistert hat.
+        </p>
+        <p>
+          Wenn ich mit Schülerinnen und Schülern über die Entwicklung der
+          Zusammenarbeit mit ChatGPT und Codex spreche, möchte ich nicht nur fertige
+          Programme und technische Änderungen zeigen. Ich möchte aus meiner eigenen
+          Sicht erzählen, wie diese Unterstützung meine Arbeit verändert hat und
+          welche neuen Möglichkeiten ich dadurch erkannt habe.
+        </p>
+        <p>
+          Diese Gespräche werde ich wahrscheinlich sehr emotional führen. Gerade
+          deshalb sind die drei Beispiele für mich wichtig: Sie helfen mir, mich an
+          die entscheidenden Momente zu erinnern und meine Begeisterung an konkreten
+          Erlebnissen zu erklären.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Neue Verfahrensweise für die weitere Projektentwicklung</h2>
+
+      <p>
+        OpenAI Codex unterstützt mich künftig bei der laufenden Softwareentwicklung
+        des Projekts. Codex kann die einzelnen Programmdateien gemeinsam analysieren,
+        Änderungen durchführen, mögliche Testläufe ausführen, interne Versionsnummern
+        pflegen und die technischen Änderungen dokumentieren.
+      </p>
+
+      <p>
+        Das Aufspielen der Software auf den ESP32 und das praktische Zusammenspiel
+        aller Komponenten mit dem Dobot organisiere und teste ich selbst.
+      </p>
+
+      <ul class="rollen">
+        <li>Ich formuliere meine Ideen, Anforderungen und Änderungswünsche.</li>
+        <li>Ich informiere Codex über Fehler und Beobachtungen aus meinen praktischen Tests.</li>
+        <li>Codex bearbeitet die Programmdateien und dokumentiert die Änderungen.</li>
+        <li>Künftig erhält jede geänderte Softwarekomponente eine nachvollziehbare interne Versionsnummer.</li>
+        <li>Ich fordere bei Bedarf kleine Testprogramme für neue Sensoren und Aktoren an.</li>
+        <li>Ich baue die Komponenten auf und prüfe sie an der realen Hardware.</li>
+        <li>Codex bindet die getesteten Komponenten anschließend in das Gesamtprojekt ein.</li>
+        <li>Dieser Vorgang wird wiederholt, bis die Software meinen Anforderungen entspricht.</li>
+      </ul>
+
+      <p>
+        Der Vorteil dieser Vorgehensweise ist, dass ich mich stärker auf die
+        praktische Arbeit mit dem Dobot und seinem Umfeld konzentrieren kann.
+        Ich platziere Sensoren und Aktoren, erprobe meine Ideen und sammle Erfahrungen
+        mit dem realen Aufbau. Codex unterstützt mich parallel bei der systematischen
+        Softwareentwicklung, der Versionspflege und der technischen Dokumentation.
+      </p>
+    </section>
+
+    <section>
+      <h2>Geplante Weiterentwicklung</h2>
+
+      <p>
+        Rund um den Dobot sollen später unterschiedliche Versuchsaufbauten entstehen.
+        Sensoren und Aktoren müssen deshalb optional und austauschbar bleiben. Als
+        erste Erweiterungen sind ein DHT11-Sensor und ein Fotowiderstand vorgesehen.
+      </p>
+
+      <p>
+        Beim Verbindungsaufbau soll der ESP32 dem PC-Steuerprogramm seine tatsächlich
+        verfügbare Sensor- und Aktorausstattung melden. Das Steuerprogramm kann dadurch
+        die Befehlsliste bereits vor dem Start prüfen und verständlich anzeigen, wenn
+        eine benötigte Komponente fehlt.
+      </p>
+
+      <p>
+        Für größere Versuchsaufbauten soll außerdem der I²C-Bus genutzt werden.
+        Vorgesehen sind insbesondere digitale I²C-Port-Expander und
+        I²C-PWM-Expander. Die konkrete Geräteverwaltung und das dazugehörige
+        Kommunikationsprotokoll werden erst nach den anstehenden Praxistests entwickelt.
+      </p>
+    </section>
+
+    <section>
+      <h2>Die Aufgaben von ChatGPT, Codex und mir</h2>
+
+      <dl>
+        <dt><strong>Meine Aufgabe</strong></dt>
+        <dd>
+          Ideen entwickeln, Anforderungen formulieren, Hardware aufbauen, praktisch
+          testen, Beobachtungen festhalten und über die Ergebnisse entscheiden.
+        </dd>
+
+        <dt><strong>Aufgabe von ChatGPT</strong></dt>
+        <dd>
+          Mit mir Lösungswege entwickeln, Zusammenhänge erklären, meine Gedanken
+          ordnen und die didaktische sowie persönliche Darstellung unterstützen.
+        </dd>
+
+        <dt><strong>Aufgabe von OpenAI Codex</strong></dt>
+        <dd>
+          Direkt an den Projektdateien arbeiten, zusammenhängende Änderungen
+          durchführen, testbare Bestandteile prüfen, Versionen sichern und die
+          technischen Änderungen dokumentieren.
+        </dd>
+      </dl>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
