@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PCF8574 – Gesamtdokumentation</title>
+<style>
+:root{
+  --bg:#f5f7fa; --paper:#ffffff; --text:#17202a; --muted:#5d6d7e;
+  --blue:#185adb; --blue2:#eaf1ff; --green:#177245; --green2:#eaf8f1;
+  --orange:#a84f00; --orange2:#fff4e5; --red:#a61b1b; --red2:#fff0f0;
+  --border:#d8dee8; --code:#111827; --codefg:#e5edf8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+main{max-width:1060px;margin:0 auto;background:var(--paper);min-height:100vh;padding:34px 42px 60px}
+h1{font-size:2.2rem;margin:0 0 8px;color:#123b75}
+h2{margin-top:42px;padding-bottom:8px;border-bottom:2px solid var(--blue2);color:#123b75}
+h3{margin-top:28px;color:#214f83}
+p{margin:10px 0}
+.subtitle{font-size:1.1rem;color:var(--muted);margin-bottom:24px}
+.badge{display:inline-block;background:var(--blue2);color:#123b75;border:1px solid #bdd0f7;border-radius:999px;padding:4px 10px;margin:3px 5px 3px 0;font-size:.9rem}
+nav{background:#f0f5ff;border:1px solid #c9d9f5;border-radius:12px;padding:18px 22px;margin:22px 0}
+nav a{color:#174ea6;text-decoration:none}
+nav ol{columns:2;column-gap:32px;margin:8px 0 0;padding-left:22px}
+table{border-collapse:collapse;width:100%;margin:14px 0 22px}
+th,td{border:1px solid var(--border);padding:9px 11px;vertical-align:top}
+th{background:#edf3fb;text-align:left}
+code{font-family:Consolas,"Courier New",monospace}
+pre{background:var(--code);color:var(--codefg);border-radius:10px;padding:17px 19px;overflow:auto;line-height:1.4}
+.note,.tip,.warn,.correction{border-left:5px solid;padding:13px 16px;margin:17px 0;border-radius:6px}
+.note{background:var(--blue2);border-color:var(--blue)}
+.tip{background:var(--green2);border-color:var(--green)}
+.warn{background:var(--orange2);border-color:var(--orange)}
+.correction{background:var(--red2);border-color:var(--red)}
+.diagram{background:#fafbfc;border:1px solid var(--border);padding:14px 16px;border-radius:8px;font-family:Consolas,"Courier New",monospace;white-space:pre-wrap}
+.small{font-size:.91rem;color:var(--muted)}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.kpi div{border:1px solid var(--border);border-radius:10px;padding:14px;background:#fbfcfe}
+.kpi strong{display:block;font-size:1.35rem;color:#123b75}
+@media(max-width:720px){main{padding:22px 18px}nav ol{columns:1}h1{font-size:1.75rem}}
+@media print{body{background:white}main{max-width:none;padding:15mm}nav{break-inside:avoid}pre{white-space:pre-wrap}}
+</style>
+</head>
+<body>
+<main>
+<h1>PCF8574 – Gesamtdokumentation</h1>
+<p class="subtitle">Technische Grundlagen, Modulanschluss, MicroPython, Belastbarkeit, Eingänge, LED-Matrix, Treiber und Vergleich zum PCF8575</p>
+
+<span class="badge">8-Bit-I/O-Erweiterung</span>
+<span class="badge">I²C</span>
+<span class="badge">MicroPython</span>
+<span class="badge">ESP32 / ESP8266</span>
+<span class="badge">LED-Matrix</span>
+
+<div class="correction">
+<strong>Hinweis zu früheren Aussagen:</strong> Einige Werte wurden in den Gesprächen bewusst vereinfacht dargestellt. In dieser Zusammenfassung sind die technischen Aussagen präzisiert. Insbesondere ist der PCF8574 kein normaler Push-Pull-Treiber: LOW kann er wesentlich kräftiger treiben als ein dauerhaftes HIGH. Absolute Grenzwerte sind keine empfohlenen Betriebswerte.
+</div>
+
+<nav>
+<strong>Inhalt</strong>
+<ol>
+<li><a href="#ueberblick">Überblick</a></li>
+<li><a href="#modul">Das verwendete Modul</a></li>
+<li><a href="#i2c">I²C, Adressen und Pegel</a></li>
+<li><a href="#ports">Quasi-bidirektionale Ports</a></li>
+<li><a href="#strom">Strombelastbarkeit</a></li>
+<li><a href="#pullups">Pull-up und Pull-down</a></li>
+<li><a href="#micropython">MicroPython-Grundlagen</a></li>
+<li><a href="#treiber">Treiberdatei pcf8574.py</a></li>
+<li><a href="#tests">Testprogramme</a></li>
+<li><a href="#ledmatrix">8×8-LED-Matrix</a></li>
+<li><a href="#bausteine">ULN2803, 74HC240 und 74HC540</a></li>
+<li><a href="#stepper">28BYJ-48-Schrittmotoren</a></li>
+<li><a href="#pcf8575">Vergleich mit PCF8575</a></li>
+<li><a href="#fehler">Typische Fehler</a></li>
+<li><a href="#quellen">Quellen</a></li>
+</ol>
+</nav>
+
+<section id="ueberblick">
+<h2>1. Überblick</h2>
+<p>Der <strong>PCF8574</strong> erweitert einen Mikrocontroller über den I²C-Bus um <strong>acht digitale Ein-/Ausgänge P0 bis P7</strong>. Für die Kommunikation werden nur die beiden Busleitungen <strong>SDA</strong> und <strong>SCL</strong> benötigt.</p>
+<div class="kpi">
+<div><strong>8</strong>I/O-Pins P0–P7</div>
+<div><strong>2,5–6 V</strong>Versorgungsspannung</div>
+<div><strong>100 kHz</strong>I²C Standard Mode</div>
+<div><strong>0x20–0x27</strong>PCF8574-Adressen</div>
+</div>
+<p>Typische Anwendungen sind Taster, Statussignale, LEDs mit geeigneter Beschaltung, Relais- oder Transistortreiber, LCD-Adapter und einfache Unterrichtsmodelle.</p>
+</section>
+
+<section id="modul">
+<h2>2. Das verwendete PCF8574-Modul</h2>
+<p>Das gezeigte blaue Breakout-Modul besitzt gewöhnlich:</p>
+<ul>
+<li>zwei parallele Anschlussgruppen mit <strong>VCC, GND, SDA und SCL</strong> zum einfachen Durchschleifen des I²C-Busses,</li>
+<li>eine Stiftleiste für <strong>P0 bis P7</strong>,</li>
+<li>drei Adressbrücken oder Jumper <strong>A0, A1 und A2</strong>,</li>
+<li>teilweise einen herausgeführten <strong>INT</strong>-Anschluss.</li>
+</ul>
+<div class="note"><strong>Wichtig:</strong> Die beiden Gruppen VCC/GND/SDA/SCL sind elektrisch parallel. Es handelt sich nicht um zwei getrennte I²C-Schnittstellen.</div>
+</section>
+
+<section id="i2c">
+<h2>3. I²C, Adressen und Signalpegel</h2>
+<h3>3.1 Adressierung</h3>
+<table>
+<tr><th>Baustein</th><th>7-Bit-Adressbereich</th></tr>
+<tr><td>PCF8574</td><td><code>0x20</code> bis <code>0x27</code></td></tr>
+<tr><td>PCF8574A</td><td><code>0x38</code> bis <code>0x3F</code></td></tr>
+</table>
+<p>Die unteren drei Adressbits werden über A0, A1 und A2 eingestellt. Die tatsächliche Adresse sollte immer mit <code>i2c.scan()</code> geprüft werden.</p>
+
+<h3>3.2 SDA- und SCL-Pegel</h3>
+<p>SDA und SCL sind Open-Drain-Leitungen. Die Teilnehmer ziehen die Leitungen nur aktiv auf LOW. Der HIGH-Pegel entsteht durch Pull-up-Widerstände.</p>
+<div class="diagram">Pull-up nach 3,3 V  →  SDA/SCL im Ruhezustand etwa 3,3 V
+Pull-up nach 5,0 V  →  SDA/SCL im Ruhezustand etwa 5,0 V</div>
+<p>Auf vielen Modulen liegen die I²C-Pull-ups an der Modulversorgung VCC. Dann hängt der HIGH-Pegel tatsächlich von der Versorgungsspannung des Moduls ab.</p>
+<div class="warn"><strong>ESP32 und ESP8266:</strong> Deren GPIOs arbeiten mit 3,3-V-Logik und sind nicht als 5-V-tolerant anzusehen. Wird das Modul mit 5 V versorgt und ziehen seine Widerstände SDA/SCL auf 5 V, ist ein bidirektionaler Pegelwandler oder eine Anpassung der Pull-ups nötig. Die einfache sichere Variante ist der Betrieb des PCF8574-Moduls mit 3,3 V.</div>
+
+<h3>3.3 Übliche I²C-Pins</h3>
+<table>
+<tr><th>Controller</th><th>SDA</th><th>SCL</th></tr>
+<tr><td>ESP8266 NodeMCU / D1 mini</td><td>GPIO4 / D2</td><td>GPIO5 / D1</td></tr>
+<tr><td>ESP32, häufige Standardbelegung</td><td>GPIO21</td><td>GPIO22</td></tr>
+</table>
+</section>
+
+<section id="ports">
+<h2>4. Quasi-bidirektionale Ein-/Ausgänge</h2>
+<p>Der PCF8574 besitzt <strong>kein Richtungsregister</strong>. Ein Pin wird nicht mit <code>INPUT</code> oder <code>OUTPUT</code> konfiguriert. Stattdessen bestimmt das geschriebene Bit das Verhalten:</p>
+<table>
+<tr><th>Geschriebenes Bit</th><th>Verhalten des Ports</th></tr>
+<tr><td><code>0</code></td><td>Der Port zieht aktiv nach GND: kräftiger LOW-Ausgang.</td></tr>
+<tr><td><code>1</code></td><td>Der LOW-Transistor wird abgeschaltet; eine schwache interne Stromquelle hält den Pin HIGH. Der Pin kann nun als Eingang gelesen oder extern auf LOW gezogen werden.</td></tr>
+</table>
+<p>Nach dem Einschalten stehen alle Ports auf HIGH und sind damit grundsätzlich als Eingänge nutzbar.</p>
+<div class="diagram">VCC
+ │
+ ├── schwache interne Stromquelle
+ │
+ ●──── P0 … P7
+ │
+ └── Schalttransistor nach GND</div>
+<div class="tip">Merksatz: <strong>Zum Lesen zuerst eine 1 schreiben.</strong></div>
+</section>
+
+<section id="strom">
+<h2>5. Belastbarkeit der Ausgänge</h2>
+<p>Der PCF8574 kann Strom wesentlich besser <strong>nach GND aufnehmen</strong> als nach VCC liefern. Das macht ihn für aktive-LOW-Schaltungen besonders geeignet.</p>
+<table>
+<tr><th>Betriebsart</th><th>Praxisbedeutung</th></tr>
+<tr><td>LOW / Strom aufnehmen</td><td>Geeignet für kleine LED-Ströme und Logikeingänge. Der garantierte LOW-Pegel hängt von Versorgung, Strom und Herstellerdatenblatt ab.</td></tr>
+<tr><td>HIGH / Strom liefern</td><td>Im statischen Zustand nur über eine schwache interne Stromquelle, typischerweise in der Größenordnung von etwa 100 µA. Nicht als kräftige Versorgung einer Last verwenden.</td></tr>
+</table>
+<div class="warn">
+<strong>Nicht mit dem absoluten Maximum planen.</strong> Angaben wie „25 mA pro Pin“ werden häufig als Belastbarkeit missverstanden. Sie sind je nach Datenblatt an bestimmte LOW-Pegel gekoppelt oder absolute Grenzwerte. Für ein robustes Unterrichtsmodell sind wenige Milliampere pro aktivem LOW-Ausgang deutlich sinnvoller. Zusätzlich müssen Gesamtstrom, Verlustleistung und gleichzeitige Belastung aller acht Ports berücksichtigt werden.
+</div>
+<p>Für LEDs ist diese Stromrichtung günstig:</p>
+<div class="diagram">+V ── Vorwiderstand ── LED ── PCF8574-Port
+                                 │
+                              LOW aktiv</div>
+<p>Ungünstig ist dagegen, eine LED vom PCF8574-Ausgang nach GND zu speisen, weil der Port dabei den HIGH-Strom liefern müsste.</p>
+</section>
+
+<section id="pullups">
+<h2>6. Interne Pull-ups und Pull-downs</h2>
+<p>Der PCF8574 besitzt <strong>keine frei konfigurierbaren Pull-up- oder Pull-down-Widerstände</strong> wie ein ESP32.</p>
+<ul>
+<li>Kein <code>Pin.PULL_UP</code>.</li>
+<li>Kein <code>Pin.PULL_DOWN</code>.</li>
+<li>Kein einstellbarer Widerstandswert.</li>
+<li>Bei einer geschriebenen 1 wirkt die schwache interne Stromquelle nach VCC.</li>
+</ul>
+<p>Ein Taster wird daher am einfachsten zwischen Port und GND geschaltet:</p>
+<div class="diagram">PCF8574-Port ── Taster ── GND
+
+Taster offen:      gelesen wird 1
+Taster gedrückt:   gelesen wird 0</div>
+<p>Bei langen Leitungen oder störbehafteter Umgebung kann ein externer Pull-up, beispielsweise 4,7 kΩ bis 10 kΩ, sinnvoll sein.</p>
+</section>
+
+<section id="micropython">
+<h2>7. MicroPython-Grundlagen</h2>
+<h3>7.1 I²C-Scan</h3>
+<pre><code>from machine import Pin, I2C
+
+# ESP32
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)
+
+print([hex(adresse) for adresse in i2c.scan()])</code></pre>
+
+<h3>7.2 Ein Byte schreiben</h3>
+<pre><code>PCF_ADDR = 0x20
+i2c.writeto(PCF_ADDR, bytes([0b1010_0101]))</code></pre>
+
+<h3>7.3 Ein Byte lesen: Unterschied mit und ohne [0]</h3>
+<pre><code>daten = i2c.readfrom(PCF_ADDR, 1)
+# Ergebnis: bytes-Objekt, zum Beispiel b'\xff'
+
+wert = i2c.readfrom(PCF_ADDR, 1)[0]
+# Ergebnis: Ganzzahl, zum Beispiel 255</code></pre>
+<p>Das <code>[0]</code> wählt das erste Byte des zurückgegebenen <code>bytes</code>-Objekts aus. Dadurch lässt sich direkt mit Bitoperationen arbeiten.</p>
+
+<h3>7.4 Binärzahlen in Python</h3>
+<pre><code>wert = 0b0101_1010
+print(wert)       # 90
+print(bin(wert))  # 0b1011010</code></pre>
+<p>Für eine immer achtstellige Ausgabe, auch auf MicroPython-Versionen mit eingeschränkter Formatunterstützung:</p>
+<pre><code>print("OUT = 0b" + bin(wert)[2:].rjust(8, "0"))</code></pre>
+</section>
+
+<section id="treiber">
+<h2>8. Kleines MicroPython-Treibermodul <code>pcf8574.py</code></h2>
+<pre><code>class PCF8574:
+    def __init__(self, i2c, addr=0x20):
+        self.i2c = i2c
+        self.addr = addr
+        self._state = 0xFF
+        self._write_byte(self._state)
+
+    def _check_pin(self, pin):
+        if pin &lt; 0 or pin &gt; 7:
+            raise ValueError("pin muss zwischen 0 und 7 liegen")
+
+    def _write_byte(self, value):
+        self._state = value &amp; 0xFF
+        self.i2c.writeto(self.addr, bytes([self._state]))
+
+    def _read_byte(self):
+        return self.i2c.readfrom(self.addr, 1)[0]
+
+    def write(self, value):
+        self._write_byte(value)
+
+    def read(self):
+        return self._read_byte()
+
+    def pin_write(self, pin, value):
+        self._check_pin(pin)
+
+        if value:
+            self._state |= 1 &lt;&lt; pin
+        else:
+            self._state &amp;= ~(1 &lt;&lt; pin)
+
+        self._write_byte(self._state)
+
+    def pin_read(self, pin):
+        self._check_pin(pin)
+        return 1 if self._read_byte() &amp; (1 &lt;&lt; pin) else 0
+
+    def pin_input(self, pin):
+        self.pin_write(pin, 1)
+
+    def pin_low(self, pin):
+        self.pin_write(pin, 0)
+
+    def pin_high(self, pin):
+        self.pin_write(pin, 1)
+
+    def toggle(self, pin):
+        self._check_pin(pin)
+        self._state ^= 1 &lt;&lt; pin
+        self._write_byte(self._state)</code></pre>
+<div class="note"><strong>Wichtig beim gemeinsamen Einsatz von Ein- und Ausgängen:</strong> Die Software muss die geschriebenen Zustände in <code>_state</code> behalten. Bits, die als Eingang dienen, müssen in diesem Schattenregister auf 1 bleiben.</div>
+</section>
+
+<section id="tests">
+<h2>9. Testprogramme</h2>
+<h3>9.1 Lauflicht an den acht Ports</h3>
+<pre><code>from machine import Pin, I2C
+from pcf8574 import PCF8574
+import time
+
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)
+adressen = i2c.scan()
+
+if not adressen:
+    raise RuntimeError("Kein I2C-Gerät gefunden")
+
+pcf = PCF8574(i2c, adressen[0])
+
+while True:
+    for pin in range(8):
+        wert = 1 &lt;&lt; pin
+        pcf.write(wert)
+        print("OUT = 0b" + bin(wert)[2:].rjust(8, "0"))
+        time.sleep_ms(250)</code></pre>
+
+<h3>9.2 Taster an P0</h3>
+<pre><code>from machine import Pin, I2C
+from pcf8574 import PCF8574
+import time
+
+i2c = I2C(0, scl=Pin(22), sda=Pin(21), freq=100000)
+pcf = PCF8574(i2c, 0x20)
+
+pcf.pin_input(0)
+
+while True:
+    if pcf.pin_read(0) == 0:
+        print("Taster gedrückt")
+    else:
+        print("Taster offen")
+
+    time.sleep_ms(100)</code></pre>
+</section>
+
+<section id="ledmatrix">
+<h2>10. Zwei PCF8574 an einer 8×8-LED-Matrix</h2>
+<p>Eine naheliegende Aufteilung ist:</p>
+<div class="diagram">PCF8574 Nr. 1 → acht Zeilen
+PCF8574 Nr. 2 → acht Spalten</div>
+<p>Für ein didaktisches Modell ist das sehr anschaulich, weil Bitmuster, Zeilen-/Spaltenauswahl, Stromrichtung und Multiplexing offen sichtbar bleiben.</p>
+<h3>10.1 Sinnvolle Lernschritte</h3>
+<ol>
+<li>Eine einzelne LED schalten.</li>
+<li>Eine vollständige Zeile aktivieren.</li>
+<li>Eine vollständige Spalte aktivieren.</li>
+<li>Zeilen und Spalten kombinieren.</li>
+<li>Einzelne Bildpunkte durch Multiplexing ansteuern.</li>
+<li>Treiberstufen ergänzen.</li>
+<li>Später mit einem integrierten Matrix-Treiber wie MAX7219 vergleichen.</li>
+</ol>
+<div class="tip"><strong>Didaktischer Kern:</strong> Der PCF8574 erzeugt das Bitmuster, die Treiber liefern oder übernehmen den Laststrom, und die Software erzeugt durch schnelles Umschalten das sichtbare Bild.</div>
+<h3>10.2 Grenzen</h3>
+<ul>
+<li>I²C-Übertragungen begrenzen die maximale Multiplexrate.</li>
+<li>Die HIGH-Ausgänge des PCF8574 sind sehr schwach.</li>
+<li>Bei mehreren gleichzeitig aktiven LEDs müssen Einzel- und Gesamtstrom beachtet werden.</li>
+<li>Für höhere Helligkeit oder Dauerbetrieb sind externe Treiber sinnvoll.</li>
+</ul>
+</section>
+
+<section id="bausteine">
+<h2>11. Treiber- und Pufferbausteine</h2>
+<h3>11.1 ULN2803A</h3>
+<p>Der ULN2803A enthält acht Darlington-Treiber mit Open-Collector-Ausgängen. Er kann Lasten nur <strong>nach GND ziehen</strong>.</p>
+<div class="diagram">Eingang HIGH → Ausgang wird nach GND gezogen
+Eingang LOW  → Ausgang ist hochohmig</div>
+<p>Er liefert <strong>keinen aktiven HIGH-Pegel</strong>. Für Kathoden oder die Low-Side einer Matrix ist er gut geeignet. Der COM-Pin gehört bei induktiven Lasten an die positive Lastversorgung, damit die integrierten Freilaufdioden wirken; bei reinen LEDs kann COM offen bleiben.</p>
+<div class="warn">Die oft genannten 500 mA pro Kanal sind ein Maximalwert unter Bedingungen. Gesamtstrom und Verlustleistung des Gehäuses begrenzen den tatsächlichen gleichzeitigen Betrieb mehrerer Kanäle.</div>
+
+<h3>11.2 74HC240 und 74HC540</h3>
+<p>Beide Bausteine sind achtfach invertierende Puffer mit Tri-State-Ausgängen. Sie können aktiv HIGH und LOW ausgeben und sind daher für kleine LED-Ströme und zur Pegelinvertierung geeignet.</p>
+<table>
+<tr><th>Merkmal</th><th>74HC240</th><th>74HC540</th></tr>
+<tr><td>Funktion</td><td>8 invertierende Puffer</td><td>8 invertierende Puffer</td></tr>
+<tr><td>Ausgänge</td><td>Tri-State</td><td>Tri-State</td></tr>
+<tr><td>Enable</td><td>zwei aktive-LOW-Gruppeneingänge</td><td>zwei aktive-LOW-Gruppeneingänge</td></tr>
+<tr><td>Hauptunterschied</td><td>andere Pinanordnung</td><td>andere Pinanordnung</td></tr>
+</table>
+<p>Für dauerhaft aktive Ausgänge werden die beiden <code>/OE</code>-Eingänge auf GND gelegt.</p>
+<p>Bei etwa <strong>5 mA pro Kanal</strong> kann ein HC-Puffer in einem kleinen Unterrichtsmodell grundsätzlich funktionieren. Trotzdem müssen Datenblatt, Gesamtstrom und zulässiger Spannungsabfall geprüft werden. Acht Kanäle mit je 5 mA bedeuten bereits 40 mA Gesamtlast.</p>
+
+<h3>11.3 High-Side-Treiber</h3>
+<p>Wer deutlich mehr Strom aktiv nach VCC liefern möchte, benötigt eine High-Side-Stufe, beispielsweise PNP-Transistoren, P-Kanal-MOSFETs oder einen Source-Treiber wie TBD62783/UDN2981.</p>
+<div class="diagram">Plus-Seite / Anoden:   High-Side-Treiber
+Minus-Seite / Kathoden: ULN2803 oder andere Low-Side-Treiber</div>
+</section>
+
+<section id="stepper">
+<h2>12. Mehrere 28BYJ-48 über ULN2003</h2>
+<p>Jeder 28BYJ-48 benötigt über seine ULN2003-Platine vier Steuersignale. Drei Motoren benötigen daher zwölf Ausgänge. Ein einzelner PCF8574 reicht nicht; mindestens zwei Module oder ein PCF8575 sind nötig.</p>
+<table>
+<tr><th>Modul</th><th>Belegung</th></tr>
+<tr><td>PCF8574 Nr. 1</td><td>P0–P3 Motor 1, P4–P7 Motor 2</td></tr>
+<tr><td>PCF8574 Nr. 2</td><td>P0–P3 Motor 3</td></tr>
+</table>
+<p>Die Motorversorgung muss extern erfolgen. ESP, PCF8574, ULN2003-Platinen und Netzteil benötigen eine gemeinsame Masse.</p>
+<div class="warn"><strong>Geschwindigkeit:</strong> Ein Schrittmuster über einzelne <code>pin_write()</code>-Aufrufe erzeugt mehrere I²C-Übertragungen pro Halbschritt und ist unnötig langsam. Besser ist es, das vollständige Portbyte zu berechnen und mit genau einer I²C-Übertragung zu schreiben.</div>
+<h3>12.1 Positionsverwaltung</h3>
+<p>Der 28BYJ-48 besitzt in der üblichen Ausführung keine Positionsrückmeldung. Das Programm kann lediglich die ausgegebenen Schritte zählen:</p>
+<pre><code>self.position = 0
+
+def step(self, richtung=1):
+    self.position += richtung
+    # anschließend neues Spulenmuster ausgeben</code></pre>
+<p>Dieser Softwarezähler ist nur dann korrekt, wenn der Motor keine Schritte verliert. Nach Neustart, Blockieren oder manuellem Verdrehen stimmt die angenommene Position nicht mehr. Eine zuverlässige Maschine benötigt eine Referenzfahrt mit Endschalter oder Sensor; alternativ einen Encoder.</p>
+</section>
+
+<section id="pcf8575">
+<h2>13. Vergleich mit dem PCF8575</h2>
+<p>Der PCF8575 arbeitet nach demselben Grundprinzip, bietet aber 16 statt 8 quasi-bidirektionale Ports.</p>
+<table>
+<tr><th>Eigenschaft</th><th>PCF8574</th><th>PCF8575</th></tr>
+<tr><td>Portanzahl</td><td>8</td><td>16</td></tr>
+<tr><td>Datenbreite je Übertragung</td><td>1 Byte</td><td>2 Byte</td></tr>
+<tr><td>Richtungsregister</td><td>nein</td><td>nein</td></tr>
+<tr><td>Konfigurierbare Pull-ups/-downs</td><td>nein</td><td>nein</td></tr>
+<tr><td>Portprinzip</td><td>quasi-bidirektional</td><td>quasi-bidirektional</td></tr>
+</table>
+<h3>13.1 16 Bit schreiben und lesen</h3>
+<pre><code># Schreiben, Low-Byte zuerst
+i2c.writeto(PCF_ADDR, bytes([
+    wert &amp; 0xFF,
+    (wert &gt;&gt; 8) &amp; 0xFF
+]))
+
+# Lesen
+daten = i2c.readfrom(PCF_ADDR, 2)
+wert = daten[0] | (daten[1] &lt;&lt; 8)</code></pre>
+<p>Auch beim PCF8575 gilt: Zum Lesen eines Pins muss das zugehörige Ausgangsbit vorher auf 1 gesetzt werden.</p>
+</section>
+
+<section id="fehler">
+<h2>14. Typische Fehler und Missverständnisse</h2>
+<table>
+<tr><th>Fehlerbild</th><th>Wahrscheinliche Ursache</th><th>Abhilfe</th></tr>
+<tr><td><code>i2c.scan()</code> liefert nichts</td><td>Verdrahtung, Versorgung, SDA/SCL vertauscht oder falsche Pins</td><td>VCC/GND prüfen, Busleitungen messen, korrekte Controllerpins verwenden</td></tr>
+<tr><td>Falsche Adresse</td><td>A0–A2 anders gesetzt oder PCF8574A statt PCF8574</td><td>Adresse scannen; Bereiche 0x20–0x27 bzw. 0x38–0x3F prüfen</td></tr>
+<tr><td>ESP wird mit 5 V belastet</td><td>Modul-Pull-ups liegen an 5 V</td><td>Modul mit 3,3 V betreiben, Pull-ups ändern oder Pegelwandler einsetzen</td></tr>
+<tr><td>Eingang bleibt LOW</td><td>Vor dem Lesen wurde eine 0 geschrieben</td><td>Bit zuerst auf 1 setzen</td></tr>
+<tr><td>LED an HIGH-Ausgang bleibt dunkel</td><td>PCF8574 kann HIGH nur schwach halten</td><td>LED gegen VCC schalten und Strom nach LOW aufnehmen oder Puffer einsetzen</td></tr>
+<tr><td>Binärausgabe verursacht Fehler</td><td>Format-Unterstützung der MicroPython-Version eingeschränkt</td><td><code>"0b" + bin(wert)[2:].rjust(8, "0")</code> verwenden</td></tr>
+<tr><td>Stepper läuft ruckelig</td><td>Zu viele einzelne I²C-Schreibvorgänge oder zu hohe Schrittfrequenz</td><td>Portbyte gesammelt schreiben, Verzögerung erhöhen, Versorgung prüfen</td></tr>
+</table>
+</section>
+
+<section id="quellen">
+<h2>15. Verifizierte Datenblattquellen</h2>
+<ul>
+<li><a href="https://www.ti.com/lit/ds/symlink/pcf8574.pdf">Texas Instruments: PCF8574 – Remote 8-Bit I/O Expander for I²C Bus</a></li>
+<li><a href="https://www.nxp.com/docs/en/data-sheet/PCF8574_PCF8574A.pdf">NXP: PCF8574 / PCF8574A – Remote 8-bit I/O expander for I²C-bus</a></li>
+<li><a href="https://www.ti.com/lit/ds/symlink/pcf8575.pdf">Texas Instruments: PCF8575 – Remote 16-Bit I²C and SMBus I/O Expander</a></li>
+</ul>
+<p class="small">Diese Datei fasst die bisherigen Gespräche zusammen und ordnet sie technisch. Für endgültige Grenzwerte eines konkreten Aufbaus ist immer das Datenblatt des tatsächlich verbauten Herstellers und Bauteiltyps maßgeblich.</p>
+</section>
+</main>
+</body>
+</html>

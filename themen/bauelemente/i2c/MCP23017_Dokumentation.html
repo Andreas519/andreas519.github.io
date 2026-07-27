@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP23017 – technische Daten, Python, Ein-/Ausgänge und Interrupts</title>
+<style>
+:root {
+  --blau:#174f78; --hellblau:#eaf4fb; --dunkel:#18323f;
+  --grau:#f4f6f7; --rand:#b9c7cf; --warn:#fff3cd;
+  --warnrand:#d6a400; --gut:#eaf7ea; --gutrand:#4c8c4a;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:#dde5e9; color:#17252d;
+  font-family:Arial,Helvetica,sans-serif; line-height:1.58;
+}
+header {
+  background:linear-gradient(135deg,#123d5c,#2474a6);
+  color:white; padding:38px 24px;
+}
+header .innen, main, footer .innen { max-width:1180px; margin:auto; }
+header h1 { margin:0 0 8px; font-size:clamp(2rem,4vw,3.1rem); }
+header p { margin:0; font-size:1.15rem; }
+nav { background:#102f43; padding:10px 20px; position:sticky; top:0; z-index:5; }
+nav .innen { max-width:1180px; margin:auto; display:flex; flex-wrap:wrap; gap:8px 16px; }
+nav a { color:white; text-decoration:none; font-size:.95rem; }
+nav a:hover { text-decoration:underline; }
+main { max-width:1180px; margin:auto; background:white; padding:28px; box-shadow:0 0 20px rgba(0,0,0,.08); }
+section { margin:0 0 42px; scroll-margin-top:70px; }
+h2 { color:var(--blau); border-bottom:3px solid var(--blau); padding-bottom:6px; }
+h3 { color:var(--dunkel); }
+.kurzfassung { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px; margin:18px 0; }
+.karte { border:1px solid var(--rand); border-radius:10px; padding:16px; background:var(--grau); }
+.karte strong { display:block; color:var(--blau); font-size:1.1rem; margin-bottom:4px; }
+.hinweis,.warnung,.praxis {
+  border-left:6px solid var(--blau); background:var(--hellblau);
+  padding:14px 18px; margin:18px 0; border-radius:6px;
+}
+.warnung { border-left-color:var(--warnrand); background:var(--warn); }
+.praxis { border-left-color:var(--gutrand); background:var(--gut); }
+table { width:100%; border-collapse:collapse; margin:16px 0 24px; }
+th,td { border:1px solid #9eb0ba; padding:9px 10px; text-align:left; vertical-align:top; }
+th { background:#dbeaf3; color:#173e57; }
+tr:nth-child(even) td { background:#f8fafb; }
+code { font-family:Consolas,"Courier New",monospace; background:#eef2f4; padding:1px 4px; border-radius:4px; }
+pre {
+  background:#17242c; color:#eef7fb; padding:18px; border-radius:9px;
+  overflow:auto; line-height:1.45; max-height:42em; border:1px solid #0d151a;
+}
+pre code { background:transparent; padding:0; color:inherit; }
+.schaltbild {
+  background:#f6f8f9; border:1px solid var(--rand); padding:16px;
+  border-radius:8px; overflow-x:auto; font-family:Consolas,"Courier New",monospace;
+  white-space:pre; line-height:1.35;
+}
+.download { display:inline-block; margin:4px 8px 4px 0; padding:10px 14px; background:var(--blau); color:white; text-decoration:none; border-radius:6px; }
+.download:hover { background:#0f3857; }
+footer { background:#102f43; color:white; padding:25px; }
+.klein { font-size:.92rem; color:#465b67; }
+@media (max-width:700px) {
+  main { padding:18px; }
+  nav { position:static; }
+  table { font-size:.9rem; }
+}
+@media print {
+  nav,.downloadbereich { display:none; }
+  body { background:white; }
+  main { box-shadow:none; max-width:none; }
+  pre { max-height:none; white-space:pre-wrap; }
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="innen">
+<h1>MCP23017</h1>
+<p>Technische Daten · Python-/MicroPython-Programmierung · Verhalten der Ein- und Ausgänge · Interrupts · Einsatzbeispiel</p>
+</div>
+</header>
+
+<nav>
+<div class="innen">
+<a href="#ueberblick">Überblick</a>
+<a href="#daten">Technische Daten</a>
+<a href="#anschluss">Anschluss</a>
+<a href="#verhalten">Ein-/Ausgänge</a>
+<a href="#register">Register</a>
+<a href="#python">Python</a>
+<a href="#interrupts">Interrupts</a>
+<a href="#beispiel">Einsatzbeispiel</a>
+<a href="#vergleich">Vergleich PCF8574</a>
+<a href="#fehler">Fehlersuche</a>
+</div>
+</nav>
+
+<main>
+
+<section id="ueberblick">
+<h2>1. Überblick</h2>
+<p>
+Der <strong>MCP23017</strong> ist ein über I²C gesteuerter Portexpander von Microchip.
+Er erweitert einen Mikrocontroller um zwei digitale 8-Bit-Ports:
+<strong>PORTA</strong> mit GPA0 bis GPA7 und <strong>PORTB</strong> mit GPB0 bis GPB7.
+Die Pins werden über Register einzeln als Eingang oder Ausgang konfiguriert.
+</p>
+
+<div class="kurzfassung">
+<div class="karte"><strong>16 GPIO-Pins</strong>Zwei funktionell getrennte 8-Bit-Ports.</div>
+<div class="karte"><strong>I²C</strong>7-Bit-Adressen von 0x20 bis 0x27.</div>
+<div class="karte"><strong>Richtungsregister</strong>Jeder nutzbare GPIO wird gezielt als Eingang oder Ausgang festgelegt.</div>
+<div class="karte"><strong>Pull-ups</strong>Für Eingänge einzeln zuschaltbare schwache Pull-up-Widerstände.</div>
+<div class="karte"><strong>Interrupts</strong>INTA und INTB mit Capture-, Flag- und Vergleichsregistern.</div>
+<div class="karte"><strong>1,8 bis 5,5 V</strong>Für ESP32-Projekte zweckmäßig mit 3,3 V betreiben.</div>
+</div>
+
+<div class="praxis">
+<strong>Didaktischer Vorteil:</strong>
+Im Gegensatz zum PCF8574 lässt sich beim MCP23017 sehr deutlich zeigen, dass
+Richtung, Pull-up, Ausgangslatch, Eingangswert und Interruptquelle getrennte
+Funktionen und Register sind.
+</div>
+</section>
+
+<section id="daten">
+<h2>2. Technische Daten</h2>
+<table>
+<thead><tr><th>Merkmal</th><th>Wert beziehungsweise Bedeutung</th></tr></thead>
+<tbody>
+<tr><td>Baustein</td><td>MCP23017 – 16-Bit-I/O-Expander mit I²C-Schnittstelle</td></tr>
+<tr><td>Betriebsspannung</td><td>1,8 V bis 5,5 V</td></tr>
+<tr><td>I²C-Taktraten</td><td>100 kHz, 400 kHz und bis 1,7 MHz; die zulässige Höchstgeschwindigkeit hängt auch von der Betriebsspannung ab</td></tr>
+<tr><td>GPIO-Aufteilung</td><td>PORTA: GPA0…GPA7; PORTB: GPB0…GPB7</td></tr>
+<tr><td>Adressauswahl</td><td>Drei Hardwarepins A0, A1 und A2; dadurch acht Adressen 0x20…0x27</td></tr>
+<tr><td>Zustand nach Reset</td><td>Richtungsregister grundsätzlich auf Eingang; Pull-ups und Interrupts aus; Ausgangslatches auf 0</td></tr>
+<tr><td>Interne Pull-ups</td><td>Einzeln zuschaltbar; typischer Pull-up-Strom laut Datenblatt etwa 75 µA bei 5 V</td></tr>
+<tr><td>Interruptausgänge</td><td>INTA und INTB; aktiv HIGH, aktiv LOW oder Open Drain; getrennt oder gespiegelt</td></tr>
+<tr><td>Maximalwert je Ausgang</td><td>25 mA Source oder Sink als absoluter Grenzwert, nicht als empfohlener Dauerstrom</td></tr>
+<tr><td>Garantierte Ausgangswerte</td><td>Bei 4,5 V unter anderem LOW bei 8 mA und HIGH bei 3 mA spezifiziert</td></tr>
+<tr><td>Gesamtstromgrenzen</td><td>Maximal 150 mA über VSS und 125 mA über VDD; ebenfalls absolute Grenzwerte</td></tr>
+<tr><td>Gehäuse</td><td>Unter anderem 28-poliges SPDIP, SOIC, SSOP und QFN</td></tr>
+</tbody>
+</table>
+
+<div class="warnung">
+<strong>25 mA sind kein sinnvoller Planungswert.</strong>
+Die 25 mA pro Pin stehen im Abschnitt der absoluten Grenzwerte. Für robuste
+Unterrichtsschaltungen sollte der Strom deutlich kleiner bleiben. LEDs werden
+mit Vorwiderstand betrieben. Relais, Motoren, Magnetventile, größere Anzeigen
+oder LED-Matrizen benötigen Treiber, beispielsweise Transistoren, MOSFETs oder
+einen ULN2803A.
+</div>
+
+<div class="warnung">
+<strong>Besonderheit GPA7 und GPB7:</strong>
+Das aktuelle Microchip-Datenblatt DS20001952D kennzeichnet diese beiden Pins
+beim MCP23017 als <strong>nur als Ausgang verwendbar</strong>. Im älteren
+Datenblatt DS20001952C wurden noch alle 16 GPIOs als bidirektional beschrieben.
+Für neue und zuverlässig reproduzierbare Schaltungen sollten GPA7 und GPB7
+deshalb nur als Ausgänge eingeplant werden, sofern die konkrete Chiprevision
+nicht eindeutig geprüft wurde.
+</div>
+</section>
+
+<section id="anschluss">
+<h2>3. Anschluss an einen ESP32</h2>
+<table>
+<thead><tr><th>MCP23017</th><th>ESP32 / Beschaltung</th><th>Hinweis</th></tr></thead>
+<tbody>
+<tr><td>VDD</td><td>3,3 V</td><td>So bleiben I²C- und GPIO-Pegel zum ESP32 kompatibel.</td></tr>
+<tr><td>VSS</td><td>GND</td><td>Gemeinsame Masse ist zwingend erforderlich.</td></tr>
+<tr><td>SDA</td><td>GPIO21</td><td>Typische ESP32-Belegung; andere geeignete Pins sind möglich.</td></tr>
+<tr><td>SCL</td><td>GPIO22</td><td>Typische ESP32-Belegung.</td></tr>
+<tr><td>A0, A1, A2</td><td>GND</td><td>Ergibt 0x20. Die Adresspins dürfen nicht offen bleiben.</td></tr>
+<tr><td>RESET</td><td>Über etwa 10 kΩ nach 3,3 V</td><td>RESET ist aktiv LOW und muss einen definierten Pegel erhalten.</td></tr>
+<tr><td>INTA</td><td>beispielsweise GPIO27</td><td>Bei Open Drain mit etwa 10 kΩ nach 3,3 V ziehen.</td></tr>
+<tr><td>INTB</td><td>optional weiterer ESP32-GPIO</td><td>Kann getrennt genutzt oder mit INTA gespiegelt werden.</td></tr>
+</tbody>
+</table>
+
+<div class="schaltbild">ESP32                         MCP23017
+─────                         ────────
+3,3 V ─────────────────────── VDD
+GND   ─────────────────────── VSS
+GPIO21 / SDA ──────────────── SDA
+GPIO22 / SCL ──────────────── SCL
+GPIO27 / IRQ ◄─────────────── INTA
+                 │
+3,3 V ── 10 kΩ ──┘           Open-Drain-Pull-up
+
+3,3 V ── 10 kΩ ───────────── RESET
+GND ──────────────────────── A0
+GND ──────────────────────── A1
+GND ──────────────────────── A2       → Adresse 0x20
+
+SDA ── 4,7 kΩ ── 3,3 V
+SCL ── 4,7 kΩ ── 3,3 V       nur nötig, wenn auf dem Modul keine Pull-ups vorhanden sind</div>
+
+<h3>3.1 I²C-Adressen</h3>
+<table>
+<thead><tr><th>A2</th><th>A1</th><th>A0</th><th>Adresse</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td><code>0x20</code></td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td><code>0x21</code></td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td><code>0x22</code></td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td><code>0x23</code></td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td><code>0x24</code></td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td><code>0x25</code></td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td><code>0x26</code></td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td><code>0x27</code></td></tr>
+</tbody>
+</table>
+<p>
+Mit acht MCP23017 lassen sich theoretisch bis zu 128 Portleitungen adressieren.
+Buskapazität, Leitungslänge, Pull-up-Widerstände und Stromversorgung setzen in
+der Praxis Grenzen.
+</p>
+</section>
+
+<section id="verhalten">
+<h2>4. Verhalten der Ein- und Ausgänge</h2>
+
+<h3>4.1 Richtungsregister</h3>
+<table>
+<thead><tr><th>IODIR-Bit</th><th>Wirkung</th></tr></thead>
+<tbody>
+<tr><td><code>1</code></td><td>Pin ist Eingang; der Ausgangstreiber ist hochohmig.</td></tr>
+<tr><td><code>0</code></td><td>Pin ist Ausgang; das Ausgangslatch bestimmt den Pegel.</td></tr>
+</tbody>
+</table>
+
+<p>
+Nach einem Reset stehen IODIRA und IODIRB auf <code>0xFF</code>.
+Die Pins sind damit grundsätzlich zunächst Eingänge. Die Einschränkung für
+GPA7 und GPB7 muss zusätzlich berücksichtigt werden.
+</p>
+
+<h3>4.2 Eingänge</h3>
+<p>
+Ein Eingang ist hochohmig. Ohne externe Beschaltung oder zugeschalteten Pull-up
+kann er einen undefinierten Zustand annehmen. Über <code>GPPUA</code> und
+<code>GPPUB</code> wird für jeden Eingang einzeln ein schwacher Pull-up aktiviert.
+Interne Pull-down-Widerstände besitzt der MCP23017 nicht.
+</p>
+
+<div class="praxis">
+<strong>Typischer Tasteranschluss:</strong>
+Taster zwischen GPIO und GND; internen Pull-up einschalten. Nicht gedrückt wird
+eine logische 1 gelesen, gedrückt eine logische 0.
+</div>
+
+<h3>4.3 Eingangspolarität</h3>
+<p>
+<code>IPOLA</code> und <code>IPOLB</code> können gelesene Eingangswerte
+bitweise invertieren. Das verändert nicht den elektrischen Pegel am Pin,
+sondern nur den im GPIO-Register sichtbaren Wert.
+</p>
+
+<h3>4.4 Ausgänge und Ausgangslatches</h3>
+<p>
+Die Ausgänge sind echte Push-Pull-Ausgänge. Sie können aktiv nach LOW und
+nach HIGH schalten.
+</p>
+<ul>
+<li><code>GPIOA/GPIOB</code> lesen: tatsächlichen Pegel an den Portpins lesen.</li>
+<li><code>OLATA/OLATB</code> lesen: gespeicherten Sollwert der Ausgangslatches lesen.</li>
+<li><code>GPIOA/GPIOB</code> schreiben: schreibt praktisch in das Ausgangslatch.</li>
+<li><code>OLATA/OLATB</code> schreiben: setzt gezielt die Ausgangslatches.</li>
+</ul>
+
+<div class="hinweis">
+Ein gespeicherter Schattenwert verhindert, dass beim Ändern eines einzelnen
+Bits versehentlich andere Ausgangsbits verändert werden.
+</div>
+
+<h3>4.5 Umschalten der Richtung</h3>
+<p>
+Wird ein Pin vom Eingang zum Ausgang umgeschaltet, liegt sofort der bereits im
+Ausgangslatch gespeicherte Wert am Pin an. Bei empfindlichen Aktoren sollte
+deshalb zunächst OLAT auf einen sicheren Anfangswert gesetzt und erst danach
+die Richtung auf Ausgang geändert werden.
+</p>
+</section>
+
+<section id="register">
+<h2>5. Wichtige Register bei IOCON.BANK = 0</h2>
+<table>
+<thead><tr><th>Port A</th><th>Port B</th><th>Register</th><th>Aufgabe</th></tr></thead>
+<tbody>
+<tr><td>0x00</td><td>0x01</td><td>IODIRA / IODIRB</td><td>Richtung: 1 = Eingang, 0 = Ausgang</td></tr>
+<tr><td>0x02</td><td>0x03</td><td>IPOLA / IPOLB</td><td>Eingangspolarität invertieren</td></tr>
+<tr><td>0x04</td><td>0x05</td><td>GPINTENA / GPINTENB</td><td>Interrupt für einzelne Pins freigeben</td></tr>
+<tr><td>0x06</td><td>0x07</td><td>DEFVALA / DEFVALB</td><td>Sollwert für Interruptvergleich</td></tr>
+<tr><td>0x08</td><td>0x09</td><td>INTCONA / INTCONB</td><td>Vergleich gegen früheren Wert oder DEFVAL</td></tr>
+<tr><td>0x0A</td><td>0x0B</td><td>IOCON</td><td>Bank, Spiegelung, Open Drain, Polarität</td></tr>
+<tr><td>0x0C</td><td>0x0D</td><td>GPPUA / GPPUB</td><td>Interne Pull-ups einschalten</td></tr>
+<tr><td>0x0E</td><td>0x0F</td><td>INTFA / INTFB</td><td>Interruptquelle anzeigen</td></tr>
+<tr><td>0x10</td><td>0x11</td><td>INTCAPA / INTCAPB</td><td>Zustand beim Interrupt erfassen und Interrupt löschen</td></tr>
+<tr><td>0x12</td><td>0x13</td><td>GPIOA / GPIOB</td><td>Aktuelle Pinpegel lesen</td></tr>
+<tr><td>0x14</td><td>0x15</td><td>OLATA / OLATB</td><td>Ausgangslatches lesen und schreiben</td></tr>
+</tbody>
+</table>
+
+<h3>5.1 Wichtige IOCON-Bits</h3>
+<table>
+<thead><tr><th>Bit</th><th>Name</th><th>Bedeutung</th></tr></thead>
+<tbody>
+<tr><td>7</td><td>BANK</td><td>0 = A-/B-Register abwechselnd; 1 = nach Ports getrennt</td></tr>
+<tr><td>6</td><td>MIRROR</td><td>1 = INTA und INTB melden Ereignisse beider Ports</td></tr>
+<tr><td>5</td><td>SEQOP</td><td>1 = automatische Adressfortschaltung deaktiviert</td></tr>
+<tr><td>2</td><td>ODR</td><td>1 = Interruptausgänge arbeiten als Open Drain</td></tr>
+<tr><td>1</td><td>INTPOL</td><td>Aktive HIGH- oder LOW-Polarität im Push-Pull-Betrieb</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="python">
+<h2>6. Python- und MicroPython-Programmierung</h2>
+
+<h3>6.1 I²C-Bus erzeugen und Baustein suchen</h3>
+<pre><code>from machine import Pin, I2C
+
+i2c = I2C(
+    0,
+    sda=Pin(21),
+    scl=Pin(22),
+    freq=100_000,
+)
+
+print([hex(adresse) for adresse in i2c.scan()])
+# Bei A0 = A1 = A2 = GND muss 0x20 erscheinen.</code></pre>
+
+<h3>6.2 Direkter Registerzugriff</h3>
+<pre><code>ADRESSE = 0x20
+IODIRA = 0x00
+GPPUA = 0x0C
+GPIOA = 0x12
+
+i2c.writeto_mem(ADRESSE, IODIRA, bytes((0xFF,)))
+i2c.writeto_mem(ADRESSE, GPPUA, bytes((0x7F,)))
+
+wert = i2c.readfrom_mem(ADRESSE, GPIOA, 1)[0]
+print("{:08b}".format(wert))</code></pre>
+
+<h3>6.3 Mitgelieferte MicroPython-Bibliothek</h3>
+<div class="downloadbereich">
+<a class="download" href="mcp23017.py">mcp23017.py</a>
+<a class="download" href="mcp23017_interrupt_beispiel.py">Interrupt-Beispiel</a>
+</div>
+
+<p>
+Die Bibliothek kapselt die Registerzugriffe in verständliche Methoden und
+benötigt keine zusätzliche Installation.
+</p>
+<pre><code>&quot;&quot;&quot;
+mcp23017.py
+Kleine MicroPython-Bibliothek für den MCP23017 am ESP32.
+
+Registerbelegung: IOCON.BANK = 0
+Standardadresse: 0x20 bei A0 = A1 = A2 = GND
+
+Wichtiger Hinweis:
+Das aktuelle Microchip-Datenblatt DS20001952D kennzeichnet GPA7 und
+GPB7 beim MCP23017 als reine Ausgänge. Ältere Datenblattstände
+beschrieben diese Pins als bidirektional. Mit strict_gp7=True wird
+deshalb eine Konfiguration dieser beiden Pins als Eingang verhindert.
+&quot;&quot;&quot;
+
+class MCP23017:
+    INPUT = 1
+    OUTPUT = 0
+
+    IODIRA = 0x00
+    IODIRB = 0x01
+    IPOLA = 0x02
+    IPOLB = 0x03
+    GPINTENA = 0x04
+    GPINTENB = 0x05
+    DEFVALA = 0x06
+    DEFVALB = 0x07
+    INTCONA = 0x08
+    INTCONB = 0x09
+    IOCON = 0x0A
+    GPPUA = 0x0C
+    GPPUB = 0x0D
+    INTFA = 0x0E
+    INTFB = 0x0F
+    INTCAPA = 0x10
+    INTCAPB = 0x11
+    GPIOA = 0x12
+    GPIOB = 0x13
+    OLATA = 0x14
+    OLATB = 0x15
+
+    def __init__(self, i2c, address=0x20, strict_gp7=True):
+        if not 0x20 &lt;= address &lt;= 0x27:
+            raise ValueError(&quot;Die MCP23017-Adresse muss zwischen 0x20 und 0x27 liegen.&quot;)
+
+        self.i2c = i2c
+        self.address = address
+        self.strict_gp7 = strict_gp7
+
+        # BANK = 0, normale fortlaufende Registeranordnung
+        self._write_register(self.IOCON, 0x00)
+
+        self._olat = [
+            self._read_register(self.OLATA),
+            self._read_register(self.OLATB),
+        ]
+
+    def _write_register(self, register, value):
+        self.i2c.writeto_mem(
+            self.address,
+            register,
+            bytes((value &amp; 0xFF,))
+        )
+
+    def _read_register(self, register):
+        return self.i2c.readfrom_mem(
+            self.address,
+            register,
+            1
+        )[0]
+
+    def _change_bit(self, register, bit, value):
+        data = self._read_register(register)
+
+        if value:
+            data |= 1 &lt;&lt; bit
+        else:
+            data &amp;= ~(1 &lt;&lt; bit)
+
+        self._write_register(register, data)
+
+    @staticmethod
+    def _pin_data(pin):
+        if not 0 &lt;= pin &lt;= 15:
+            raise ValueError(&quot;Die Pinnummer muss zwischen 0 und 15 liegen.&quot;)
+
+        port = 0 if pin &lt; 8 else 1
+        bit = pin if pin &lt; 8 else pin - 8
+        return port, bit
+
+    @staticmethod
+    def _port_index(port):
+        if port in (&quot;A&quot;, &quot;a&quot;, 0):
+            return 0
+        if port in (&quot;B&quot;, &quot;b&quot;, 1):
+            return 1
+        raise ValueError(&quot;Der Port muss &#x27;A&#x27;, &#x27;B&#x27;, 0 oder 1 sein.&quot;)
+
+    def pin_mode(self, pin, mode):
+        port, bit = self._pin_data(pin)
+
+        if mode not in (self.INPUT, self.OUTPUT):
+            raise ValueError(&quot;Als Modus ist MCP23017.INPUT oder MCP23017.OUTPUT zulässig.&quot;)
+
+        if self.strict_gp7 and mode == self.INPUT and pin in (7, 15):
+            raise ValueError(
+                &quot;GPA7 und GPB7 werden nach aktuellem Datenblatt &quot;
+                &quot;beim MCP23017 nur als Ausgänge verwendet.&quot;
+            )
+
+        self._change_bit(self.IODIRA + port, bit, mode == self.INPUT)
+
+    def pullup(self, pin, enabled=True):
+        port, bit = self._pin_data(pin)
+        self._change_bit(self.GPPUA + port, bit, enabled)
+
+    def invert_input(self, pin, enabled=True):
+        port, bit = self._pin_data(pin)
+        self._change_bit(self.IPOLA + port, bit, enabled)
+
+    def write(self, pin, value):
+        port, bit = self._pin_data(pin)
+
+        if value:
+            self._olat[port] |= 1 &lt;&lt; bit
+        else:
+            self._olat[port] &amp;= ~(1 &lt;&lt; bit)
+
+        self._write_register(self.OLATA + port, self._olat[port])
+
+    def read(self, pin):
+        port, bit = self._pin_data(pin)
+        data = self._read_register(self.GPIOA + port)
+        return 1 if data &amp; (1 &lt;&lt; bit) else 0
+
+    def write_port(self, port, value):
+        port = self._port_index(port)
+        self._olat[port] = value &amp; 0xFF
+        self._write_register(self.OLATA + port, self._olat[port])
+
+    def read_port(self, port):
+        port = self._port_index(port)
+        return self._read_register(self.GPIOA + port)
+
+    def interrupt_enable(self, pin, enabled=True):
+        port, bit = self._pin_data(pin)
+        self._change_bit(self.GPINTENA + port, bit, enabled)
+
+    def interrupt_on_change(self, pin):
+        &quot;&quot;&quot;Interrupt bei Änderung gegenüber dem zuvor gelesenen Zustand.&quot;&quot;&quot;
+        port, bit = self._pin_data(pin)
+        self._change_bit(self.INTCONA + port, bit, False)
+        self.interrupt_enable(pin, True)
+
+    def interrupt_on_default(self, pin, default_value):
+        &quot;&quot;&quot;Interrupt bei Abweichung vom angegebenen Sollwert.&quot;&quot;&quot;
+        port, bit = self._pin_data(pin)
+        self._change_bit(self.DEFVALA + port, bit, bool(default_value))
+        self._change_bit(self.INTCONA + port, bit, True)
+        self.interrupt_enable(pin, True)
+
+    def configure_interrupt_outputs(
+        self,
+        mirror=False,
+        open_drain=True,
+        active_high=False
+    ):
+        value = self._read_register(self.IOCON)
+
+        # BANK = 0 beibehalten
+        value &amp;= ~(1 &lt;&lt; 7)
+
+        if mirror:
+            value |= 1 &lt;&lt; 6
+        else:
+            value &amp;= ~(1 &lt;&lt; 6)
+
+        if open_drain:
+            value |= 1 &lt;&lt; 2
+        else:
+            value &amp;= ~(1 &lt;&lt; 2)
+
+        if active_high:
+            value |= 1 &lt;&lt; 1
+        else:
+            value &amp;= ~(1 &lt;&lt; 1)
+
+        self._write_register(self.IOCON, value)
+
+    def interrupt_flags(self, port):
+        port = self._port_index(port)
+        return self._read_register(self.INTFA + port)
+
+    def interrupt_capture(self, port):
+        &quot;&quot;&quot;
+        Liest den beim Interrupt gespeicherten Portzustand.
+        Das Lesen von INTCAP löscht den Interrupt dieses Ports.
+        &quot;&quot;&quot;
+        port = self._port_index(port)
+        return self._read_register(self.INTCAPA + port)
+
+    def clear_interrupt(self, port):
+        return self.interrupt_capture(port)
+</code></pre>
+
+<h3>6.4 Kurzes Beispiel ohne Interrupt</h3>
+<pre><code>from machine import Pin, I2C
+from time import sleep_ms
+from mcp23017 import MCP23017
+
+i2c = I2C(0, sda=Pin(21), scl=Pin(22), freq=100_000)
+mcp = MCP23017(i2c, address=0x20)
+
+mcp.pin_mode(0, MCP23017.INPUT)
+mcp.pullup(0, True)
+
+mcp.pin_mode(8, MCP23017.OUTPUT)
+
+while True:
+    taster = mcp.read(0)
+    mcp.write(8, not taster)
+    sleep_ms(20)</code></pre>
+
+<h3>6.5 CircuitPython oder Raspberry Pi</h3>
+<p>
+Für CircuitPython und CPython auf Einplatinencomputern existiert die
+Adafruit-Bibliothek <code>Adafruit_CircuitPython_MCP230xx</code>.
+</p>
+<pre><code>import board
+import busio
+from digitalio import Direction, Pull
+from adafruit_mcp230xx.mcp23017 import MCP23017
+
+i2c = busio.I2C(board.SCL, board.SDA)
+mcp = MCP23017(i2c, address=0x20)
+
+taster = mcp.get_pin(0)
+taster.direction = Direction.INPUT
+taster.pull = Pull.UP
+
+led = mcp.get_pin(8)
+led.direction = Direction.OUTPUT
+led.value = not taster.value</code></pre>
+</section>
+
+<section id="interrupts">
+<h2>7. Interrupts</h2>
+<p>
+Mit Interrupts muss der Mikrocontroller die Eingänge nicht ständig abfragen.
+Ändert sich ein freigegebener Eingang, aktiviert der MCP23017 INTA oder INTB.
+Der ESP32 liest erst dann die zugehörigen Register.
+</p>
+
+<h3>7.1 Vergleichsarten</h3>
+<table>
+<thead><tr><th>INTCON-Bit</th><th>Vergleich</th><th>Einsatz</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Aktueller Eingang gegen den zuvor erfassten Portzustand</td><td>Interrupt bei jeder Änderung</td></tr>
+<tr><td>1</td><td>Aktueller Eingang gegen DEFVAL</td><td>Interrupt bei Abweichung von einem Sollwert</td></tr>
+</tbody>
+</table>
+
+<h3>7.2 Ablauf</h3>
+<ol>
+<li>GPINTEN schaltet die Überwachung je Pin ein.</li>
+<li>INTCON legt die Vergleichsart fest.</li>
+<li>DEFVAL enthält bei Bedarf den Sollzustand.</li>
+<li>Bei einer Abweichung wird INTA oder INTB aktiv.</li>
+<li>INTF zeigt die auslösenden Pins.</li>
+<li>INTCAP enthält den Portzustand im Moment des Ereignisses.</li>
+<li>Das Lesen von INTCAP oder GPIO löscht den Interrupt des betreffenden Ports.</li>
+</ol>
+
+<div class="praxis">
+<strong>INTCAP ist besonders wertvoll:</strong>
+Der beim Ereignis erfasste Zustand bleibt zunächst erhalten, auch wenn sich
+der Eingang danach erneut ändert.
+</div>
+
+<h3>7.3 INTA und INTB</h3>
+<ul>
+<li>Standardmäßig gehört INTA zu PORTA und INTB zu PORTB.</li>
+<li>Mit MIRROR = 1 melden beide Ausgänge Ereignisse beider Ports.</li>
+<li>Push-Pull aktiv LOW oder aktiv HIGH ist möglich.</li>
+<li>Open Drain erlaubt einen gemeinsamen Interruptdraht und saubere Pegelanpassung.</li>
+</ul>
+
+<div class="warnung">
+<strong>Keine I²C-Kommunikation direkt in der ESP32-Interruptfunktion.</strong>
+Die Interruptfunktion sollte nur einen Merker setzen. Das Lesen des MCP23017
+erfolgt anschließend in der normalen Hauptschleife.
+</div>
+
+<pre><code>interrupt_steht_an = False
+
+def irq_handler(pin):
+    global interrupt_steht_an
+    interrupt_steht_an = True
+
+irq = Pin(27, Pin.IN, Pin.PULL_UP)
+irq.irq(trigger=Pin.IRQ_FALLING, handler=irq_handler)
+
+while True:
+    if interrupt_steht_an:
+        interrupt_steht_an = False
+        capture = mcp.interrupt_capture("A")
+        print("Zustand beim Interrupt:", bin(capture))</code></pre>
+
+<h3>7.4 Taster entprellen</h3>
+<p>
+Mechanische Taster erzeugen häufig mehrere schnelle Pegelwechsel. Eine kurze
+Software-Entprellzeit von ungefähr 20 bis 40 ms ist für einfache Bedienfelder
+oft ausreichend.
+</p>
+</section>
+
+<section id="beispiel">
+<h2>8. Einsatzbeispiel: Taster- und LED-Bedienfeld</h2>
+<p>
+Sieben Taster sind an GPA0 bis GPA6 angeschlossen. Sie verwenden die internen
+Pull-ups und schalten gegen GND. Sieben LEDs liegen über Vorwiderstände an
+GPB0 bis GPB6. Jeder Tastendruck schaltet die zugehörige LED um.
+</p>
+
+<p>
+GPA7 wird bewusst nicht als Eingang verwendet. GPB7 kann bei Bedarf als
+zusätzlicher Ausgang eingesetzt werden.
+</p>
+
+<h3>8.1 Bauteile</h3>
+<ul>
+<li>ESP32-Entwicklungsboard</li>
+<li>MCP23017 oder Breakout-Modul</li>
+<li>sieben Taster</li>
+<li>sieben LEDs mit Vorwiderständen, beispielsweise 680 Ω bis 1 kΩ bei 3,3 V</li>
+<li>Pull-ups für SDA, SCL und Open-Drain-INTA, falls nicht auf dem Modul vorhanden</li>
+<li>10-kΩ-Widerstand für RESET nach 3,3 V</li>
+</ul>
+
+<h3>8.2 Verdrahtung</h3>
+<table>
+<thead><tr><th>Funktion</th><th>Pins</th><th>Beschaltung</th></tr></thead>
+<tbody>
+<tr><td>Taster 1…7</td><td>GPA0…GPA6</td><td>Je ein Taster zwischen Pin und GND; interner Pull-up ein</td></tr>
+<tr><td>LED 1…7</td><td>GPB0…GPB6</td><td>Pin → Vorwiderstand → LED → GND</td></tr>
+<tr><td>Interrupt</td><td>INTA</td><td>Zu ESP32-GPIO27; 10-kΩ-Pull-up nach 3,3 V</td></tr>
+</tbody>
+</table>
+
+<h3>8.3 Vollständiges MicroPython-Beispiel</h3>
+<pre><code>&quot;&quot;&quot;
+mcp23017_interrupt_beispiel.py
+
+Einsatzbeispiel:
+- sieben Taster an GPA0 bis GPA6 gegen GND
+- interne Pull-ups des MCP23017
+- sieben LEDs an GPB0 bis GPB6 über Vorwiderstände
+- INTA als Open-Drain-Interrupt an ESP32-GPIO27
+- I2C: SDA = GPIO21, SCL = GPIO22
+
+Jeder Tastendruck schaltet die zugehörige LED um.
+&quot;&quot;&quot;
+
+from machine import Pin, I2C
+from time import sleep_ms
+from mcp23017 import MCP23017
+
+
+SDA_PIN = 21
+SCL_PIN = 22
+INT_PIN = 27
+ADRESSE = 0x20
+
+i2c = I2C(
+    0,
+    sda=Pin(SDA_PIN),
+    scl=Pin(SCL_PIN),
+    freq=100_000,
+)
+
+gefundene_adressen = i2c.scan()
+print(&quot;Gefundene I2C-Adressen:&quot;, [hex(a) for a in gefundene_adressen])
+
+if ADRESSE not in gefundene_adressen:
+    raise RuntimeError(
+        &quot;MCP23017 nicht unter 0x20 gefunden. &quot;
+        &quot;Verdrahtung und Adresspins A0 bis A2 prüfen.&quot;
+    )
+
+mcp = MCP23017(i2c, address=ADRESSE)
+
+# GPA0 bis GPA6: Tastereingänge mit internen Pull-ups
+for pin in range(0, 7):
+    mcp.pin_mode(pin, MCP23017.INPUT)
+    mcp.pullup(pin, True)
+    mcp.interrupt_on_change(pin)
+
+# GPB0 bis GPB6: LED-Ausgänge
+for pin in range(8, 15):
+    mcp.pin_mode(pin, MCP23017.OUTPUT)
+    mcp.write(pin, 0)
+
+# INTA und INTB arbeiten getrennt.
+# INTA ist Open Drain und wird extern nach 3,3 V hochgezogen.
+mcp.configure_interrupt_outputs(
+    mirror=False,
+    open_drain=True,
+    active_high=False,
+)
+
+mcp.clear_interrupt(&quot;A&quot;)
+letzter_tasterzustand = mcp.read_port(&quot;A&quot;) | 0x80
+led_zustand = 0
+interrupt_steht_an = False
+
+
+def interrupt_handler(pin):
+    &quot;&quot;&quot;
+    In einer Interruptfunktion keine I2C-Kommunikation durchführen.
+    Es wird nur ein Merker gesetzt.
+    &quot;&quot;&quot;
+    global interrupt_steht_an
+    interrupt_steht_an = True
+
+
+interrupt_eingang = Pin(INT_PIN, Pin.IN, Pin.PULL_UP)
+interrupt_eingang.irq(
+    trigger=Pin.IRQ_FALLING,
+    handler=interrupt_handler,
+)
+
+print(&quot;Bereit: Taster an GPA0 bis GPA6 betätigen.&quot;)
+
+while True:
+    if interrupt_steht_an:
+        interrupt_steht_an = False
+
+        # Lesen von INTCAPA löscht den Interrupt von Port A.
+        capture = mcp.interrupt_capture(&quot;A&quot;)
+
+        # Kurze Entprellzeit, danach stabilen Zustand lesen.
+        sleep_ms(25)
+        aktueller_tasterzustand = mcp.read_port(&quot;A&quot;) | 0x80
+
+        # Eine 1-zu-0-Flanke entspricht einem gedrückten Taster.
+        gedrueckt = letzter_tasterzustand &amp; (~aktueller_tasterzustand &amp; 0xFF)
+
+        for bit in range(7):
+            if gedrueckt &amp; (1 &lt;&lt; bit):
+                led_zustand ^= 1 &lt;&lt; bit
+                print(
+                    &quot;Taster GPA{} gedrückt – LED GPB{} ist jetzt {}.&quot;.format(
+                        bit,
+                        bit,
+                        &quot;EIN&quot; if led_zustand &amp; (1 &lt;&lt; bit) else &quot;AUS&quot;,
+                    )
+                )
+
+        mcp.write_port(&quot;B&quot;, led_zustand)
+        letzter_tasterzustand = aktueller_tasterzustand
+
+        print(
+            &quot;INTCAPA = {:08b}, GPIOA = {:08b}, GPIOB = {:08b}&quot;.format(
+                capture,
+                aktueller_tasterzustand,
+                led_zustand,
+            )
+        )
+
+    sleep_ms(5)
+</code></pre>
+
+<h3>8.4 Unterrichtliche Auswertung</h3>
+<ul>
+<li>Warum zeigt ein nicht gedrückter Taster eine 1?</li>
+<li>Welche Bits ändern sich in GPIOA?</li>
+<li>Wie speichert OLATB den LED-Zustand?</li>
+<li>Was steht im INTCAPA-Register beim Ereignis?</li>
+<li>Warum wird im IRQ-Handler nur ein Merker gesetzt?</li>
+<li>Welche Tasterprellungen sind in den Ausgaben sichtbar?</li>
+</ul>
+</section>
+
+<section id="vergleich">
+<h2>9. MCP23017 und PCF8574 im Vergleich</h2>
+<table>
+<thead><tr><th>Eigenschaft</th><th>MCP23017</th><th>PCF8574</th></tr></thead>
+<tbody>
+<tr><td>Portpins</td><td>16</td><td>8</td></tr>
+<tr><td>Portprinzip</td><td>Echte Richtungsregister; Push-Pull-Ausgänge</td><td>Quasi-bidirektionale Pins ohne separates Richtungsregister</td></tr>
+<tr><td>Eingang konfigurieren</td><td>IODIR-Bit auf 1 setzen</td><td>Eine 1 an den Pin schreiben und anschließend lesen</td></tr>
+<tr><td>Ausgang HIGH</td><td>Aktiv getriebener HIGH-Pegel</td><td>Schwache interne Stromquelle nach dem Umschaltimpuls</td></tr>
+<tr><td>Interne Pull-ups</td><td>Je Eingang über GPPU zuschaltbar</td><td>Keine frei konfigurierbaren Pull-up-Widerstände</td></tr>
+<tr><td>Eingangsinvertierung</td><td>Bitweise mit IPOL</td><td>Kein eigenes Register</td></tr>
+<tr><td>Interruptausgänge</td><td>INTA und INTB; umfangreich konfigurierbar</td><td>Ein gemeinsamer INT-Ausgang</td></tr>
+<tr><td>Interruptquelle</td><td>INTF und INTCAP</td><td>Port lesen und alten mit neuem Zustand vergleichen</td></tr>
+<tr><td>Registerumfang</td><td>Richtung, Polarität, Pull-up, Interrupt, GPIO und Latch getrennt</td><td>Einfaches Byte-Lese-/Schreibprinzip</td></tr>
+<tr><td>Geeignet für</td><td>Komplexere Bedienfelder und gemischte Ein-/Ausgänge</td><td>Einfache Erweiterungen und didaktischer I²C-Einstieg</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="fehler">
+<h2>10. Typische Fehler und Fehlersuche</h2>
+<table>
+<thead><tr><th>Beobachtung</th><th>Mögliche Ursache</th><th>Lösung</th></tr></thead>
+<tbody>
+<tr><td>Scan findet nichts</td><td>SDA/SCL vertauscht, keine Masse, RESET LOW, fehlende Pull-ups</td><td>Spannungen, RESET und Leitungen prüfen</td></tr>
+<tr><td>Adresse ist nicht 0x20</td><td>A0, A1 oder A2 liegen HIGH oder schweben</td><td>Adresspins auf definierte Pegel legen</td></tr>
+<tr><td>Eingang wechselt zufällig</td><td>Pin ist offen</td><td>GPPU einschalten oder externen Widerstand verwenden</td></tr>
+<tr><td>Andere Ausgänge ändern sich mit</td><td>Restliches Ausgangsbyte überschrieben</td><td>Schattenregister beziehungsweise OLAT verwenden</td></tr>
+<tr><td>Interrupt bleibt aktiv</td><td>GPIO/INTCAP nicht gelesen oder DEFVAL-Abweichung besteht weiter</td><td>INTF prüfen und INTCAP des richtigen Ports lesen</td></tr>
+<tr><td>Viele Interrupts je Tastendruck</td><td>Tasterprellen</td><td>Software- oder Hardware-Entprellung</td></tr>
+<tr><td>MicroPython wird instabil</td><td>I²C oder Ausgaben direkt im IRQ-Handler</td><td>Im Handler nur Merker setzen</td></tr>
+<tr><td>GPA7/GPB7 nicht als Eingang nutzbar</td><td>Aktuelle Datenblattbeschränkung</td><td>Diese Pins als Ausgänge verwenden</td></tr>
+<tr><td>Relais oder Motor unzuverlässig</td><td>GPIO überlastet, keine Freilaufdiode</td><td>Treiberstufe, separate Lastversorgung und Freilaufdiode</td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>11. Zusammenfassung</h2>
+<ul>
+<li>Der MCP23017 erweitert einen I²C-Mikrocontroller um zwei 8-Bit-Ports.</li>
+<li>IODIR legt die Richtung eindeutig fest.</li>
+<li>Eingänge besitzen einzeln schaltbare schwache Pull-ups.</li>
+<li>GPIO liest den tatsächlichen Pinpegel, OLAT den gespeicherten Ausgangswert.</li>
+<li>INTA und INTB melden Änderungen oder Abweichungen von einem Sollwert.</li>
+<li>INTF identifiziert die Quelle; INTCAP speichert den Zustand beim Ereignis.</li>
+<li>Die 25-mA-Angabe ist ein absoluter Grenzwert und kein normaler Betriebsstrom.</li>
+<li>GPA7 und GPB7 werden nach aktuellem Datenblatt vorsichtshalber nur als Ausgänge eingeplant.</li>
+</ul>
+</section>
+
+<section>
+<h2>12. Quellen</h2>
+<ol>
+<li><a href="https://www.microchip.com/en-us/product/mcp23017">Microchip-Produktseite MCP23017</a></li>
+<li><a href="https://ww1.microchip.com/downloads/aemDocuments/documents/APID/ProductDocuments/DataSheets/MCP23017-Data-Sheet-DS20001952.pdf">Microchip-Datenblatt DS20001952D</a></li>
+<li><a href="https://docs.micropython.org/en/latest/library/machine.I2C.html">MicroPython: machine.I2C</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_CircuitPython_MCP230xx">Adafruit CircuitPython MCP230xx</a></li>
+</ol>
+<p class="klein">
+Stand der technischen Prüfung: 27.07.2026. Maßgeblich ist stets das Datenblatt
+der tatsächlich eingesetzten Bauteilrevision.
+</p>
+</section>
+
+</main>
+
+<footer>
+<div class="innen">
+Dokumentation für Unterricht, AG und eigene Versuche · MCP23017 am ESP32 mit MicroPython
+</div>
+</footer>
+
+</body>
+</html>
