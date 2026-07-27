@@ -12,11 +12,72 @@
 <meta name="description" content="Öffentliche Sammlung überarbeiteter Technik-, Informatik- und Physikprojekte von Andreas Sigismund für die AG Young Engineers am Martin-Rinckart-Gymnasium Eilenburg.">
 <meta name="keywords" content="Andreas Sigismund, Young Engineers, Martin-Rinckart-Gymnasium Eilenburg, Technik, Informatik, Physik, ESP32, MicroPython, Arduino, GitHub Pages, Unterrichtsmodell">
 <link rel="stylesheet" href="css/my.css">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico?v=20260727-2" type="image/x-icon">
+<style>
+  .home-header {
+    position: relative;
+  }
+
+  .home-header p {
+    display: grid;
+    align-content: center;
+    min-height: 37px;
+    margin: 0;
+    padding: 0 8px 0 50px;
+    font-size: .9rem;
+    line-height: 1.25;
+  }
+
+  .home-header-text-line {
+    display: block;
+  }
+
+  .home-header-logo {
+    position: absolute;
+    top: 4px;
+    left: 8px;
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+
+  .home-header-logo img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 112px;
+    max-width: none;
+    height: auto;
+    transform: translate(-50%, -50%);
+  }
+
+  @media (max-width: 600px) {
+    .home-header p {
+      padding-left: 36px;
+      font-size: .82rem;
+    }
+
+    .home-header-logo {
+      width: 32px;
+      height: 32px;
+    }
+
+    .home-header-logo img {
+      width: 90px;
+    }
+  }
+</style>
 </head>
 <body>
-<header>
-  <p>Projekte und Themen aus dem Umfeld der AG <strong>Young Engineers</strong> am <a href="https://www.mrge.de">Martin-Rinckart-Gymnasium</a>.</p>
+<header class="home-header">
+  <span class="home-header-logo" aria-hidden="true">
+    <img src="AG-Logo-2.png" alt="">
+  </span>
+  <p>
+    <span class="home-header-text-line">Projekte und Themen der AG <strong>Young Engineers</strong></span>
+    <span class="home-header-text-line">am Martin-Rinckart-Gymnasium Eilenburg.</span>
+  </p>
 </header>
 <!-- <nav class="home-menu" aria-label="Hauptnavigation">
   <ul>

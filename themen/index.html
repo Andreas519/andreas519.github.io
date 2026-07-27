@@ -9,6 +9,230 @@
   <meta name="project" content="AG Young Engineers">
 
 <link rel="stylesheet" href="../css/my.css">
+<style>
+  .project-card img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .components-visual {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border: 1px solid #0f5138;
+    border-radius: 8px;
+    background-color: #176b4d;
+    background-image: radial-gradient(rgba(255, 255, 255, .16) 1px, transparent 1px);
+    background-size: 14px 14px;
+  }
+
+  .timer-rail,
+  .timer-trace {
+    position: absolute;
+    z-index: 1;
+    background: #f0c853;
+  }
+
+  .rail-vcc { left: 13px; right: 13px; top: 18px; height: 3px; }
+  .rail-gnd { left: 13px; right: 13px; bottom: 17px; height: 3px; }
+  .trace-pin8-a { left: calc(50% + 56px); top: 18px; width: 3px; height: 50px; }
+  .trace-pin8-b { left: calc(50% + 41px); top: 65px; width: 18px; height: 3px; }
+  .trace-pin4-a { left: calc(50% - 59px); top: 18px; width: 3px; height: 109px; }
+  .trace-pin4-b { left: calc(50% - 59px); top: 124px; width: 18px; height: 3px; }
+  .trace-pin1-a { left: calc(50% - 58px); top: 67px; width: 3px; height: 116px; }
+  .trace-pin1-b { left: calc(50% - 58px); top: 180px; width: 46px; height: 3px; }
+  .trace-r1-top { right: 37px; top: 18px; width: 3px; height: 17px; }
+  .trace-r1-bottom { right: 37px; top: 73px; width: 3px; height: 15px; }
+  .trace-pin7 { left: calc(50% + 41px); right: 37px; top: 85px; height: 3px; }
+  .trace-r2-top { right: 37px; top: 85px; width: 3px; height: 13px; }
+  .trace-r2-bottom { right: 37px; top: 136px; width: 3px; height: 11px; }
+  .trace-pin6-a { left: calc(50% + 41px); top: 105px; width: 25px; height: 3px; }
+  .trace-pin6-b { left: calc(50% + 63px); top: 105px; width: 3px; height: 42px; }
+  .trace-timing-node { left: calc(50% + 63px); right: 37px; top: 144px; height: 3px; }
+  .trace-cap-ground { right: 37px; top: 165px; width: 3px; height: 18px; }
+  .trace-pin2-a { left: calc(50% - 58px); top: 86px; width: 3px; height: 61px; }
+  .trace-pin2-b { left: calc(50% - 58px); width: calc(50% + 21px); top: 144px; height: 3px; }
+  .trace-output { left: 51px; top: 104px; width: calc(50% - 92px); height: 3px; }
+  .trace-led-ground { left: 31px; top: 121px; width: 3px; height: 62px; }
+
+  .timer-node {
+    position: absolute;
+    z-index: 4;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ffe184;
+    box-shadow: 0 0 0 1px #806216;
+  }
+
+  .node-discharge { right: 35px; top: 83px; }
+  .node-timing { right: 35px; top: 142px; }
+
+  .timer-chip {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    top: 98px;
+    width: 86px;
+    height: 82px;
+    display: grid;
+    place-items: center;
+    transform: translate(-50%, -50%);
+    border: 2px solid #080d0b;
+    border-radius: 5px;
+    background: #151a18;
+    color: #f4e4a3;
+    box-shadow: 0 5px 9px rgba(0, 0, 0, .4);
+    font-family: Consolas, monospace;
+  }
+
+  .timer-chip-label {
+    line-height: 1.1;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .timer-chip-label small {
+    display: block;
+    margin-top: 6px;
+    color: #aebbb5;
+    font-size: .52rem;
+    letter-spacing: .08em;
+  }
+
+  .timer-notch {
+    position: absolute;
+    left: 50%;
+    top: -2px;
+    width: 25px;
+    height: 10px;
+    transform: translateX(-50%);
+    border-radius: 0 0 13px 13px;
+    background: #176b4d;
+  }
+
+  .timer-dot {
+    position: absolute;
+    left: 9px;
+    top: 12px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #838e89;
+    box-shadow: inset 0 1px 2px #050806;
+  }
+
+  .timer-pin {
+    position: absolute;
+    width: 13px;
+    height: 7px;
+    border: 1px solid #7d8984;
+    background: #d8dedb;
+    color: #f8dd83;
+    font: 700 .45rem Consolas, monospace;
+    line-height: 6px;
+  }
+
+  .timer-pin.left { left: -13px; text-align: left; }
+  .timer-pin.right { right: -13px; text-align: right; }
+  .pin-1, .pin-8 { top: 8px; }
+  .pin-2, .pin-7 { top: 27px; }
+  .pin-3, .pin-6 { top: 47px; }
+  .pin-4, .pin-5 { top: 66px; }
+
+  .timer-resistor {
+    position: absolute;
+    z-index: 3;
+    border: 2px solid #b98725;
+    border-radius: 4px;
+    background: #ead9a8;
+    color: #533e18;
+    font: 700 .5rem Consolas, monospace;
+    text-align: center;
+  }
+
+  .resistor-r1 {
+    right: 27px;
+    top: 34px;
+    width: 21px;
+    height: 40px;
+    padding-top: 13px;
+  }
+
+  .resistor-r2 {
+    right: 27px;
+    top: 97px;
+    width: 21px;
+    height: 40px;
+    padding-top: 13px;
+  }
+
+  .timer-capacitor {
+    position: absolute;
+    z-index: 3;
+    right: 29px;
+    top: 147px;
+    width: 17px;
+    height: 18px;
+    border-radius: 3px;
+    background: #4985cb;
+    color: #fff;
+    font: 700 .45rem Consolas, monospace;
+    line-height: 18px;
+    text-align: center;
+  }
+
+  .visual-resistor {
+    position: absolute;
+    z-index: 2;
+    left: 48px;
+    top: 96px;
+    padding: 4px 7px;
+    border: 3px solid #d0a94c;
+    border-radius: 5px;
+    background: #ead9a8;
+    color: #533e18;
+    font: 700 .72rem Consolas, monospace;
+  }
+
+  .visual-led {
+    position: absolute;
+    z-index: 2;
+    left: 20px;
+    top: 94px;
+    width: 25px;
+    height: 25px;
+    border: 3px solid #b91c1c;
+    border-radius: 50%;
+    background: #ff4d3d;
+    box-shadow: 0 0 0 6px rgba(255, 218, 90, .22), 0 0 18px #ffe178;
+  }
+
+  .visual-label {
+    position: absolute;
+    left: 71px;
+    top: 4px;
+    color: #e7f5ed;
+    font: 700 .72rem Consolas, monospace;
+    letter-spacing: .08em;
+  }
+
+  .supply-label {
+    position: absolute;
+    z-index: 3;
+    color: #fff2ad;
+    font: 700 .52rem Consolas, monospace;
+  }
+
+  .label-vcc { right: 11px; top: 6px; }
+  .label-gnd { right: 11px; bottom: 4px; }
+
+  .components-card > a:first-child {
+    display: block;
+  }
+</style>
   </head>
   <body>
   <header>
@@ -44,7 +268,59 @@
         <img src="Makeblock_Laserbox/bilder/ansicht-b.png" alt="Makeblock Laserbox Pro" height="200">
       </a><br>
       <a href="Makeblock_Laserbox/index.html" target="_blank">Makeblock Laserbox Pro</a>
-    </article>       
+    </article>
+    <article class="project-card project-card-center components-card">
+      <a href="bauelemente/index.html" target="_blank" aria-label="Bauelemente öffnen">
+        <div class="components-visual" aria-hidden="true">
+          <span class="timer-rail rail-vcc"></span>
+          <span class="timer-rail rail-gnd"></span>
+          <span class="timer-trace trace-pin8-a"></span>
+          <span class="timer-trace trace-pin8-b"></span>
+          <span class="timer-trace trace-pin4-a"></span>
+          <span class="timer-trace trace-pin4-b"></span>
+          <span class="timer-trace trace-pin1-a"></span>
+          <span class="timer-trace trace-pin1-b"></span>
+          <span class="timer-trace trace-r1-top"></span>
+          <span class="timer-trace trace-r1-bottom"></span>
+          <span class="timer-trace trace-pin7"></span>
+          <span class="timer-trace trace-r2-top"></span>
+          <span class="timer-trace trace-r2-bottom"></span>
+          <span class="timer-trace trace-pin6-a"></span>
+          <span class="timer-trace trace-pin6-b"></span>
+          <span class="timer-trace trace-timing-node"></span>
+          <span class="timer-trace trace-cap-ground"></span>
+          <span class="timer-trace trace-pin2-a"></span>
+          <span class="timer-trace trace-pin2-b"></span>
+          <span class="timer-trace trace-output"></span>
+          <span class="timer-trace trace-led-ground"></span>
+          <span class="timer-node node-discharge"></span>
+          <span class="timer-node node-timing"></span>
+          <span class="timer-resistor resistor-r1">R1</span>
+          <span class="timer-resistor resistor-r2">R2</span>
+          <span class="timer-capacitor">C1</span>
+          <span class="timer-chip">
+            <span class="timer-notch"></span>
+            <span class="timer-dot"></span>
+            <span class="timer-pin left pin-1">1</span>
+            <span class="timer-pin left pin-2">2</span>
+            <span class="timer-pin left pin-3">3</span>
+            <span class="timer-pin left pin-4">4</span>
+            <span class="timer-pin right pin-8">8</span>
+            <span class="timer-pin right pin-7">7</span>
+            <span class="timer-pin right pin-6">6</span>
+            <span class="timer-pin right pin-5">5</span>
+            <span class="timer-chip-label">NE555<small>TIMER</small></span>
+          </span>
+          <span class="visual-resistor">470 Ω</span>
+          <span class="visual-led"></span>
+          <span class="visual-label">NE555 ASTABLE LED BLINKER</span>
+          <span class="supply-label label-vcc">VCC</span>
+          <span class="supply-label label-gnd">GND</span>
+        </div>
+      </a>
+      <a href="bauelemente/index.html" target="_blank">Bauelemente</a>
+      <p class="note">Grundlagen, Kernliste und Dokumentationen</p>
+    </article>
   </div>  
   </section>
   <section> <!--- Grid--->
@@ -72,6 +348,8 @@
   </main>
   <footer>
     © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    <strong>KI-Beitrag – GitHub Copilot:</strong> Gestaltung und technische Umsetzung der Bauelemente-Karte sowie Einbindung des Themenlinks.<br>
+    Fachliche Prüfung und Veröffentlichung: Andreas Sigismund.<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../js/script.js"></script>
   </footer>

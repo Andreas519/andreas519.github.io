@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bauelementeliste · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="publisher" content="Andreas Sigismund">
+  <meta name="project" content="Bauelemente erfassen, AG Young Engineers">
+  <link rel="stylesheet" href="../../css/my.css">
+  <style>
+    :root {
+      --doc-green: #146b4a;
+      --doc-green-dark: #123f31;
+      --doc-yellow: #f2c14e;
+      --doc-red: #b73b2d;
+      --doc-paper: #fffdf7;
+    }
+
+    body {
+      background-color: #edf3ee;
+      background-image: radial-gradient(#b7c8bb 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+
+    .doc-header {
+      padding: 38px 20px;
+      background: var(--doc-green-dark);
+      color: #fff;
+      text-align: center;
+    }
+
+    .doc-header p:first-child {
+      margin: 0 0 10px;
+      color: #f8d978;
+      font-size: .82rem;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .doc-header h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(2.1rem, 7vw, 4.2rem);
+      letter-spacing: 0;
+    }
+
+    .doc-header p:last-child {
+      max-width: 720px;
+      margin: 14px auto 0;
+      color: #dcece3;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+
+    .doc-nav ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
+
+    .doc-nav a {
+      width: 100%;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .summary div {
+      padding: 16px;
+      border-left: 4px solid var(--doc-green);
+      background: #f4faf6;
+    }
+
+    .summary strong {
+      display: block;
+      color: var(--doc-green-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.8rem;
+    }
+
+    .component-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .component-table th,
+    .component-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .component-table th {
+      background: #e8f2eb;
+      color: var(--doc-green-dark);
+    }
+
+    .component-table tbody tr:nth-child(even) { background: #fafcf9; }
+    .component-table td:first-child { font-weight: 700; }
+
+    .core-columns {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 18px;
+    }
+
+    .core-box {
+      padding: 20px;
+      border: 1px solid #b9cbbf;
+      border-top: 5px solid var(--doc-green);
+      border-radius: 6px;
+      background: var(--doc-paper);
+    }
+
+    .core-box h3 { margin-top: 0; color: var(--doc-green-dark); }
+    .core-box ul { columns: 2; padding-left: 1.2rem; }
+    .core-box:first-child ul { columns: 1; }
+
+    .open-items {
+      border-left-color: var(--doc-red);
+      background: #fff6f3;
+    }
+
+    .open-items strong { color: var(--doc-red); }
+
+    @media (max-width: 720px) {
+      .summary,
+      .core-columns { grid-template-columns: 1fr; }
+      .core-box ul { columns: 1; }
+      .component-table { font-size: .9rem; }
+      .component-table th,
+      .component-table td { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="doc-header">
+    <p>Dokumentation · Stand Juli 2026</p>
+    <h1>Bauelementeliste</h1>
+    <p>Rekonstruierte Zusammenstellung der im Projekt besprochenen und bestätigten passiven und aktiven Bauelemente.</p>
+  </header>
+
+  <main>
+    <a class="back-link" href="index.html">← Zur Bauelemente-Übersicht</a>
+
+    <nav class="section-nav doc-nav" aria-label="Abschnitte der Bauelementeliste">
+      <ul>
+        <li><a href="#passiv">Passive Bauelemente</a></li>
+        <li><a href="#leds">Leuchtdioden</a></li>
+        <li><a href="#halbleiter">Transistoren</a></li>
+        <li><a href="#regler">Spannungsregler</a></li>
+        <li><a href="#ics">Integrierte Schaltungen</a></li>
+        <li><a href="#sensoren">Sensoren</a></li>
+        <li><a href="#kernliste">Kernliste</a></li>
+      </ul>
+    </nav>
+
+    <section aria-labelledby="ueberblick-title">
+      <h2 id="ueberblick-title">Überblick</h2>
+      <p>Die Liste unterscheidet zwischen konkret besprochenen Ausführungen und übergeordneten Bauteilgruppen. Sie dient als Grundlage für Erkennung, Sortierung und spätere Einzeldokumentationen.</p>
+      <div class="summary">
+        <div><strong>7</strong>passive Zielbauteile</div>
+        <div><strong>12</strong>konkret benannte integrierte Schaltungen</div>
+        <div><strong>14</strong>Sensorarten und optische Bauteile</div>
+      </div>
+    </section>
+
+    <section id="passiv" aria-labelledby="passiv-title">
+      <h2 id="passiv-title">1. Passive Bauelemente</h2>
+      <table class="component-table">
+        <thead><tr><th>Bauelement</th><th>Genannte Ausführungen oder Hinweise</th></tr></thead>
+        <tbody>
+          <tr><td>Widerstand</td><td>Allgemeine Widerstände, unter anderem 220 Ω und 470 kΩ</td></tr>
+          <tr><td>Potentiometer</td><td>Verstellbarer analoger Eingabewert</td></tr>
+          <tr><td>Trimmpotentiometer</td><td>Beispielsweise W105, entsprechend etwa 1 MΩ</td></tr>
+          <tr><td>Kondensator</td><td>Unter anderem 10 µF und 10 nF sowie Kondensatoren C1/C2</td></tr>
+          <tr><td>Fotowiderstand / LDR</td><td>Photocell beziehungsweise analoger Helligkeitssensor</td></tr>
+          <tr><td>Taster</td><td>Digitales Eingabeelement mit Rückstellung</td></tr>
+          <tr><td>Schalter</td><td>Digitales Eingabeelement mit stabiler Schaltstellung</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="leds" aria-labelledby="leds-title">
+      <h2 id="leds-title">2. Leuchtdioden</h2>
+      <table class="component-table">
+        <thead><tr><th>Bauelement</th><th>Ausführung oder Anwendung</th></tr></thead>
+        <tbody>
+          <tr><td>LED</td><td>Normale sichtbare Leuchtdiode</td></tr>
+          <tr><td>Weiße und gelbe LED</td><td>Einzeln oder als Modul</td></tr>
+          <tr><td>RGB-LED</td><td>Mehrfarbige Leuchtdiode</td></tr>
+          <tr><td>IR-LED</td><td>Sender in Lichtschranken und Reflexionssensoren</td></tr>
+          <tr><td>8×8-LED-Matrix</td><td>Didaktisches Matrixprojekt</td></tr>
+          <tr><td>Q0–Q7-LEDs</td><td>Anzeige der parallelen Ausgänge eines Schieberegisters</td></tr>
+          <tr><td>Q7S-LED</td><td>Anzeige des seriellen Ausgangs eines Schieberegisters</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="halbleiter" aria-labelledby="halbleiter-title">
+      <h2 id="halbleiter-title">3. Transistoren und Leistungshalbleiter</h2>
+      <table class="component-table">
+        <thead><tr><th>Typ</th><th>Einordnung</th></tr></thead>
+        <tbody>
+          <tr><td>BC337</td><td>NPN-Kleinsignaltransistor im TO-92-Gehäuse</td></tr>
+          <tr><td>BC547</td><td>NPN-Kleinsignaltransistor im TO-92-Gehäuse</td></tr>
+          <tr><td>BC557</td><td>PNP-Kleinsignaltransistor im TO-92-Gehäuse</td></tr>
+          <tr><td>TIP120</td><td>NPN-Darlington-Leistungstransistor</td></tr>
+          <tr><td>IRLZ34N</td><td>Logic-Level-N-Kanal-MOSFET</td></tr>
+          <tr><td>Fototransistor</td><td>Empfänger in Lichtschranken, Reflexionssensoren und Optokopplern</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="regler" aria-labelledby="regler-title">
+      <h2 id="regler-title">4. Spannungsregler</h2>
+      <table class="component-table">
+        <thead><tr><th>Typ</th><th>Einordnung</th></tr></thead>
+        <tbody>
+          <tr><td>LM317</td><td>Einstellbarer linearer Spannungsregler, unter anderem im TO-220-Gehäuse</td></tr>
+          <tr><td>7805</td><td>Linearer Festspannungsregler für 5 V</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="ics" aria-labelledby="ics-title">
+      <h2 id="ics-title">5. Analoge und digitale integrierte Schaltungen</h2>
+      <table class="component-table">
+        <thead><tr><th>Typ</th><th>Funktion</th></tr></thead>
+        <tbody>
+          <tr><td>NE555</td><td>Timer und Taktgenerator für astabile und monostabile Schaltungen</td></tr>
+          <tr><td>Operationsverstärker 741</td><td>Analoger Operationsverstärker</td></tr>
+          <tr><td>L9110</td><td>Motortreiber beziehungsweise einfache H-Brücke</td></tr>
+          <tr><td>ULN2003</td><td>Siebenfacher Darlington-Treiberbaustein</td></tr>
+          <tr><td>ULN2803</td><td>Achtfacher Darlington-Treiberbaustein</td></tr>
+          <tr><td>74HC164</td><td>8-Bit-Schieberegister ohne Ausgangslatch</td></tr>
+          <tr><td>74HC595</td><td>8-Bit-Schieberegister mit Ausgangslatch</td></tr>
+          <tr><td>74HC240</td><td>Achtfacher invertierender Puffer mit Tri-State-Ausgängen</td></tr>
+          <tr><td>74HC540</td><td>Achtfacher invertierender Puffer mit Tri-State-Ausgängen</td></tr>
+          <tr><td>PCF8574</td><td>I²C-Portexpander mit acht quasi-bidirektionalen Anschlüssen</td></tr>
+          <tr><td>LTV847</td><td>Vierfacher Optokoppler im DIP-16-Gehäuse</td></tr>
+          <tr><td>P192C / SN74192</td><td>Synchroner Vorwärts-/Rückwärts-Dezimalzähler</td></tr>
+        </tbody>
+      </table>
+      <p><a href="i2c/PCF8574_Gesamtdokumentation.html">Ausführliche PCF8574-Gesamtdokumentation öffnen →</a></p>
+    </section>
+
+    <section id="sensoren" aria-labelledby="sensoren-title">
+      <h2 id="sensoren-title">6. Optoelektronische Bauelemente und Sensoren</h2>
+      <table class="component-table">
+        <thead><tr><th>Typ</th><th>Funktion</th></tr></thead>
+        <tbody>
+          <tr><td>TCRT5000</td><td>IR-Reflexionssensor mit IR-LED und Fototransistor</td></tr>
+          <tr><td>ST188</td><td>IR-Gabellichtschranke</td></tr>
+          <tr><td>HY860H-A</td><td>IR-Gabellichtschranke</td></tr>
+          <tr><td>LTV847</td><td>Vierfacher Optokoppler</td></tr>
+          <tr><td>DS18B20</td><td>Digitaler Temperatursensor</td></tr>
+          <tr><td>DHT22</td><td>Temperatur- und Luftfeuchtesensor</td></tr>
+          <tr><td>MPU-6050</td><td>Beschleunigungs- und Gyrosensor</td></tr>
+          <tr><td>PIR-Sensor</td><td>Bewegungssensor</td></tr>
+          <tr><td>MQ-2</td><td>Gas- und Rauchsensor</td></tr>
+          <tr><td>Steam Sensor</td><td>Wasser- beziehungsweise Dampfsensor</td></tr>
+          <tr><td>Bodenfeuchtesensor</td><td>Soil Humidity Sensor</td></tr>
+          <tr><td>Farbsensor</td><td>Erfassung und Unterscheidung von Farben</td></tr>
+          <tr><td>Infrarotsensor</td><td>Berührungslose Objekterkennung</td></tr>
+          <tr><td>Analoger Helligkeitssensor</td><td>Meistens LDR-basiert</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="kernliste" aria-labelledby="kernliste-title">
+      <h2 id="kernliste-title">Zusammengefasste Kernliste</h2>
+      <p>Für eine erste überschaubare Erkennung und Sortierung werden die konkreten Typen zu folgenden Zielgruppen zusammengefasst.</p>
+      <div class="core-columns">
+        <div class="core-box">
+          <h3>Passive Bauelemente</h3>
+          <ul>
+            <li>Widerstand</li>
+            <li>Potentiometer</li>
+            <li>Trimmpotentiometer</li>
+            <li>Kondensator</li>
+            <li>Fotowiderstand / LDR</li>
+            <li>Taster</li>
+            <li>Schalter</li>
+          </ul>
+        </div>
+        <div class="core-box">
+          <h3>Aktive Bauelemente</h3>
+          <ul>
+            <li>LED</li>
+            <li>IR-LED</li>
+            <li>Transistor</li>
+            <li>MOSFET</li>
+            <li>Spannungsregler</li>
+            <li>Operationsverstärker</li>
+            <li>Timer-IC</li>
+            <li>Treiber-IC</li>
+            <li>Schieberegister</li>
+            <li>Zähler</li>
+            <li>Optokoppler</li>
+            <li>Reflexionssensor</li>
+            <li>Gabellichtschranke</li>
+            <li>Temperatursensor</li>
+            <li>Feuchtesensor</li>
+            <li>Lichtsensor</li>
+            <li>Bewegungssensor</li>
+            <li>Gassensor</li>
+          </ul>
+        </div>
+      </div>
+      <aside class="open-items">
+        <strong>Noch nicht als eigene Zielbauelemente bestätigt:</strong> Eine normale Halbleiterdiode und eine Spule. Beide werden erst nach ausdrücklicher Festlegung in die offizielle Projektliste aufgenommen.
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    <strong>KI-Beitrag – GitHub Copilot:</strong> Überführung der freigegebenen ChatGPT-Kernliste in eine strukturierte Webdokumentation, redaktionelle Formulierungen und HTML/CSS-Umsetzung.<br>
+    Fachliche Prüfung und Veröffentlichung: Andreas Sigismund.<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  </footer>
+  <script src="../../js/script.js"></script>
+</body>
+</html>

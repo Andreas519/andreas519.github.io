@@ -285,7 +285,7 @@
     <div class="header-content">
       <p class="eyebrow">Vom einzelnen Teil zur funktionierenden Schaltung</p>
       <h1>Bauelemente</h1>
-      <p>Widerstand, Diode oder Mikrochip: Jedes Bauteil übernimmt eine klar beschreibbare Aufgabe. Wer diese Aufgaben erkennt, kann Schaltungen lesen, planen und systematisch prüfen.</p>
+      <p>Widerstand, LED oder Mikrochip: Jedes Bauteil übernimmt eine klar beschreibbare Aufgabe. Wer diese Aufgaben erkennt, kann Schaltungen lesen, planen und systematisch prüfen.</p>
     </div>
   </header>
 
@@ -302,8 +302,8 @@
 
     <section aria-labelledby="kernliste-title">
       <div class="section-heading">
-        <h2 id="kernliste-title">Die Kernliste</h2>
-        <p>Zwölf Bauteilgruppen reichen aus, um einen großen Teil typischer Mikrocontroller-Schaltungen zu verstehen.</p>
+        <h2 id="kernliste-title">Bauteile entdecken</h2>
+        <p>Eine Auswahl aus der bestätigten Kernliste: von passiven Grundbauteilen bis zu Sensoren und integrierten Schaltungen.</p>
       </div>
 
       <div class="filter-bar" role="group" aria-label="Bauteile nach Aufgabe filtern">
@@ -333,11 +333,11 @@
           <p>Speichert kurzzeitig Ladung, glättet Versorgung und filtert Störungen.</p>
           <small>Einheit: Farad (F)</small>
         </article>
-        <article class="component-card" data-group="schutz">
-          <div class="component-symbol" aria-hidden="true">▷|</div>
-          <h3>Diode</h3>
-          <p>Lässt Strom bevorzugt in eine Richtung fließen und schützt vor Rückströmen.</p>
-          <small>Polung beachten</small>
+        <article class="component-card" data-group="steuern">
+          <div class="component-symbol" aria-hidden="true">Tr</div>
+          <h3>Trimmpotentiometer</h3>
+          <p>Ermöglicht den selten veränderten Feinabgleich eines Widerstands oder Spannungsteilers.</p>
+          <small>Beispiel: W105 ≈ 1 MΩ</small>
         </article>
         <article class="component-card" data-group="steuern">
           <div class="component-symbol" aria-hidden="true">LED</div>
@@ -352,10 +352,10 @@
           <small>Drei Anschlüsse</small>
         </article>
         <article class="component-card" data-group="steuern">
-          <div class="component-symbol" aria-hidden="true">K</div>
-          <h3>Relais</h3>
-          <p>Schaltet einen getrennten Stromkreis mechanisch und ermöglicht galvanische Trennung.</p>
-          <small>Freilaufdiode vorsehen</small>
+          <div class="component-symbol" aria-hidden="true">555</div>
+          <h3>Timer-IC</h3>
+          <p>Erzeugt Zeitintervalle und Taktsignale für mono- oder astabile Schaltungen.</p>
+          <small>Beispiel: NE555</small>
         </article>
         <article class="component-card" data-group="schutz">
           <div class="component-symbol" aria-hidden="true">OC</div>
@@ -382,12 +382,22 @@
           <small>Analog oder digital</small>
         </article>
         <article class="component-card" data-group="steuern">
-          <div class="component-symbol" aria-hidden="true">µC</div>
-          <h3>Mikrocontroller</h3>
-          <p>Liest Eingänge, verarbeitet Programme und steuert Ausgänge zeitlich präzise.</p>
-          <small>Das programmierbare Zentrum</small>
+          <div class="component-symbol" aria-hidden="true">SR</div>
+          <h3>Schieberegister</h3>
+          <p>Übernimmt serielle Bits und stellt sie geordnet an mehreren Ausgängen bereit.</p>
+          <small>74HC164 und 74HC595</small>
         </article>
       </div>
+    </section>
+
+    <section class="knowledge-link" aria-labelledby="liste-title">
+      <div class="chip-visual" aria-hidden="true">A–Z</div>
+      <div>
+        <p class="eyebrow">Neue Gesamtdokumentation</p>
+        <h2 id="liste-title">Die bestätigte Bauelementeliste</h2>
+        <p>Passive Bauteile, LEDs, Transistoren, Spannungsregler, integrierte Schaltungen und Sensoren mit konkreten Typen und einer zusammengefassten Kernliste.</p>
+      </div>
+      <a href="bauelemente-liste.html">Gesamtliste öffnen →</a>
     </section>
 
     <section class="knowledge-link" aria-labelledby="pcf-title">
@@ -398,6 +408,16 @@
         <p>Der PCF8574 zeigt beispielhaft, wie ein Schnittstellen-IC arbeitet: I²C-Adressierung, quasi-bidirektionale Ports, Stromgrenzen und MicroPython werden in einer Gesamtdokumentation verbunden.</p>
       </div>
       <a href="i2c/PCF8574_Gesamtdokumentation.html">PCF8574 öffnen →</a>
+    </section>
+
+    <section class="knowledge-link" aria-labelledby="mcp-title">
+      <div class="chip-visual" aria-hidden="true">MCP23017</div>
+      <div>
+        <p class="eyebrow">Bauteil im Detail</p>
+        <h2 id="mcp-title">16 konfigurierbare GPIOs mit Interrupts</h2>
+        <p>Die neue Dokumentation erklärt technische Daten, Register, Pull-ups, Interrupts und die Python-/MicroPython-Programmierung des MCP23017.</p>
+      </div>
+      <a href="i2c/MCP23017_Dokumentation.html">MCP23017 öffnen →</a>
     </section>
 
     <section class="workbench" aria-labelledby="werkbank-title">
@@ -417,6 +437,8 @@
 
   <footer>
     © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    <strong>KI-Beitrag – GitHub Copilot:</strong> Konzeption, Seitengliederung, Formulierungen sowie Umsetzung mit HTML, CSS und JavaScript.<br>
+    Inhaltliche Grundlage: die vom Nutzer freigegebene ChatGPT-Zusammenfassung. Fachliche Prüfung und Veröffentlichung: Andreas Sigismund.<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
   </footer>
 
