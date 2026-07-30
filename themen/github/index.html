@@ -1,47 +1,145 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Github</title>
-<meta name="author" content="Andreas Sigismund">
-<meta name="publisher" content="Andreas Sigismund">
-<meta name="project" content="AG Young Engineers">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Git und GitHub verständlich erklärt: Änderungen prüfen, stagen, committen, pushen und GitHub Pages kontrollieren.">
+  <title>Git und GitHub - Young Engineers</title>
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
+  <meta name="publisher" content="Andreas Sigismund">
+  <meta name="project" content="AG Young Engineers">
 
-<link rel="stylesheet" href="../../css/my.css">
+  <link rel="stylesheet" href="../../css/my.css">
 </head>
 <body>
 <header>
-  <h3>TinkerCAD</h3>
+  <h1>Git und GitHub</h1>
+  <p>Änderungen nachvollziehbar speichern und Webseiten zuverlässig veröffentlichen</p>
 </header>
+
+<nav class="section-nav" aria-label="Seitennavigation">
+  <ul>
+    <li><a href="#unterschied">Git und GitHub</a></li>
+    <li><a href="#ablauf">Arbeitsablauf</a></li>
+    <li><a href="#spickzettel">Spickzettel</a></li>
+    <li><a href="#pages">GitHub Pages</a></li>
+    <li><a href="#hilfe">Fehlersuche</a></li>
+  </ul>
+</nav>
+
 <main>
-  <section>
-  <ul><h3>Tipps und Tricks</h3>
-    <li>Im privaten Fenster testen, um den Browser-Cache zu umgehen.</li>
-    <li>Actions prüfen - Im Repository: GitHub → Repository → Actions<br>
-    <a href="https://github.com/Andreas519/andreas519.github.io/actions" target="_blank">andreas519.github.io - Actions</a>
-    </li>
-    <li></li>
-    <li></li>
-   </ul> 
- </section>
+  <section id="unterschied">
+    <h2>Git und GitHub sind nicht dasselbe</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Git</h3>
+        <p>Git verwaltet die Versionsgeschichte auf dem eigenen Computer. Es merkt sich, welche Dateien geändert, hinzugefügt oder gelöscht wurden.</p>
+        <p class="note">Git funktioniert auch ohne Internet.</p>
+      </article>
+      <article class="project-card">
+        <h3>GitHub</h3>
+        <p>GitHub speichert das Git-Repository im Internet. Dort können Commits angesehen, gemeinsam bearbeitet und als GitHub Pages veröffentlicht werden.</p>
+        <p class="note">GitHub kennt lokale Änderungen erst nach dem Push.</p>
+      </article>
+    </div>
+  </section>
 
-  <section>
-    <h3>typischer Ablauf</h3>
+  <section id="ablauf">
+    <h2>Der sichere Arbeitsablauf</h2>
+    <p class="merkbox"><strong>Merksatz:</strong> Ansehen → Auswählen → Speichern → Hochladen</p>
+    <div class="grid">
+      <article class="project-card">
+        <h3>1. Ansehen</h3>
+        <p>Zuerst prüfen, welche Dateien verändert wurden.</p>
+        <pre><code>git status</code></pre>
+      </article>
+      <article class="project-card">
+        <h3>2. Stagen</h3>
+        <p>Nur die gewünschten Änderungen für den nächsten Commit auswählen.</p>
+        <pre><code>git add pfad/datei.html</code></pre>
+      </article>
+      <article class="project-card">
+        <h3>3. Committen</h3>
+        <p>Den ausgewählten Zwischenstand lokal speichern und beschreiben.</p>
+        <pre><code>git commit -m "Beschreibung"</code></pre>
+      </article>
+      <article class="project-card">
+        <h3>4. Pushen</h3>
+        <p>Die lokalen Commits zum verbundenen GitHub-Repository hochladen.</p>
+        <pre><code>git push</code></pre>
+      </article>
+    </div>
+    <aside>
+      <strong>Wichtig:</strong> <code>git push</code> überträgt nur Commits. Nicht committete Änderungen bleiben auf dem eigenen Computer.
+    </aside>
+  </section>
+
+  <section id="spickzettel">
+    <h2>Git-Spickzettel</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Die wichtigsten Befehle auf einer Seite</h3>
+        <p>Der Spickzettel erklärt die deutschen Merkhilfen, die normale Befehlsreihenfolge und das gezielte Übertragen einzelner Dateien.</p>
+        <p>
+          <a href="/tools/md-viewer.html?file=/themen/github/git-spickzettel.md&amp;title=Git-Spickzettel"
+            target="_blank" rel="noopener noreferrer">Git-Spickzettel öffnen</a>
+        </p>
+      </article>
+      <article class="project-card">
+        <h3>Das Paketbild</h3>
+        <ol>
+          <li><strong>Stagen:</strong> Inhalt auswählen.</li>
+          <li><strong>Committen:</strong> Paket verschließen und beschriften.</li>
+          <li><strong>Pushen:</strong> Paket zu GitHub schicken.</li>
+        </ol>
+      </article>
+    </div>
+  </section>
+
+  <section id="pages">
+    <h2>Von GitHub zur veröffentlichten Webseite</h2>
     <ol>
-      <li>Änderung lokal speichern</li>
-      <li>Commit in GitHub Desktop</li>
-      <li>Push zu GitHub</li>
-      <li>GitHub Pages baut/veröffentlicht die Seite neu - Browser zeigt eventuell noch alte Version aus dem Cache</li>
-      <li>Im privaten Fenster testen - Damit umgehst du oft den Browser-Cache.</li>
+      <li>Änderungen lokal bearbeiten und speichern.</li>
+      <li>Die gewünschten Dateien stagen und committen.</li>
+      <li>Den Commit zu GitHub pushen.</li>
+      <li>GitHub Pages baut die Webseite neu auf.</li>
+      <li>Nach erfolgreichem Deployment die veröffentlichte Seite prüfen.</li>
     </ol>
+    <p>
+      <a href="https://github.com/Andreas519/andreas519.github.io/actions" target="_blank" rel="noopener noreferrer">
+        Build- und Deployment-Status in GitHub Actions prüfen
+      </a>
+    </p>
+  </section>
 
-    Actions prüfen - Im Repository: GitHub → Repository → Actions<br>
-    Dort siehst du, ob „pages build and deployment“ noch läuft oder erfolgreich abgeschlossen ist.
+  <section id="hilfe">
+    <h2>Wenn eine Änderung nicht sichtbar ist</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Git-Status prüfen</h3>
+        <p>Liegt die Änderung noch lokal oder wurde sie bereits committet?</p>
+        <pre><code>git status</code></pre>
+      </article>
+      <article class="project-card">
+        <h3>GitHub Actions prüfen</h3>
+        <p>Der Vorgang „pages build and deployment“ muss erfolgreich abgeschlossen sein.</p>
+      </article>
+      <article class="project-card">
+        <h3>Browser-Cache umgehen</h3>
+        <p>Die Seite neu laden oder testweise in einem privaten Browserfenster öffnen.</p>
+      </article>
+      <article class="project-card">
+        <h3>Pfad und Großschreibung prüfen</h3>
+        <p>GitHub Pages unterscheidet beispielsweise zwischen <code>Bild.png</code> und <code>bild.png</code>.</p>
+      </article>
+    </div>
   </section>
 </main>
+
 <footer>
-  © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Überarbeitet mit GitHub Copilot · Fachliche Prüfung und Veröffentlichung: Andreas Sigismund<br>
+  AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
   Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
   <script src="../../js/script.js"></script>
 </footer>
