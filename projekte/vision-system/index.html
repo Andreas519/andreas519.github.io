@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raspberry Pi Zero Cam - Young Engineers</title>
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
+  <meta name="publisher" content="Andreas Sigismund">
+  <meta name="project" content="AG Young Engineers">
+
+  <link rel="stylesheet" href="../../css/my.css">
+</head>
+<body>
+  <header>
+    <h1>Raspberry Pi Zero Cam</h1>
+    <p>Kamera-Projekte mit dem Raspberry Pi Zero W und Raspberry Pi Zero 2 W</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Projektübersicht</h2>
+      <p>
+        Ein Raspberry Pi Zero mit Kameramodul eignet sich für kompakte Foto-,
+        Zeitraffer- und Beobachtungsprojekte. Der Raspberry Pi Zero 2 W bietet
+        dabei deutlich mehr Leistung als die ursprünglichen Zero-Modelle.
+      </p>
+      <aside>
+        Der Kameraanschluss der Zero-Modelle benötigt ein schmales CSI-Kamerakabel
+        für den Raspberry Pi Zero. Ein gewöhnliches Raspberry-Pi-Kamerakabel ist zu breit.
+      </aside>
+    </section>
+
+    <section>
+      <h2>Benötigte Komponenten</h2>
+      <div class="grid">
+        <article class="project-card">
+          <h3>Hardware</h3>
+          <ul>
+            <li>Raspberry Pi Zero W oder Raspberry Pi Zero 2 W</li>
+            <li>Raspberry-Pi-Kameramodul</li>
+            <li>CSI-Kamerakabel für Raspberry Pi Zero</li>
+            <li>microSD-Karte mit Raspberry Pi OS</li>
+            <li>stabiles 5-V-Netzteil</li>
+          </ul>
+        </article>
+        <article class="project-card">
+          <h3>Software</h3>
+          <ul>
+            <li>Raspberry Pi OS</li>
+            <li><code>rpicam-apps</code> für Vorschau, Fotos und Videos</li>
+            <li>Picamera2 für eigene Python-Programme</li>
+            <li>SSH für den Betrieb ohne Monitor</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h2>Kamera testen</h2>
+      <p>Nach dem Anschließen und Starten des Raspberry Pi kann die Kamera im Terminal geprüft werden:</p>
+      <pre><code>rpicam-hello</code></pre>
+      <p>Ein Foto wird mit folgendem Befehl aufgenommen:</p>
+      <pre><code>rpicam-still -o testbild.jpg</code></pre>
+      <p>Für einen Raspberry Pi ohne angeschlossenen Bildschirm eignet sich eine Aufnahme ohne Vorschaufenster:</p>
+      <pre><code>rpicam-still -n -o testbild.jpg</code></pre>
+    </section>
+
+    <section>
+      <h2>Weiterführende Anleitung</h2>
+      <p>
+        Die ausführliche Dokumentation beschreibt Modelle, Anschlüsse, Stromversorgung,
+        die Einrichtung von Raspberry Pi OS, den Betrieb über WLAN und SSH sowie die Kamera.
+      </p>
+      <p>
+        <a href="/tools/md-viewer.html?file=/themen/raspberry%20pi/raspberry_pi_zero_beschaltung_inbetriebnahme_nutzung.md&amp;title=Raspberry%20Pi%20Zero"
+          target="_blank" rel="noopener noreferrer">
+          Raspberry Pi Zero: Beschaltung, Inbetriebnahme und Nutzung
+        </a>
+      </p>
+      <p><a href="../index.html">Zurück zur Projektübersicht</a></p>
+    </section>
+  </main>
+
+  <footer>
+    Erstellt mit GitHub Copilot · Fachliche Prüfung und Veröffentlichung: Andreas Sigismund<br>
+    AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../js/script.js"></script>
+  </footer>
+</body>
+</html>
