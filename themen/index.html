@@ -10,17 +10,6 @@
 
 <link rel="stylesheet" href="../css/my.css">
 <style>
-  .project-card img {
-    max-width: 100%;
-    height: auto;
-  }
-
-  .project-card img.topic-preview-image {
-    width: 100%;
-    height: 200px;
-    object-fit: contain;
-  }
-
   .components-visual {
     position: relative;
     width: 100%;
@@ -247,120 +236,58 @@
   <main>
    <section>
     <div class="grid">
-     <article class="project-card project-card-center">
-      <a href="tinkercad/index.html" target="_blank">Tinkercad</a><br>
-      browserbasierte Lern- und Entwicklungsumgebung, die das einfache Erstellen von 3D-Modellen, 
-      das Simulieren elektronischer Schaltungen sowie das Programmieren virtueller Mikrocontroller wie Arduino oder micro. ermöglicht.
-       
-      
+     <article class="project-card">
+      <a href="tinkercad/index.html" target="_blank">
+       <img class="topic-preview-image" src="tinkercad/bilder/tinkercad-quer.png" alt="Tinkercad">
+      </a>
      </article>
-     <article class="project-card project-card-center">
-      <a href="wokwi/preview.html" target="_blank">Wokwi Simulator</a><br>
-      browserbasierter Simulator für elektronische Schaltungen und Mikrocontroller, wie Arduino, ESP32, ESP8266, Raspberry Pi Pico, STM32 und viele mehr.
-        <!-- <img class="topic-preview-image" src="Dobot_Magician/bilder/dobot+profiroll.png" alt="Dobot Magician"> -->
-      </article> 
+     <article class="project-card">
+      <a href="wokwi/preview.html" target="_blank">
+       <img class="topic-preview-image" src="wokwi/wokwi-quer.png" alt="Wokwi Simulator">
+      </a>
+     </article>
+     <article class="project-card">
+      <a href="Dobot_Magician/index.html" target="_blank">
+       <img class="topic-preview-image" src="Dobot_Magician/bilder/dobot-quer.png" alt="Dobot Magician">
+      </a>
+     </article>
     </div>
    </section>
-   <section> <!--- Grid--->
-   <div class="grid">
-    <article class="project-card project-card-center">
-      <a href="Dobot_Magician/index.html" target="_blank">
-        <img class="topic-preview-image" src="Dobot_Magician/bilder/dobot+profiroll.png" alt="Dobot Magician">
+   <section>
+    <div class="grid">
+     <article class="project-card">
+      <a href="bauelemente/elektronikmodule-ueberblick.html" target="_blank">
+       <img class="topic-preview-image" src="bauelemente/module-quer.png" alt="Elektronikmodule">
       </a>
-    </article>
-    <article class="project-card project-card-center">  
+     </article>
+     <article class="project-card">
       <a href="3d-drucker/index.html" target="_blank">
-        <img class="topic-preview-image" src="./3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png" alt="3D-Drucker">
-      </a>  
-      <br>
-      
-    </article>
-    <article class="project-card project-card-center">
-      <a href="Makeblock_Laserbox/index.html" target="_blank">
-        <img src="Makeblock_Laserbox/bilder/lasercutter-quer.png" alt="Makeblock Laserbox Pro" height="200">
+       <img class="topic-preview-image" src="3d-drucker/bilder/3d-drucker-quer.png" alt="3D-Drucker">
       </a>
-      
-    </article>     
-    
-  </div>  
-  <div class="grid">
-    <article class="project-card project-card-center">
+     </article>
+     <article class="project-card">
       <a href="Makeblock_Laserbox/index.html" target="_blank">
-        <img src="Makeblock_Laserbox/bilder/ansicht-b.png" alt="Makeblock Laserbox Pro" height="200">
-      </a><br>
-      <a href="Makeblock_Laserbox/index.html" target="_blank">Makeblock Laserbox Pro</a>
-    </article>
-    <article class="project-card project-card-center components-card">
-      <a href="bauelemente/index.html" target="_blank" aria-label="Bauelemente öffnen">
-        <div class="components-visual" aria-hidden="true">
-          <span class="timer-rail rail-vcc"></span>
-          <span class="timer-rail rail-gnd"></span>
-          <span class="timer-trace trace-pin8-a"></span>
-          <span class="timer-trace trace-pin8-b"></span>
-          <span class="timer-trace trace-pin4-a"></span>
-          <span class="timer-trace trace-pin4-b"></span>
-          <span class="timer-trace trace-pin1-a"></span>
-          <span class="timer-trace trace-pin1-b"></span>
-          <span class="timer-trace trace-r1-top"></span>
-          <span class="timer-trace trace-r1-bottom"></span>
-          <span class="timer-trace trace-pin7"></span>
-          <span class="timer-trace trace-r2-top"></span>
-          <span class="timer-trace trace-r2-bottom"></span>
-          <span class="timer-trace trace-pin6-a"></span>
-          <span class="timer-trace trace-pin6-b"></span>
-          <span class="timer-trace trace-timing-node"></span>
-          <span class="timer-trace trace-cap-ground"></span>
-          <span class="timer-trace trace-pin2-a"></span>
-          <span class="timer-trace trace-pin2-b"></span>
-          <span class="timer-trace trace-output"></span>
-          <span class="timer-trace trace-led-ground"></span>
-          <span class="timer-node node-discharge"></span>
-          <span class="timer-node node-timing"></span>
-          <span class="timer-resistor resistor-r1">R1</span>
-          <span class="timer-resistor resistor-r2">R2</span>
-          <span class="timer-capacitor">C1</span>
-          <span class="timer-chip">
-            <span class="timer-notch"></span>
-            <span class="timer-dot"></span>
-            <span class="timer-pin left pin-1">1</span>
-            <span class="timer-pin left pin-2">2</span>
-            <span class="timer-pin left pin-3">3</span>
-            <span class="timer-pin left pin-4">4</span>
-            <span class="timer-pin right pin-8">8</span>
-            <span class="timer-pin right pin-7">7</span>
-            <span class="timer-pin right pin-6">6</span>
-            <span class="timer-pin right pin-5">5</span>
-            <span class="timer-chip-label">NE555<small>TIMER</small></span>
-          </span>
-          <span class="visual-resistor">470 Ω</span>
-          <span class="visual-led"></span>
-          <span class="visual-label">NE555 ASTABLE LED BLINKER</span>
-          <span class="supply-label label-vcc">VCC</span>
-          <span class="supply-label label-gnd">GND</span>
-        </div>
+       <img class="topic-preview-image" src="Makeblock_Laserbox/bilder/lasercutter-quer.png" alt="Makeblock Laserbox Pro">
       </a>
-      <a href="bauelemente/index.html" target="_blank">Bauelemente</a>
-      <p class="note">Grundlagen, Kernliste und Dokumentationen</p>
+     </article>
+    </div>
+   </section>
+   <section>
+    <div class="grid">
+    <article class="project-card">
+     <a href="bauelemente/index.html" target="_blank">
+       <img class="topic-preview-image" src="bauelemente/bilder/bauelemente-quer.png" alt="Bauelemente">
+     </a>
     </article>
-  </div>  
-  </section>
-  <section> <!--- Grid--->
-   <div class="grid">
     <article class="project-card">  
      <a href="./robotiksysteme-und-fahrzeuge-ueberblick.html" target="_blank">
        <img class="topic-preview-image" src="robotik/robotik-quer.png" alt="Robotiksysteme und programmierbare Fahrzeuge">
      </a>
-    </article>    
-    <article class="project-card">
-     <a href="bauelemente/elektronikmodule-ueberblick.html" target="_blank">
-       <img class="topic-preview-image" src="bauelemente/module-quer.png" alt="Module"> 
-     </a>  
     </article>
-   </div>
-  </section>
-  <section> <!--- Grid--->
+    </div>
+   </section>
+  <section> <!--- Grid-  OHNE INHALTE-->
   <div class="grid">
-   
     <article class="project-card">
       <h3>AIS-Flächenportal</h3>
     </article>
