@@ -42,5 +42,9 @@ voererst keine
 
 Es werden weiteren Bilder benötigt für:
 
-- [ ] Bilderkennung
+- [ ] Dobot Magician
+  Grundlage: https://andreas519.github.io/themen/Dobot_Magician/bilder/dobot+profiroll.png
+  Hintergraund wie: https://andreas519.github.io/themen/3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png
+
+  
 
