@@ -18,14 +18,15 @@ projekte/<projekt>/bilder/<projekt>-quer.png
 ## Status
 
 ### Themen auf der Startseite `andreas519.github.io/index.html`
+- [x] Tinkercad
+- [x] Wokwi
 - [x] Dobot Magician
 - [x] 3D-Drucker
 - [x] Makeblock Laserbox Pro
 - [x] Bauelemente
 - [x] Elektronikmodule
 - [x] Robotiksysteme
-- [x] Tinkercad
-- [x] Wokwi
+
 
 Es werden weiteren Bilder benötigt für:
 
@@ -38,13 +39,18 @@ voererst keine
 - [x] 28BYJ-48 Schrittmotor
 - [x] Schieberegister 74HC595
 - [x] Hausautomation
-- [x] Dobot Magician
+
+### Projekte auf der Seite `andreas519.github.io/themen/index.html`
+
 
 Es werden weiteren Bilder benötigt für:
 
-- [ ] Dobot Magician
-  Grundlage: https://andreas519.github.io/themen/Dobot_Magician/bilder/dobot+profiroll.png
-  Hintergraund wie: https://andreas519.github.io/themen/3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png
+- [ ] 3D-Drucker 
+  Grundlage: http://andreas519.github.io/themen/3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png
+  Auf das Format 1672 × 941 Pixel anpassen
+- [ ] Bauelemente  
+  Eine Collage mit passiven und aktiven elektrischen und elektronischen Bauelementen, auch als Schaltzeichen;
+  Breadboard
 
-  
+
 
