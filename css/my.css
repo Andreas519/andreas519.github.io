@@ -26,6 +26,8 @@ header p { margin:12px auto 0; max-width:850px; font-size:1.1rem; opacity:.95; }
 main { max-width:1050px; margin:0 auto; padding:28px 18px 48px; }
 section { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:24px; margin:18px 0; box-shadow:0 4px 14px rgba(0,0,0,.04); }
 h2 { margin-top:0; color:var(--accent-dark); }
+.section-heading { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:baseline; gap:8px 16px; }
+.section-heading h2 { margin-bottom:0; }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
 .project-card { border:1px solid var(--border); border-radius:12px; padding:6px; background:#fbfdff; }
 .topic-preview-image { display:block; width:100%; max-width:250px; height:auto; margin:0 auto; }

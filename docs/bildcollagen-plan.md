@@ -32,15 +32,15 @@ Es werden weiteren Bilder benötigt für:
 voererst keine
 
 ### Projekte auf der Startseite `andreas519.github.io/index.html`
-
-keine Bilder vorhanden
-
 - [x] Raspberry Pi Zero CAM
 - [x] Vision Systeme
+- [x] Dobot Magician
+- [x] 28BYJ-48 Schrittmotor
+- [x] Schieberegister 74HC595
+- [x] Hausautomation
 - [x] Dobot Magician
 
 Es werden weiteren Bilder benötigt für:
 
-- [] 28BYJ-48 Schrittmotor
-- [] Schieberegister 74HC595
-- [] Hausautomation 
+- [ ] Bilderkennung
+
