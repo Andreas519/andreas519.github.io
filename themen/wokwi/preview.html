@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Überblick über Wokwi, den Online-Simulator für Arduino, ESP32, STM32, Raspberry Pi Pico, Sensoren, Aktoren und IoT-Projekte.">
+  <title>Wokwi – Online-Simulator für Mikrocontroller und Elektronik</title>
+  <style>
+    :root {
+      --dunkel:#24324a; --violett:#6750a4; --violett-dunkel:#48317f;
+      --hellviolett:#f2effb; --blau:#176c9e; --hellblau:#eaf5fb;
+      --gruen:#27734d; --hellgruen:#eaf6ef; --gelb:#8a6500;
+      --hellgelb:#fff7dc; --rot:#a33a32; --hellrot:#fff0ee;
+      --grau:#5b6670; --hellgrau:#f4f6f8; --rand:#cbd4dc;
+      --text:#26333d; --weiss:#fff;
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{margin:0;color:var(--text);background:var(--weiss);font-family:Arial,Helvetica,sans-serif;line-height:1.64}
+    a{color:var(--blau);text-underline-offset:.16em} a:hover,a:focus{color:#0c4568}
+    header{padding:3.6rem 1.2rem 3.2rem;color:var(--weiss);background:radial-gradient(circle at 88% 20%,rgba(255,255,255,.18),transparent 23%),linear-gradient(125deg,var(--dunkel),var(--violett-dunkel) 58%,var(--violett))}
+    .breite{width:min(1180px,93%);margin-inline:auto}
+    header h1{margin:0 0 .75rem;font-size:clamp(2.1rem,5vw,3.6rem);line-height:1.1}
+    header p{max-width:900px;margin:0;font-size:1.14rem}
+    .sprungnavigation{position:sticky;top:0;z-index:10;padding:.72rem 1.2rem;background:rgba(255,255,255,.96);border-bottom:1px solid var(--rand);box-shadow:0 2px 8px rgba(36,50,74,.08)}
+    .sprungnavigation ul{display:flex;flex-wrap:wrap;gap:.45rem 1.1rem;margin:0;padding:0;list-style:none}
+    main{padding:2.4rem 0 4rem} section{margin-bottom:3.4rem;scroll-margin-top:5rem}
+    h2{margin:0 0 1.2rem;padding-bottom:.42rem;color:var(--dunkel);border-bottom:3px solid var(--violett);font-size:clamp(1.55rem,3vw,2.15rem)}
+    h3{color:var(--violett-dunkel)} code{padding:.08rem .28rem;background:#eef1f4;border-radius:4px;font-family:Consolas,"Courier New",monospace}
+    .einleitung{padding:1.45rem 1.55rem;background:var(--hellviolett);border-left:6px solid var(--violett);border-radius:0 11px 11px 0;font-size:1.06rem}
+    .hinweis{margin-top:1.15rem;padding:1.25rem 1.4rem;background:var(--hellgelb);border:1px solid #dfca7d;border-radius:10px}
+    .kennzahlen{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1rem;margin-top:1.35rem}
+    .kennzahl{padding:1.15rem;text-align:center;background:var(--hellgrau);border:1px solid var(--rand);border-radius:10px}
+    .kennzahl strong{display:block;color:var(--violett-dunkel);font-size:1.9rem;line-height:1.1}
+    .karten{display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:1.15rem}
+    .karte{display:flex;flex-direction:column;padding:1.3rem;background:var(--weiss);border:1px solid var(--rand);border-radius:12px;box-shadow:0 3px 13px rgba(36,50,74,.08)}
+    .karte h3{margin:0 0 .5rem}.karte p:last-child{margin-bottom:0}
+    .status{display:inline-block;width:fit-content;margin-bottom:.65rem;padding:.2rem .58rem;border-radius:999px;font-size:.86rem;font-weight:bold}
+    .status-gut{color:var(--gruen);background:var(--hellgruen);border:1px solid #a8d5bb}
+    .status-teil{color:var(--gelb);background:var(--hellgelb);border:1px solid #dfca7d}
+    .status-fehler{color:var(--rot);background:var(--hellrot);border:1px solid #e1aaa4}
+    .tabelle{overflow-x:auto;border:1px solid var(--rand);border-radius:10px}
+    table{width:100%;min-width:850px;border-collapse:collapse} th,td{padding:.78rem .82rem;text-align:left;vertical-align:top;border-bottom:1px solid var(--rand)}
+    th{color:var(--weiss);background:var(--dunkel)} tbody tr:nth-child(even){background:var(--hellgrau)} tbody tr:last-child td{border-bottom:0}
+    .ampel{font-weight:bold;white-space:nowrap}.ampel-gut{color:var(--gruen)}.ampel-teil{color:var(--gelb)}.ampel-fehler{color:var(--rot)}
+    .lernweg{counter-reset:schritt;display:grid;gap:1rem;margin:0;padding:0;list-style:none}
+    .lernweg li{position:relative;padding:1.15rem 1.2rem 1.15rem 4.3rem;background:var(--hellblau);border:1px solid #b7d7e8;border-radius:10px}
+    .lernweg li::before{counter-increment:schritt;content:counter(schritt);position:absolute;top:1rem;left:1.15rem;display:grid;width:2.25rem;height:2.25rem;place-items:center;color:var(--weiss);background:var(--blau);border-radius:50%;font-weight:bold}
+    .projektliste{margin:.4rem 0 0;padding-left:1.25rem}.projektliste li{margin:.42rem 0}
+    .struktur{margin:0;padding:1.3rem 1.5rem 1.3rem 3rem;background:var(--hellgrau);border:1px solid var(--rand);border-radius:10px}.struktur li{margin:.42rem 0}
+    .bewertung{padding:1.4rem 1.5rem;background:var(--hellgruen);border-left:6px solid var(--gruen);border-radius:0 10px 10px 0}
+    .quellen{font-size:.95rem}.quellen li{margin-bottom:.58rem}
+    footer{padding:2rem 1.2rem;color:#e8edf3;background:var(--dunkel)} footer p{margin:.28rem 0}
+    @media(max-width:680px){header{padding-top:2.6rem}.sprungnavigation{position:static}}
+    @media print{.sprungnavigation{display:none}body{font-size:10.5pt}header{color:#000;background:none;border-bottom:2px solid #000}.karte{break-inside:avoid;box-shadow:none}a{color:#000;text-decoration:none}}
+  </style>
+</head>
+<body>
+<header><div class="breite"><h1>Wokwi</h1><p>Online-Simulator für Mikrocontroller, elektronische Schaltungen, Sensoren, Aktoren, Anzeigen und IoT-Projekte</p></div></header>
+<nav class="sprungnavigation" aria-label="Seitennavigation"><div class="breite"><ul>
+  <li><a href="#ueberblick">Überblick</a></li><li><a href="#hardware">Hardware</a></li><li><a href="#programmierung">Programmierung</a></li>
+  <li><a href="#werkzeuge">Werkzeuge</a></li><li><a href="#grenzen">Grenzen</a></li><li><a href="#materialien">Unsere Materialien</a></li>
+  <li><a href="#linkpruefung">Linkprüfung</a></li><li><a href="#lernweg">Lernweg</a></li><li><a href="#struktur">Neue Struktur</a></li>
+</ul></div></nav>
+<main class="breite">
+<section id="ueberblick"><h2>1. Was ist Wokwi?</h2>
+  <div class="einleitung"><p><strong>Wokwi</strong> ist ein browserbasierter Simulator für Mikrocontroller und digitale Elektronik. Programme können geschrieben, kompiliert und auf virtueller Hardware ausgeführt werden. Mikrocontroller, LEDs, Taster, Sensoren, Anzeigen, Motoren und weitere Bauteile lassen sich auf einer virtuellen Arbeitsfläche miteinander verbinden.</p><p>Für den Einstieg ist keine Installation erforderlich. Ein Projekt kann direkt im Browser geöffnet, verändert, simuliert und über einen Link weitergegeben werden.</p></div>
+  <div class="kennzahlen"><div class="kennzahl"><strong>Browser</strong>direkter Einstieg</div><div class="kennzahl"><strong>4</strong>Prozessorarchitekturen</div><div class="kennzahl"><strong>C/C++</strong>Arduino und Frameworks</div><div class="kennzahl"><strong>Python</strong>MicroPython und CircuitPython</div><div class="kennzahl"><strong>IoT</strong>WLAN, HTTP und MQTT</div></div>
+  <div class="hinweis"><strong>Schreibweise:</strong> Der offizielle Name lautet <strong>Wokwi</strong>. Auf älteren Seiten finden sich auch „WokWi“ oder versehentlich „Woki“.</div>
+</section>
+<section><h2>2. Warum ist Wokwi für Unterricht und AG geeignet?</h2><div class="karten">
+  <article class="karte"><h3>Sofort beginnen</h3><p>Schüler benötigen zunächst weder Entwicklungsboard noch Steckbrett, Kabel oder elektronische Bauteile.</p></article>
+  <article class="karte"><h3>Gefahrlos experimentieren</h3><p>Verpolte LEDs, falsche Ports oder Programmfehler zerstören keine reale Hardware. Änderungen können schnell rückgängig gemacht werden.</p></article>
+  <article class="karte"><h3>Fehler eingrenzen</h3><p>Wenn ein Programm in der Simulation funktioniert, kann später gezielter zwischen Software-, Verdrahtungs- und Hardwarefehlern unterschieden werden.</p></article>
+  <article class="karte"><h3>Projekte teilen</h3><p>Über Projektlinks können Ausgangsprojekte, Aufgaben, Lösungen und Varianten verteilt werden.</p></article>
+  <article class="karte"><h3>Knappes Material ersetzen</h3><p>Alle Schüler können gleichzeitig mit derselben virtuellen Schaltung arbeiten, auch wenn nur wenige reale Module vorhanden sind.</p></article>
+  <article class="karte"><h3>Zu Hause vorbereiten</h3><p>Programme und Schaltungen lassen sich außerhalb der Schule vorbereiten. Die praktische Erprobung folgt an realer Hardware.</p></article>
+</div></section>
+<section id="hardware"><h2>3. Unterstützte Mikrocontroller</h2><div class="tabelle"><table><thead><tr><th>Familie</th><th>Beispiele</th><th>Typischer Einsatz</th><th>Bedeutung für uns</th></tr></thead><tbody>
+  <tr><td>Arduino / AVR</td><td>Uno, Nano, Mega 2560, ATtiny85</td><td>C/C++, Grundlagen, Shields und Peripherie</td><td class="ampel ampel-gut">Sehr gut geeignet</td></tr>
+  <tr><td>ESP32-Familie</td><td>ESP32, S2, S3, C3, C6, H2 und weitere Varianten</td><td>Arduino, MicroPython, CircuitPython, Rust, ESP-IDF und IoT</td><td class="ampel ampel-gut">Besonders wichtig</td></tr>
+  <tr><td>Raspberry Pi Pico</td><td>RP2040 / Pi Pico</td><td>MicroPython, CircuitPython, Arduino und Pico SDK</td><td class="ampel ampel-gut">Gut geeignet</td></tr>
+  <tr><td>STM32</td><td>STM32C031, STM32L031, STM32F103C8</td><td>ARM-Mikrocontroller und eingebettete Systeme</td><td class="ampel ampel-teil">Spätere Erweiterung</td></tr>
+  <tr><td>ESP8266</td><td>NodeMCU, D1 mini, ESP-01, D1 im Uno-Format</td><td>Viele ältere praktische Projekte</td><td class="ampel ampel-fehler">Nicht offiziell aufgeführt</td></tr>
+  <tr><td>Makeblock-Controller</td><td>mCore, Me Orion, Me Auriga, MegaPi</td><td>mBot, Starter, Ranger und Ultimate</td><td class="ampel ampel-teil">Keine fertigen Robotermodelle</td></tr>
+</tbody></table></div>
+<div class="hinweis"><strong>Wichtig:</strong> Ein ESP32-Projekt ist keine vollständige Simulation eines ESP8266. Portbelegung, Bibliotheken, Speicher und MicroPython-Funktionen können sich unterscheiden.</div></section>
+<section><h2>4. Simulierbare Bauteile</h2><div class="karten">
+  <article class="karte"><h3>Eingaben</h3><p>Taster, Schalter, DIP-Schalter, Potentiometer, Joystick und Tastaturen.</p></article>
+  <article class="karte"><h3>Sensoren</h3><p>Ultraschall, Temperatur, Luftfeuchte, Licht, Bewegung, Druck, Beschleunigung, Gyroskop, RFID und weitere Sensoren.</p></article>
+  <article class="karte"><h3>Anzeigen</h3><p>LEDs, 7-Segment-Anzeigen, LCD1602, OLED, TFT, LED-Ringe, LED-Streifen und LED-Matrizen.</p></article>
+  <article class="karte"><h3>Antriebe</h3><p>Servo-, Gleichstrom- und Schrittmotoren sowie ausgewählte Motortreiber.</p></article>
+  <article class="karte"><h3>Kommunikation</h3><p>UART, I²C, SPI sowie beim ESP32 simuliertes WLAN für HTTP-, HTTPS-, WebSocket-, NTP- und MQTT-Projekte.</p></article>
+  <article class="karte"><h3>Digitale Logik</h3><p>Logikgatter, Schieberegister, Speicherbausteine und weitere digitale Schaltungen.</p></article>
+</div></section>
+<section id="programmierung"><h2>5. Programmierung und Projektdateien</h2><div class="karten">
+  <article class="karte"><h3>Arduino C/C++</h3><p>Das Programm liegt meist in <code>sketch.ino</code> oder <code>main.ino</code>. Bibliotheken aus dem Arduino Library Manager können eingebunden werden.</p></article>
+  <article class="karte"><h3>MicroPython</h3><p>Das Hauptprogramm heißt gewöhnlich <code>main.py</code>. Weitere Python-Module können ausgelagert und importiert werden.</p></article>
+  <article class="karte"><h3>CircuitPython</h3><p>Das Startprogramm liegt typischerweise in <code>code.py</code>; unterstützt wird unter anderem der Raspberry Pi Pico.</p></article>
+  <article class="karte"><h3>Weitere Frameworks</h3><p>Mit VS Code sind unter anderem ESP-IDF, PlatformIO, Zephyr, Pi Pico SDK, Rust und weitere Toolchains möglich.</p></article>
+  <article class="karte"><h3><code>diagram.json</code></h3><p>Beschreibt virtuelle Bauteile, ihre Position, Eigenschaften und die Verdrahtung.</p></article>
+  <article class="karte"><h3><code>libraries.txt</code></h3><p>Enthält bei Arduino-Projekten zusätzliche Bibliotheken und gegebenenfalls deren Versionen.</p></article>
+</div><div class="hinweis">Die Schaltung kann grafisch im Diagramm-Editor oder direkt in <code>diagram.json</code> bearbeitet werden.</div></section>
+<section id="werkzeuge"><h2>6. Besondere Werkzeuge</h2><div class="karten">
+  <article class="karte"><h3>Serieller Monitor</h3><p>Zeigt Programmausgaben und kann Texte oder Befehle an den simulierten Controller senden.</p></article>
+  <article class="karte"><h3>Serieller Plotter</h3><p>Stellt Zahlenwerte als zeitlichen Verlauf dar, beispielsweise Messwerte oder Regelgrößen.</p></article>
+  <article class="karte"><h3>Logikanalysator</h3><p>Acht digitale Kanäle für PWM, UART, I²C, SPI, Servo- und NeoPixel-Signale.</p></article>
+  <article class="karte"><h3>Debugger</h3><p>Im Browser für AVR-Controller als Beta; weitere Controller können über VS Code debuggt werden.</p></article>
+  <article class="karte"><h3>Virtuelles WLAN</h3><p>ESP32-Projekte verbinden sich über <code>Wokwi-GUEST</code> mit Internetdiensten und MQTT-Servern.</p></article>
+  <article class="karte"><h3>Automatisierte Tests</h3><p>Wokwi CLI und CI können Taster, Sensorwerte und serielle Ausgaben automatisiert prüfen.</p></article>
+  <article class="karte"><h3>Eigene Bauteile</h3><p>Mit der Chips API lassen sich fehlende Komponenten als fortgeschrittene Erweiterung selbst entwickeln.</p></article>
+</div></section>
+<section id="grenzen"><h2>7. Was Wokwi nicht ersetzen kann</h2><div class="tabelle"><table><thead><tr><th>Bereich</th><th>Simulation</th><th>Reale Hardware</th></tr></thead><tbody>
+  <tr><td>Verdrahtung</td><td>Übersichtlich und idealisiert</td><td>Kontaktfehler, lose Kabel und schlechte Steckverbindungen</td></tr>
+  <tr><td>Strom und Spannung</td><td>Nur eingeschränkt beziehungsweise idealisiert</td><td>Belastbarkeit, Spannungsabfälle, falsche Pegel und Überlastung</td></tr>
+  <tr><td>Analoge Elektronik</td><td>Nur grundlegende Unterstützung</td><td>Rauschen, Toleranzen, Kennlinien und reale Messwerte</td></tr>
+  <tr><td>Motoren</td><td>Prinzip und Ansteuerung</td><td>Drehmoment, Trägheit, Last, Stromspitzen und Mechanik</td></tr>
+  <tr><td>Funk</td><td>Idealisiertes virtuelles WLAN</td><td>Reichweite, Störungen, Abbrüche und Antennenwirkung</td></tr>
+  <tr><td>Zeitverhalten</td><td>Für viele Programme brauchbar</td><td>Abweichungen durch reale Peripherie und Bibliotheken</td></tr>
+</tbody></table></div><div class="bewertung"><strong>Didaktische Konsequenz:</strong> Wokwi eignet sich für Entwurf, Programmierung, Erklärung und erste Fehlersuche. Vollständig erprobt ist ein Projekt erst nach dem Aufbau auf realer Hardware.</div></section>
+<section id="materialien"><h2>8. Unsere vorhandenen Wokwi-Materialien</h2><p>Die bestehende Wokwi-Seite enthält bereits einen umfangreichen Lern- und Projektbestand. Die Inhalte sollten künftig als <strong>Einführung – Aufgabe – Hilfe – Lösung – reale Umsetzung</strong> geordnet werden.</p><div class="karten">
+  <article class="karte"><span class="status status-gut">Mehrere Projekte erreichbar</span><h3>Grundlagen</h3><ul class="projektliste"><li>LEDs und Taster</li><li>Blinken mit und ohne blockierendes Warten</li><li>PWM</li><li>Timer und Interrupts</li><li>Laufzeitmessungen</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/wokwi/leds.html" target="_blank" rel="noopener">LEDs, Taster und Schalter</a></p></article>
+  <article class="karte"><span class="status status-gut">Lernreihe vorhanden</span><h3>7-Segment-Anzeigen</h3><ul class="projektliste"><li>Einzelne Segmente</li><li>Listen und Bitmuster</li><li>Funktionen</li><li>Multiplexbetrieb</li><li>Aufgabe mit vier Stellen</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/wokwi/7-segment-anzeige.php" target="_blank" rel="noopener">Vorhandene Lernreihe</a></p></article>
+  <article class="karte"><span class="status status-gut">Viele Beispiele vorhanden</span><h3>NeoPixel und LED-Matrizen</h3><ul class="projektliste"><li>LED-Ring</li><li>8×8-Matrix</li><li>Lampenfeld</li><li>Game of Life</li><li>Zusammengesetzte Matrizen</li><li>FastLED</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/wokwi/fastled.html" target="_blank" rel="noopener">NeoPixel-/FastLED-Seite</a></p></article>
+  <article class="karte"><span class="status status-gut">PDF und Projekte vorhanden</span><h3>LCD1602 und Eingaben</h3><ul class="projektliste"><li>HD44780 ohne I²C</li><li>MicroPython am ESP32</li><li>Keypad-Shield näherungsweise nachgebildet</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/wokwi/LCD-1602-Keypad-Shield.pdf" target="_blank" rel="noopener">Dokumentation</a></p></article>
+  <article class="karte"><span class="status status-gut">Mehrere Unterseiten vorhanden</span><h3>Motoren und Antriebe</h3><ul class="projektliste"><li>Gleichstrommotor und H-Brücke</li><li>Motorboot mit Joystick und Servo</li><li>Servomotor</li><li>Schrittmotor und A4988</li><li>ALLBOT-Projektidee</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/wokwi/motorsteuerung.html" target="_blank" rel="noopener">Gleichstrommotoren</a> · <a href="https://www.mrge.de/lehrer/sigismund/wokwi/schrittmotor.html" target="_blank" rel="noopener">Schrittmotoren</a> · <a href="https://www.mrge.de/lehrer/sigismund/wokwi/servo-motoren.html" target="_blank" rel="noopener">Servos</a></p></article>
+  <article class="karte"><span class="status status-gut">Fortgeschrittene Beispiele</span><h3>Programmstruktur und OOP</h3><ul class="projektliste"><li>Funktionen auslagern</li><li>Python-Module importieren</li><li>Lokale und globale Variablen</li><li>Listen</li><li>LED-Klasse</li><li>Zeichenketten auswerten</li></ul></article>
+  <article class="karte"><span class="status status-gut">C und MicroPython vorhanden</span><h3>TFT ILI9341</h3><ul class="projektliste"><li>Grundausgabe und Grafik</li><li>Linien, Rechtecke und Kreise</li><li>Plotter-Experimente</li><li>Arduino C/C++ und MicroPython</li></ul></article>
+  <article class="karte"><span class="status status-teil">Verstreut dokumentiert</span><h3>Kommunikation und Schieberegister</h3><ul class="projektliste"><li>Serielle Ein- und Ausgabe</li><li>UART zwischen Controllern</li><li>74HC595</li><li>WLAN und IoT als Ergänzung</li></ul><p><a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/themen/kommunikation/" target="_blank" rel="noopener">Kommunikationsbereich</a></p></article>
+</div></section>
+<section id="linkpruefung"><h2>9. Erste Link- und Inhaltsprüfung</h2><p>Die wichtigsten lokalen Seiten und viele direkte Wokwi-Projekte sind weiterhin erreichbar. Mehrere Zuordnungen müssen jedoch korrigiert werden.</p><div class="tabelle"><table><thead><tr><th>Stelle</th><th>Feststellung</th><th>Empfehlung</th></tr></thead><tbody>
+  <tr><td>Schreibweise</td><td>„WokWi“ und „wokwi“ wechseln.</td><td>Einheitlich <strong>Wokwi</strong>.</td></tr>
+  <tr><td>Einleitung</td><td>„Micropytzhon“ ist falsch.</td><td><strong>MicroPython</strong></td></tr>
+  <tr><td>Speichern</td><td>„Anmeldung ist zwingend“ ist zu streng.</td><td>Ohne Konto bleibt ein Projekt an Browser und Gerät gebunden; mit Konto ist es geräteübergreifend erreichbar.</td></tr>
+  <tr><td>Hardware</td><td>Die alte Einleitung nennt nur einen Teil der heutigen Controller.</td><td>STM32 und neue ESP32-Familien ergänzen.</td></tr>
+  <tr><td>LED-Projekte</td><td>„ohne sleep()“ und „mit PWM“ verwenden denselben Projektlink.</td><td>Projektziele vergleichen und Link berichtigen.</td></tr>
+  <tr><td>NeoPixel-Matrix</td><td>„2. 8×8-Matrix Lösungen“ und „Game of Life“ verweisen auf dasselbe Projekt.</td><td>Eigentlichen Lösungslink wiederherstellen.</td></tr>
+  <tr><td>ALLBOT</td><td>Der Link „Allbot Robot“ führt zur Motorbootsteuerung.</td><td>Richtigen ALLBOT-Link eintragen.</td></tr>
+  <tr><td>Motorsteuerung</td><td>„ESP schaltet Relais – Teil 2“ erscheint zweimal.</td><td>Prüfen, ob der zweite Eintrag Teil 3 ist.</td></tr>
+  <tr><td>Schieberegister</td><td>„74SN595“ ist falsch.</td><td><strong>74HC595</strong></td></tr>
+  <tr><td>Entwürfe</td><td>Unvollständige Projekte sind nicht einheitlich gekennzeichnet.</td><td>Ausgangsprojekt, Aufgabe, Lösung, Entwurf oder Archiv ausweisen.</td></tr>
+</tbody></table></div></section>
+<section id="lernweg"><h2>10. Empfohlener Lernweg</h2><ol class="lernweg">
+  <li><strong>Oberfläche:</strong> Blinkprojekt öffnen, Simulation starten und Programm verändern.</li>
+  <li><strong>Digitale Ein- und Ausgänge:</strong> LEDs, Taster, Schalter und Pull-up/Pull-down.</li>
+  <li><strong>Zeitsteuerung:</strong> <code>sleep()</code>/<code>delay()</code>, nicht blockierendes Blinken und Timer.</li>
+  <li><strong>Programmstruktur:</strong> Funktionen, Listen, eigene Dateien und Module.</li>
+  <li><strong>Anzeigen:</strong> 7-Segment, LCD1602, OLED, NeoPixel-Matrix und TFT.</li>
+  <li><strong>Sensoren:</strong> digitale Sensoren, ADC, serieller Plotter und Messwerte.</li>
+  <li><strong>Motoren:</strong> Servo, Gleichstrommotor, H-Brücke und Schrittmotor.</li>
+  <li><strong>Kommunikation:</strong> UART, I²C, SPI, WLAN, HTTP und MQTT.</li>
+  <li><strong>Fehlersuche:</strong> serieller Monitor, Logikanalysator und Debugger.</li>
+  <li><strong>Reale Hardware:</strong> Portbelegung prüfen, aufbauen, Stromversorgung beachten und Unterschiede dokumentieren.</li>
+</ol></section>
+<section><h2>11. Konten, Sichtbarkeit und Kosten</h2><div class="karten">
+  <article class="karte"><h3>Kostenlose Nutzung</h3><p>Wokwi ist für die persönliche Nutzung kostenlos. Projekte des kostenlosen Tarifs sind grundsätzlich öffentlich.</p></article>
+  <article class="karte"><h3>Anmeldung</h3><p>Ein Konto erleichtert Speichern, Wiederfinden und Bearbeiten auf mehreren Geräten. Möglich sind unter anderem E-Mail, Google und GitHub.</p></article>
+  <article class="karte"><h3>Bezahlte Tarife</h3><p>Sie bieten unter anderem schnellere Builds, nicht gelistete Projekte, eigene Bibliotheken, private IoT-Gateways und erweiterte VS-Code-Funktionen.</p></article>
+  <article class="karte"><h3>Wokwi Classroom</h3><p>Im Juli 2026 wird der Classroom-Tarif mit 30&nbsp;€ je Schüler und Semester von vier Monaten bei mindestens fünf Teilnehmern angeboten. Vor einer Beschaffung erneut prüfen.</p></article>
+</div></section>
+<section id="struktur"><h2>12. Empfohlene neue Struktur</h2><ol class="struktur">
+  <li><strong>Überblick:</strong> Funktion, Controller, Bauteile, Konto und Grenzen.</li>
+  <li><strong>Erste Schritte:</strong> Oberfläche, Arduino C/C++, ESP32-MicroPython und Pi Pico.</li>
+  <li><strong>Programmiergrundlagen:</strong> I/O, Zeitsteuerung, Funktionen, Module, OOP, Interrupts.</li>
+  <li><strong>Bauteile:</strong> LEDs, Anzeigen, Sensoren, Motoren, Schieberegister und I/O-Erweiterungen.</li>
+  <li><strong>Kommunikation und IoT:</strong> UART, I²C, SPI, WLAN, HTTP und MQTT.</li>
+  <li><strong>Projekte:</strong> Ampel, Motorboot, Lampenfeld, Game of Life, ALLBOT und Spiele.</li>
+  <li><strong>Werkzeuge:</strong> Monitor, Plotter, Logikanalysator, Debugger, VS Code und Tests.</li>
+  <li><strong>Archiv:</strong> alte, unvollständige und nicht mehr geprüfte Projekte.</li>
+</ol></section>
+<section><h2>13. Zusammenfassende Bewertung</h2><div class="bewertung"><p>Wokwi erleichtert den Übergang zwischen Programmierunterricht und praktischer Elektronik. Der Simulator ermöglicht einen schnellen, sicheren und für alle Schüler gleichzeitig verfügbaren Einstieg.</p><p>Der vorhandene Materialbestand ist umfangreicher, als die bisherige Startseite erkennen lässt. Er sollte nicht neu erfunden, sondern geordnet, geprüft und in einen nachvollziehbaren Lernweg überführt werden.</p><p><strong>Leitidee:</strong> zuerst verstehen und simulieren – anschließend aufbauen, messen und an realer Hardware überprüfen.</p></div></section>
+<section class="quellen"><h2>14. Geprüfte Quellen und Einstiege</h2><ul>
+  <li><a href="https://www.mrge.de/lehrer/sigismund/wokwi/" target="_blank" rel="noopener">Vorhandene Wokwi-Startseite</a></li>
+  <li><a href="https://wokwi.com/" target="_blank" rel="noopener">Offizielle Wokwi-Startseite</a></li>
+  <li><a href="https://docs.wokwi.com/" target="_blank" rel="noopener">Offizielle Dokumentation</a></li>
+  <li><a href="https://docs.wokwi.com/getting-started/supported-hardware" target="_blank" rel="noopener">Unterstützte Hardware</a></li>
+  <li><a href="https://docs.wokwi.com/guides/diagram-editor" target="_blank" rel="noopener">Diagramm-Editor</a></li>
+  <li><a href="https://docs.wokwi.com/guides/serial-monitor" target="_blank" rel="noopener">Serieller Monitor</a></li>
+  <li><a href="https://docs.wokwi.com/guides/logic-analyzer" target="_blank" rel="noopener">Logikanalysator</a></li>
+  <li><a href="https://docs.wokwi.com/guides/esp32-wifi" target="_blank" rel="noopener">ESP32-WLAN-Simulation</a></li>
+  <li><a href="https://docs.wokwi.com/guides/micropython" target="_blank" rel="noopener">MicroPython</a></li>
+  <li><a href="https://docs.wokwi.com/vscode/getting-started" target="_blank" rel="noopener">Wokwi für VS Code</a></li>
+  <li><a href="https://wokwi.com/pricing" target="_blank" rel="noopener">Tarife</a></li>
+</ul><p><strong>Stand:</strong> 29. Juli 2026. Funktionen, Hardwareunterstützung und Tarife können sich ändern.</p></section>
+</main>
+<footer><div class="breite"><p><strong>Wokwi – Online-Simulator für Mikrocontroller und Elektronik</strong></p><p>Arbeitsstand zur Sichtung und Neuordnung der vorhandenen Unterrichtsmaterialien</p><p>Martin-Rinckart-Gymnasium Eilenburg · AG Young Engineers</p></div></footer>
+</body>
+</html>
