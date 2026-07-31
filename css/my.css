@@ -28,7 +28,7 @@ section { background:var(--card); border:1px solid var(--border); border-radius:
 h2 { margin-top:0; color:var(--accent-dark); }
 .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
 .project-card { border:1px solid var(--border); border-radius:12px; padding:6px; background:#fbfdff; }
-.topic-preview-image { display:block; width:100%; height:auto; }
+.topic-preview-image { display:block; width:100%; max-width:250px; height:auto; margin:0 auto; }
 .project-card-center {  max-width: 600px;   margin: 1em auto;   text-align: center; }
 .project-card h3 { margin-top:0; margin-bottom:4px; }
 .image-row { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; align-items:flex-start; margin:1em 0; }
