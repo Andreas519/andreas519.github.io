@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="publisher" content="AG Young Engineers">
+  <meta name="project" content="ESP32 &amp; Co – PC – Dobot">
+  <meta name="description" content="Hardwaretests für Porterweiterungen am ESP32 im Umfeld des Dobot Magician">
+  <title>Hardwaretests · ESP32 &amp; Co – PC – Dobot</title>
+  <link rel="stylesheet" href="../../../../../css/my.css">
+</head>
+<body>
+  <header>
+    <h1>ESP32 &amp; Co – PC – Dobot</h1>
+    <p>Hardware einzeln prüfen und anschließend sicher in die Dobot-Steuerung integrieren</p>
+  </header>
+
+  <main>
+    <section>
+      <h2>Unser Anliegen</h2>
+      <p>
+        In diesem Projektbereich entwickeln wir kleine, übersichtliche Programme,
+        mit denen sich Hardware im Umfeld des Dobot Magician zunächst unabhängig
+        testen lässt. Dadurch können Anschlussfehler, falsche Adressen und
+        ungeeignete Einstellungen erkannt werden, bevor die Bauteile Teil einer
+        umfangreicheren Robotersteuerung werden.
+      </p>
+      <p>
+        Nach einem erfolgreichen Einzeltest sollen die Programme als Grundlage
+        für die Integration der Hardware in das ESP32-Steuerprogramm
+        <code>esp32_dobot_steuerung_v1_3.py</code> dienen. Der ESP32 kann damit
+        zusätzliche Taster, Sensoren, Statusanzeigen, Signalleuchten oder
+        Aktoren bereitstellen und über die vorhandene Verbindung mit dem
+        PC-Programm und dem Dobot Magician zusammenarbeiten.
+      </p>
+    </section>
+
+    <section>
+      <h2>Schrittweise Vorgehensweise</h2>
+      <ol>
+        <li>Jedes Modul wird einzeln und ohne Dobot getestet.</li>
+        <li>Anschlüsse, Versorgung und Geräteadresse werden kontrolliert.</li>
+        <li>Ein- und Ausgänge beziehungsweise PWM-Kanäle werden praktisch geprüft.</li>
+        <li>Die modulspezifischen Funktionen werden in wiederverwendbare Klassen überführt.</li>
+        <li>Erst danach werden passende PC-Befehle und Statusmeldungen ergänzt.</li>
+        <li>Zum Schluss erfolgt der gemeinsame Test mit PC und Dobot Magician.</li>
+      </ol>
+      <p>
+        Diese Aufteilung erleichtert die Fehlersuche und verhindert, dass bei
+        einem Problem gleichzeitig Hardware, ESP32-Programm, Kommunikation und
+        Roboterbewegung untersucht werden müssen.
+      </p>
+    </section>
+
+    <section>
+      <h2>I²C-Bus übersichtlich prüfen</h2>
+      <p>
+        Der einfache Scanner zeigt ausschließlich die aktuell gefundenen
+        I²C-Adressen an. Dadurch lässt sich die Einstellung der Adresspins
+        kontrollieren, ohne dass Ausgaben eines umfangreicheren Modultests
+        ablenken.
+      </p>
+      <p>
+        <strong>Verbindlicher erster Schritt:</strong> Bei jedem I²C-Modul
+        wird zuerst <code>i2c-scanner.py</code> ausgeführt. Erst wenn das
+        Modul mit der erwarteten Adresse gefunden wurde, folgt das zugehörige
+        Testprogramm.
+      </p>
+      <p>
+        <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/i2c-scanner.py"
+           target="_blank" rel="noopener noreferrer">i2c-scanner.py im Code-Viewer öffnen</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Testaufbau und Bauteile</h2>
+      <p>
+        Eine eigene Übersichtsseite zeigt die verwendeten ESP32-Anschlüsse,
+        unsere verbindlichen Kabelfarben und die fünf Erweiterungsbausteine mit
+        einer kurzen Beschreibung.
+      </p>
+      <p>
+        <a href="testaufbau.html">Testaufbau und Bauteile ansehen</a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Die ersten fünf Erweiterungen</h2>
+
+      <h3>PCF8574 – einfacher I²C-Portexpander</h3>
+      <div class="content-row">
+        <p>
+          Der PCF8574 stellt acht quasi-bidirektionale Anschlüsse bereit und
+          eignet sich für einfache Taster, Schalter oder Status-LEDs. Für die
+          Verbindung zum ESP32 werden nur SDA und SCL benötigt.<br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/pcf8574_test.py"
+             target="_blank" rel="noopener noreferrer">pcf8574_test.py im Code-Viewer öffnen</a>
+          <br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/pcf8574_test-in-out.py"
+             target="_blank" rel="noopener noreferrer">pcf8574_test-in-out.py im Code-Viewer öffnen</a>
+          <br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/pcf8574_test-in-out-2.py"
+             target="_blank" rel="noopener noreferrer">pcf8574_test-in-out-2.py im Code-Viewer öffnen</a>
+        </p>
+        <figure class="half-width uniform-image-height">
+          <a href="bilder/pcf8574-beschriftet.png"
+             target="_blank" rel="noopener noreferrer"
+             title="Bild in Originalgröße öffnen">
+            <img src="bilder/pcf8574-beschriftet.png"
+                 alt="Beschriftetes PCF8574-Modul">
+          </a>
+        </figure>
+      </div>
+
+      <h3>PCF8575 – einfacher I²C-Portexpander mit 16 Anschlüssen</h3>
+      <div class="content-row">
+        <p>
+          Der PCF8575 arbeitet ähnlich wie der PCF8574, stellt jedoch 16
+          quasi-bidirektionale Anschlüsse bereit. Er eignet sich, wenn viele
+          einfache digitale Ein- oder Ausgänge benötigt werden.<br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/pcf8575_test.py"
+             target="_blank" rel="noopener noreferrer">pcf8575_test.py im Code-Viewer öffnen</a>
+        </p>
+        <figure class="half-width uniform-image-height">
+          <a href="bilder/pcf8575-zugeschnitten.png"
+             target="_blank" rel="noopener noreferrer"
+             title="Bild in Originalgröße öffnen">
+            <img src="bilder/pcf8575-zugeschnitten.png"
+                 alt="PCF8575-IO-Expander-Modul">
+          </a>
+        </figure>
+      </div>
+
+      <h3>MCP23017 – leistungsfähiger I²C-Portexpander</h3>
+      <div class="content-row">
+        <p>
+          Der MCP23017 erweitert den ESP32 um 16 getrennt konfigurierbare
+          Ein- und Ausgänge. Er bietet unter anderem interne Pull-up-Widerstände
+          und ist deshalb für umfangreichere Bedien- und Anzeigeelemente
+          geeignet.<br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/mcp23017_test.py"
+             target="_blank" rel="noopener noreferrer">mcp23017_test.py im Code-Viewer öffnen</a>
+          <br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/mcp23017_test-interrupt.py"
+             target="_blank" rel="noopener noreferrer">mcp23017_test-interrupt.py im Code-Viewer öffnen</a>
+        </p>
+        <figure class="half-width uniform-image-height">
+          <a href="bilder/mcp23017-modul.png"
+             target="_blank" rel="noopener noreferrer"
+             title="Bild in Originalgröße öffnen">
+            <img src="bilder/mcp23017-modul.png"
+                 alt="MCP23017-Modul mit beschrifteten Anschlüssen">
+          </a>
+        </figure>
+      </div>
+
+      <h3>PCA9685 – PWM-Erweiterung</h3>
+      <div class="content-row">
+        <p>
+          Der PCA9685 stellt 16 PWM-Kanäle bereit. Damit lassen sich
+          beispielsweise Helligkeiten, Servos oder geeignete Treiberstufen
+          ansteuern, ohne die PWM-Ressourcen des ESP32 für jeden Kanal einzeln
+          zu benötigen.<br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/pca9685_test.py"
+             target="_blank" rel="noopener noreferrer">pca9685_test.py im Code-Viewer öffnen</a>
+        </p>
+        <figure class="half-width uniform-image-height">
+          <a href="bilder/pca9685-jzk.png"
+             target="_blank" rel="noopener noreferrer"
+             title="Bild in Originalgröße öffnen">
+            <img src="bilder/pca9685-jzk.png"
+                 alt="JZK PCA9685 16-Kanal-12-Bit-PWM-Modul">
+          </a>
+        </figure>
+      </div>
+
+      <h3>74HC595 – klassisches Schieberegister</h3>
+      <div class="content-row">
+        <p>
+          Der 74HC595 ist kein I²C-Baustein. Er benötigt drei GPIO-Leitungen für
+          Daten-, Schiebe- und Speichertakt und stellt acht digitale Ausgänge
+          bereit. Mehrere Bausteine können hintereinandergeschaltet werden, ohne
+          weitere Steuerleitungen am ESP32 zu belegen.<br>
+          <a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/74hc595_test.py"
+             target="_blank" rel="noopener noreferrer">74hc595_test.py im Code-Viewer öffnen</a>
+        </p>
+        <figure class="half-width uniform-image-height">
+          <a href="bilder/Schieberegister-74hc595.png"
+             target="_blank" rel="noopener noreferrer"
+             title="Bild in Originalgröße öffnen">
+            <img src="bilder/Schieberegister-74hc595.png"
+                 alt="74HC595-Schieberegister im DIP-16-Gehäuse">
+          </a>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>Anschluss- und Testhinweise</h2>
+      <p>
+        Die gemeinsame Anleitung enthält Pinbelegungen, Testaufbauten,
+        Sicherheitshinweise und Informationen zu möglichen I²C-Adresskonflikten.
+      </p>
+      <p>
+        <a href="/tools/md-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/README.md"
+           target="_blank" rel="noopener noreferrer">README.md im Markdown-Viewer öffnen</a>
+      </p>
+      <p>
+        <strong>Wichtig:</strong> PCF8574, PCF8575 und MCP23017 können
+        abhängig von ihrer Beschaltung dieselbe I²C-Adresse im Bereich
+        <code>0x20</code> bis <code>0x27</code> verwenden. Beim ersten Test
+        wird deshalb nur ein Modul angeschlossen. Größere Lasten dürfen nicht
+        direkt von den Ausgängen der Erweiterungsbausteine versorgt werden.
+      </p>
+
+      <h3>PCF8574-Adressbrücken</h3>
+      <p>
+        Die Leitungen A2, A1 und A0 bilden die drei niederwertigen Bits der
+        I²C-Adresse. LOW bedeutet GND, HIGH bedeutet VCC.
+      </p>
+      <div class="project-card">
+        <table>
+          <thead>
+            <tr><th>A2</th><th>A1</th><th>A0</th><th>I²C-Adresse</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LOW</td><td>LOW</td><td>LOW</td><td><code>0x20</code></td></tr>
+            <tr><td>LOW</td><td>LOW</td><td>HIGH</td><td><code>0x21</code></td></tr>
+            <tr><td>LOW</td><td>HIGH</td><td>LOW</td><td><code>0x22</code></td></tr>
+            <tr><td>LOW</td><td>HIGH</td><td>HIGH</td><td><code>0x23</code></td></tr>
+            <tr><td>HIGH</td><td>LOW</td><td>LOW</td><td><code>0x24</code></td></tr>
+            <tr><td>HIGH</td><td>LOW</td><td>HIGH</td><td><code>0x25</code></td></tr>
+            <tr><td>HIGH</td><td>HIGH</td><td>LOW</td><td><code>0x26</code></td></tr>
+            <tr><td>HIGH</td><td>HIGH</td><td>HIGH</td><td><code>0x27</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>
+        Für den Test mit zwei Modulen erhält Modul 1 die Einstellung
+        <code>A2 A1 A0 = 000</code> und damit <code>0x20</code>. Bei Modul 2
+        wird nur A0 auf HIGH gesetzt:
+        <code>A2 A1 A0 = 001</code> und damit <code>0x21</code>.
+        Maßgeblich sind die GND-/Minus- und VCC-/Plus-Markierungen auf der
+        jeweiligen Platine. Der I²C-Scan muss anschließend
+        <code>0x20</code> und <code>0x21</code> anzeigen.
+      </p>
+    </section>
+
+    <section>
+      <h2>Bauelemente verstehen</h2>
+      <p>
+        Beim Aufbau einer Experimentierumgebung für einen ESP32 im Umfeld des
+        Dobot Magician steht immer wieder die Frage im Raum: Was können wir von
+        den verwendeten Ports und Bauelementen erwarten? Die dazu erarbeiteten
+        Grundlagen sind im Themenbereich Bauelemente zusammengestellt.
+      </p>
+      <p>
+        <a href="/themen/bauelemente/index.html">
+          Zum Themenbereich Bauelemente
+        </a>
+      </p>
+    </section>
+
+    <section>
+      <h2>Nächste Schritte</h2>
+      <p>
+        Nach den praktischen Einzeltests legen wir fest, welche Anschlüsse eine
+        konkrete Aufgabe am Dobot übernehmen. Anschließend werden einheitliche
+        Befehle zum Setzen und Abfragen der Anschlüsse entwickelt. Erst die
+        geprüften Funktionen werden in die ESP32-Dobot-Steuerung übernommen.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>

@@ -10,8 +10,8 @@ except ImportError:
     import select
 
 
-VERSION = "1.3.2"
-VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
+VERSION = "1.3.8"
+VERSIONSDATUM = "26.07.2026, 20:49 Uhr"
 
 
 # ------------------------------------------------------------
@@ -41,6 +41,40 @@ led_gelb.on()
 ENTPRELLZEIT_MS = 50
 SCHLEIFENPAUSE_MS = 5
 STARTWARTEZEIT_MS = 1000
+EMPFANGSANZEIGE_MS = 200
+
+empfangsanzeige_aktiv = False
+empfangsanzeige_ruhezustand = led.value()
+empfangsanzeige_ende = 0
+
+
+def empfangsanzeige_starten():
+    """Zeigt eine empfangene PC-Nachricht kurz über die blaue LED an."""
+
+    global empfangsanzeige_aktiv
+    global empfangsanzeige_ruhezustand
+    global empfangsanzeige_ende
+
+    empfangsanzeige_ruhezustand = led.value()
+    led.value(not empfangsanzeige_ruhezustand)
+    empfangsanzeige_ende = time.ticks_add(
+        time.ticks_ms(),
+        EMPFANGSANZEIGE_MS,
+    )
+    empfangsanzeige_aktiv = True
+
+
+def empfangsanzeige_pruefen():
+    """Stellt nach der Empfangsanzeige den vorherigen LED-Zustand wieder her."""
+
+    global empfangsanzeige_aktiv
+
+    if not empfangsanzeige_aktiv:
+        return
+
+    if time.ticks_diff(time.ticks_ms(), empfangsanzeige_ende) >= 0:
+        led.value(empfangsanzeige_ruhezustand)
+        empfangsanzeige_aktiv = False
 
 
 class Taste:
@@ -99,7 +133,7 @@ tasten = [
     Taste(PIN_WEITER, "WEITER"),
     Taste(PIN_HALT, "HALT"),
     Taste(PIN_STATUS, "STATUS"),
-    Taste(PIN_FREI1, "FREI_1"),
+    Taste(PIN_FREI1, "FREIGABE"),
     Taste(PIN_FREI2, "FREI_2"),
 ]
 
@@ -117,6 +151,7 @@ eingabe_poll.register(
     sys.stdin,
     select.POLLIN,
 )
+pc_eingabepuffer = ""
 
 
 def zeile_senden(text):
@@ -204,6 +239,9 @@ def pc_nachricht_verarbeiten(nachricht):
     teile = nachricht.split(";")
     befehl = teile[0].strip().upper()
     parameter = [teil.strip() for teil in teile[1:]]
+
+    while parameter and parameter[-1] == "":
+        parameter.pop()
 
     if befehl == "PC_BEREIT":
         led.on()
@@ -305,15 +343,27 @@ def pc_nachricht_verarbeiten(nachricht):
 def pc_nachrichten_lesen():
     """Liest und verarbeitet vorhandene PC-Nachrichten."""
 
-    while eingabe_poll.poll(0):
-        zeile = sys.stdin.readline()
+    global pc_eingabepuffer
 
-        if not zeile:
+    while eingabe_poll.poll(0):
+        zeichen = sys.stdin.read(1)
+
+        if not zeichen:
             return
 
-        pc_nachricht_verarbeiten(
-            zeile.strip()
-        )
+        if zeichen in ("\r", "\n"):
+            if pc_eingabepuffer:
+                nachricht = pc_eingabepuffer
+                pc_eingabepuffer = ""
+                pc_nachricht_verarbeiten(nachricht)
+                empfangsanzeige_starten()
+            continue
+
+        pc_eingabepuffer += zeichen
+
+        if len(pc_eingabepuffer) > 200:
+            zeile_senden("FEHLER;PC_NACHRICHT_ZU_LANG")
+            pc_eingabepuffer = ""
 
 
 simulation_led_aktiv = False
@@ -438,6 +488,7 @@ def hauptprogramm():
         simulation_led_pruefen()  # zufällige LED-Änderung prüfen
         ueberwache()              # allgemeine Ein- und Ausgänge
         pc_nachrichten_lesen()
+        empfangsanzeige_pruefen()
         time.sleep_ms(SCHLEIFENPAUSE_MS)
 
 def Tasten_testen():

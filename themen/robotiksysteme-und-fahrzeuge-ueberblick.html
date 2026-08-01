@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Überblick über die am Martin-Rinckart-Gymnasium dokumentierten Robotiksysteme, Fahrzeuge, Laufroboter und Roboterarme.">
+    <title>Robotiksysteme und programmierbare Fahrzeuge – Überblick</title>
+
+    <style>
+        :root {
+            --dunkel: #17324d;
+            --blau: #256da8;
+            --hellblau: #eaf4fb;
+            --gruen: #26734d;
+            --hellgruen: #eaf6ef;
+            --gelb: #8a6500;
+            --hellgelb: #fff7dc;
+            --rot: #a33a32;
+            --hellrot: #fff0ee;
+            --grau: #5d6872;
+            --hellgrau: #f4f6f8;
+            --rand: #ccd5dc;
+            --text: #24313b;
+            --weiss: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--text);
+            background: var(--weiss);
+            font-family: Arial, Helvetica, sans-serif;
+            line-height: 1.62;
+        }
+
+        a {
+            color: #145f96;
+            text-underline-offset: 0.16em;
+        }
+
+        a:hover,
+        a:focus {
+            color: #0b3e63;
+        }
+
+        header {
+            color: var(--weiss);
+            background:
+                linear-gradient(120deg, rgba(23, 50, 77, 0.98), rgba(37, 109, 168, 0.88));
+            padding: 3.5rem 1.2rem 3rem;
+        }
+
+        .breite {
+            width: min(1180px, 93%);
+            margin-inline: auto;
+        }
+
+        header h1 {
+            margin: 0 0 0.8rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            line-height: 1.12;
+        }
+
+        header p {
+            max-width: 900px;
+            margin: 0;
+            font-size: 1.12rem;
+        }
+
+        .sprungnavigation {
+            padding: 0.8rem 1.2rem;
+            background: var(--hellgrau);
+            border-bottom: 1px solid var(--rand);
+        }
+
+        .sprungnavigation ul {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem 1.2rem;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        main {
+            padding: 2.2rem 0 4rem;
+        }
+
+        section {
+            margin-bottom: 3.2rem;
+            scroll-margin-top: 1rem;
+        }
+
+        h2 {
+            margin: 0 0 1.2rem;
+            color: var(--dunkel);
+            border-bottom: 3px solid var(--blau);
+            padding-bottom: 0.42rem;
+            font-size: clamp(1.55rem, 3vw, 2.15rem);
+        }
+
+        h3 {
+            color: var(--blau);
+        }
+
+        .einleitung,
+        .historie {
+            padding: 1.3rem 1.5rem;
+            border-left: 6px solid var(--blau);
+            background: var(--hellblau);
+            border-radius: 0 10px 10px 0;
+        }
+
+        .historie {
+            margin-top: 1.2rem;
+            border-left-color: var(--gelb);
+            background: var(--hellgelb);
+        }
+
+        .kennzahlen {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 1rem;
+            margin-top: 1.4rem;
+        }
+
+        .kennzahl {
+            padding: 1.15rem;
+            text-align: center;
+            background: var(--hellgrau);
+            border: 1px solid var(--rand);
+            border-radius: 10px;
+        }
+
+        .kennzahl strong {
+            display: block;
+            color: var(--dunkel);
+            font-size: 2rem;
+            line-height: 1.1;
+        }
+
+        .karten {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.15rem;
+        }
+
+        .karte {
+            display: flex;
+            flex-direction: column;
+            padding: 1.3rem;
+            background: var(--weiss);
+            border: 1px solid var(--rand);
+            border-radius: 12px;
+            box-shadow: 0 3px 13px rgba(23, 50, 77, 0.08);
+        }
+
+        .karte h3 {
+            margin: 0 0 0.35rem;
+        }
+
+        .untertitel {
+            margin: 0 0 0.9rem;
+            color: var(--grau);
+            font-weight: bold;
+        }
+
+        .daten {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            gap: 0.35rem 0.75rem;
+            margin: 0.8rem 0 1rem;
+        }
+
+        .daten dt {
+            font-weight: bold;
+            color: var(--dunkel);
+        }
+
+        .daten dd {
+            margin: 0;
+        }
+
+        .status {
+            display: inline-block;
+            width: fit-content;
+            margin-bottom: 0.65rem;
+            padding: 0.2rem 0.58rem;
+            border-radius: 999px;
+            font-size: 0.86rem;
+            font-weight: bold;
+        }
+
+        .status-gut {
+            color: var(--gruen);
+            background: var(--hellgruen);
+            border: 1px solid #a8d5bb;
+        }
+
+        .status-luecke {
+            color: var(--gelb);
+            background: var(--hellgelb);
+            border: 1px solid #e0ca7a;
+        }
+
+        .status-fehlt {
+            color: var(--rot);
+            background: var(--hellrot);
+            border: 1px solid #e1aaa4;
+        }
+
+        .links {
+            margin-top: auto;
+            padding-top: 0.7rem;
+            border-top: 1px solid var(--rand);
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 0.15rem 0.6rem 0.15rem 0;
+        }
+
+        .tabelle {
+            overflow-x: auto;
+            border: 1px solid var(--rand);
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 820px;
+        }
+
+        th,
+        td {
+            padding: 0.78rem 0.8rem;
+            text-align: left;
+            vertical-align: top;
+            border-bottom: 1px solid var(--rand);
+        }
+
+        th {
+            color: var(--weiss);
+            background: var(--dunkel);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--hellgrau);
+        }
+
+        tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .ampel {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .ampel-gut {
+            color: var(--gruen);
+        }
+
+        .ampel-luecke {
+            color: var(--gelb);
+        }
+
+        .ampel-fehlt {
+            color: var(--rot);
+        }
+
+        .struktur {
+            margin: 0;
+            padding: 1.3rem 1.5rem 1.3rem 3rem;
+            background: var(--hellgrau);
+            border: 1px solid var(--rand);
+            border-radius: 10px;
+        }
+
+        .struktur li {
+            margin: 0.42rem 0;
+        }
+
+        .offen {
+            padding: 1.4rem;
+            background: var(--hellgelb);
+            border: 1px solid #e0ca7a;
+            border-radius: 10px;
+        }
+
+        .offen ul {
+            margin-bottom: 0;
+        }
+
+        .quellen {
+            font-size: 0.95rem;
+        }
+
+        .quellen li {
+            margin-bottom: 0.6rem;
+        }
+
+        footer {
+            padding: 2rem 1.2rem;
+            color: #e8eef3;
+            background: var(--dunkel);
+        }
+
+        footer p {
+            margin: 0.3rem 0;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding-top: 2.5rem;
+            }
+
+            .daten {
+                grid-template-columns: 1fr;
+                gap: 0.05rem;
+            }
+
+            .daten dd {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        @media print {
+            .sprungnavigation {
+                display: none;
+            }
+
+            body {
+                font-size: 10.5pt;
+            }
+
+            header {
+                color: #000;
+                background: none;
+                border-bottom: 2px solid #000;
+            }
+
+            .karte {
+                break-inside: avoid;
+                box-shadow: none;
+            }
+
+            a {
+                color: #000;
+                text-decoration: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <div class="breite">
+        <h1>Robotiksysteme und programmierbare Fahrzeuge</h1>
+        <p>
+            Rekonstruierter Überblick über die im öffentlichen Bereich dokumentierten
+            Lernroboter, Fahrzeugbaukästen, Laufroboter und Roboterarme.
+        </p>
+    </div>
+</header>
+
+<nav class="sprungnavigation" aria-label="Seitennavigation">
+    <div class="breite">
+        <ul>
+            <li><a href="#einordnung">Einordnung</a></li>
+            <li><a href="#fahrzeuge">Fahrzeuge</a></li>
+            <li><a href="#laufroboter">Laufroboter</a></li>
+            <li><a href="#arme">Roboterarme</a></li>
+            <li><a href="#vergleich">Vergleich</a></li>
+            <li><a href="#links">Linkprüfung</a></li>
+            <li><a href="#struktur">Neue Struktur</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="breite">
+
+    <section id="einordnung">
+        <h2>1. Einordnung</h2>
+
+        <div class="einleitung">
+            <p>
+                Auf den erhaltenen Seiten werden mehrere Robotiksysteme genannt.
+                Sie gehören nicht alle zur gleichen Geräteklasse. Für eine verständliche
+                Neuordnung werden sie deshalb in drei Hauptgruppen eingeteilt:
+                <strong>fahrende Roboter</strong>, <strong>laufende Roboter</strong>
+                und <strong>Roboterarme</strong>.
+            </p>
+        </div>
+
+        <div class="historie">
+            <strong>Hinweis zur Quellenlage:</strong>
+            Nach dem früheren Serverwechsel blieben einige Übersichtsseiten erhalten,
+            während Unterseiten, Bilder, Programme oder Downloads verloren gingen.
+            Ein fehlender Link bedeutet daher nicht automatisch, dass das betreffende
+            System nie vorhanden war.
+        </div>
+
+        <div class="kennzahlen">
+            <div class="kennzahl"><strong>4</strong> Makeblock-Plattformen</div>
+            <div class="kennzahl"><strong>1</strong> Elegoo-Fahrzeugfamilie</div>
+            <div class="kennzahl"><strong>1</strong> genanntes fischertechnik-System</div>
+            <div class="kennzahl"><strong>1</strong> dokumentierter Laufroboter</div>
+            <div class="kennzahl"><strong>2</strong> dokumentierte Roboterarme</div>
+        </div>
+    </section>
+
+
+    <section id="fahrzeuge">
+        <h2>2. Fahrende Robotiksysteme</h2>
+
+        <div class="karten">
+
+            <article class="karte">
+                <span class="status status-gut">Material vorhanden</span>
+                <h3>Makeblock mBot</h3>
+                <p class="untertitel">Kompaktes zweirädriges Einstiegsfahrzeug</p>
+
+                <p>
+                    Der mBot eignet sich für den Einstieg in Sensorik, Motorsteuerung,
+                    Linienverfolgung, Hinderniserkennung und drahtlose Steuerung.
+                    Von allen Makeblock-Systemen ist er auf den erhaltenen Seiten am
+                    ausführlichsten dokumentiert.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>mCore</dd>
+                    <dt>Programmierung</dt><dd>mBlock, Arduino IDE</dd>
+                    <dt>Typische Sensoren</dt><dd>Ultraschall, Linienfolger, Licht, IR</dd>
+                    <dt>Unterricht</dt><dd>Beginner bis fortgeschrittene Erweiterungen</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/makeblock/mblock/mbot/" target="_blank" rel="noopener">Vorhandene mBot-Seite</a>
+                    <a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/themen/mBot/" target="_blank" rel="noopener">mBot mit ESP32/ESP-Now</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-luecke">Unterseite fehlt</span>
+                <h3>Makeblock Starter Robot Kit</h3>
+                <p class="untertitel">Modularer Fahrzeugbaukasten mit Me Orion</p>
+
+                <p>
+                    Der Starter-Baukasten kann als Ketten- oder Radfahrzeug aufgebaut
+                    werden. Die erhaltene Arduino-Seite enthält nur einen kurzen Einstieg;
+                    die frühere mBlock-Unterseite ist nicht mehr vorhanden.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>Me Orion</dd>
+                    <dt>Programmierung</dt><dd>mBlock, Arduino IDE</dd>
+                    <dt>Schwerpunkt</dt><dd>Mechanischer Aufbau, Motoren, Sensorerweiterungen</dd>
+                    <dt>Bestand</dt><dd>Auf der alten Übersicht genannt</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter.html" target="_blank" rel="noopener">Erhaltene Arduino-Seite</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-luecke">Teilweise dokumentiert</span>
+                <h3>Makeblock mBot Ranger</h3>
+                <p class="untertitel">3-in-1-System mit Rad-, Ketten- und Balance-Modell</p>
+
+                <p>
+                    Der Ranger ist mechanisch und regelungstechnisch anspruchsvoller
+                    als der mBot. Die Arduino-Seite zum Me-Auriga-Controller ist noch
+                    vorhanden; die frühere mBlock-Seite fehlt.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>Me Auriga</dd>
+                    <dt>Programmierung</dt><dd>mBlock, Arduino IDE</dd>
+                    <dt>Schwerpunkt</dt><dd>Encoder-Motoren, Gyroskop, Regelung, RGB-LED-Ring</dd>
+                    <dt>Unterricht</dt><dd>Fortgeschrittene Robotik und Regelkreise</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/makeblock/arduino-ide/ranger.html" target="_blank" rel="noopener">Erhaltene Arduino-Seite</a>
+                    <a href="https://www.makeblock.com/pages/mbot-ranger-robot-building-kit" target="_blank" rel="noopener">Aktuelle Herstellerseite</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-fehlt">Eigene Unterseiten fehlen</span>
+                <h3>Makeblock Ultimate 2.0</h3>
+                <p class="untertitel">Umfangreicher 10-in-1-Robotikbaukasten</p>
+
+                <p>
+                    Ultimate 2.0 verbindet Fahrzeug-, Greifer- und weitere
+                    Robotermodelle. Auf der alten Übersicht ist das System mehrfach
+                    verlinkt, die damaligen Zielseiten sind jedoch nicht mehr vorhanden.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>MegaPi</dd>
+                    <dt>Programmierung</dt><dd>mBlock, Arduino IDE; Erweiterung mit Raspberry Pi</dd>
+                    <dt>Schwerpunkt</dt><dd>Komplexe Mechanik, Encoder, Greifen und Transportieren</dd>
+                    <dt>Unterricht</dt><dd>Projektarbeit für Fortgeschrittene</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.makeblock.com/pages/mbot-ultimate-robotics-kit" target="_blank" rel="noopener">Aktuelle Herstellerseite</a>
+                    <a href="https://support.makeblock.com/hc/en-us/sections/360001778514-Ultimate-2-0" target="_blank" rel="noopener">Hersteller-Hilfe</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-gut">Umfangreiche alte Seite vorhanden</span>
+                <h3>ELEGOO Smart Robot Car</h3>
+                <p class="untertitel">Arduino-basiertes vierrädriges Lernfahrzeug</p>
+
+                <p>
+                    Die erhaltene Seite dokumentiert Montage, Shield, Sensoren,
+                    Motorsteuerung, Infrarot, Bluetooth und Systemtests. Sie enthält
+                    Materialien zu mehreren Fahrzeugversionen und viele eigene
+                    Unterrichtsideen.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>ELEGOO UNO R3 / Arduino-kompatibel</dd>
+                    <dt>Programmierung</dt><dd>Arduino IDE</dd>
+                    <dt>Sensoren</dt><dd>Ultraschall, Linienfolger, IR; je nach Version weitere Module</dd>
+                    <dt>Projekte</dt><dd>Labyrinth, Parkplatzsuche, Linienfahrt, Wettbewerbe</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/elegoo-robot-car.html" target="_blank" rel="noopener">Vorhandene Projektseite</a>
+                    <a href="https://www.elegoo.com/blogs/arduino-projects/elegoo-smart-robot-car-kit-v3-0-plus-v3-0-v2-0-tutorial" target="_blank" rel="noopener">Herstellerunterlagen V1–V3</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-fehlt">Nur als Name erhalten</span>
+                <h3>fischertechnik Robotics</h3>
+                <p class="untertitel">Modulares Konstruktions- und Robotiksystem</p>
+
+                <p>
+                    „Fischertechnik“ wird auf der alten Themenübersicht genannt,
+                    besitzt dort aber keinen Link. Aus den öffentlich erhaltenen Seiten
+                    lässt sich deshalb nicht sicher erkennen, welcher Baukasten und
+                    welcher Controller tatsächlich vorhanden waren.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>Noch zu bestimmen: ROBO TX, TXT oder TXT 4.0?</dd>
+                    <dt>Programmierung</dt><dd>Abhängig von der vorhandenen Generation</dd>
+                    <dt>Schwerpunkt</dt><dd>Mechanik, Sensorik, Regelung und Modellbau</dd>
+                    <dt>Aufgabe</dt><dd>Bestand fotografieren und Typbezeichnungen erfassen</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.fischertechnik.de/en/products/schools/robotics" target="_blank" rel="noopener">Aktuelle Robotics-Übersicht</a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+
+    <section id="laufroboter">
+        <h2>3. Laufende Roboter</h2>
+
+        <div class="karten">
+            <article class="karte">
+                <span class="status status-luecke">Lokale Seite vorhanden, externe Links teils veraltet</span>
+                <h3>ALLBOT VR408</h3>
+                <p class="untertitel">Vierbeiniger, servogetriebener Arduino-Roboter</p>
+
+                <p>
+                    Der ALLBOT fährt nicht, sondern bewegt sich mit vier Beinen.
+                    Acht Servomotoren werden über ein Arduino- und Servoshield
+                    angesteuert. Auf der eigenen Seite wird ein vorhandenes,
+                    von einem Schüler aufgebautes Modell dokumentiert.
+                </p>
+
+                <dl class="daten">
+                    <dt>Controller</dt><dd>Arduino mit VRSSM-Servoshield</dd>
+                    <dt>Antrieb</dt><dd>Acht Servomotoren</dd>
+                    <dt>Programmierung</dt><dd>Arduino; frühere Smartphone-/IR-Steuerung</dd>
+                    <dt>Status</dt><dd>Inbetriebnahme und Funktionsprüfung noch zu dokumentieren</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/allbot.html" target="_blank" rel="noopener">Vorhandene ALLBOT-Seite</a>
+                    <a href="https://manuals.whadda.com/category.php?id=85" target="_blank" rel="noopener">Aktuelle Whadda-Handbuchsammlung</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+
+    <section id="arme">
+        <h2>4. Roboterarme – eigene Geräteklasse</h2>
+
+        <p>
+            Roboterarme gehören in denselben Robotik-Gesamtbereich, sollten aber
+            nicht mit den Fahrzeugen verglichen werden. Ihre Schwerpunkte sind
+            Koordinatensysteme, Bahnplanung, Greifen, Automatisierung und Sicherheit.
+        </p>
+
+        <div class="karten">
+            <article class="karte">
+                <span class="status status-luecke">Sehr kurze lokale Seite</span>
+                <h3>Velleman KSR10</h3>
+                <p class="untertitel">Bausatz eines kabelgebundenen Roboterarms</p>
+
+                <p>
+                    Auf der alten Seite steht „KR10“; die noch erreichbare
+                    Herstellerseite bezeichnet das Modell als <strong>KSR10</strong>.
+                    Die lokale Dokumentation besteht derzeit nur aus zwei Verweisen.
+                </p>
+
+                <dl class="daten">
+                    <dt>Steuerung</dt><dd>Handbedienung; kein mit dem Dobot vergleichbares Robotiksystem</dd>
+                    <dt>Antrieb</dt><dd>Fünf Motoren</dd>
+                    <dt>Schwerpunkt</dt><dd>Montage und grundlegende Armbewegungen</dd>
+                    <dt>Aufgabe</dt><dd>Eigene Fotos und Erfahrungen ergänzen</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/vellemann.html" target="_blank" rel="noopener">Vorhandene Velleman-Seite</a>
+                    <a href="https://www.velleman.eu/products/view/?id=375310" target="_blank" rel="noopener">Erreichbare Herstellerseite KSR10</a>
+                </div>
+            </article>
+
+
+            <article class="karte">
+                <span class="status status-gut">Aktives Entwicklungsprojekt</span>
+                <h3>Dobot Magician</h3>
+                <p class="untertitel">Programmierbarer Vierachs-Roboterarm</p>
+
+                <p>
+                    Der Dobot ist heute das am intensivsten weiterentwickelte
+                    Robotikprojekt. Neben der ursprünglichen DobotStudio-Seite
+                    existieren inzwischen eigene Python-Module, Befehlsketten,
+                    ESP32-Kommunikation und umfangreiche neue Dokumentationen.
+                </p>
+
+                <dl class="daten">
+                    <dt>Steuerung</dt><dd>DobotStudio, Blockly, Python-API</dd>
+                    <dt>Werkzeuge</dt><dd>Sauger und weitere Endeffektoren</dd>
+                    <dt>Schwerpunkt</dt><dd>Koordinaten, Pick-and-Place, Automatisierung</dd>
+                    <dt>Status</dt><dd>Aktiv in Überarbeitung und Erweiterung</dd>
+                </dl>
+
+                <div class="links">
+                    <a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/dobot_magician.html" target="_blank" rel="noopener">Frühere Dobot-Seite</a>
+                    <a href="https://andreas519.github.io/projekte/dobot_magician/" target="_blank" rel="noopener">Neuer Projektbereich</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+
+    <section id="vergleich">
+        <h2>5. Vergleich der Systeme</h2>
+
+        <div class="tabelle">
+            <table>
+                <thead>
+                    <tr>
+                        <th>System</th>
+                        <th>Bewegungsart</th>
+                        <th>Controller</th>
+                        <th>Programmierung</th>
+                        <th>Didaktischer Schwerpunkt</th>
+                        <th>Dokumentationsstand</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>mBot</td>
+                        <td>2 Räder</td>
+                        <td>mCore</td>
+                        <td>mBlock, Arduino</td>
+                        <td>Schneller Einstieg, Sensoren, Linienfahrt</td>
+                        <td class="ampel ampel-gut">Gut erhalten</td>
+                    </tr>
+                    <tr>
+                        <td>Starter Robot Kit</td>
+                        <td>Rad- oder Kettenfahrzeug</td>
+                        <td>Me Orion</td>
+                        <td>mBlock, Arduino</td>
+                        <td>Modularer Aufbau und Erweiterung</td>
+                        <td class="ampel ampel-luecke">Lückenhaft</td>
+                    </tr>
+                    <tr>
+                        <td>mBot Ranger</td>
+                        <td>Rad, Kette, Balance</td>
+                        <td>Me Auriga</td>
+                        <td>mBlock, Arduino</td>
+                        <td>Regelung, Encoder, Gyroskop</td>
+                        <td class="ampel ampel-luecke">Teilweise erhalten</td>
+                    </tr>
+                    <tr>
+                        <td>Ultimate 2.0</td>
+                        <td>Mehrere Modelle</td>
+                        <td>MegaPi</td>
+                        <td>mBlock, Arduino, Raspberry Pi</td>
+                        <td>Komplexe Projektarbeit</td>
+                        <td class="ampel ampel-fehlt">Eigene Seiten fehlen</td>
+                    </tr>
+                    <tr>
+                        <td>ELEGOO Smart Robot Car</td>
+                        <td>4 Räder</td>
+                        <td>UNO-kompatibel</td>
+                        <td>Arduino</td>
+                        <td>Offene Hardware, systematisches Testen</td>
+                        <td class="ampel ampel-gut">Umfangreich erhalten</td>
+                    </tr>
+                    <tr>
+                        <td>fischertechnik Robotics</td>
+                        <td>Modellabhängig</td>
+                        <td>Noch unbekannt</td>
+                        <td>Generationsabhängig</td>
+                        <td>Mechanik und Robotikbaukasten</td>
+                        <td class="ampel ampel-fehlt">Nur erwähnt</td>
+                    </tr>
+                    <tr>
+                        <td>ALLBOT VR408</td>
+                        <td>4 Beine</td>
+                        <td>Arduino + Shield</td>
+                        <td>Arduino</td>
+                        <td>Servos und Bewegungsabläufe</td>
+                        <td class="ampel ampel-luecke">Kurze Seite erhalten</td>
+                    </tr>
+                    <tr>
+                        <td>Velleman KSR10</td>
+                        <td>Roboterarm</td>
+                        <td>Handsteuerung</td>
+                        <td>Keine eigentliche Programmierung</td>
+                        <td>Montage und Armkinematik</td>
+                        <td class="ampel ampel-luecke">Sehr kurz</td>
+                    </tr>
+                    <tr>
+                        <td>Dobot Magician</td>
+                        <td>4-Achs-Arm</td>
+                        <td>Dobot-Controller</td>
+                        <td>Blockly, Python, API</td>
+                        <td>Automatisierung und Pick-and-Place</td>
+                        <td class="ampel ampel-gut">Aktives Projekt</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <section id="links">
+        <h2>6. Ergebnis der ersten Linkprüfung</h2>
+
+        <div class="tabelle">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Bereich</th>
+                        <th>Zustand</th>
+                        <th>Feststellung</th>
+                        <th>Empfohlene Maßnahme</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Startseite 2024 → Roboter</td>
+                        <td class="ampel ampel-luecke">Unvollständig</td>
+                        <td>Makeblock, Elegoo, Velleman, ALLBOT und Dobot sind verlinkt; fischertechnik steht nur als Text.</td>
+                        <td>Zentrale Robotik-Übersicht verlinken.</td>
+                    </tr>
+                    <tr>
+                        <td>Makeblock → mBot</td>
+                        <td class="ampel ampel-gut">Erreichbar</td>
+                        <td>Mehrere lokale Seiten und Aufgaben sind vorhanden.</td>
+                        <td>Als Muster für die anderen Systeme nutzen.</td>
+                    </tr>
+                    <tr>
+                        <td>Makeblock → Starter, Ranger, Ultimate</td>
+                        <td class="ampel ampel-fehlt">Mehrere Ziele fehlen</td>
+                        <td>Die alten mBlock-Unterseiten und die Ultimate-Arduino-Seite sind nicht vorhanden.</td>
+                        <td>Neue Einstiegsseiten anlegen; alte Links umleiten.</td>
+                    </tr>
+                    <tr>
+                        <td>ELEGOO Smart Robot Car</td>
+                        <td class="ampel ampel-gut">Erreichbar</td>
+                        <td>Sehr viele Inhalte und Downloads sind noch vorhanden.</td>
+                        <td>Seite gliedern, Versionsangaben ordnen und Links einzeln prüfen.</td>
+                    </tr>
+                    <tr>
+                        <td>fischertechnik</td>
+                        <td class="ampel ampel-fehlt">Keine Zielseite</td>
+                        <td>Aus dem öffentlichen Bereich ist der konkrete Bestand nicht erkennbar.</td>
+                        <td>Gerätebestand aufnehmen und neue Seite erstellen.</td>
+                    </tr>
+                    <tr>
+                        <td>ALLBOT</td>
+                        <td class="ampel ampel-luecke">Gemischt</td>
+                        <td>Lokale Seite funktioniert; die Whadda-Handbuchsammlung ist erreichbar. Alte allbot.eu- und Spiegel-Links sind unzuverlässig.</td>
+                        <td>Nur noch auf Whadda und lokale Sicherungen verweisen.</td>
+                    </tr>
+                    <tr>
+                        <td>Velleman KSR10</td>
+                        <td class="ampel ampel-luecke">Teilweise</td>
+                        <td>Herstellerseite ist erreichbar; der alte virtuelle Roboterarm-Link ist nicht zuverlässig erreichbar.</td>
+                        <td>Modellbezeichnung korrigieren und Ersatz für den Simulator suchen.</td>
+                    </tr>
+                    <tr>
+                        <td>Dobot Magician</td>
+                        <td class="ampel ampel-luecke">Alte und neue Welt getrennt</td>
+                        <td>Die alte lokale Seite ist vorhanden, die aktuelle Entwicklung liegt im neuen GitHub-Projektbereich.</td>
+                        <td>Von der alten Seite deutlich zum neuen Projekt verweisen.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <section id="struktur">
+        <h2>7. Empfohlene neue Seitenstruktur</h2>
+
+        <ol class="struktur">
+            <li>
+                <strong>Robotik – Gesamtüberblick</strong>
+                <ul>
+                    <li>Welche Systeme besitzen oder besaßen wir?</li>
+                    <li>Welche Materialien sind erhalten?</li>
+                    <li>Welche Geräte sind noch funktionsfähig?</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Fahrende Roboter</strong>
+                <ul>
+                    <li>Makeblock: mBot, Starter, Ranger, Ultimate</li>
+                    <li>ELEGOO Smart Robot Car</li>
+                    <li>fischertechnik Robotics</li>
+                    <li>spätere Arduino-/ESP32-Eigenbauten</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Laufende Roboter</strong>
+                <ul>
+                    <li>ALLBOT VR408</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Roboterarme</strong>
+                <ul>
+                    <li>Velleman KSR10</li>
+                    <li>Dobot Magician</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Gemeinsame Grundlagen</strong>
+                <ul>
+                    <li>Motoren und Motortreiber</li>
+                    <li>Sensoren</li>
+                    <li>Linienverfolgung und Hinderniserkennung</li>
+                    <li>Bluetooth, WLAN, ESP-Now und serielle Kommunikation</li>
+                    <li>Wettbewerbe und Unterrichtsaufgaben</li>
+                </ul>
+            </li>
+        </ol>
+    </section>
+
+
+    <section>
+        <h2>8. Noch offene Bestandsfragen</h2>
+
+        <div class="offen">
+            <ul>
+                <li>Welche fischertechnik-Baukästen und Controller sind tatsächlich vorhanden?</li>
+                <li>Welche Versionen des ELEGOO Smart Robot Car befinden sich noch in der Schule?</li>
+                <li>Existieren mBot Starter, Ranger und Ultimate noch vollständig und funktionsfähig?</li>
+                <li>Ist der ALLBOT VR408 inzwischen in Betrieb genommen worden?</li>
+                <li>Gibt es weitere Fahrzeugtypen, die auf den öffentlich erhaltenen Seiten nicht mehr erscheinen?</li>
+                <li>Welche alten Programme, ZIP-Dateien, Bilder und Handbücher liegen noch auf lokalen Datenträgern?</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <section class="quellen">
+        <h2>9. Geprüfte Ausgangsquellen</h2>
+
+        <ul>
+            <li><a href="https://mrge.de/lehrer/sigismund/index-2024.php" target="_blank" rel="noopener">Öffentliche Startseite 2024</a></li>
+            <li><a href="https://www.mrge.de/lehrer/sigismund/makeblock/" target="_blank" rel="noopener">Makeblock-Übersicht</a></li>
+            <li><a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/elegoo-robot-car.html" target="_blank" rel="noopener">ELEGOO Smart Robot Car</a></li>
+            <li><a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/allbot.html" target="_blank" rel="noopener">ALLBOT Robot System</a></li>
+            <li><a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/vellemann.html" target="_blank" rel="noopener">Velleman-Roboterarm</a></li>
+            <li><a href="https://www.mrge.de/lehrer/sigismund/Young-Engineers/roboter/dobot_magician.html" target="_blank" rel="noopener">Frühere Dobot-Magician-Seite</a></li>
+        </ul>
+
+        <p>
+            <strong>Stand der Prüfung:</strong> 29. Juli 2026.
+            Die Bestandsangaben beruhen auf den öffentlich auffindbaren Seiten.
+            Noch nicht öffentlich dokumentierte Geräte können in dieser ersten
+            Fassung fehlen.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <div class="breite">
+        <p><strong>Robotiksysteme und programmierbare Fahrzeuge</strong></p>
+        <p>Arbeitsstand zur Sichtung, Sicherung und Neuordnung der vorhandenen Materialien</p>
+        <p>Martin-Rinckart-Gymnasium Eilenburg · AG Young Engineers</p>
+    </div>
+</footer>
+</body>
+</html>

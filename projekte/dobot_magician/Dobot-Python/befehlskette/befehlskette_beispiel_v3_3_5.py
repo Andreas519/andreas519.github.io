@@ -8,7 +8,7 @@ import sys
 # Diese Zeilen anpassen
 # ------------------------------------------------------------
 
-COM_MODUS = "tcp"  # "serial" oder "tcp"
+COM_MODUS = "serial"  # "serial" oder "tcp"
 
 DOBOT_PORT = "COM10"
 DOBOT_BAUDRATE = 115200
@@ -18,7 +18,7 @@ ESP32_TCP_AKTIV = False
 
 if COM_MODUS == "serial":
     ESP32_COM_AKTIV = True
-    ESP32_COM_PORT = "COM26"
+    ESP32_COM_PORT = "COM3"
     ESP32_COM_BAUDRATE = 115200
     ESP32_COM_VERBINDUNGS_TIMEOUT = 5.0
 
@@ -35,33 +35,30 @@ STANDARD_PAUSE_MS = 500
 TIMEOUT_SEKUNDEN = 90.0
 MAX_SCHRITTE = 1000
 
-PROGRAMM_VERSION = "3.3.5.3"
-PROGRAMM_VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
-ERWARTETE_BEFEHLSKETTENVERSION = "3.3.5.2"
-ERWARTETE_ESP32_MODULVERSION = "1.4.3"
+PROGRAMM_VERSION = "3.3.5.9"
+PROGRAMM_VERSIONSDATUM = "26.07.2026, 21:30 Uhr"
+ERWARTETE_BEFEHLSKETTENVERSION = "3.3.5.3"
+ERWARTETE_ESP32_MODULVERSION = "1.4.5"
 
 
 # Die Meldung FREIGABE wird im TCP-Simulator einfach eingetippt.
 # Im seriellen Betrieb muss der ESP32 die Zeile FREIGABE senden.
 befehle = [
-    ("geschwindigkeit", 40, 40, "Geschwindigkeit und Beschleunigung auf 40 % setzen", 0),
+    ("geschwindigkeit", 15, 15, "Geschwindigkeit und Beschleunigung für den Pause-Test auf 15 % setzen", 0),
+    ("fahre_um", 0, 0, 30, 0, "Sicherheitshub vor der HOME-Fahrt", 500),
     ("home", "HOME-Fahrt ausführen", 500),
-    ("marke", "auf_freigabe_warten"),
-    ("warte_bis", "FREIGABE", "Warte auf FREIGABE vom COM-/TCP-Client", None),
-    ("wert_anzeigen", "TEMPERATUR", "Vom ESP gespeicherte Temperatur anzeigen"),
-    ("wenn_wert", "TEMPERATUR", ">=", 30, ("wert_anzeigen", "TEMPERATUR", "Temperaturwarnung: mindestens 30 °C"), ("wert_anzeigen", "TEMPERATUR", "Temperatur liegt unter 30 °C")),
-    ("wert_anzeigen", "POSITION", "Vom ESP gespeicherte Position anzeigen"),
-    ("wenn_wert", "POSITION", "==", "POS_A", ("fahre_zu", 240, 140, 70, 0, "Fahre zu Position A", 500), ("gehe_zu_befehl", "POS_B")),
-    ("gehe_zu_befehl", "POSITION_ENDE"),
-    ("marke", "POS_B"),
-    ("fahre_zu", 180, 160, 50, 0, "Fahre zu Position B", 500),
-    ("marke", "POSITION_ENDE"),
-    ("gehe_zu_befehl", "auf_freigabe_warten"),
+    ("warte_bis", "FREIGABE", "Warte auf FREIGABE für den Pause-Test", None),
+    ("fahre_zu", 180, 160, 50, 0, "Langsame Fahrt zu Position B – dabei Pause anfordern", 500),
+    ("fahre_zu", 240, 140, 70, 0, "Fahrt zu Position A – startet erst nach Weiter", 500),
 ]
 
 # Weitere mögliche Befehle:
+# ("wert_anzeigen", "TEMPERATUR", "Vom ESP gespeicherte Temperatur anzeigen")
+# ("wert_anzeigen", "POSITION", "Vom ESP gespeicherte Position anzeigen")
 # ("warte_bis_wert", "TASTER", "==", 1, "Warte auf gedrückten Taster", None)
 # ("wenn_wert", "TEMPERATUR", "<", 10, Wahr-Befehl, Falsch-Befehl)
+# ("marke", "wiederholen")
+# ("gehe_zu_befehl", "wiederholen")
 # ("esp_senden", "LED_GELB_EIN", "Gelbe LED am ESP32 einschalten")
 # ("esp_senden", "DISPLAY;Dobot arbeitet", "Text an ESP32-Display senden")
 

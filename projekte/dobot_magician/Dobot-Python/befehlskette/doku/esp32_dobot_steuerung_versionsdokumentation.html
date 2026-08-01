@@ -124,7 +124,7 @@ footer {
   <div>
     <h1>ESP32-Dobot-Steuerung</h1>
     <p>Dokumentation der Änderungen am MicroPython-Programm für Taster, LEDs und die Kommunikation mit der Dobot-Befehlskette.</p>
-    <span class="badge">Versionen 1.0 bis 1.2</span>
+    <span class="badge">Versionen 1.0 bis 1.3.8</span>
   </div>
 </header>
 
@@ -152,7 +152,7 @@ footer {
 <tr><td>26</td><td>Taster Weiter</td><td><code>WEITER</code></td></tr>
 <tr><td>27</td><td>Taster Halt</td><td><code>HALT</code></td></tr>
 <tr><td>33</td><td>Taster Status</td><td><code>STATUS</code></td></tr>
-<tr><td>18</td><td>Taster Frei 1</td><td><code>FREI_1</code></td></tr>
+<tr><td>18</td><td>Taster Freigabe</td><td><code>FREIGABE</code></td></tr>
 <tr><td>32</td><td>Taster Frei 2</td><td><code>FREI_2</code></td></tr>
 <tr><td>2</td><td>Blaue LED</td><td>Leuchtet nach Empfang von <code>PC_BEREIT</code></td></tr>
 <tr><td>19</td><td>Gelbe LED</td><td>Simulierter Ausgang <code>LED_gelb</code></td></tr>
@@ -170,7 +170,12 @@ footer {
 <tbody>
 <tr><td><strong>1.0</strong></td><td>Erste Erweiterung um Signalüberwachung und zufällige LED-Simulation</td><td>Fehlerhaft</td></tr>
 <tr><td><strong>1.1</strong></td><td>Initialisierung und Sendefunktion korrigiert</td><td>LED-Thread im Test unzuverlässig</td></tr>
-<tr><td><strong>1.2</strong></td><td>LED-Simulation ohne zusätzlichen Thread</td><td>Aktueller Teststand</td></tr>
+<tr><td><strong>1.2</strong></td><td>LED-Simulation ohne zusätzlichen Thread</td><td>Historischer stabiler Stand</td></tr>
+<tr><td><strong>1.3</strong></td><td>Allgemeine PC-Befehle, Rückmeldungen und Statusabfragen</td><td>Grundlage der aktuellen Entwicklung</td></tr>
+<tr><td><strong>1.3.1–1.3.5</strong></td><td>Zwischenstände zur Diagnose des seriellen Empfangs</td><td>Durch 1.3.6 ersetzt</td></tr>
+<tr><td><strong>1.3.6</strong></td><td>Zuverlässiger Empfang über <code>sys.stdin</code> und blaue Empfangsanzeige</td><td>Praktisch getestet</td></tr>
+<tr><td><strong>1.3.7</strong></td><td>Abschließendes Semikolon bei parametrierten Befehlen erlaubt</td><td>Praktisch getestet</td></tr>
+<tr><td><strong>1.3.8</strong></td><td>GPIO 18 sendet passend zur Befehlskette <code>FREIGABE</code></td><td>Aktueller, praktisch getesteter Stand</td></tr>
 </tbody>
 </table>
 </section>
@@ -268,7 +273,7 @@ WERT;LED_gelb;0</code></pre>
 <tr><th>Richtung</th><th>Funktion</th><th>Beispiel</th></tr>
 </thead>
 <tbody>
-<tr><td>ESP32 → PC</td><td><code>zeile_senden()</code></td><td><code>zeile_senden("FREI_1")</code></td></tr>
+<tr><td>ESP32 → PC</td><td><code>zeile_senden()</code></td><td><code>zeile_senden("FREIGABE")</code></td></tr>
 <tr><td>PC → ESP32</td><td><code>pc_nachrichten_lesen()</code></td><td><code>PC_BEREIT</code></td></tr>
 </tbody>
 </table>
@@ -278,64 +283,57 @@ WERT;LED_gelb;0</code></pre>
 </section>
 
 <section>
-<h2>Aktuell bereits verarbeitete PC-Nachricht</h2>
-<pre><code>if nachricht == "PC_BEREIT":
-    led.on()</code></pre>
-<p>Dadurch wird die blaue Online-LED eingeschaltet.</p>
-</section>
-
-<section>
-<h2>Noch nicht in Version 1.2 umgesetzt</h2>
-<div class="open">
-<p>Das PC-Steuerprogramm der Befehlskette kann ab Version 3.3.5 beliebige Texte mit dem Befehl <code>esp_senden</code> übertragen. Das ESP32-Programm 1.2 verarbeitet bisher jedoch nur <code>PC_BEREIT</code>.</p>
-</div>
-
-<p>Vorgeschlagene zukünftige Befehle:</p>
-<pre><code>LED_GELB_EIN
+<h2>Version 1.3 bis 1.3.8</h2>
+<h3>Verarbeitung von PC-Befehlen</h3>
+<p>Die in Version 1.2 noch geplante allgemeine Befehlsverarbeitung ist inzwischen umgesetzt. Version 1.3.8 verarbeitet folgende Befehle:</p>
+<pre><code>PC_BEREIT
+PING
+LED_GELB_EIN
 LED_GELB_AUS
-LED_GELB_UMSCHALTEN</code></pre>
+LED_GELB_UMSCHALTEN
+LED_GELB_STATUS
+SIMULATION_LED_START;min;max
+SIMULATION_LED_STOP
+ESP32_STATUS
+HILFE</code></pre>
 
-<p>Dafür muss <code>pc_nachrichten_lesen()</code> später erweitert werden:</p>
-<pre><code>if nachricht == "PC_BEREIT":
-    led.on()
+<p>Unbekannte Befehle werden eindeutig beantwortet:</p>
+<pre><code>UNBEKANNTER_BEFEHL;Befehl</code></pre>
 
-elif nachricht == "LED_GELB_EIN":
-    led_gelb.on()
+<h3>Serieller Empfang</h3>
+<p>Die Zwischenstände 1.3.1 bis 1.3.5 dienten dazu, den Empfang über die MicroPython-Konsole praktisch zu untersuchen. Ein direkter zweiter Zugriff auf <code>UART(0)</code> erwies sich als ungeeignet, weil diese Schnittstelle bereits vom REPL verwendet wird.</p>
+<p>Seit Version 1.3.6 liest das dauerhaft gestartete ESP32-Programm die Zeichen nicht blockierend über <code>sys.stdin</code>. Die Datei wird auf dem ESP32 als <code>esp32_dobot_steuerung.py</code> gespeichert und durch folgende <code>main.py</code> automatisch gestartet:</p>
+<pre><code>import esp32_dobot_steuerung</code></pre>
 
-elif nachricht == "LED_GELB_AUS":
-    led_gelb.off()
+<h3>Blaue Empfangsanzeige</h3>
+<p>Nach <code>PC_BEREIT</code> leuchtet die blaue LED als Verbindungsanzeige. Bei jeder vollständig empfangenen PC-Nachricht wechselt sie für 200 ms in den entgegengesetzten Zustand und kehrt danach zurück. Eine leuchtende LED erlischt beim Empfang deshalb kurz.</p>
 
-elif nachricht == "LED_GELB_UMSCHALTEN":
-    led_gelb.value(not led_gelb.value())
+<h3>Parametrierte Befehle in Version 1.3.7</h3>
+<p>Abschließende leere Parameter werden ignoriert. Beide Schreibweisen sind gleichwertig:</p>
+<pre><code>SIMULATION_LED_START;2;5
+SIMULATION_LED_START;2;5;</code></pre>
 
-else:
-    zeile_senden(
-        f"UNBEKANNTER_BEFEHL;{nachricht}"
-    )</code></pre>
-
-<div class="note"><strong>Wichtig:</strong> Dieser Abschnitt dokumentiert die geplante nächste Erweiterung. Er ist im aktuellen Stand 1.2 noch nicht enthalten.</div>
+<h3>Freigabe-Taster in Version 1.3.8</h3>
+<p>Der Taster an GPIO 18 sendet nun <code>FREIGABE</code> statt <code>FREI_1</code>. Damit setzt er die Befehlskette unmittelbar fort, wenn diese mit <code>warte_bis("FREIGABE")</code> auf die Freigabe wartet.</p>
 </section>
 
 <section>
-<h2>Empfohlene Tests</h2>
-<ol>
-  <li>Alle sechs Taster einzeln drücken und die empfangenen Meldungen am PC kontrollieren.</li>
-  <li>Die LED-Simulation vorübergehend mit <code>simulation_led_aendert_sich(3, 6)</code> testen.</li>
-  <li>Prüfen, ob jede LED-Änderung genau einmal als <code>WERT;LED_gelb;...</code> gesendet wird.</li>
-  <li><code>PC_BEREIT</code> vom PC senden und kontrollieren, ob die blaue LED eingeschaltet wird.</li>
-  <li>Das Programm mit <code>KeyboardInterrupt</code> beenden und prüfen, ob beide LEDs ausgeschaltet werden.</li>
-</ol>
-</section>
-
-<section>
-<h2>Empfohlene nächste Version</h2>
-<p>Für die nächste Version wäre die Bezeichnung <strong>1.3</strong> sinnvoll. Schwerpunkt:</p>
+<h2>Praktisch bestätigte Tests bis Version 1.3.8</h2>
+<div class="ok">
 <ul>
-  <li>Verarbeitung allgemeiner PC-Befehle in <code>pc_nachrichten_lesen()</code>.</li>
-  <li>Bestätigung ausgeführter Befehle an den PC.</li>
-  <li>Optionales Ein- und Ausschalten der LED-Simulation durch PC-Befehle.</li>
-  <li>Saubere Meldung unbekannter Befehle.</li>
+  <li><code>PING</code> wird mit <code>PONG</code> beantwortet.</li>
+  <li><code>LED_GELB_EIN</code> und <code>LED_GELB_AUS</code> schalten die LED und bestätigen die Ausführung.</li>
+  <li>LED-Änderungen werden als <code>WERT;LED_gelb;0</code> beziehungsweise <code>WERT;LED_gelb;1</code> übertragen.</li>
+  <li><code>SIMULATION_LED_START;2;5;</code> startet die zufälligen Wechsel.</li>
+  <li><code>SIMULATION_LED_STOP</code> beendet sie zuverlässig.</li>
+  <li><code>HILFE</code> liefert die unterstützte Befehlsliste.</li>
+  <li><code>ESP32_STATUS</code> meldet Version, LED-Zustände und Simulationsstatus.</li>
+  <li>Alle sechs Taster senden beim Drücken genau eine Meldung. Gedrückthalten und Loslassen erzeugen keine weitere Meldung.</li>
+  <li>Der Taster an GPIO 18 sendet <code>FREIGABE</code> und setzt <code>warte_bis("FREIGABE")</code> zuverlässig fort.</li>
+  <li>Der Halt-Taster stoppte eine problematische Dobot-Bewegung sofort.</li>
+  <li>Der einmalige Ablauf aus Sicherheitshub, HOME, Freigabe, Fahrt zu Position B und Programmende wurde vollständig und ohne beschädigte Rückmeldungen ausgeführt.</li>
 </ul>
+</div>
 </section>
 
 <section>
@@ -345,14 +343,17 @@ else:
 <tbody>
 <tr><td><code>esp32_dobot_steuerung_v1.py</code></td><td>Ursprünglicher Stand 1.0 mit Fehlern.</td></tr>
 <tr><td><code>esp32_dobot_steuerung_v1_1.py</code></td><td>Korrigierter Stand 1.1 mit Thread-Simulation.</td></tr>
-<tr><td><code>esp32_dobot_steuerung_v1_2.py</code></td><td>Aktueller Stand 1.2 ohne zusätzlichen Thread.</td></tr>
+<tr><td><code>esp32_dobot_steuerung_v1_2.py</code></td><td>Historischer Stand 1.2 ohne zusätzlichen Thread.</td></tr>
+<tr><td><code>esp32_dobot_steuerung_v1_3.py</code></td><td>Aktive Entwicklungsdatei; interne Version derzeit 1.3.8.</td></tr>
+<tr><td><code>esp32_dobot_steuerung.py</code></td><td>Dateiname der aktiven Version auf dem ESP32.</td></tr>
+<tr><td><code>main.py</code></td><td>Startet das Steuerprogramm per <code>import esp32_dobot_steuerung</code>.</td></tr>
 </tbody>
 </table>
 </section>
 </main>
 
 <footer>
-<p>ESP32-Steuerung für die Dobot-Befehlskette · Dokumentationsstand 24.07.2026</p>
+<p>ESP32-Steuerung für die Dobot-Befehlskette · Dokumentationsstand 26.07.2026, Version 1.3.8</p>
 </footer>
 </body>
 </html>

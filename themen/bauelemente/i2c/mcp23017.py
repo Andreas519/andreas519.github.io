@@ -199,3 +199,37 @@ class MCP23017:
 
     def clear_interrupt(self, port):
         return self.interrupt_capture(port)
+
+
+def _selbsttest():
+    """Initialisiert den MCP23017 beim direkten Start dieser Datei."""
+    from machine import I2C, Pin
+
+    SDA_PIN = 21  # GPIO21 - SDA - gelb
+    SCL_PIN = 22  # GPIO22 - SCL - grün
+    ADRESSE = 0x20
+
+    i2c = I2C(
+        0,
+        sda=Pin(SDA_PIN),
+        scl=Pin(SCL_PIN),
+        freq=100_000,
+    )
+
+    print("MCP23017-Selbsttest an Adresse", hex(ADRESSE))
+
+    try:
+        mcp = MCP23017(i2c, address=ADRESSE)
+        print("Initialisierung erfolgreich.")
+        print("Port A: {:08b}".format(mcp.read_port("A")))
+        print("Port B: {:08b}".format(mcp.read_port("B")))
+    except Exception as fehler:
+        print("Initialisierung fehlgeschlagen:", fehler)
+        print(
+            "I2C-Scan:",
+            [hex(adresse) for adresse in i2c.scan()],
+        )
+
+
+if __name__ == "__main__":
+    _selbsttest()

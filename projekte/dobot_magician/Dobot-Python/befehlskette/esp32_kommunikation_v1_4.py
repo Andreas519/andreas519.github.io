@@ -4,8 +4,8 @@ import threading
 import time
 
 
-VERSION = "1.4.3"
-VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
+VERSION = "1.4.5"
+VERSIONSDATUM = "26.07.2026, 20:10 Uhr"
 
 BEFEHLE = {
     "p": "p",
@@ -217,7 +217,7 @@ class _ESP32SteuerungBasis:
                 f"{eintrag['name']} = {eintrag['wert']!r} "
                 f"von {quelle}"
             )
-#             senden(f"EMPFANGEN WERT;{eintrag['name']};{eintrag['wert']}")  # Erzeugt eventuell Rückkopplungen bei "UNBEKANNTER_BEFEHL"            return
+            return
 
         steuerbefehl = _befehl_normalisieren(nachricht)
 
@@ -227,7 +227,6 @@ class _ESP32SteuerungBasis:
                 f"ESP32-Steuerbefehl empfangen: "
                 f"{gross} von {quelle}"
             )
-#            senden(f"EMPFANGEN {gross}") # Verursacht mit die Rückkopplung der Fehlermeldung " 'UNBEKANNTER_BEFEHL;EMPFANGEN UNBEKANNTE"
             return
 
         if self.meldungen is None:
@@ -311,7 +310,11 @@ class ESP32SerielleSteuerung(_ESP32SteuerungBasis):
             with self._sende_lock:
                 self._senden(ser, text)
             return True
-        except Exception:
+        except Exception as fehler:
+            print(
+                f"Senden an {self.name} über {self.port} fehlgeschlagen: "
+                f"{fehler}"
+            )
             return False
 
     def beenden(self):
@@ -339,7 +342,7 @@ class ESP32SerielleSteuerung(_ESP32SteuerungBasis):
     def _senden(ser, text):
         """Sendet eine mit Zeilenende abgeschlossene Nachricht."""
 
-        ser.write(f"{text}\n".encode("utf-8"))
+        ser.write(f"{text}\r\n".encode("utf-8"))
         ser.flush()
 
     def _empfangsschleife(self):

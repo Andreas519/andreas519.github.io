@@ -56,12 +56,22 @@ pre code { background:transparent; padding:0; color:inherit; }
 }
 .download { display:inline-block; margin:4px 8px 4px 0; padding:10px 14px; background:var(--blau); color:white; text-decoration:none; border-radius:6px; }
 .download:hover { background:#0f3857; }
+.modul-layout {
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(280px,1fr);
+  gap:24px; align-items:start; margin:18px 0 24px;
+}
+.modul-layout figure { margin:0; height:300px; }
+.modul-layout figure a { display:flex; width:100%; height:300px; justify-content:flex-end; }
+.modul-layout figure img {
+  width:100%; height:300px; object-fit:contain; object-position:right center;
+}
 footer { background:#102f43; color:white; padding:25px; }
 .klein { font-size:.92rem; color:#465b67; }
 @media (max-width:700px) {
   main { padding:18px; }
   nav { position:static; }
   table { font-size:.9rem; }
+  .modul-layout { grid-template-columns:1fr; }
 }
 @media print {
   nav,.downloadbereich { display:none; }
@@ -165,13 +175,101 @@ nicht eindeutig geprüft wurde.
 
 <section id="anschluss">
 <h2>3. Anschluss an einen ESP32</h2>
+
+<h3>Pinlayout des vorhandenen CJMCU-Moduls</h3>
+<div class="modul-layout">
+<div>
+<p>
+Das Modul führt die Anschlüsse für die I²C-Variante MCP23017 und die
+SPI-Variante MCP23S17 gemeinsam heraus. Für den MCP23017 gelten links
+<code>SDA</code> und <code>SCL</code>; die alternativ aufgedruckten
+Bezeichnungen <code>SI</code>, <code>SCK</code>, <code>SO</code> und
+<code>CS</code> gehören zur SPI-Variante.
+</p>
+<p>
+Die linke Reihe enthält von oben nach unten A2, A1, A0, RESET, zwei bei I²C
+nicht verwendete Anschlüsse, SDA, SCL, GND und VCC. Rechts liegen die
+Versorgung, die beiden Interruptausgänge und die Portpins. Bei den paarweisen
+Beschriftungen steht links jeweils Port B und rechts Port A, beispielsweise
+B0/A0 bis B7/A7.
+</p>
+<div class="praxis">
+<strong>Beschriftung ITB/ITA:</strong>
+Gemeint sind INTB und INTA. Für unseren Test wird INTB mit dem vorgesehenen
+ESP32-Interruptpin verbunden.
+</div>
+</div>
+<figure>
+<a href="bilder/mcp23017-cjmcu-pinlayout.png"
+   target="_blank" rel="noopener noreferrer"
+   title="Bild in Originalgröße öffnen">
+<img src="bilder/mcp23017-cjmcu-pinlayout.png"
+     alt="Pinlayout des CJMCU-Moduls für MCP23017 und MCP23S17">
+</a>
+</figure>
+</div>
+
+<h3>Schaltplan und Bestückungsseite des CJMCU-2317</h3>
+<div class="modul-layout">
+<div>
+<p>
+Der Modulschaltplan zeigt die gemeinsame Auslegung für MCP23017 (I²C) und
+MCP23S17 (SPI). Für unseren MCP23017 sind die Leitungen
+<strong>SDA (gelb)</strong> und <strong>SCL (grün)</strong> maßgeblich.
+</p>
+<p>
+R1 und R2 sind jeweils mit <strong>10 kΩ</strong> angegeben und ziehen SDA
+und SCL nach VCC. Das vorhandene Modul besitzt damit bereits die notwendigen
+I²C-Pull-up-Widerstände. Zusätzliche Pull-ups sind beim einzelnen Modul
+normalerweise nicht erforderlich.
+</p>
+<div class="hinweis">
+<strong>Wichtig:</strong> Das sind Pull-up-Widerstände zwischen Signalleitung
+und VCC, keine in Reihe liegenden Vorwiderstände. Das Modul wird am ESP32 mit
+3,3 V betrieben, damit auch die I²C-Pegel 3,3 V betragen.
+</div>
+</div>
+<figure>
+<a href="bilder/mcp23017-cjmcu-schaltplan.png"
+   target="_blank" rel="noopener noreferrer"
+   title="Schaltplan in Originalgröße öffnen">
+<img src="bilder/mcp23017-cjmcu-schaltplan.png"
+     alt="Schaltplan des CJMCU-2317 mit 10-Kiloohm-Pull-ups an SDA und SCL">
+</a>
+</figure>
+</div>
+
+<div class="modul-layout">
+<div>
+<p>
+Die Aufnahme der Bestückungsseite hilft bei der Identifikation des tatsächlich
+verwendeten Moduls. Oberhalb des MCP23017 ist das mit <code>103</code>
+beschriftete Widerstandsnetzwerk zu sehen. Die beiden ebenfalls mit
+<code>103</code> gekennzeichneten Widerstände unterhalb des Bausteins
+entsprechen jeweils 10 kΩ.
+</p>
+<p>
+Beide Abbildungen sind auf der Seite verkleinert. Ein Klick öffnet das jeweilige
+Bild in Originalgröße.
+</p>
+</div>
+<figure>
+<a href="bilder/mcp23017-cjmcu-rueckseite.png"
+   target="_blank" rel="noopener noreferrer"
+   title="Bestückungsseite in Originalgröße öffnen">
+<img src="bilder/mcp23017-cjmcu-rueckseite.png"
+     alt="Bestückungsseite des CJMCU-2317 mit MCP23017 und Widerständen">
+</a>
+</figure>
+</div>
+
 <table>
 <thead><tr><th>MCP23017</th><th>ESP32 / Beschaltung</th><th>Hinweis</th></tr></thead>
 <tbody>
 <tr><td>VDD</td><td>3,3 V</td><td>So bleiben I²C- und GPIO-Pegel zum ESP32 kompatibel.</td></tr>
 <tr><td>VSS</td><td>GND</td><td>Gemeinsame Masse ist zwingend erforderlich.</td></tr>
-<tr><td>SDA</td><td>GPIO21</td><td>Typische ESP32-Belegung; andere geeignete Pins sind möglich.</td></tr>
-<tr><td>SCL</td><td>GPIO22</td><td>Typische ESP32-Belegung.</td></tr>
+<tr><td>SDA</td><td>GPIO21, gelb</td><td>Auf dem CJMCU-2317 über 10 kΩ nach VCC gezogen.</td></tr>
+<tr><td>SCL</td><td>GPIO22, grün</td><td>Auf dem CJMCU-2317 über 10 kΩ nach VCC gezogen.</td></tr>
 <tr><td>A0, A1, A2</td><td>GND</td><td>Ergibt 0x20. Die Adresspins dürfen nicht offen bleiben.</td></tr>
 <tr><td>RESET</td><td>Über etwa 10 kΩ nach 3,3 V</td><td>RESET ist aktiv LOW und muss einen definierten Pegel erhalten.</td></tr>
 <tr><td>INTA</td><td>beispielsweise GPIO27</td><td>Bei Open Drain mit etwa 10 kΩ nach 3,3 V ziehen.</td></tr>
@@ -319,6 +417,19 @@ die Richtung auf Ausgang geändert werden.
 <h2>6. Python- und MicroPython-Programmierung</h2>
 
 <h3>6.1 I²C-Bus erzeugen und Baustein suchen</h3>
+<p>
+Für die praktische Fehlersuche steht ein bewusst einfacher Scanner bereit.
+Er gibt fortlaufend nur die gefundenen I²C-Adressen aus und vermeidet damit
+ablenkende Ergebnisse aus einem vollständigen Modultest:
+<a href="/tools/code-viewer.html?file=/projekte/dobot_magician/Dobot-Python/befehlskette/hardwaretests/i2c_portexpander/i2c-scanner.py"
+   target="_blank" rel="noopener noreferrer">i2c-scanner.py im Code-Viewer öffnen</a>.
+</p>
+<div class="praxis">
+<strong>Immer zuerst scannen:</strong>
+Vor jedem Test eines I²C-Moduls wird zunächst <code>i2c-scanner.py</code>
+ausgeführt. Der eigentliche Modultest beginnt erst, wenn die erwartete Adresse
+zuverlässig angezeigt wird.
+</div>
 <pre><code>from machine import Pin, I2C
 
 i2c = I2C(
@@ -353,6 +464,15 @@ print("{:08b}".format(wert))</code></pre>
 Die Bibliothek kapselt die Registerzugriffe in verständliche Methoden und
 benötigt keine zusätzliche Installation.
 </p>
+<div class="praxis">
+<strong>Direkter Start:</strong>
+Wird <code>mcp23017.py</code> in Thonny direkt ausgeführt, startet der Block
+<code>if __name__ == "__main__":</code> automatisch einen Selbsttest an
+Adresse <code>0x20</code>. Bei erfolgreicher Initialisierung werden PORTA und
+PORTB gelesen. Schlägt die Initialisierung fehl, folgt unmittelbar ein
+I²C-Scan. Beim Import mit <code>from mcp23017 import MCP23017</code> wird der
+Selbsttest nicht ausgeführt.
+</div>
 <pre><code>&quot;&quot;&quot;
 mcp23017.py
 Kleine MicroPython-Bibliothek für den MCP23017 am ESP32.
@@ -555,6 +675,40 @@ class MCP23017:
 
     def clear_interrupt(self, port):
         return self.interrupt_capture(port)
+
+
+def _selbsttest():
+    &quot;&quot;&quot;Initialisiert den MCP23017 beim direkten Start dieser Datei.&quot;&quot;&quot;
+    from machine import I2C, Pin
+
+    SDA_PIN = 21  # GPIO21 - SDA - gelb
+    SCL_PIN = 22  # GPIO22 - SCL - grün
+    ADRESSE = 0x20
+
+    i2c = I2C(
+        0,
+        sda=Pin(SDA_PIN),
+        scl=Pin(SCL_PIN),
+        freq=100_000,
+    )
+
+    print(&quot;MCP23017-Selbsttest an Adresse&quot;, hex(ADRESSE))
+
+    try:
+        mcp = MCP23017(i2c, address=ADRESSE)
+        print(&quot;Initialisierung erfolgreich.&quot;)
+        print(&quot;Port A: {:08b}&quot;.format(mcp.read_port(&quot;A&quot;)))
+        print(&quot;Port B: {:08b}&quot;.format(mcp.read_port(&quot;B&quot;)))
+    except Exception as fehler:
+        print(&quot;Initialisierung fehlgeschlagen:&quot;, fehler)
+        print(
+            &quot;I2C-Scan:&quot;,
+            [hex(adresse) for adresse in i2c.scan()],
+        )
+
+
+if __name__ == &quot;__main__&quot;:
+    _selbsttest()
 </code></pre>
 
 <h3>6.4 Kurzes Beispiel ohne Interrupt</h3>
@@ -861,6 +1015,7 @@ while True:
 <tbody>
 <tr><td>Scan findet nichts</td><td>SDA/SCL vertauscht, keine Masse, RESET LOW, fehlende Pull-ups</td><td>Spannungen, RESET und Leitungen prüfen</td></tr>
 <tr><td>Adresse ist nicht 0x20</td><td>A0, A1 oder A2 liegen HIGH oder schweben</td><td>Adresspins auf definierte Pegel legen</td></tr>
+<tr><td>Adresse bleibt unverändert oder wechselt unerwartet</td><td>Fehlerhaftes Dupont-Kabel oder schlechter Kontakt auf dem Breadboard; die Litze kann unzuverlässig mit Stecker oder Buchse verpresst sein</td><td>Schaltung spannungsfrei machen, Kabel mit dem Multimeter auf Durchgang prüfen und dabei vorsichtig bewegen; auffällige Kabel aussortieren</td></tr>
 <tr><td>Eingang wechselt zufällig</td><td>Pin ist offen</td><td>GPPU einschalten oder externen Widerstand verwenden</td></tr>
 <tr><td>Andere Ausgänge ändern sich mit</td><td>Restliches Ausgangsbyte überschrieben</td><td>Schattenregister beziehungsweise OLAT verwenden</td></tr>
 <tr><td>Interrupt bleibt aktiv</td><td>GPIO/INTCAP nicht gelesen oder DEFVAL-Abweichung besteht weiter</td><td>INTF prüfen und INTCAP des richtigen Ports lesen</td></tr>

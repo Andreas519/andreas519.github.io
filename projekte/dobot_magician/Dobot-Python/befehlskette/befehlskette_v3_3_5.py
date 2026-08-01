@@ -5,8 +5,8 @@ import threading
 import time
 
 
-VERSION = "3.3.5.2"
-VERSIONSDATUM = "26.07.2026, 10:42 Uhr"
+VERSION = "3.3.5.3"
+VERSIONSDATUM = "26.07.2026, 21:30 Uhr"
 
 ZUSTAND_LAEUFT = "läuft"
 ZUSTAND_PAUSIERT = "pausiert"
@@ -1086,7 +1086,14 @@ def _steuerbefehle_verarbeiten(
                 if roboter_aktiv:
                     dType.SetQueuedCmdStopExec(api)
                 zustand = ZUSTAND_PAUSIERT
-                print("PAUSE angefordert.")
+                if roboter_aktiv:
+                    print(
+                        "PAUSE angefordert: Der aktuelle Roboterbefehl "
+                        "wird kontrolliert beendet. Vor dem nächsten "
+                        "Befehl wartet die Befehlskette."
+                    )
+                else:
+                    print("PAUSE angefordert.")
             else:
                 print(
                     "Pause nicht ausgeführt: "

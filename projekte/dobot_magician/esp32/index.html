@@ -5,56 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ESP32 macht mit · Dobot Magician · Young Engineers</title>
   <meta name="author" content="Andreas Sigismund">
-  <meta name="description" content="Projekt mit ESP32 und Dobot Magician.">
+  <meta name="publisher" content="AG Young Engineers">
+  <meta name="project" content="ESP32 &amp; Co – PC – Dobot">
+  <meta name="description" content="Der ESP32 erweitert die Steuerung des Dobot Magician um Sensoren, Aktoren und zusätzliche Schnittstellen.">
   <link rel="stylesheet" href="../../../css/my.css">
 </head>
 <body>
   <header>
-    ESP32 macht mit
+    <h1>ESP32 macht mit</h1>
+    <p>Sensoren, Aktoren und zusätzliche Schnittstellen für den Dobot Magician</p>
   </header>
+
   <main>
     <section>
-        <p>Die beiden folgenden Formulierungen sind zum Durchdenken gedacht und werden später durch eine endgültige Version ersetzt.</p>
-     <div class="grid">
-      <p> Der ESP32 übernimmt im Gesamtsystem zusätzliche Aufgaben, 
-         die der Dobot Magician nicht selbst ausführen kann,
-         die außerhalb der Dobot-Steuerung zweckmäßiger umgesetzt werden
-         oder die der Dobot Magician nicht selbst ausführen kann. 
-     </p>
-     <p>Der ESP32 übernimmt im Gesamtsystem zusätzliche Aufgaben, 
-        die der Dobot Magician nicht selbst ausführen kann, 
-        die außerhalb der Dobot-Steuerung zweckmäßiger umgesetzt werden oder 
-        die aus Gründen der Flexibilität, Erweiterbarkeit oder Vereinfachung ausgelagert werden sollen.
-     </p>
-     </div>
-     <p>
-        Die vom ESP32 ausgewerteten Sensoren und angesteuerten Aktoren können 
-        entweder am Dobot Magician befestigt sein oder sich im Arbeitsbereich des Roboters befinden.
+      <h2>Der ESP32 im Gesamtsystem</h2>
+      <p>
+        Der ESP32 übernimmt im Gesamtsystem zusätzliche Aufgaben,
+        die der Dobot Magician nicht selbst ausführen kann,
+        die außerhalb der Dobot-Steuerung zweckmäßiger umgesetzt werden oder
+        die aus Gründen der Flexibilität, Erweiterbarkeit oder Vereinfachung
+        ausgelagert werden sollen.
       </p>
       <p>
-        Die Verarbeitung der Sensordaten und die Steuerung der Aktoren können direkt auf dem ESP32 erfolgen 
-        oder an ein Steuerprogramm auf dem PC weitergegeben werden. 
-       </p>
-       <p>
-        Dieses Programm koordiniert anschließend die Steuerbefehle für den Dobot Magician und den ESP32.
-        </p>
-        <p>
-        Weitere Mikrocontroller können über den ESP32 als Kommunikationsknoten über geeignete Schnittstellen 
-        in das Gesamtsystem eingebunden werden.
-    </p>
+        Die vom ESP32 ausgewerteten Sensoren und angesteuerten Aktoren können
+        entweder am Dobot Magician befestigt sein oder sich im Arbeitsbereich
+        des Roboters befinden.
+      </p>
+      <p>
+        Die Verarbeitung der Sensordaten und die Steuerung der Aktoren können
+        direkt auf dem ESP32 erfolgen oder an ein Steuerprogramm auf dem PC
+        weitergegeben werden. Dieses Programm koordiniert anschließend die
+        Steuerbefehle für den Dobot Magician und den ESP32.
+      </p>
+      <p>
+        Weitere Mikrocontroller können über den ESP32 als Kommunikationsknoten
+        und über geeignete Schnittstellen in das Gesamtsystem eingebunden werden.
+      </p>
     </section>
+
     <section>
-     <p>
-      Der ESP32 überwacht einen Schalter und sendet anfangs den Status an den PC, 
-      danach wird jede Änderung des Status an den PC gesendet.
-     </p>
-     <p>Kommunikation erfolgt über geeignete Schnittstellen. WLAN und Serielle Schnittstellen sind zu testen.</p>
+      <h2>Schrittweise Entwicklung</h2>
+      <p>
+        Neue Hardware wird zunächst unabhängig vom Dobot mit kleinen,
+        übersichtlichen Programmen getestet. Erst wenn Anschluss, Versorgung
+        und Funktion geprüft sind, werden die erprobten Programmteile in die
+        gemeinsame ESP32-Dobot-Steuerung übernommen.
+      </p>
+      <p>
+        Den Anfang bilden die I²C-Portexpander PCF8574 und PCF8575, der
+        leistungsfähigere MCP23017, die PWM-Erweiterung PCA9685 und das
+        klassische Schieberegister 74HC595.
+      </p>
+      <p>
+        <a href="../Dobot-Python/befehlskette/hardwaretests/hardwaretest.html">
+          Hardwaretests und Testprogramme öffnen
+        </a>
+      </p>
+    </section>
 
-
-    </section>  
-    
+    <section>
+      <h2>Kommunikation mit dem PC</h2>
+      <p>
+        In einem ersten Versuchsaufbau überwacht der ESP32 einen Schalter. Nach
+        dem Programmstart sendet er dessen aktuellen Zustand an den PC.
+        Anschließend meldet er jede Zustandsänderung.
+      </p>
+      <p>
+        Für die Kommunikation werden geeignete Schnittstellen untersucht.
+        Zunächst testen wir die serielle Verbindung und WLAN getrennt, bevor sie
+        mit der Steuerung des Dobot Magician verbunden werden.
+      </p>
+    </section>
   </main>
-  <footer>© Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
     Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
     <script src="../../../js/script.js"></script>
   </footer>

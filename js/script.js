@@ -202,3 +202,66 @@ if (document.readyState === "loading") {
 } else {
   initializeCodeLinks();
 }
+
+function initialisiereBildVollansicht() {
+  const vorschaubilder = document.querySelectorAll('.topic-preview-image[src*="-250."]');
+  if (!vorschaubilder.length) {
+    return;
+  }
+
+  const vollansicht = document.createElement("div");
+  vollansicht.className = "image-fullsize-preview";
+  vollansicht.setAttribute("aria-hidden", "true");
+
+  const originalbild = document.createElement("img");
+  originalbild.alt = "";
+  vollansicht.appendChild(originalbild);
+  document.body.appendChild(vollansicht);
+
+  let timerId = null;
+  let aktivesVorschaubild = null;
+
+  function schliesseVollansicht() {
+    clearTimeout(timerId);
+    timerId = null;
+    aktivesVorschaubild = null;
+    vollansicht.classList.remove("is-visible");
+    vollansicht.setAttribute("aria-hidden", "true");
+    originalbild.removeAttribute("src");
+    originalbild.alt = "";
+  }
+
+  originalbild.addEventListener("mouseleave", schliesseVollansicht);
+
+  vorschaubilder.forEach(vorschaubild => {
+    vorschaubild.addEventListener("mouseenter", () => {
+      schliesseVollansicht();
+      aktivesVorschaubild = vorschaubild;
+      const bildquelle = vorschaubild.currentSrc || vorschaubild.src;
+      originalbild.src = bildquelle.replace(/-250(?=\.[^./?#]+(?:[?#]|$))/, "");
+      originalbild.alt = vorschaubild.alt;
+
+      timerId = setTimeout(() => {
+        if (aktivesVorschaubild !== vorschaubild) {
+          return;
+        }
+
+        timerId = null;
+        vollansicht.classList.add("is-visible");
+        vollansicht.setAttribute("aria-hidden", "false");
+      }, 2000);
+    });
+
+    vorschaubild.addEventListener("mouseleave", () => {
+      if (!vollansicht.classList.contains("is-visible")) {
+        schliesseVollansicht();
+      }
+    });
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initialisiereBildVollansicht);
+} else {
+  initialisiereBildVollansicht();
+}
