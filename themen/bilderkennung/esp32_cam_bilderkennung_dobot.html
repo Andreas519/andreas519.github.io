@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-CAM, Bilderkennung und Dobot</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #5f6b7a;
+      --accent: #0b5ed7;
+      --accent-soft: #eaf2ff;
+      --border: #d9e2ef;
+      --good: #147d35;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(135deg, #0b5ed7, #173f73);
+      color: white;
+      padding: 3rem 1.5rem;
+    }
+    header .wrap, main {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin: 0 0 .6rem; font-size: clamp(2rem, 5vw, 3.2rem); }
+    h2 {
+      margin-top: 2.4rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: .45rem;
+      color: #173f73;
+    }
+    h3 { color: #244f85; }
+    main { padding: 2rem 1rem 4rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.25rem 1.4rem;
+      margin: 1rem 0;
+      box-shadow: 0 6px 20px rgba(28, 55, 90, .06);
+    }
+    .question {
+      border-left: 5px solid var(--accent);
+      background: var(--accent-soft);
+    }
+    .formula {
+      font-family: "Courier New", monospace;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: white;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: .75rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eef4fb; }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin: 1rem auto;
+    }
+    code, pre {
+      font-family: "Courier New", monospace;
+    }
+    pre {
+      background: #111827;
+      color: #f9fafb;
+      padding: 1rem;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    .recommendation {
+      border-left: 5px solid var(--good);
+      background: #edf9f0;
+    }
+    .small { color: var(--muted); font-size: .95rem; }
+    ul { padding-left: 1.3rem; }
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border);
+      background: white;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>ESP32-CAM, Bilderkennung und Dobot</h1>
+    <p>Zusammenfassung ab der Anfrage zur Erfassung einer Fläche von 70 × 70 cm.</p>
+  </div>
+</header>
+
+<main>
+  <section class="card question">
+    <h2>1. Ausgangsfrage</h2>
+    <p><strong>Welche Entfernung sollte eine ESP32-CAM haben, um eine Fläche von 70 × 70 cm erfassen zu können?</strong></p>
+  </section>
+
+  <section class="card">
+    <h2>2. Erforderlicher Abstand der Kamera</h2>
+    <p>Der notwendige Abstand hängt hauptsächlich vom Blickwinkel des verwendeten Objektivs ab. Viele ESP32-CAM-Module mit OV2640-Kamera besitzen einen horizontalen Blickwinkel von ungefähr 60°.</p>
+
+    <div class="formula">
+      Bildbreite = 2 · d · tan(30°)<br>
+      d = 70 cm / (2 · tan(30°))<br>
+      d ≈ 60,6 cm
+    </div>
+
+    <p>Für eine Fläche von 70 × 70 cm ist daher ein Abstand von ungefähr <strong>60 bis 65 cm</strong> zwischen Kamera und Arbeitsfläche ein sinnvoller Ausgangswert.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Erfasste Fläche</th>
+          <th>Ungefährer Abstand</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>30 × 30 cm</td><td>ca. 26 cm</td></tr>
+        <tr><td>50 × 50 cm</td><td>ca. 43 cm</td></tr>
+        <tr><td><strong>70 × 70 cm</strong></td><td><strong>ca. 60 cm</strong></td></tr>
+        <tr><td>100 × 100 cm</td><td>ca. 87 cm</td></tr>
+      </tbody>
+    </table>
+
+    <p>Für die Lochrasterplatte mit ungefähr 70 × 50 cm bietet sich eine Montagehöhe von etwa <strong>60 bis 70 cm</strong> an. Ein kleiner Rand außerhalb der Platte erleichtert die Kalibrierung.</p>
+  </section>
+
+  <section class="card">
+    <h2>3. Skizze des Aufbaus</h2>
+    <img src="a_clean_technical_infographic_diagram_layout_li.png" alt="Technische Skizze zur Montagehöhe einer ESP32-CAM über einer Lochrasterplatte">
+    <p class="small">Die Grafik zeigt einen möglichen Aufbau mit senkrecht montierter Kamera, Arbeitsbereich, Lochrasterplatte und Dobot.</p>
+  </section>
+
+  <section class="card">
+    <h2>4. Wichtige Hinweise für eine zuverlässige Erkennung</h2>
+    <ul>
+      <li>Kamera möglichst senkrecht über der Platte montieren</li>
+      <li>Feste und verwindungsarme Halterung verwenden</li>
+      <li>Gleichmäßige Beleuchtung ohne harte Schatten sicherstellen</li>
+      <li>Weitwinkelverzerrung möglichst gering halten</li>
+      <li>Referenzpunkte oder das Lochraster zur Kalibrierung verwenden</li>
+      <li>Bildkoordinaten anschließend in Dobot-Koordinaten umrechnen</li>
+    </ul>
+  </section>
+
+  <section class="card question">
+    <h2>5. Frage zur Bilderkennung</h2>
+    <p><strong>Welche KI-Applikation kann auf einem ESP, Raspberry Pi oder im Steuerprogramm die Bilderkennung übernehmen?</strong></p>
+  </section>
+
+  <section class="card recommendation">
+    <h2>6. Empfohlene Lösung</h2>
+    <p><strong>ESP32-CAM als Kamera, Python auf dem PC als Auswertungssystem.</strong></p>
+    <p>Die ESP32-CAM nimmt das Bild auf und überträgt es an das vorhandene Python-Steuerprogramm. Dort übernehmen OpenCV und bei Bedarf YOLO die Auswertung.</p>
+
+    <pre>ESP32-CAM
+    ↓ Bildübertragung per WLAN
+Python-Steuerprogramm
+    ├── OpenCV: Bild einlesen und entzerren
+    ├── YOLO: Körper erkennen
+    ├── Koordinaten umrechnen
+    └── dobot.py: Roboter bewegen</pre>
+
+    <p>Diese Lösung ist für den Einstieg besonders geeignet, weil ausreichend Rechenleistung vorhanden ist und Fehler leicht untersucht werden können.</p>
+  </section>
+
+  <section class="card">
+    <h2>7. Geeignete Softwarelösungen</h2>
+
+    <h3>OpenCV</h3>
+    <p>OpenCV eignet sich für klassische Bildverarbeitung:</p>
+    <ul>
+      <li>Farberkennung</li>
+      <li>Konturerkennung</li>
+      <li>Kreis- und Rechteckerkennung</li>
+      <li>Bestimmung von Mittelpunkt und Größe</li>
+      <li>Entzerrung und Kamerakalibrierung</li>
+    </ul>
+
+    <h3>YOLO</h3>
+    <p>YOLO eignet sich für trainierte Objekterkennung. Es kann mehrere Objekte gleichzeitig erkennen und für jedes Objekt Klasse, Position und Wahrscheinlichkeit ausgeben.</p>
+
+    <h3>Edge Impulse mit FOMO</h3>
+    <p>Für eine direkte Erkennung auf einem ESP32 oder ESP32-S3 ist Edge Impulse mit FOMO geeignet. Das Modell wird mit eigenen Bildern trainiert und anschließend als Bibliothek auf den Mikrocontroller übertragen.</p>
+
+    <h3>ESP-DL</h3>
+    <p>ESP-DL ist Espressifs eigene Bibliothek für neuronale Netze auf ESP32-Plattformen. Sie ist leistungsfähig, aber technischer in der Einrichtung.</p>
+
+    <h3>Raspberry Pi mit OpenCV und YOLO</h3>
+    <p>Ein Raspberry Pi 4 oder 5 kann Kameraaufnahme, Bilderkennung und Dobot-Steuerung gemeinsam übernehmen. Das ist eine gute Lösung für eine später eigenständig arbeitende Anlage.</p>
+  </section>
+
+  <section class="card">
+    <h2>8. Vergleich der Plattformen</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Plattform</th>
+          <th>Geeignete Lösung</th>
+          <th>Bewertung</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ESP32-CAM</td>
+          <td>Edge Impulse/FOMO oder ESP-DL</td>
+          <td>Gut für einfache Edge-KI, aber begrenzte Rechenleistung</td>
+        </tr>
+        <tr>
+          <td>ESP32-S3 mit PSRAM</td>
+          <td>Edge Impulse, ESP-DL</td>
+          <td>Besser für lokale KI als die klassische ESP32-CAM</td>
+        </tr>
+        <tr>
+          <td>Raspberry Pi</td>
+          <td>OpenCV und YOLO</td>
+          <td>Sehr gut für eine eigenständige Sortieranlage</td>
+        </tr>
+        <tr>
+          <td>PC-Steuerprogramm</td>
+          <td>Python, OpenCV und YOLO</td>
+          <td>Beste Einstiegs- und Entwicklungsumgebung</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>9. Erkennung geometrischer Körper</h2>
+    <p>Die KI kann beispielsweise folgende Klassen unterscheiden:</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Klasse</th>
+          <th>Typische Merkmale</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Würfel</td><td>gleich lange Kanten, quadratische Flächen</td></tr>
+        <tr><td>Quader</td><td>rechteckige Flächen, unterschiedliche Kantenlängen</td></tr>
+        <tr><td>Zylinder</td><td>runde Grundfläche, gekrümmte Mantelfläche</td></tr>
+        <tr><td>Kegel</td><td>runde Grundfläche und Spitze</td></tr>
+        <tr><td>Kugel</td><td>keine Kanten und keine Ecken</td></tr>
+      </tbody>
+    </table>
+
+    <p>Zusätzlich können Farbe, Größe, Lage, Orientierung, Anzahl und Position der Objekte bestimmt werden.</p>
+  </section>
+
+  <section class="card">
+    <h2>10. Grenzen einer einzelnen Kamera</h2>
+    <ul>
+      <li>Ein stehender Zylinder kann von oben wie ein Kreis aussehen.</li>
+      <li>Eine Kugel erscheint ebenfalls kreisförmig.</li>
+      <li>Würfel und Quader können aus bestimmten Perspektiven ähnlich wirken.</li>
+      <li>Schatten, schlechte Beleuchtung und Überdeckungen verschlechtern die Erkennung.</li>
+    </ul>
+
+    <p>Zur Verbesserung helfen eine leicht schräge Perspektive, bekannte Objektgrößen, eine zusätzliche Seitenkamera oder ein trainiertes YOLO-Modell.</p>
+  </section>
+
+  <section class="card recommendation">
+    <h2>11. Sinnvolle Entwicklungsstufen</h2>
+    <ol>
+      <li>Farbe und Lage mit OpenCV erkennen</li>
+      <li>Einfache Grundkörper über Konturen und Größen unterscheiden</li>
+      <li>Mehrere Körper mit YOLO zuverlässig erkennen</li>
+      <li>Bildkoordinaten in Dobot-Koordinaten umrechnen</li>
+      <li>Dobot sortiert die erkannten Körper automatisch</li>
+      <li>Später auf Raspberry Pi oder ESP32-S3 umstellen</li>
+    </ol>
+  </section>
+
+  <section class="card recommendation">
+    <h2>12. Fazit</h2>
+    <p>Für den ersten funktionsfähigen Aufbau ist folgende Kombination am sinnvollsten:</p>
+    <p><strong>ESP32-CAM als Bildquelle + Python mit OpenCV und YOLO im vorhandenen Dobot-Steuerprogramm.</strong></p>
+    <p>Damit lassen sich Bilderkennung, Koordinatenbestimmung, Lagerverwaltung und Robotersteuerung schrittweise miteinander verbinden.</p>
+  </section>
+</main>
+
+<footer>
+  Zusammenfassung für das Dobot- und ESP32-CAM-Projekt
+</footer>
+</body>
+</html>
