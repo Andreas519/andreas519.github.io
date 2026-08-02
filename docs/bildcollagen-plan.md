@@ -26,6 +26,7 @@ projekte/<projekt>/bilder/<projekt>-quer.png
 - [x] Bauelemente
 - [x] Elektronikmodule
 - [x] Robotiksysteme
+- [x] Bilderkennung
 
 
 Es werden weiteren Bilder benötigt für:
