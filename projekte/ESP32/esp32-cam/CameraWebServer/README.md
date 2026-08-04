@@ -1,12 +1,14 @@
 # CameraWebServer
 
-Aktuelle Version: **0.3.0**
+Aktuelle Version: **0.4.0**
 
 ## Lokale WLAN-Startdaten
 
-`wifi_secrets.example.h` nach `wifi_secrets.h` kopieren und dort das erste
-WLAN eintragen. Die lokale Datei `wifi_secrets.h` wird von Git ignoriert.
-Nach dem ersten Start liegen die Zugangsdaten dauerhaft im NVS-Flash.
+`wifi_secrets.example.h` nach `wifi_secrets.h` kopieren und dort bis zu acht
+WLANs eintragen. Die lokale Datei `wifi_secrets.h` wird von Git ignoriert.
+Noch nicht gespeicherte Einträge werden beim Start in den NVS-Flash übernommen.
+Bereits gespeicherte Einträge werden dabei nicht überschrieben. Ein leeres
+Passwort kennzeichnet ein offenes WLAN.
 
 ## BLE-Dialog
 

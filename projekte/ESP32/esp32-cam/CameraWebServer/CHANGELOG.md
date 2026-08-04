@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## 0.4.0 – 2026-08-04
+
+- Mehrere lokale Start-WLANs in `wifi_secrets.h` unterstützen.
+- Noch nicht im NVS vorhandene lokale WLANs bei jedem Start sicher ergänzen.
+- Bereits gespeicherte WLAN-Zugänge und Passwörter nicht überschreiben.
+- Offene WLANs durch ein leeres Passwort unterstützen.
+
 ## 0.3.0 – 2026-08-04
 
 - Bis zu acht WLAN-Zugänge dauerhaft im NVS-Flash speichern.

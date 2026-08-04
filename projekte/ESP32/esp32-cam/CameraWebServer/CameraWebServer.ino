@@ -15,13 +15,10 @@
 #if __has_include("wifi_secrets.h")
 #include "wifi_secrets.h"
 #else
-#define INITIAL_WIFI_SSID_VALUE ""
-#define INITIAL_WIFI_PASSWORD_VALUE ""
+#define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.3.0";
-const char *INITIAL_WIFI_SSID = INITIAL_WIFI_SSID_VALUE;
-const char *INITIAL_WIFI_PASSWORD = INITIAL_WIFI_PASSWORD_VALUE;
+const char *PROGRAM_VERSION = "0.4.0";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -31,6 +28,9 @@ struct WifiCredential {
   String ssid;
   String password;
 };
+
+const WifiCredential initialWifiNetworks[] = { INITIAL_WIFI_NETWORKS };
+const size_t initialWifiNetworkCount = sizeof(initialWifiNetworks) / sizeof(initialWifiNetworks[0]);
 
 const char *BLE_SERVICE_UUID = "6E400001-B5A3-F393-E0A9-E50E24DCCA9E";
 const char *BLE_RX_UUID = "6E400002-B5A3-F393-E0A9-E50E24DCCA9E";
@@ -127,13 +127,7 @@ void loadWifiNetworks() {
 
   if (!preferences.getBool("initialized", false)) {
     preferences.putBool("initialized", true);
-    if (strlen(INITIAL_WIFI_SSID) > 0) {
-      preferences.putUChar("count", 1);
-      preferences.putString("ssid0", INITIAL_WIFI_SSID);
-      preferences.putString("pass0", INITIAL_WIFI_PASSWORD);
-    } else {
-      preferences.putUChar("count", 0);
-    }
+    preferences.putUChar("count", 0);
   }
 
   wifiNetworkCount = min(preferences.getUChar("count", 0), MAX_WIFI_NETWORKS);
@@ -142,6 +136,31 @@ void loadWifiNetworks() {
     wifiNetworks[i].password = preferences.getString(("pass" + String(i)).c_str(), "");
   }
   preferences.end();
+
+  bool importedNetwork = false;
+  for (size_t initialIndex = 0; initialIndex < initialWifiNetworkCount; initialIndex++) {
+    if (initialWifiNetworks[initialIndex].ssid.isEmpty()) {
+      continue;
+    }
+
+    bool alreadySaved = false;
+    for (uint8_t savedIndex = 0; savedIndex < wifiNetworkCount; savedIndex++) {
+      if (wifiNetworks[savedIndex].ssid == initialWifiNetworks[initialIndex].ssid) {
+        alreadySaved = true;
+        break;
+      }
+    }
+
+    if (!alreadySaved && wifiNetworkCount < MAX_WIFI_NETWORKS) {
+      wifiNetworks[wifiNetworkCount++] = initialWifiNetworks[initialIndex];
+      importedNetwork = true;
+      Serial.println("Imported local WiFi: " + initialWifiNetworks[initialIndex].ssid);
+    }
+  }
+
+  if (importedNetwork) {
+    saveWifiNetworks();
+  }
 }
 
 void saveWifiNetworks() {
@@ -427,6 +446,8 @@ void setup() {
 #endif
 
   loadWifiNetworks();
+  Serial.print("Saved WiFi networks: ");
+  Serial.println(wifiNetworkCount);
   bool wifiConnected = connectToKnownWifi();
 
   setupBluetoothDialog();
