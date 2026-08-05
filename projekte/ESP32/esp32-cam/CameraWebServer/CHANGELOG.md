@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## 0.7.0 – 2026-08-05
+
+- Das im Windows-Dialog ausgewählte gespeicherte WLAN gezielt verbinden.
+- Alle im Flash gespeicherten WLAN-Namen beim Start seriell ausgeben.
+- Gespeicherte WLANs im Windows-Dialog automatisch als Auswahlliste laden.
+- Eine erneute BLE-Verbindung ohne Neustart des Windows-Dialogs ermöglichen.
+
 ## Vorgemerkt für 0.6.1
 
 - Helligkeit der Blitz-LED im BLE-Modus deutlich reduzieren.

@@ -17,6 +17,7 @@ class BleController:
     def __init__(self, events):
         self.events = events
         self.client = None
+        self.notification_buffer = ""
         self.loop = asyncio.new_event_loop()
         self.thread = threading.Thread(target=self._run_loop, daemon=True)
         self.thread.start()
@@ -35,6 +36,9 @@ class BleController:
         if self.client and self.client.is_connected:
             self.events.put(("status", "Bereits verbunden"))
             return
+
+        if self.client:
+            await self._disconnect_silently()
 
         self.events.put(("status", f"Suche {DEVICE_NAME} ..."))
         try:
@@ -55,9 +59,12 @@ class BleController:
                 raise RuntimeError("RX- oder TX-Characteristic wurde nicht gefunden.")
 
             await self.client.start_notify(TX_UUID, self._on_notification)
+            self.notification_buffer = ""
             self.events.put(("connected", True))
             self.events.put(("status", f"Verbunden mit {DEVICE_NAME}"))
             self.events.put(("console", "\n--- Verbunden ---\n"))
+            self.events.put(("wifi_list_reset", None))
+            await self._send("WLAN LISTE", "WLAN LISTE (automatisch)")
         except Exception as error:
             await self._disconnect_silently()
             self.events.put(("connected", False))
@@ -82,6 +89,8 @@ class BleController:
                 self.client = None
 
     def send(self, command, display_command=None):
+        if command.strip().upper() == "WLAN LISTE":
+            self.events.put(("wifi_list_reset", None))
         self._submit(self._send(command, display_command))
 
     async def _send(self, command, display_command):
@@ -112,9 +121,17 @@ class BleController:
             self.events.put(("error", f"Senden fehlgeschlagen: {error}"))
 
     def _on_notification(self, _characteristic, data):
-        self.events.put(("console", bytes(data).decode("utf-8", errors="replace")))
+        self.notification_buffer += bytes(data).decode("utf-8", errors="replace")
+        while "\n" in self.notification_buffer:
+            line, self.notification_buffer = self.notification_buffer.split("\n", 1)
+            self.events.put(("console", line + "\n"))
+            number, separator, ssid = line.strip().partition(": ")
+            if separator and number.isdigit() and ssid:
+                self.events.put(("wifi_network", ssid))
 
-    def _on_disconnected(self, _client):
+    def _on_disconnected(self, client):
+        if self.client is client:
+            self.client = None
         self.events.put(("connected", False))
         self.events.put(("status", "Verbindung wurde getrennt"))
         self.events.put(("console", "\n--- ESP32-CAM getrennt ---\n"))
@@ -160,7 +177,7 @@ class BleDialogApp:
         quick.pack(fill="x", pady=(12, 0))
         ttk.Label(quick, text="WLAN-Name (SSID)").grid(row=0, column=0, sticky="w")
         ttk.Label(quick, text="Passwort").grid(row=0, column=1, sticky="w", padx=(8, 0))
-        self.ssid_entry = ttk.Entry(quick)
+        self.ssid_entry = ttk.Combobox(quick)
         self.ssid_entry.grid(row=1, column=0, sticky="ew")
         self.password_entry = ttk.Entry(quick, show="•")
         self.password_entry.grid(row=1, column=1, sticky="ew", padx=(8, 0))
@@ -178,11 +195,17 @@ class BleDialogApp:
             ("Hilfe", "HILFE"),
             ("Status", "STATUS"),
             ("WLAN-Liste", "WLAN LISTE"),
-            ("WLAN verbinden und neu starten", "WLAN VERBINDEN"),
         ):
             button = ttk.Button(actions, text=label, command=lambda value=command: self.controller.send(value))
             button.pack(side="left", padx=(0, 8))
             self.quick_buttons.append(button)
+        self.connect_wifi_button = ttk.Button(
+            actions,
+            text="Ausgewähltes WLAN verbinden und neu starten",
+            command=self._connect_wifi,
+        )
+        self.connect_wifi_button.pack(side="left", padx=(0, 8))
+        self.quick_buttons.append(self.connect_wifi_button)
 
         terminal = ttk.LabelFrame(outer, text="Dialog", padding=10)
         terminal.pack(fill="both", expand=True, pady=(12, 0))
@@ -233,6 +256,13 @@ class BleDialogApp:
             return
         self.controller.send(f"WLAN LOESCHEN {ssid}")
 
+    def _connect_wifi(self):
+        ssid = self.ssid_entry.get().strip()
+        if not ssid:
+            messagebox.showwarning("WLAN verbinden", "Bitte ein gespeichertes WLAN auswählen.")
+            return
+        self.controller.send(f"WLAN VERBINDEN {ssid}")
+
     def _send_manual(self):
         command = self.command_entry.get()
         if command.strip():
@@ -260,6 +290,13 @@ class BleDialogApp:
                     self.status_label.configure(text=value)
                 elif event == "connected":
                     self._set_connected(value)
+                elif event == "wifi_list_reset":
+                    self.ssid_entry.configure(values=())
+                elif event == "wifi_network":
+                    values = list(self.ssid_entry.cget("values"))
+                    if value not in values:
+                        values.append(value)
+                        self.ssid_entry.configure(values=values)
                 elif event == "error":
                     messagebox.showerror("Bluetooth LE", value)
         except queue.Empty:

@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.6.0**
+Aktuelle Version: **0.7.0**
 
 ## Lokale WLAN-Startdaten
 
@@ -32,7 +32,7 @@ STATUS
 WLAN LISTE
 WLAN HINZUFUEGEN <SSID>|<PASSWORT>
 WLAN LOESCHEN <SSID>
-WLAN VERBINDEN
+WLAN VERBINDEN <SSID>
 ```
 
 Bis zu acht WLAN-Zugänge können gespeichert werden. Kennwörter werden im

@@ -19,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.6.0";
+const char *PROGRAM_VERSION = "0.7.0";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -55,7 +55,7 @@ void startCameraServer();
 void setupLedFlash();
 void loadWifiNetworks();
 void saveWifiNetworks();
-bool connectToKnownWifi();
+bool connectToKnownWifi(String preferredSsid = "");
 void setupBluetoothDialog();
 void handleBluetoothDialog();
 void executeBluetoothCommand(String command);
@@ -212,7 +212,7 @@ void saveWifiNetworks() {
   preferences.end();
 }
 
-bool connectToKnownWifi() {
+bool connectToKnownWifi(String preferredSsid) {
   if (wifiNetworkCount == 0) {
     Serial.println("No saved WiFi network");
     return false;
@@ -221,6 +221,41 @@ bool connectToKnownWifi() {
   WiFi.disconnect();
   WiFi.mode(WIFI_STA);
   WiFi.setSleep(false);
+
+  preferredSsid.trim();
+  if (!preferredSsid.isEmpty()) {
+    int preferredIndex = -1;
+    for (uint8_t i = 0; i < wifiNetworkCount; i++) {
+      if (wifiNetworks[i].ssid == preferredSsid) {
+        preferredIndex = i;
+        break;
+      }
+    }
+    if (preferredIndex < 0) {
+      Serial.println("Selected WiFi is not saved: " + preferredSsid);
+      return false;
+    }
+
+    Serial.print("Connecting to selected WiFi: ");
+    Serial.println(preferredSsid);
+    WiFi.begin(
+      wifiNetworks[preferredIndex].ssid.c_str(),
+      wifiNetworks[preferredIndex].password.c_str()
+    );
+    unsigned long deadline = millis() + 12000;
+    while (WiFi.status() != WL_CONNECTED && static_cast<long>(deadline - millis()) > 0) {
+      delay(250);
+      Serial.print(".");
+    }
+    Serial.println();
+    if (WiFi.status() == WL_CONNECTED) {
+      Serial.print("WiFi connected, IP: ");
+      Serial.println(WiFi.localIP());
+      return true;
+    }
+    Serial.println("No connection to selected WiFi");
+    return false;
+  }
 
   int16_t rssi[MAX_WIFI_NETWORKS];
   for (uint8_t i = 0; i < wifiNetworkCount; i++) {
@@ -280,7 +315,7 @@ void executeBluetoothCommand(String command) {
     sendBluetoothLine("  WLAN LISTE");
     sendBluetoothLine("  WLAN HINZUFUEGEN <SSID>|<PASSWORT>");
     sendBluetoothLine("  WLAN LOESCHEN <SSID>");
-    sendBluetoothLine("  WLAN VERBINDEN");
+    sendBluetoothLine("  WLAN VERBINDEN <SSID>");
   } else if (upperCommand == "STATUS") {
     sendBluetoothLine("Bluetooth: verbunden");
     if (WiFi.status() == WL_CONNECTED) {
@@ -348,9 +383,15 @@ void executeBluetoothCommand(String command) {
     wifiNetworkCount--;
     saveWifiNetworks();
     sendBluetoothLine("WLAN geloescht: " + deleteSsid);
-  } else if (upperCommand == "WLAN VERBINDEN") {
-    sendBluetoothLine("WLAN-Verbindung wird aufgebaut ...");
-    if (connectToKnownWifi()) {
+  } else if (upperCommand == "WLAN VERBINDEN" || upperCommand.startsWith("WLAN VERBINDEN ")) {
+    String selectedSsid = command.substring(14);
+    selectedSsid.trim();
+    if (selectedSsid.isEmpty()) {
+      sendBluetoothLine("Bitte ein WLAN auswaehlen.");
+      return;
+    }
+    sendBluetoothLine("Verbindung mit " + selectedSsid + " wird aufgebaut ...");
+    if (connectToKnownWifi(selectedSsid)) {
       sendBluetoothLine("Verbunden mit " + WiFi.SSID());
       sendBluetoothLine("IP: " + WiFi.localIP().toString());
       sendBluetoothLine("Neustart in den Webserver-Modus ...");
@@ -477,16 +518,11 @@ void setup() {
 
   loadWifiNetworks();
   Serial.print("Saved WiFi networks: ");
-  bool firstPrintedNetwork = true;
-  for (size_t i = 0; i < initialWifiNetworkCount; i++) {
-    if (initialWifiNetworks[i].ssid.isEmpty()) {
-      continue;
-    }
-    if (!firstPrintedNetwork) {
+  for (uint8_t i = 0; i < wifiNetworkCount; i++) {
+    if (i > 0) {
       Serial.print(",");
     }
-    Serial.print(initialWifiNetworks[i].ssid);
-    firstPrintedNetwork = false;
+    Serial.print(wifiNetworks[i].ssid);
   }
   Serial.println();
   bool firstBluetoothSetup = isBluetoothInitialSetupPending();
