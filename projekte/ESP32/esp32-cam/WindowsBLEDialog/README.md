@@ -9,6 +9,10 @@ das Auswahlfeld. Beim Neustart wird ausschließlich das dort ausgewählte WLAN
 verwendet. Nach einer BLE-Trennung kann das Modul ohne Neustart des Dialogs
 erneut gesucht werden.
 
+Der zu suchende BLE-Modulname kann im Feld **Modulname** geändert werden.
+Erfolgreich gefundene Namen bleiben dauerhaft gespeichert und können beim
+nächsten Start aus der Liste ausgewählt werden.
+
 ## Start
 
 `ESP32-CAM-BLE-Dialog starten.bat` doppelt anklicken.
