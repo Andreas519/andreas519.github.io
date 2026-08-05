@@ -313,6 +313,24 @@ esp_err_t scheduledPhotoHandler(httpd_req_t *request) {
   return result;
 }
 
+esp_err_t bluetoothModeHandler(httpd_req_t *request) {
+  Preferences preferences;
+  preferences.begin("device-mode", false);
+  preferences.putBool("ble-next", true);
+  preferences.end();
+
+  httpd_resp_set_type(request, "application/json");
+  httpd_resp_set_hdr(request, "Cache-Control", "no-store");
+  esp_err_t result = httpd_resp_sendstr(
+    request,
+    "{\"status\":\"restarting\",\"mode\":\"ble\"}"
+  );
+  Serial.println("HTTP request: restart into Bluetooth mode");
+  delay(750);
+  ESP.restart();
+  return result;
+}
+
 }  // namespace
 
 void setupScheduledCapture() {
@@ -425,8 +443,15 @@ void registerScheduledCaptureHandlers(httpd_handle_t server) {
     .handler = scheduledPhotoHandler,
     .user_ctx = nullptr,
   };
+  httpd_uri_t bluetoothModeUri = {
+    .uri = "/ble-mode",
+    .method = HTTP_POST,
+    .handler = bluetoothModeHandler,
+    .user_ctx = nullptr,
+  };
 
   httpd_register_uri_handler(server, &settingsUri);
   httpd_register_uri_handler(server, &configUri);
   httpd_register_uri_handler(server, &photoUri);
+  httpd_register_uri_handler(server, &bluetoothModeUri);
 }
