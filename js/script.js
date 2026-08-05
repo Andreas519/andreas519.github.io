@@ -204,7 +204,7 @@ if (document.readyState === "loading") {
 }
 
 function initialisiereBildVollansicht() {
-  const vorschaubilder = document.querySelectorAll('.topic-preview-image[src*="-250."]');
+  const vorschaubilder = document.querySelectorAll('.topic-preview-image[src*="-250."], .hover-fullsize-image');
   if (!vorschaubilder.length) {
     return;
   }

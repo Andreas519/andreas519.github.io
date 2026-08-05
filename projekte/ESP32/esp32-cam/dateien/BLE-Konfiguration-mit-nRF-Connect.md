@@ -6,7 +6,7 @@ iPhone und dem ESP32-CAM-Modul. Das Modul meldet sich als
 
 ## 1. Verbindung und BLE-Kanäle
 
-![nRF Connect zeigt den verbundenen ESP32-CAM und seine BLE-Kanäle](bilder/ble-nrf-connect-01-uebersicht.png)
+![nRF Connect zeigt den verbundenen ESP32-CAM und seine BLE-Kanäle](../bilder/ble-nrf-connect-01-uebersicht.png)
 
 Der Dienst besitzt zwei wichtige Kanäle:
 
@@ -17,7 +17,7 @@ Der Dienst besitzt zwei wichtige Kanäle:
 
 ## 2. Einen Befehl senden
 
-![Write-Kanal mit dem als Hex-Wert gesendeten Befehl HILFE](bilder/ble-nrf-connect-02-write.png)
+![Write-Kanal mit dem als Hex-Wert gesendeten Befehl HILFE](../bilder/ble-nrf-connect-02-write.png)
 
 Der Wert `0x48494C46450A` entspricht dem UTF-8- beziehungsweise ASCII-Text:
 
@@ -30,7 +30,7 @@ vollständig übertragen wurde.
 
 ## 3. Antworten abonnieren
 
-![Notify-Kanal mit Teilen der vom ESP32-CAM gesendeten Hilfe](bilder/ble-nrf-connect-03-notify-hilfe.png)
+![Notify-Kanal mit Teilen der vom ESP32-CAM gesendeten Hilfe](../bilder/ble-nrf-connect-03-notify-hilfe.png)
 
 Im Notify-Kanal muss die Benachrichtigung abonniert sein. nRF Connect zeigt
 die empfangenen Antworten mit Zeitstempel an. Längere Zeilen können auf mehrere
@@ -38,7 +38,7 @@ BLE-Pakete verteilt erscheinen.
 
 ## 4. Antwort des Moduls
 
-![Notify-Kanal mit einer in mehrere BLE-Pakete aufgeteilten Antwort](bilder/ble-nrf-connect-04-notify-antwort.png)
+![Notify-Kanal mit einer in mehrere BLE-Pakete aufgeteilten Antwort](../bilder/ble-nrf-connect-04-notify-antwort.png)
 
 Die drei sichtbaren Teile
 

@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## 0.8.0 – 2026-08-05
+
+- Neue Einzelaufnahme über den PC-Endpunkt `/photo-capture` bereitstellen.
+- Windows-Programm zum Anfordern, Anzeigen und Speichern eines Fotos ergänzen.
+- Den gesuchten BLE-Modulnamen im Windows-Dialog bearbeitbar machen.
+- Erfolgreich gefundene BLE-Modulnamen dauerhaft als Auswahlliste speichern.
+
 ## 0.7.1 – 2026-08-05
 
 - Das ausgewählte WLAN vor dem Verlassen des BLE-Modus vormerken.

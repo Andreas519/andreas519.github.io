@@ -1,13 +1,16 @@
 import asyncio
+import json
+import os
 import queue
 import threading
 import tkinter as tk
+from pathlib import Path
 from tkinter import messagebox, ttk
 
 from bleak import BleakClient, BleakScanner
 
 
-DEVICE_NAME = "ESP32-CAM-Setup"
+DEFAULT_DEVICE_NAME = "ESP32-CAM-Setup"
 SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e"
 RX_UUID = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 TX_UUID = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
@@ -29,10 +32,10 @@ class BleController:
     def _submit(self, coroutine):
         return asyncio.run_coroutine_threadsafe(coroutine, self.loop)
 
-    def connect(self):
-        self._submit(self._connect())
+    def connect(self, device_name):
+        self._submit(self._connect(device_name))
 
-    async def _connect(self):
+    async def _connect(self, device_name):
         if self.client and self.client.is_connected:
             self.events.put(("status", "Bereits verbunden"))
             return
@@ -40,15 +43,16 @@ class BleController:
         if self.client:
             await self._disconnect_silently()
 
-        self.events.put(("status", f"Suche {DEVICE_NAME} ..."))
+        self.events.put(("status", f"Suche {device_name} ..."))
         try:
-            device = await BleakScanner.find_device_by_name(DEVICE_NAME, timeout=12.0)
+            device = await BleakScanner.find_device_by_name(device_name, timeout=12.0)
             if device is None:
                 raise RuntimeError(
                     "Modul nicht gefunden. Prüfe, ob der BLE-Konfigurationsmodus aktiv ist."
                 )
 
             self.events.put(("status", "Verbinde ..."))
+            self.events.put(("device_found", device.name or device_name))
             self.client = BleakClient(device, disconnected_callback=self._on_disconnected)
             await self.client.connect()
 
@@ -61,7 +65,7 @@ class BleController:
             await self.client.start_notify(TX_UUID, self._on_notification)
             self.notification_buffer = ""
             self.events.put(("connected", True))
-            self.events.put(("status", f"Verbunden mit {DEVICE_NAME}"))
+            self.events.put(("status", f"Verbunden mit {device.name or device_name}"))
             self.events.put(("console", "\n--- Verbunden ---\n"))
             self.events.put(("wifi_list_reset", None))
             await self._send("WLAN LISTE", "WLAN LISTE (automatisch)")
@@ -154,6 +158,7 @@ class BleDialogApp:
         self.events = queue.Queue()
         self.controller = BleController(self.events)
         self.connected = False
+        self.device_names = self._load_device_names()
 
         self._build_ui()
         self._set_connected(False)
@@ -166,9 +171,17 @@ class BleDialogApp:
 
         connection = ttk.LabelFrame(outer, text="Verbindung", padding=10)
         connection.pack(fill="x")
+        ttk.Label(connection, text="Modulname").pack(side="left")
+        self.device_name_entry = ttk.Combobox(connection, values=self.device_names, width=24)
+        self.device_name_entry.set(self.device_names[0])
+        self.device_name_entry.pack(side="left", padx=(8, 12))
         self.status_label = ttk.Label(connection, text="Nicht verbunden")
         self.status_label.pack(side="left", fill="x", expand=True)
-        self.connect_button = ttk.Button(connection, text="Modul suchen und verbinden", command=self.controller.connect)
+        self.connect_button = ttk.Button(
+            connection,
+            text="Suchen und verbinden",
+            command=self._connect_device,
+        )
         self.connect_button.pack(side="left", padx=(8, 0))
         self.disconnect_button = ttk.Button(connection, text="Trennen", command=self.controller.disconnect)
         self.disconnect_button.pack(side="left", padx=(8, 0))
@@ -238,6 +251,44 @@ class BleDialogApp:
         for button in self.quick_buttons:
             button.configure(state=state)
         self.connect_button.configure(state="disabled" if connected else "normal")
+        self.device_name_entry.configure(state="disabled" if connected else "normal")
+
+    @staticmethod
+    def _settings_path():
+        base = Path(os.environ.get("APPDATA", Path.home())) / "ESP32-CAM"
+        return base / "ble_dialog.json"
+
+    def _load_device_names(self):
+        try:
+            data = json.loads(self._settings_path().read_text(encoding="utf-8"))
+            names = [str(name).strip() for name in data.get("device_names", []) if str(name).strip()]
+        except (OSError, ValueError, TypeError):
+            names = []
+        if DEFAULT_DEVICE_NAME not in names:
+            names.insert(0, DEFAULT_DEVICE_NAME)
+        return names
+
+    def _save_device_names(self):
+        path = self._settings_path()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps({"device_names": self.device_names}, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+
+    def _remember_device_name(self, name):
+        name = name.strip()
+        if name and name not in self.device_names:
+            self.device_names.append(name)
+            self.device_name_entry.configure(values=self.device_names)
+            self._save_device_names()
+
+    def _connect_device(self):
+        name = self.device_name_entry.get().strip()
+        if not name:
+            messagebox.showwarning("Bluetooth LE", "Bitte einen Modulnamen eingeben oder auswählen.")
+            return
+        self.controller.connect(name)
 
     def _add_wifi(self):
         ssid = self.ssid_entry.get().strip()
@@ -297,6 +348,8 @@ class BleDialogApp:
                     if value not in values:
                         values.append(value)
                         self.ssid_entry.configure(values=values)
+                elif event == "device_found":
+                    self._remember_device_name(value)
                 elif event == "error":
                     messagebox.showerror("Bluetooth LE", value)
         except queue.Empty:

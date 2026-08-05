@@ -19,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.7.1";
+const char *PROGRAM_VERSION = "0.8.0";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";

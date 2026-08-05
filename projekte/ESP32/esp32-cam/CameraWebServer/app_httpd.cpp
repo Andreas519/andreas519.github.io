@@ -732,6 +732,19 @@ void startCameraServer() {
 #endif
   };
 
+  httpd_uri_t photo_capture_uri = {
+    .uri = "/photo-capture",
+    .method = HTTP_GET,
+    .handler = capture_handler,
+    .user_ctx = NULL
+#ifdef CONFIG_HTTPD_WS_SUPPORT
+    ,
+    .is_websocket = true,
+    .handle_ws_control_frames = false,
+    .supported_subprotocol = NULL
+#endif
+  };
+
   httpd_uri_t stream_uri = {
     .uri = "/stream",
     .method = HTTP_GET,
@@ -832,6 +845,7 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &cmd_uri);
     httpd_register_uri_handler(camera_httpd, &status_uri);
     httpd_register_uri_handler(camera_httpd, &capture_uri);
+    httpd_register_uri_handler(camera_httpd, &photo_capture_uri);
     httpd_register_uri_handler(camera_httpd, &bmp_uri);
 
     httpd_register_uri_handler(camera_httpd, &xclk_uri);

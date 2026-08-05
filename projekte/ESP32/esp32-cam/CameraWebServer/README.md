@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.7.1**
+Aktuelle Version: **0.8.0**
 
 ## Lokale WLAN-Startdaten
 
@@ -49,3 +49,9 @@ Einstellungen bleiben im NVS-Flash gespeichert.
 Nach einer WLAN-Verbindung aktualisiert das Modul seine Uhr über einen externen
 Zeitdienst. Eine erneute Aktualisierung erfolgt alle sechs Stunden. Anzeige und
 Foto-Dateinamen verwenden die deutsche Winter- beziehungsweise Sommerzeit.
+
+## Fotoabruf vom PC
+
+Eine neue Einzelaufnahme kann per `GET /photo-capture` angefordert werden. Das
+Windows-Programm im Ordner `WindowsPhotoClient` zeigt das empfangene JPEG an
+und kann es mit Datums- und Zeitstempel im Dateinamen speichern.
