@@ -1,5 +1,10 @@
 # Änderungsprotokoll
 
+## Vorgemerkt für 0.6.1
+
+- Helligkeit der Blitz-LED im BLE-Modus deutlich reduzieren.
+- Kurze AN-Zeit und niedrigeren PWM-Wert praktisch vergleichen.
+
 ## 0.6.0 – 2026-08-05
 
 - Nach Einführung dieser Version einmalig automatisch im BLE-Modus starten.
