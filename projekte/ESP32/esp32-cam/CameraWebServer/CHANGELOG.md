@@ -1,5 +1,18 @@
 # Änderungsprotokoll
 
+## 0.5.0 – 2026-08-04
+
+- Gespeicherte WLAN-Namen statt ihrer Anzahl beim Start ausgeben.
+- Browserseite `/photo-settings` für Auflösung und Aufnahmeintervall ergänzen.
+- Letztes zeitgesteuertes Foto unter `/scheduled-photo` bereitstellen.
+- Fotoeinstellungen dauerhaft im NVS-Flash speichern.
+- Systemzeit beim Start und anschließend alle sechs Stunden über einen
+  externen Zeitdienst aktualisieren.
+- Deutsche Winter- und Sommerzeit für Anzeige und Dateinamen berücksichtigen.
+- Kamera-Webserver und BLE-Konfiguration in getrennten, über GPIO 13
+  auswählbaren Betriebsarten stabil betreiben.
+- Videostream und Steuerung gemeinsam auf Port 80 bereitstellen.
+
 ## 0.4.0 – 2026-08-04
 
 - Mehrere lokale Start-WLANs in `wifi_secrets.h` unterstützen.

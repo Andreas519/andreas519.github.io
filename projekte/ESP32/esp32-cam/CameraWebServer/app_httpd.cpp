@@ -22,6 +22,7 @@
 #include "sdkconfig.h"
 #include "camera_index.h"
 #include "board_config.h"
+#include "scheduled_capture.h"
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -675,6 +676,9 @@ static esp_err_t index_handler(httpd_req_t *req) {
 void startCameraServer() {
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
   config.max_uri_handlers = 16;
+  config.stack_size = 3072;
+  config.max_open_sockets = 4;
+  config.lru_purge_enable = true;
 
   httpd_uri_t index_uri = {
     .uri = "/",
@@ -822,7 +826,8 @@ void startCameraServer() {
   ra_filter_init(&ra_filter, 20);
 
   log_i("Starting web server on port: '%u'", config.server_port);
-  if (httpd_start(&camera_httpd, &config) == ESP_OK) {
+  esp_err_t cameraServerResult = httpd_start(&camera_httpd, &config);
+  if (cameraServerResult == ESP_OK) {
     httpd_register_uri_handler(camera_httpd, &index_uri);
     httpd_register_uri_handler(camera_httpd, &cmd_uri);
     httpd_register_uri_handler(camera_httpd, &status_uri);
@@ -834,14 +839,15 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &greg_uri);
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
+    registerScheduledCaptureHandlers(camera_httpd);
+    httpd_register_uri_handler(camera_httpd, &stream_uri);
+    Serial.println("HTTP camera server started");
+  } else {
+    Serial.printf("HTTP camera server failed: 0x%x\n", cameraServerResult);
   }
 
-  config.server_port += 1;
-  config.ctrl_port += 1;
-  log_i("Starting stream server on port: '%u'", config.server_port);
-  if (httpd_start(&stream_httpd, &config) == ESP_OK) {
-    httpd_register_uri_handler(stream_httpd, &stream_uri);
-  }
+  stream_httpd = camera_httpd;
+  Serial.println("HTTP stream route started on port 80");
 }
 
 void setupLedFlash() {

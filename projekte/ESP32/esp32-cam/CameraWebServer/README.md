@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.4.0**
+Aktuelle Version: **0.5.0**
 
 ## Lokale WLAN-Startdaten
 
@@ -16,6 +16,11 @@ Das Modul meldet sich als `ESP32-CAM-Setup` und stellt einen Nordic-UART-
 kompatiblen BLE-Dienst bereit. Jeder Befehl wird mit einem Zeilenumbruch
 abgeschlossen.
 
+Für den BLE-Konfigurationsmodus GPIO 13 beim Neustart gedrückt halten. Kamera-
+Webserver und BLE laufen wegen des begrenzten internen RAMs des ESP32-CAM in
+getrennten Betriebsarten. Nach `WLAN VERBINDEN` startet das Modul automatisch
+in den Webserver-Modus neu.
+
 ```text
 HILFE
 STATUS
@@ -28,3 +33,14 @@ WLAN VERBINDEN
 Bis zu acht WLAN-Zugänge können gespeichert werden. Kennwörter werden im
 Dialog nicht angezeigt. Der NVS-Speicher ist dauerhaft, aber nicht
 verschlüsselt.
+
+## Zeitgesteuerte Fotos
+
+Unter `/photo-settings` lassen sich Auflösung und Aufnahmeintervall einstellen.
+Der Wert `0` deaktiviert automatische Aufnahmen. Das jeweils letzte Foto steht
+unter `/scheduled-photo` für den Browser oder ein PC-Programm bereit. Die
+Einstellungen bleiben im NVS-Flash gespeichert.
+
+Nach einer WLAN-Verbindung aktualisiert das Modul seine Uhr über einen externen
+Zeitdienst. Eine erneute Aktualisierung erfolgt alle sechs Stunden. Anzeige und
+Foto-Dateinamen verwenden die deutsche Winter- beziehungsweise Sommerzeit.

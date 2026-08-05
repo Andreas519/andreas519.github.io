@@ -11,6 +11,7 @@
 // Select camera model in board_config.h
 // ===========================
 #include "board_config.h"
+#include "scheduled_capture.h"
 
 #if __has_include("wifi_secrets.h")
 #include "wifi_secrets.h"
@@ -18,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.4.0";
+const char *PROGRAM_VERSION = "0.5.0";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -324,10 +325,9 @@ void executeBluetoothCommand(String command) {
     if (connectToKnownWifi()) {
       sendBluetoothLine("Verbunden mit " + WiFi.SSID());
       sendBluetoothLine("IP: " + WiFi.localIP().toString());
-      if (!cameraServerStarted) {
-        startCameraServer();
-        cameraServerStarted = true;
-      }
+      sendBluetoothLine("Neustart in den Webserver-Modus ...");
+      delay(750);
+      ESP.restart();
     } else {
       sendBluetoothLine("Keine Verbindung moeglich.");
     }
@@ -447,26 +447,47 @@ void setup() {
 
   loadWifiNetworks();
   Serial.print("Saved WiFi networks: ");
-  Serial.println(wifiNetworkCount);
-  bool wifiConnected = connectToKnownWifi();
-
-  setupBluetoothDialog();
-  Serial.print("BLE ready: ");
-  Serial.println(BLUETOOTH_NAME);
+  bool firstPrintedNetwork = true;
+  for (size_t i = 0; i < initialWifiNetworkCount; i++) {
+    if (initialWifiNetworks[i].ssid.isEmpty()) {
+      continue;
+    }
+    if (!firstPrintedNetwork) {
+      Serial.print(",");
+    }
+    Serial.print(initialWifiNetworks[i].ssid);
+    firstPrintedNetwork = false;
+  }
+  Serial.println();
+  bool bluetoothSetupMode = digitalRead(TASTER) == LOW;
+  bool wifiConnected = false;
+  if (!bluetoothSetupMode) {
+    wifiConnected = connectToKnownWifi();
+  }
 
   if (wifiConnected) {
+    synchronizeSystemTime();
+    setupScheduledCapture();
     startCameraServer();
     cameraServerStarted = true;
     Serial.print("Camera Ready! Use 'http://");
     Serial.print(WiFi.localIP());
     Serial.println("' to connect");
   } else {
-    Serial.println("Use Bluetooth and the command HILFE to configure WiFi.");
+    setupBluetoothDialog();
+    Serial.print("BLE configuration ready: ");
+    Serial.println(BLUETOOTH_NAME);
+    if (bluetoothSetupMode) {
+      Serial.println("Bluetooth mode selected with button on GPIO 13");
+    } else {
+      Serial.println("No WiFi connection. Use Bluetooth and HILFE to configure WiFi.");
+    }
   }
 }
 
 void loop() {
   handleBluetoothDialog();
+  handleScheduledCapture();
 
   if (digitalRead(TASTER) == LOW) {
     Serial.println("Taster gedrückt");
