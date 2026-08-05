@@ -19,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.8.0";
+const char *PROGRAM_VERSION = "0.8.1";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -81,6 +81,15 @@ String takeWifiForNextBoot() {
   preferences.remove("next-wifi");
   preferences.end();
   return ssid;
+}
+
+bool takeBluetoothModeRequest() {
+  Preferences preferences;
+  preferences.begin("device-mode", false);
+  bool requested = preferences.getBool("ble-next", false);
+  preferences.remove("ble-next");
+  preferences.end();
+  return requested;
 }
 
 bool isBluetoothInitialSetupPending() {
@@ -548,7 +557,8 @@ void setup() {
   }
   Serial.println();
   bool firstBluetoothSetup = isBluetoothInitialSetupPending();
-  bool bluetoothSetupMode = firstBluetoothSetup || digitalRead(TASTER) == LOW;
+  bool bluetoothModeRequested = takeBluetoothModeRequest();
+  bool bluetoothSetupMode = firstBluetoothSetup || bluetoothModeRequested || digitalRead(TASTER) == LOW;
   bool wifiConnected = false;
   if (!bluetoothSetupMode) {
     String selectedWifi = takeWifiForNextBoot();
@@ -571,6 +581,8 @@ void setup() {
     Serial.println(BLUETOOTH_NAME);
     if (firstBluetoothSetup) {
       Serial.println("Initial Bluetooth configuration mode");
+    } else if (bluetoothModeRequested) {
+      Serial.println("Bluetooth mode selected by HTTP request");
     } else if (bluetoothSetupMode) {
       Serial.println("Bluetooth mode selected with button on GPIO 13");
     } else {

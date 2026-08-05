@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.8.0**
+Aktuelle Version: **0.8.1**
 
 ## Lokale WLAN-Startdaten
 
@@ -55,3 +55,16 @@ Foto-Dateinamen verwenden die deutsche Winter- beziehungsweise Sommerzeit.
 Eine neue Einzelaufnahme kann per `GET /photo-capture` angefordert werden. Das
 Windows-Programm im Ordner `WindowsPhotoClient` zeigt das empfangene JPEG an
 und kann es mit Datums- und Zeitstempel im Dateinamen speichern.
+
+## Wechsel in den BLE-Modus per HTTP
+
+Im Webserver-Modus merkt `POST /ble-mode` den BLE-Modus vor und startet das
+Modul neu. Nach dem Neustart ist der Webserver nicht mehr erreichbar und das
+Modul kann per BLE konfiguriert werden.
+
+```powershell
+Invoke-RestMethod -Method Post -Uri http://192.168.x.x/ble-mode
+```
+
+Der Endpunkt besitzt keine Anmeldung und darf deshalb nur in einem
+vertrauenswürdigen lokalen Netzwerk verwendet werden.

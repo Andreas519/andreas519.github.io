@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+## 0.8.1 – 2026-08-05
+
+- Wechsel vom Webserver-Modus in den BLE-Konfigurationsmodus über
+  `POST /ble-mode` ermöglichen.
+- BLE-Modus vor dem Neustart im NVS vormerken und beim Start einmalig
+  aktivieren.
+- HTTP-Anfrage vor dem Neustart als JSON bestätigen.
+
 ## 0.8.0 – 2026-08-05
 
 - Neue Einzelaufnahme über den PC-Endpunkt `/photo-capture` bereitstellen.
