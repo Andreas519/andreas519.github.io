@@ -235,6 +235,29 @@
             
             contentEl.innerHTML = html;
 
+            const markdownUrl = new URL(fileUrl, window.location.href);
+
+            contentEl.querySelectorAll('a[href]').forEach(function(linkEl) {
+              const href = linkEl.getAttribute('href');
+              if (!href || href.startsWith('#')) {
+                return;
+              }
+
+              const targetUrl = new URL(href, markdownUrl);
+              if (targetUrl.origin === window.location.origin && targetUrl.pathname.toLowerCase().endsWith('.md')) {
+                const viewerUrl = new URL(window.location.pathname, window.location.origin);
+                viewerUrl.searchParams.set('file', targetUrl.pathname + targetUrl.search);
+                viewerUrl.searchParams.set('title', linkEl.textContent.trim() || targetUrl.pathname.split('/').pop());
+                linkEl.href = viewerUrl.href + targetUrl.hash;
+              } else {
+                linkEl.href = targetUrl.href;
+              }
+            });
+
+            contentEl.querySelectorAll('img[src]').forEach(function(imageEl) {
+              imageEl.src = new URL(imageEl.getAttribute('src'), markdownUrl).href;
+            });
+
             // Download-Link auf den Original-Dateiinhalt setzen (Blob)
             const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
             const downloadUrl = URL.createObjectURL(blob);

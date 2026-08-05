@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32-CAM-Modul - Young Engineers</title>
+  <meta name="author" content="GitHub Copilot">
+  <meta name="client" content="Andreas Sigismund">
+  <meta name="publisher" content="Andreas Sigismund">
+  <meta name="project" content="AG Young Engineers">
+
+  <link rel="stylesheet" href="../../../css/my.css"> <!-- Prism Grunddesign -->
+</head>
+
+<body>
+
+<header>
+  <h1>ESP32-CAM-Modul</h1>
+</header>
+
+<main>
+
+  <section>
+   <p>Das Modul ESP32-Cam ist ein kleines Kamera-Modul mit einem ESP32-Mikrocontroller.</p>
+    <div class="grid">
+    <article class="project-card">
+      <p>
+       'CameraWebServer' ist ein Beispielprogramm der Arduino IDE für die ESP32-CAM.<br>
+       Mit geringfügigen Anpassungen verbindet das Modul mit dem WLAN und startet einen Webserver.<br>
+       Über dessen Webseite kann man:<br>
+        - das Livebild der Kamera ansehen,<br>
+        - einzelne Fotos aufnehmen,<br>
+        - Auflösung, Helligkeit, Kontrast und weitere Kameraeinstellungen ändern,<br>
+        - je nach Modul Funktionen wie Blitz-LED oder Gesichtserkennung nutzen.<br>
+       Die IP-Adresse der Webseite wird nach dem Start im seriellen Monitor der Arduino IDE angezeigt.
+      </p>
+      </article>
+    <article class="project-card">
+      <figure>
+        <img class="hover-fullsize-image" src="./bilder/esp32-cam.jpg" alt="ESP32-CAM-Modul" width="300">
+      </figure>
+      </article>
+    </div>
+
+    <p>Das Modul kann für verschiedene Projekte eingesetzt werden, z. B. für Überwachungskameras oder Gesichtserkennung.</p>
+    <h2>Links</h2>
+      <p><a href="./dateien/CameraWebServer-v0.8.0.zip" download>CameraWebServer 0.8.0 als ZIP-Datei herunterladen</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/ESP32-CAM_Inbetriebnahme_und_Nutzung.md&amp;title=ESP32-CAM%3A%20Inbetriebnahme%20und%20Nutzung" target="_blank" rel="noopener noreferrer">Anleitung zur Inbetriebnahme und Nutzung des ESP32-CAM-Moduls</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/BLE-Konfiguration-mit-nRF-Connect.md&amp;title=BLE-Konfiguration%20mit%20nRF%20Connect" target="_blank" rel="noopener noreferrer">Anleitung zur BLE-Konfiguration mit nRF Connect</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/Probleme-und-Loesungen.md&amp;title=ESP32-CAM%3A%20Probleme%20und%20L%C3%B6sungen" target="_blank" rel="noopener noreferrer">Probleme und Lösungen bei der Projektentwicklung</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/CameraWebServer-0.8.0-Dokumentation.md&amp;title=ESP32-CAM%20CameraWebServer%200.8.0" target="_blank" rel="noopener noreferrer">Dokumentation zur aktuellen Version 0.8.0</a></p>
+      <p>ebook: <a href="./dateien/az-delivery-esp32-cam-ebook.pdf" target="_blank" rel="noopener noreferrer">ESP32-CAM - AI-Tinker-Model</a>  (AZ-Delivery) </p>
+
+    <h2>WindowsPhotoClient</h2>
+      <p>Der WindowsPhotoClient fordert ein neues Foto vom ESP32-CAM an, zeigt es auf dem PC an und kann es lokal als JPEG-Datei speichern.</p>
+      <p><a href="/tools/code-viewer.html?file=/projekte/ESP32/esp32-cam/WindowsPhotoClient/esp32_cam_photo_client.py&amp;lang=python&amp;title=ESP32-CAM%20Fotoabruf" target="_blank" rel="noopener noreferrer">Python-Programm ansehen und herunterladen</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/WindowsPhotoClient/README.md&amp;title=ESP32-CAM%20Fotoabruf%20f%C3%BCr%20Windows" target="_blank" rel="noopener noreferrer">Anleitung zum WindowsPhotoClient</a></p>
+      <p><a href="./WindowsPhotoClient/ESP32-CAM-Fotoabruf%20starten.bat" download>Windows-Startdatei herunterladen</a></p>
+    </section>
+</main>
+
+<footer>
+  Erstellt mit GitHub Copilot · Fachliche Prüfung und Veröffentlichung: Andreas Sigismund<br>
+  AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="/js/script.js"></script>
+</footer>
+</body>
+</html>
