@@ -19,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.5.0";
+const char *PROGRAM_VERSION = "0.6.0";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -47,6 +47,9 @@ String bluetoothInput;
 String pendingBluetoothCommand;
 bool bluetoothCommandReady = false;
 bool cameraServerStarted = false;
+bool bluetoothModeActive = false;
+bool bluetoothLedOn = false;
+unsigned long nextBluetoothLedChange = 0;
 
 void startCameraServer();
 void setupLedFlash();
@@ -56,6 +59,31 @@ bool connectToKnownWifi();
 void setupBluetoothDialog();
 void handleBluetoothDialog();
 void executeBluetoothCommand(String command);
+
+void markBluetoothInitialSetupComplete() {
+  Preferences preferences;
+  preferences.begin("device-mode", false);
+  preferences.putBool("ble-configured", true);
+  preferences.end();
+}
+
+bool isBluetoothInitialSetupPending() {
+  Preferences preferences;
+  preferences.begin("device-mode", true);
+  bool pending = !preferences.getBool("ble-configured", false);
+  preferences.end();
+  return pending;
+}
+
+void updateBluetoothLed() {
+  if (!bluetoothModeActive || static_cast<long>(millis() - nextBluetoothLedChange) < 0) {
+    return;
+  }
+
+  bluetoothLedOn = !bluetoothLedOn;
+  ledcWrite(LED_GPIO_NUM, bluetoothLedOn ? 24 : 0);
+  nextBluetoothLedChange = millis() + (bluetoothLedOn ? 250 : 750);
+}
 
 void sendBluetoothLine(const String &text) {
   Serial.println("BT: " + text);
@@ -326,6 +354,8 @@ void executeBluetoothCommand(String command) {
       sendBluetoothLine("Verbunden mit " + WiFi.SSID());
       sendBluetoothLine("IP: " + WiFi.localIP().toString());
       sendBluetoothLine("Neustart in den Webserver-Modus ...");
+      markBluetoothInitialSetupComplete();
+      ledcWrite(LED_GPIO_NUM, 0);
       delay(750);
       ESP.restart();
     } else {
@@ -459,7 +489,8 @@ void setup() {
     firstPrintedNetwork = false;
   }
   Serial.println();
-  bool bluetoothSetupMode = digitalRead(TASTER) == LOW;
+  bool firstBluetoothSetup = isBluetoothInitialSetupPending();
+  bool bluetoothSetupMode = firstBluetoothSetup || digitalRead(TASTER) == LOW;
   bool wifiConnected = false;
   if (!bluetoothSetupMode) {
     wifiConnected = connectToKnownWifi();
@@ -474,10 +505,14 @@ void setup() {
     Serial.print(WiFi.localIP());
     Serial.println("' to connect");
   } else {
+    bluetoothModeActive = true;
+    nextBluetoothLedChange = 0;
     setupBluetoothDialog();
     Serial.print("BLE configuration ready: ");
     Serial.println(BLUETOOTH_NAME);
-    if (bluetoothSetupMode) {
+    if (firstBluetoothSetup) {
+      Serial.println("Initial Bluetooth configuration mode");
+    } else if (bluetoothSetupMode) {
       Serial.println("Bluetooth mode selected with button on GPIO 13");
     } else {
       Serial.println("No WiFi connection. Use Bluetooth and HILFE to configure WiFi.");
@@ -488,6 +523,7 @@ void setup() {
 void loop() {
   handleBluetoothDialog();
   handleScheduledCapture();
+  updateBluetoothLed();
 
   if (digitalRead(TASTER) == LOW) {
     Serial.println("Taster gedrückt");

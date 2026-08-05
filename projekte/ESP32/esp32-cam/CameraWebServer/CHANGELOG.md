@@ -1,5 +1,12 @@
 # Änderungsprotokoll
 
+## 0.6.0 – 2026-08-05
+
+- Nach Einführung dieser Version einmalig automatisch im BLE-Modus starten.
+- Erststart erst nach erfolgreichem `WLAN VERBINDEN` als abgeschlossen speichern.
+- Blitz-LED im BLE-Konfigurationsmodus schwach blinken lassen.
+- GPIO 13 weiterhin als manuellen Zugang zum BLE-Modus unterstützen.
+
 ## 0.5.0 – 2026-08-04
 
 - Gespeicherte WLAN-Namen statt ihrer Anzahl beim Start ausgeben.

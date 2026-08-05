@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.5.0**
+Aktuelle Version: **0.6.0**
 
 ## Lokale WLAN-Startdaten
 
@@ -20,6 +20,11 @@ Für den BLE-Konfigurationsmodus GPIO 13 beim Neustart gedrückt halten. Kamera-
 Webserver und BLE laufen wegen des begrenzten internen RAMs des ESP32-CAM in
 getrennten Betriebsarten. Nach `WLAN VERBINDEN` startet das Modul automatisch
 in den Webserver-Modus neu.
+
+Beim ersten Start von Version 0.6.0 wird der BLE-Modus einmalig automatisch
+aktiviert; ein Zugriff auf den Taster ist dafür nicht erforderlich. Die
+Blitz-LED blinkt in diesem Modus schwach. Der automatische Erststart gilt nach
+einem erfolgreichen `WLAN VERBINDEN` als abgeschlossen.
 
 ```text
 HILFE
