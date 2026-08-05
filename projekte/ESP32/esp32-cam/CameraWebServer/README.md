@@ -1,6 +1,6 @@
 # CameraWebServer
 
-Aktuelle Version: **0.7.0**
+Aktuelle Version: **0.7.1**
 
 ## Lokale WLAN-Startdaten
 

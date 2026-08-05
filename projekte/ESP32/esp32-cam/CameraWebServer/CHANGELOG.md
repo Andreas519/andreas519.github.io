@@ -1,5 +1,13 @@
 # Änderungsprotokoll
 
+## 0.7.1 – 2026-08-05
+
+- Das ausgewählte WLAN vor dem Verlassen des BLE-Modus vormerken.
+- Vor dem WLAN-Verbindungsversuch neu starten, damit BLE und WLAN nicht
+  gleichzeitig um den knappen internen Speicher konkurrieren.
+- Bei einer fehlgeschlagenen WLAN-Verbindung automatisch wieder den BLE-Modus
+  bereitstellen.
+
 ## 0.7.0 – 2026-08-05
 
 - Das im Windows-Dialog ausgewählte gespeicherte WLAN gezielt verbinden.

@@ -19,7 +19,7 @@
 #define INITIAL_WIFI_NETWORKS { "", "" }
 #endif
 
-const char *PROGRAM_VERSION = "0.7.0";
+const char *PROGRAM_VERSION = "0.7.1";
 // GPIO 13 is available as long as the SD card interface is not used.
 const int TASTER = 13;
 const char *BLUETOOTH_NAME = "ESP32-CAM-Setup";
@@ -65,6 +65,22 @@ void markBluetoothInitialSetupComplete() {
   preferences.begin("device-mode", false);
   preferences.putBool("ble-configured", true);
   preferences.end();
+}
+
+void saveWifiForNextBoot(const String &ssid) {
+  Preferences preferences;
+  preferences.begin("device-mode", false);
+  preferences.putString("next-wifi", ssid);
+  preferences.end();
+}
+
+String takeWifiForNextBoot() {
+  Preferences preferences;
+  preferences.begin("device-mode", false);
+  String ssid = preferences.getString("next-wifi", "");
+  preferences.remove("next-wifi");
+  preferences.end();
+  return ssid;
 }
 
 bool isBluetoothInitialSetupPending() {
@@ -390,18 +406,24 @@ void executeBluetoothCommand(String command) {
       sendBluetoothLine("Bitte ein WLAN auswaehlen.");
       return;
     }
-    sendBluetoothLine("Verbindung mit " + selectedSsid + " wird aufgebaut ...");
-    if (connectToKnownWifi(selectedSsid)) {
-      sendBluetoothLine("Verbunden mit " + WiFi.SSID());
-      sendBluetoothLine("IP: " + WiFi.localIP().toString());
-      sendBluetoothLine("Neustart in den Webserver-Modus ...");
-      markBluetoothInitialSetupComplete();
-      ledcWrite(LED_GPIO_NUM, 0);
-      delay(750);
-      ESP.restart();
-    } else {
-      sendBluetoothLine("Keine Verbindung moeglich.");
+    bool savedNetworkFound = false;
+    for (uint8_t i = 0; i < wifiNetworkCount; i++) {
+      if (wifiNetworks[i].ssid == selectedSsid) {
+        savedNetworkFound = true;
+        break;
+      }
     }
+    if (!savedNetworkFound) {
+      sendBluetoothLine("WLAN nicht gefunden: " + selectedSsid);
+      return;
+    }
+
+    saveWifiForNextBoot(selectedSsid);
+    markBluetoothInitialSetupComplete();
+    sendBluetoothLine("Neustart; danach Verbindung mit " + selectedSsid + " ...");
+    ledcWrite(LED_GPIO_NUM, 0);
+    delay(750);
+    ESP.restart();
   } else {
     sendBluetoothLine("Unbekannter Befehl. HILFE zeigt alle Befehle.");
   }
@@ -529,7 +551,8 @@ void setup() {
   bool bluetoothSetupMode = firstBluetoothSetup || digitalRead(TASTER) == LOW;
   bool wifiConnected = false;
   if (!bluetoothSetupMode) {
-    wifiConnected = connectToKnownWifi();
+    String selectedWifi = takeWifiForNextBoot();
+    wifiConnected = connectToKnownWifi(selectedWifi);
   }
 
   if (wifiConnected) {
