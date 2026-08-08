@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "units": "mm",
+  "project": "projektname",
+  "parameters": {
+    "wandstaerke": 2.4,
+    "spiel_passung": 0.3,
+    "bohrung_durchmesser": 3.2,
+    "eckenradius": 2.0
+  },
+  "manufacturing": {
+    "process": "FDM",
+    "material": "PETG",
+    "nozzle_diameter": 0.4,
+    "layer_height": 0.2
+  },
+  "notes": "Beispielwerte vor der Konstruktion durch gemessene Projektwerte ersetzen."
+}

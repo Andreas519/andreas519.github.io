@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "units": "mm",
+  "project": "esp32-cam-dobot",
+  "status": "Messwerte ausstehend",
+  "parameters": {}
+}
