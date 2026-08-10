@@ -1,5 +1,10 @@
 # BLE-Konfiguration mit nRF Connect
 
+> **Aktuelle Empfehlung für das iPhone:** `BLESerial nRF` wurde erfolgreich
+> mit dem ESP32-CAM-Modul getestet und ist die bevorzugte App für den direkten
+> Textdialog. Die folgende nRF-Connect-Anleitung dokumentiert weiterhin den
+> ersten erfolgreichen BLE-Test auf Ebene der einzelnen Characteristics.
+
 Diese Bilder dokumentieren den ersten erfolgreichen BLE-Dialog zwischen einem
 iPhone und dem ESP32-CAM-Modul. Das Modul meldet sich als
 `ESP32-CAM-Setup` und verwendet den Nordic-UART-Dienst.
@@ -62,3 +67,20 @@ Die Kommunikation funktionierte in beide Richtungen:
 Für die tägliche WLAN-Konfiguration übernimmt inzwischen das Windows-Programm
 im Ordner `WindowsBLEDialog` diese Schritte einschließlich des automatischen
 Zeilenendes und des Zusammensetzens aufgeteilter Antworten.
+
+## Direkt in den Access-Point-Modus wechseln
+
+Ab Version 0.9.2 kann der BLE-Dialog eine private AP-IP festlegen und das Modul
+direkt neu starten:
+
+```text
+MODUS AP 192.168.41.1
+```
+
+Die gewählte Adresse bleibt gespeichert. `MODUS AP` ohne Parameter verwendet
+die zuletzt gespeicherte Adresse. Der Befehl muss wie alle BLE-Kommandos mit
+dem Zeilenende `0A` abgeschlossen werden.
+
+Mit `BLESerial nRF` kann der Befehl direkt als Textdialog gesendet werden. Das
+macht die App für den täglichen Einsatz komfortabler als die manuelle Arbeit
+mit einzelnen Write- und Notify-Characteristics in nRF Connect.

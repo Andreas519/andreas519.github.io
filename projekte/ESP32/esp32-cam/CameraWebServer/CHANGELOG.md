@@ -1,5 +1,80 @@
 # Änderungsprotokoll
 
+## Vorgemerkt für die nächste Version
+
+- Einsatz im Schulnetz mit der Subnetzmaske `255.255.0.0` (`/16`) praktisch
+  prüfen. Im Station-Modus soll das Modul IP-Adresse, Subnetzmaske und Gateway
+  per DHCP übernehmen.
+- Verbindung mit dem offenen WLAN `mrge-ap-bu46` aus dem Computerkabinett
+  testen; für dieses WLAN wird ein leerer Passwortwert gespeichert.
+- Subnetzmaske und Gateway auf `/system` sowie unter `/device-info` anzeigen,
+  damit die Netzwerkkonfiguration im Schulnetz kontrolliert werden kann.
+- Die `/16`-Maske des Schulnetzes von der weiterhin separat konfigurierten
+  Maske des eigenen ESP32-CAM-Access-Points unterscheiden.
+
+## 0.9.3 – 2026-08-08
+
+- Die drei Betriebsarten über unterscheidbare LED-Signale anzeigen:
+  einmaliges kurzes Leuchten im Station-Modus, Doppelblinken im
+  Access-Point-Modus und ein schwacher 20-ms-Impuls mit 2000 ms Pause im
+  BLE-Notbetrieb.
+- Eine verlorene WLAN-Verbindung 30 Sekunden lang wiederherzustellen versuchen
+  und danach neu starten, damit der Access-Point-Fallback greift.
+- Die Status-LED-Helligkeit nach dem praktischen BLE-Test von PWM 24 auf PWM 2
+  reduzieren.
+- BLE-Start über GPIO 13, BLE-Dialog, gespeicherte AP-IP `192.168.41.1` und
+  anschließende Rückkehr in den Station-Modus praktisch bestätigen.
+- Geplante Tests als Frontkamera eines RoboCars und als Kamera über der
+  Arbeitsplatte eines Dobot Magician dokumentieren.
+- Version 0.9.3 erfolgreich kompiliert und über COM6 mit 115200 Baud
+  übertragen; Flash-Hash vollständig verifiziert.
+
+## 0.9.1 – 2026-08-07
+
+- Programmversion, Betriebsart, Gerätename, WLAN und IP-Adresse unter
+  `/device-info` als JSON bereitstellen.
+- Systemübersicht unter `/system` ergänzen.
+- Station-, Access-Point- und BLE-Modus über Schaltflächen auswählen.
+- Neue POST-Endpunkte `/station-mode` und `/ap-mode` ergänzen.
+- Betriebsart nur für den unmittelbar folgenden Neustart im NVS vormerken.
+- Version 0.9.1 erfolgreich kompiliert, mit 115200 Baud übertragen und
+  Geräteinfo sowie Systemseite im Station-Modus praktisch geprüft.
+
+## 0.9.2 – 2026-08-07
+
+- Direkten Wechsel vom BLE- in den Access-Point-Modus über `MODUS AP`
+  ermöglichen.
+- Optionale private AP-IP als Befehlsparameter unterstützen und dauerhaft im
+  NVS speichern.
+- Private IPv4-Bereiche und Hostnummern von 1 bis 254 validieren.
+- Gespeicherte AP-IP in BLE-Status und Systemseite anzeigen.
+- Windows-BLE-Dialog um AP-IP-Feld und AP-Neustart-Schaltfläche erweitern.
+- AP-Kennung aus den letzten drei MAC-Bytes ableiten, sodass das getestete
+  Modul künftig `ESP32-CAM-Setup-9A3060` verwendet.
+- BLE-zu-AP-Wechsel mit `192.168.41.1` sowie anschließende Rückkehr zum
+  Station-Modus praktisch geprüft.
+- Korrigierten AP-Namen `ESP32-CAM-Setup-9A3060`, WPA2-Verbindung,
+  `/device-info` unter `192.168.41.1` und den vollständigen Zyklus
+  Station → Access Point → Station praktisch bestätigt.
+
+## 0.9.0 – 2026-08-07
+
+- Bei nicht erreichbarem bekanntem WLAN automatisch einen eigenen Access Point
+  `ESP32-CAM-Setup-XXXXXX` starten.
+- Kamera-Webserver und alle bekannten HTTP-Zugriffe auch im Access-Point-Modus
+  unter `http://192.168.4.1/` bereitstellen.
+- WLANs unter `/wifi-settings` suchen, speichern, aktualisieren, auswählen und
+  löschen.
+- Nach der WLAN-Auswahl neu starten und bei einem Verbindungsfehler erneut in
+  den Access-Point-Modus zurückfallen.
+- BLE nur noch per GPIO 13 oder `POST /ble-mode` als Notzugang aktivieren.
+- Access Point mit dem Passwort `esp32cam` schützen und über eine gerätespezifische
+  Endung im WLAN-Namen unterscheidbar machen.
+- Firmware mit 115200 Baud erfolgreich auf das ESP32-CAM-Modul übertragen.
+- Station-Modus, Zeitsynchronisierung, Kamera-Webserver, MJPEG-Livebild,
+  Einzelaufnahme, zeitgesteuertes Foto und WLAN-Webseite praktisch geprüft.
+- Praktische Tests des Access-Point- und BLE-Modus stehen noch aus.
+
 ## 0.8.1 – 2026-08-05
 
 - Wechsel vom Webserver-Modus in den BLE-Konfigurationsmodus über

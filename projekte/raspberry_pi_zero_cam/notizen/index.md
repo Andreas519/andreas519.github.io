@@ -1,0 +1,62 @@
+# Entwicklungsnotizen zum Projekt `Raspberry Pi Zero Cam`
+
+<!-- BEGIN AUTO-GENERATED FILE LIST -->
+
+## Dateien
+
+- [Bildübertragung zwischen Raspberry Pi und Windows-PC](bild_uebertragung.md)
+- [Grundsätze](grundsätze.md)
+- [Gemeinsame Netzwerkfreigabe nutzen](netzwerkfreigabe_nutzen.md)
+- [Windows-Freigabe mit Python einbinden](netzwerkfreigabe_nutzen_1.md)
+- [SCP und SSH](scp-ssh.md)
+- [Kamerasystem: Raspberry Pi vs. ESP32](Vergleich_ESP32_vs_Raspi_zero_CAM.md)
+- [Kamera am Raspberry Pi Zero W: Zusammenfassung](zusammenfassung-test.md)
+
+## Prompt-Antworten
+
+- [03 – Unvollständige Eingabe „setze“](raspberry_pi_zero_cam_prompt_antworten/03_unvollstaendige_eingabe_setze.md)
+- [04 – Setup](raspberry_pi_zero_cam_prompt_antworten/04_setup.md)
+- [05 – System- und Kamerastatus](raspberry_pi_zero_cam_prompt_antworten/05_system_und_kamera_status.md)
+- [06 – Fehler bei rpicam-still](raspberry_pi_zero_cam_prompt_antworten/06_rpicam_still_fehler.md)
+- [07 – Leeres Vorschaufenster](raspberry_pi_zero_cam_prompt_antworten/07_leeres_vorschaufenster.md)
+- [08 – Erfolgreiche Aufnahme](raspberry_pi_zero_cam_prompt_antworten/08_erfolgreiche_aufnahme.md)
+- [09 – Bildtransfer und Auflösung](raspberry_pi_zero_cam_prompt_antworten/09_bildtransfer_und_aufloesung.md)
+- [10 – raspberryPiZeroCam.md](raspberry_pi_zero_cam_prompt_antworten/10_raspberryPiZeroCam_md.md)
+- [11 – Dokumentation ausbauen](raspberry_pi_zero_cam_prompt_antworten/11_dokumentation_ausbauen.md)
+- [12 – Kapitel 8 priorisieren](raspberry_pi_zero_cam_prompt_antworten/12_kapitel_8_priorisieren.md)
+- [13 – SCP und FTP](raspberry_pi_zero_cam_prompt_antworten/13_scp_und_ftp.md)
+- [14 – Kapitel 8: Praxisanleitung](raspberry_pi_zero_cam_prompt_antworten/14_kapitel_8_praxisanleitung.md)
+- [15 – Speicherort der Dokumentation](raspberry_pi_zero_cam_prompt_antworten/15_speicherort_dokumentation.md)
+- [16 – Projekt statt Thema](raspberry_pi_zero_cam_prompt_antworten/16_projekt_statt_thema.md)
+- [17 – Schreibblock](raspberry_pi_zero_cam_prompt_antworten/17_schreibblock.md)
+- [18 – Projektname Vision System](raspberry_pi_zero_cam_prompt_antworten/18_projektname_vision_system.md)
+- [19 – Projektstruktur anlegen](raspberry_pi_zero_cam_prompt_antworten/19_projektstruktur_anlegen.md)
+- [20 – Zusammenfassung Kamera](raspberry_pi_zero_cam_prompt_antworten/20_zusammenfassung_kamera.md)
+- [21 – SCP-Timeout](raspberry_pi_zero_cam_prompt_antworten/21_scp_timeout.md)
+- [22 – SCP erfolgreich](raspberry_pi_zero_cam_prompt_antworten/22_scp_erfolgreich.md)
+- [23 – Gemeinsame Netzwerkfreigabe](raspberry_pi_zero_cam_prompt_antworten/23_gemeinsame_netzwerkfreigabe.md)
+- [24 – Existenz der Freigabe prüfen](raspberry_pi_zero_cam_prompt_antworten/24_freigabe_existenz_pruefen.md)
+- [25 – Mount-Fehler](raspberry_pi_zero_cam_prompt_antworten/25_mount_fehler.md)
+- [26 – Mountpunkt vorhanden](raspberry_pi_zero_cam_prompt_antworten/26_mountpunkt_vorhanden.md)
+- [27 – smbclient-Ausgabe](raspberry_pi_zero_cam_prompt_antworten/27_smbclient_ausgabe.md)
+- [28 – Permission denied](raspberry_pi_zero_cam_prompt_antworten/28_permission_denied.md)
+- [29 – Mount-Optionen](raspberry_pi_zero_cam_prompt_antworten/29_mount_optionen.md)
+- [30 – Freigabe funktioniert](raspberry_pi_zero_cam_prompt_antworten/30_freigabe_funktioniert.md)
+- [31 – Mounten aus Python](raspberry_pi_zero_cam_prompt_antworten/31_mounten_aus_python.md)
+- [32 – Prompts gespeichert](raspberry_pi_zero_cam_prompt_antworten/32_prompts_gespeichert.md)
+- [33 – Unauffälliger Zugriff auf index](raspberry_pi_zero_cam_prompt_antworten/33_unauffaelliger_zugriff_index.md)
+- [34 – Projektpfad](raspberry_pi_zero_cam_prompt_antworten/34_projektpfad.md)
+- [35 – Fußzeile](raspberry_pi_zero_cam_prompt_antworten/35_fusszeile.md)
+- [36 – Bash-History](raspberry_pi_zero_cam_prompt_antworten/36_bash_history.md)
+- [37 – SCP aus Python unter Windows](raspberry_pi_zero_cam_prompt_antworten/37_scp_aus_python_windows.md)
+- [38 – Datei nach SCP löschen](raspberry_pi_zero_cam_prompt_antworten/38_datei_nach_scp_loeschen.md)
+- [39 – Passwortübergabe](raspberry_pi_zero_cam_prompt_antworten/39_passwortuebergabe.md)
+- [40 – Prompts als Markdown-ZIP](raspberry_pi_zero_cam_prompt_antworten/40_prompts_als_markdown_zip.md)
+- [41 – Markdown-Viewer unter Windows](raspberry_pi_zero_cam_prompt_antworten/41_markdown_viewer_windows.md)
+- [42 – Prompt und Antwort als ZIP](raspberry_pi_zero_cam_prompt_antworten/42_prompt_und_antwort_zip.md)
+- [Prompt 43 – Arbeitsumgebung ohne Administratorrechte](raspberry_pi_zero_cam_prompt_antworten/43_arbeitsumgebung_ohne_administratorrechte.md)
+- [Prompt 44 - ZIP-Archiv des Chat erstellen](raspberry_pi_zero_cam_prompt_antworten/44_IP-Archiv_des_Chat_erstellen.md)
+- [Prompt 54 - Wer soll das alles lesen?](raspberry_pi_zero_cam_prompt_antworten/45_wer_soll_das_alles_lesen.md)
+- [Übersicht](raspberry_pi_zero_cam_prompt_antworten/README.md)
+
+<!-- END AUTO-GENERATED FILE LIST -->

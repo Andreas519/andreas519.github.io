@@ -1,0 +1,9 @@
+{
+  "markdown-preview-enhanced.automaticallyShowPreviewOfMarkdownBeingEdited": true,
+  "chat.tools.terminal.autoApprove": {
+    "/^python -c \"import html5lib; print\\('html5lib verfügbar'\\)\"$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
+}

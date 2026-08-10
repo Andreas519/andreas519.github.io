@@ -9,6 +9,12 @@ das Auswahlfeld. Beim Neustart wird ausschließlich das dort ausgewählte WLAN
 verwendet. Nach einer BLE-Trennung kann das Modul ohne Neustart des Dialogs
 erneut gesucht werden.
 
+Über das Feld **AP-IP-Adresse** kann das Modul direkt aus dem BLE-Modus in den
+Access-Point-Modus wechseln. Beispiel: `192.168.41.1`. Die Adresse muss aus
+einem privaten IPv4-Bereich stammen und wird im Modul dauerhaft gespeichert.
+Damit lassen sich in der AG unterschiedliche Adressbereiche für mehrere Module
+festlegen.
+
 Der zu suchende BLE-Modulname kann im Feld **Modulname** geändert werden.
 Erfolgreich gefundene Namen bleiben dauerhaft gespeichert und können beim
 nächsten Start aus der Liste ausgewählt werden.

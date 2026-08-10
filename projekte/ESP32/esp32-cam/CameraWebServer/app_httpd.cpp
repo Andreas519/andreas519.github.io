@@ -675,7 +675,7 @@ static esp_err_t index_handler(httpd_req_t *req) {
 
 void startCameraServer() {
   httpd_config_t config = HTTPD_DEFAULT_CONFIG();
-  config.max_uri_handlers = 16;
+  config.max_uri_handlers = 23;
   config.stack_size = 3072;
   config.max_open_sockets = 4;
   config.lru_purge_enable = true;
@@ -854,6 +854,7 @@ void startCameraServer() {
     httpd_register_uri_handler(camera_httpd, &pll_uri);
     httpd_register_uri_handler(camera_httpd, &win_uri);
     registerScheduledCaptureHandlers(camera_httpd);
+    registerWifiConfigurationHandlers(camera_httpd);
     httpd_register_uri_handler(camera_httpd, &stream_uri);
     Serial.println("HTTP camera server started");
   } else {

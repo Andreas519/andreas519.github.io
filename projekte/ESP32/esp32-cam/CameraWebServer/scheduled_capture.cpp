@@ -244,7 +244,7 @@ esp_err_t photoSettingsHandler(httpd_req_t *request) {
   } else {
     page += F("<p>Noch keine Aufnahme vorhanden.</p>");
   }
-  page += F("<p><a href='/'>Zur Kamera-Steuerung</a></p></main></body></html>");
+  page += F("<p><a href='/'>Zur Kamera-Steuerung</a> · <a href='/wifi-settings'>WLAN konfigurieren</a> · <a href='/system'>System und Betriebsart</a></p></main></body></html>");
 
   httpd_resp_set_type(request, "text/html; charset=utf-8");
   return httpd_resp_send(request, page.c_str(), page.length());
@@ -316,7 +316,7 @@ esp_err_t scheduledPhotoHandler(httpd_req_t *request) {
 esp_err_t bluetoothModeHandler(httpd_req_t *request) {
   Preferences preferences;
   preferences.begin("device-mode", false);
-  preferences.putBool("ble-next", true);
+  preferences.putString("next-mode", "ble");
   preferences.end();
 
   httpd_resp_set_type(request, "application/json");

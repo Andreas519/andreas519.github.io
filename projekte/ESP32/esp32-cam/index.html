@@ -45,20 +45,25 @@
 
     <p>Das Modul kann für verschiedene Projekte eingesetzt werden, z. B. für Überwachungskameras oder Gesichtserkennung.</p>
 
-    <h2>Aktuelle Version 0.8.1</h2>
-      <p>Die aktuelle Firmware kann während des normalen WLAN-Betriebs über eine HTTP-Anfrage in den BLE-Konfigurationsmodus versetzt werden. Dazu wird eine POST-Anfrage an <code>/ble-mode</code> gesendet. Das Modul bestätigt die Anfrage, startet neu und ist danach als <code>ESP32-CAM-Setup</code> erreichbar.</p>
+    <h2>Aktuelle Version 0.9.3</h2>
+      <p>Findet die ESP32-CAM kein gespeichertes WLAN, öffnet sie automatisch ein eigenes WLAN namens <code>ESP32-CAM-Setup-XXXXXX</code>. Nach der Verbindung mit dem Passwort <code>esp32cam</code> stehen die Kamera unter <code>http://192.168.4.1/</code> und die WLAN-Konfiguration unter <code>http://192.168.4.1/wifi-settings</code> zur Verfügung.</p>
+      <p>BLE bleibt als Notzugang erhalten. Die Firmware kann während des normalen WLAN-Betriebs über eine HTTP-Anfrage in den BLE-Konfigurationsmodus versetzt werden. Dazu wird eine POST-Anfrage an <code>/ble-mode</code> gesendet.</p>
+      <p>Unter <code>/system</code> zeigt die Firmware ihre Version, die aktive Betriebsart, den Gerätenamen, das WLAN und die IP-Adresse an. Schaltflächen ermöglichen den Neustart im Station-, Access-Point- oder BLE-Modus. Die Adresse <code>/device-info</code> liefert die Geräteinformationen zusätzlich als JSON.</p>
+      <p>Im BLE-Modus wechselt der Befehl <code>MODUS AP 192.168.41.1</code> direkt in den Access-Point-Modus und speichert die gewählte private AP-IP. Der Windows-BLE-Dialog bietet dafür ein eigenes Eingabefeld.</p>
+      <p>Bei Verlust einer bestehenden WLAN-Verbindung wartet das Modul 30 Sekunden auf die Wiederverbindung und startet danach neu, damit der Access-Point-Fallback greift. Station, Access Point und BLE besitzen unterscheidbare, stark gedimmte LED-Signale.</p>
+      <p>Weitere Praxistests sind als Frontkamera an einem RoboCar und als Kamera über der Arbeitsplatte eines Dobot Magician vorgesehen.</p>
       <pre><code>Invoke-RestMethod -Method Post -Uri "http://&lt;IP-Adresse-des-Moduls&gt;/ble-mode"</code></pre>
 
     <h2>Links</h2>
-      <p><a href="./dateien/CameraWebServer-v0.8.1.zip" download>CameraWebServer 0.8.1 als ZIP-Datei herunterladen</a></p>
+      <p><a href="./dateien/CameraWebServer-v0.9.3.zip" download>CameraWebServer 0.9.3 als ZIP-Datei herunterladen</a></p>
       <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/ESP32-CAM_Inbetriebnahme_und_Nutzung.md&amp;title=ESP32-CAM%3A%20Inbetriebnahme%20und%20Nutzung" target="_blank" rel="noopener noreferrer">Anleitung zur Inbetriebnahme und Nutzung des ESP32-CAM-Moduls</a></p>
       <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/BLE-Konfiguration-mit-nRF-Connect.md&amp;title=BLE-Konfiguration%20mit%20nRF%20Connect" target="_blank" rel="noopener noreferrer">Anleitung zur BLE-Konfiguration mit nRF Connect</a></p>
       <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/Probleme-und-Loesungen.md&amp;title=ESP32-CAM%3A%20Probleme%20und%20L%C3%B6sungen" target="_blank" rel="noopener noreferrer">Probleme und Lösungen bei der Projektentwicklung</a></p>
-      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/CameraWebServer-0.8.1-Dokumentation.md&amp;title=ESP32-CAM%20CameraWebServer%200.8.1" target="_blank" rel="noopener noreferrer">Dokumentation zur aktuellen Version 0.8.1</a></p>
+      <p><a href="/tools/md-viewer.html?file=/projekte/ESP32/esp32-cam/dateien/CameraWebServer-0.9.3-Dokumentation.md&amp;title=ESP32-CAM%20CameraWebServer%200.9.3" target="_blank" rel="noopener noreferrer">Dokumentation zur aktuellen Version 0.9.3</a></p>
       <p>ebook: <a href="./dateien/az-delivery-esp32-cam-ebook.pdf" target="_blank" rel="noopener noreferrer">ESP32-CAM - AI-Tinker-Model</a>  (AZ-Delivery) </p>
 
     <h2>BLE-Apps für Smartphones</h2>
-      <p><strong>iPhone:</strong> <em>BLESerial nRF</em> eignet sich für den direkten Dialog mit dem ESP32-CAM-Modul.</p>
+      <p><strong>iPhone:</strong> <em>BLESerial nRF</em> wurde erfolgreich mit dem ESP32-CAM-Modul getestet und ist die bevorzugte App für den direkten BLE-Dialog.</p>
       <p><strong>Android:</strong> Empfohlen wird <a href="https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal" target="_blank" rel="noopener noreferrer">Serial Bluetooth Terminal</a>. Die App unterstützt BLE und den vom Projekt verwendeten Nordic UART Service.</p>
       <p>Als Alternative kann <a href="https://play.google.com/store/apps/details?id=no.nordicsemi.android.nrftoolbox" target="_blank" rel="noopener noreferrer">nRF Toolbox for Bluetooth LE</a> mit der UART-Funktion verwendet werden.</p>
 

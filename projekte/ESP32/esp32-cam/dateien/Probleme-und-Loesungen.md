@@ -34,7 +34,7 @@ Das Programm verwendet getrennte Betriebsarten:
 Zwischen beiden Betriebsarten wird das Modul neu gestartet. Dadurch müssen BLE
 und Kamera-Webserver nicht gleichzeitig im Speicher liegen.
 
-## 3. Erstkonfiguration ohne Zugriff auf den eingebauten Taster
+## 3. Konfiguration ohne Zugriff auf den eingebauten Taster
 
 ### Problem
 
@@ -43,9 +43,10 @@ leicht erreichbar.
 
 ### Lösung
 
-Beim ersten Start wird der BLE-Konfigurationsmodus automatisch aktiviert. Erst
-nach einer erfolgreichen WLAN-Auswahl wird dieser Erststart als abgeschlossen
-gespeichert. GPIO 13 bleibt als späterer manueller Zugang zum BLE-Modus erhalten.
+Findet Version 0.9.0 kein bekanntes WLAN, startet sie automatisch den eigenen
+Access Point `ESP32-CAM-Setup-XXXXXX`. Kamera und WLAN-Konfiguration sind dann
+unter `http://192.168.4.1/` erreichbar. GPIO 13 bleibt als manueller Zugang zum
+BLE-Notbetrieb erhalten.
 
 ## 4. Die Blitz-LED ist im BLE-Modus zu hell
 
@@ -269,12 +270,36 @@ enthalten nur `wifi_secrets.example.h` als ausfüllbare Vorlage. Der ZIP-Inhalt
 wird vor der Bereitstellung ausdrücklich auf das Fehlen von
 `wifi_secrets.h` geprüft.
 
+## 19. Das Modul ist in einer unbekannten WLAN-Umgebung nicht erreichbar
+
+### Problem
+
+Keines der gespeicherten WLANs ist erreichbar. Eine Konfiguration nur über BLE
+setzt ein geeignetes Programm voraus und ist deshalb als normaler Zugangsweg
+zu umständlich.
+
+### Lösung
+
+Version 0.9.0 startet nach den fehlgeschlagenen WLAN-Versuchen automatisch
+einen passwortgeschützten Access Point. Der vorhandene Kamera-Webserver läuft
+auch dort. Unter `/wifi-settings` lassen sich WLANs suchen, speichern und
+löschen. Nach einer neuen Auswahl startet das Modul neu; schlägt auch diese
+Verbindung fehl, kehrt es wieder zum Access Point zurück. BLE wird nur noch
+gezielt per GPIO 13 oder HTTP-Anforderung aktiviert.
+
+### Teststand
+
+Die Firmware wurde kompiliert und auf das ESP32-CAM-Modul übertragen. Der
+Station-Modus mit Kamera, Livebild, Foto-Endpunkten und WLAN-Webseite ist
+praktisch bestätigt. Access-Point- und BLE-Modus stehen noch aus.
+
 ## Ergebnis
 
-Mit Version 0.8.0 stehen folgende stabile Abläufe zur Verfügung:
+Mit Version 0.9.0 sind folgende Abläufe implementiert:
 
-1. WLAN-Zugänge per BLE verwalten.
-2. Ein bestimmtes WLAN für den Neustart auswählen.
-3. Kamera und Webserver getrennt vom BLE-Modus betreiben.
-4. Zeitgesteuerte Fotos im Browser bereitstellen.
-5. Einzelbilder vom Windows-PC anfordern, anzeigen und lokal speichern.
+1. Ein bekanntes WLAN automatisch verwenden.
+2. Ohne bekanntes WLAN einen eigenen Access Point bereitstellen.
+3. Kamera und WLAN-Konfiguration in diesem Access Point gemeinsam betreiben.
+4. WLAN-Zugänge im Browser verwalten.
+5. BLE getrennt als Notbetrieb starten.
+6. Zeitgesteuerte Fotos und Einzelbilder weiterhin bereitstellen.

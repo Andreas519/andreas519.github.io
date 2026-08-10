@@ -1,4 +1,5 @@
 import asyncio
+import ipaddress
 import json
 import os
 import queue
@@ -220,6 +221,18 @@ class BleDialogApp:
         self.connect_wifi_button.pack(side="left", padx=(0, 8))
         self.quick_buttons.append(self.connect_wifi_button)
 
+        ttk.Label(quick, text="AP-IP-Adresse").grid(row=3, column=0, sticky="w", pady=(12, 0))
+        self.ap_ip_entry = ttk.Entry(quick)
+        self.ap_ip_entry.insert(0, "192.168.4.1")
+        self.ap_ip_entry.grid(row=4, column=0, sticky="ew")
+        self.start_ap_button = ttk.Button(
+            quick,
+            text="Access Point starten und neu starten",
+            command=self._start_access_point,
+        )
+        self.start_ap_button.grid(row=4, column=1, columnspan=2, sticky="w", padx=(8, 0))
+        self.quick_buttons.append(self.start_ap_button)
+
         terminal = ttk.LabelFrame(outer, text="Dialog", padding=10)
         terminal.pack(fill="both", expand=True, pady=(12, 0))
         text_frame = ttk.Frame(terminal)
@@ -313,6 +326,27 @@ class BleDialogApp:
             messagebox.showwarning("WLAN verbinden", "Bitte ein gespeichertes WLAN auswählen.")
             return
         self.controller.send(f"WLAN VERBINDEN {ssid}")
+
+    def _start_access_point(self):
+        value = self.ap_ip_entry.get().strip()
+        try:
+            address = ipaddress.IPv4Address(value)
+        except ipaddress.AddressValueError:
+            messagebox.showwarning("Access Point", "Bitte eine gültige IPv4-Adresse eingeben.")
+            return
+        octets = tuple(int(part) for part in value.split("."))
+        private_range = (
+            octets[0] == 10
+            or (octets[0] == 172 and 16 <= octets[1] <= 31)
+            or (octets[0] == 192 and octets[1] == 168)
+        )
+        if not address.is_private or not private_range or octets[3] in (0, 255):
+            messagebox.showwarning(
+                "Access Point",
+                "Bitte eine private IPv4-Adresse mit einer Hostnummer von 1 bis 254 verwenden.",
+            )
+            return
+        self.controller.send(f"MODUS AP {address}")
 
     def _send_manual(self):
         command = self.command_entry.get()

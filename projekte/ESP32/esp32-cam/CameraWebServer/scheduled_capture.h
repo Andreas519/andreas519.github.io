@@ -6,3 +6,4 @@ void setupScheduledCapture();
 void handleScheduledCapture();
 void synchronizeSystemTime();
 void registerScheduledCaptureHandlers(httpd_handle_t server);
+void registerWifiConfigurationHandlers(httpd_handle_t server);

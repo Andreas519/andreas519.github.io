@@ -1,4 +1,4 @@
-# Kapitel 8 – Bildübertragung zwischen Raspberry Pi und Windows-PC
+# Bildübertragung zwischen Raspberry Pi und Windows-PC
 
 ---
 
