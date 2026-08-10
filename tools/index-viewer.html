@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tools - Code & Markdown Viewer</title>
+  <title>Tools - Code, Markdown & JSON Viewer</title>
   <meta name="author" content="GitHub Copilot">
   <meta name="client" content="Andreas Sigismund">
-  <meta name="description" content="Viewer-Tools für Code- und Markdown-Dateien">
+  <meta name="description" content="Viewer-Tools für Code-, Markdown- und JSON-Dateien">
   <link rel="stylesheet" href="../css/my.css">
   <style>
     .tools-grid {
@@ -112,14 +112,14 @@
 </head>
 <body>
   <header>
-    Tools – Code & Markdown Viewer
+    Tools – Code, Markdown & JSON Viewer
   </header>
 
   <main>
     <section>
       <h2>Übersicht</h2>
       <p>
-        Hier sind Viewer-Tools für die Anzeige von Code- und Markdown-Dateien aus verschiedenen 
+        Hier sind Viewer-Tools für die Anzeige von Code-, Markdown- und JSON-Dateien aus verschiedenen
         Verzeichnissen des Projekts. Sie ermöglichen, Dateien relativ zum Aufrufer-Verzeichnis 
         zu laden.
       </p>
@@ -238,6 +238,46 @@
           </div>
         </div>
 
+        <!-- JSON Viewer -->
+        <div class="tool-card">
+          <h3>🧩 JSON Viewer</h3>
+          <p>
+            Prüft JSON-Dateien, formatiert gültige Daten übersichtlich und zeigt sie
+            mit Syntax-Highlighting und Zeilennummern an.
+          </p>
+
+          <p><strong>Parameter:</strong></p>
+          <table class="params-table">
+            <tr>
+              <th>Parameter</th>
+              <th>Beschreibung</th>
+              <th>Beispiel</th>
+            </tr>
+            <tr>
+              <td><code>file</code></td>
+              <td>Dateiname oder Pfad (erforderlich)</td>
+              <td><code>parameter.json</code></td>
+            </tr>
+            <tr>
+              <td><code>title</code></td>
+              <td>Angezeigter Titel (optional)</td>
+              <td><code>ESP32-CAM Parameter</code></td>
+            </tr>
+          </table>
+
+          <div class="example">
+            <div class="example-title">Absoluter Pfad:</div>
+            &lt;a href="/tools/json-viewer.html?file=/pfad/parameter.json&amp;title=Parameter"&gt;
+            <br>&nbsp;&nbsp;JSON anzeigen
+            <br>&lt;/a&gt;
+          </div>
+
+          <div class="button-group">
+            <a href="json-viewer.html?file=/projekte/fusion-cad/esp32-cam-robocar/fusion/parameter.json&amp;title=ESP32-CAM%20Parameter" class="btn">Direkt öffnen</a>
+            <a href="md-viewer.html?file=/tools/json-viewer.md&amp;title=JSON%20Viewer%20Dokumentation" class="btn btn-secondary">Dokumentation</a>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -251,7 +291,7 @@
         <strong>Absolute Pfade:</strong> Pfade, die mit <code>/</code> beginnen, werden direkt geladen.
       </p>
       <p>
-        <strong>Download:</strong> Beide Viewer bieten einen „Herunterladen"-Button für die angezeigte Datei.
+        <strong>Download:</strong> Alle Viewer bieten einen „Herunterladen"-Button für die angezeigte Datei.
       </p>
     </section>
 
@@ -272,6 +312,8 @@
         <li><strong>index.html</strong> – Diese Seite (Überblick)</li>
         <li><strong>code-viewer.html</strong> – Viewer für Quellcode-Dateien</li>
         <li><strong>md-viewer.html</strong> – Viewer für Markdown-Dateien</li>
+        <li><strong>json-viewer.html</strong> – prüfender Viewer für JSON-Dateien</li>
+        <li><strong>json-viewer.md</strong> – Dokumentation zum JSON Viewer</li>
         <li><strong>code-viewer.md</strong> – Dokumentation zum Code Viewer</li>
         <li><strong>prism/</strong> – Prism.js Syntax-Highlighting Dateien</li>
       </ul>

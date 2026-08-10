@@ -1,2 +1,196 @@
 <!DOCTYPE html>
-<html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ESP32-CAM-Halter für RoboCar - Young Engineers</title><link rel="stylesheet" href="../../../css/my.css"></head><body><header><h1>ESP32-CAM-Halter für RoboCar</h1><p>Schwenkbarer Frontkamera-Halter</p></header><main><nav class="section-nav" aria-label="Bereichsnavigation"><ul><li><a href="../">Fusion-CAD</a></li><li><a class="active" href="./">RoboCar-Halter</a></li></ul></nav><section><h2>Status</h2><p>Das Projektgerüst steht. Als Nächstes werden Einbausituation, Maße, Neigungsbereich, Druckverfahren und Toleranzen aufgenommen.</p><p><a href="/tools/md-viewer.html?file=/projekte/fusion-cad/esp32-cam-robocar/README.md&amp;title=ESP32-CAM-Halter%20für%20RoboCar" target="_blank" rel="noopener noreferrer">Projektdokumentation öffnen</a></p></section></main><footer>AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg</footer></body></html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gedruckter und getesteter ESP32-CAM-Adapter V3 mit Frontblende für den Makeblock mBot.">
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="project" content="AG Young Engineers">
+  <title>ESP32-CAM am RoboCar - Young Engineers</title>
+  <link rel="stylesheet" href="../../../css/my.css">
+</head>
+<body>
+<header>
+  <h1>ESP32-CAM am RoboCar</h1>
+  <p>Parametrischer, gedruckter und praktisch geprüfter Kameraadapter für den Makeblock mBot</p>
+</header>
+
+<main>
+  <nav class="section-nav" aria-label="Bereichsnavigation">
+    <ul>
+      <li><a href="../">Fusion-CAD</a></li>
+      <li><a class="active" href="./">ESP32-CAM am RoboCar</a></li>
+      <li><a href="#downloads">Downloads</a></li>
+      <li><a href="#ausblick">Ausblick</a></li>
+    </ul>
+  </nav>
+
+  <section>
+    <div class="section-heading">
+      <h2>Ergebnis</h2>
+      <span class="status">Adapter V3 · Frontblende V3</span>
+    </div>
+    <p>Der Adapter nimmt ein ESP32-CAM-Modul oberhalb des Ultraschallsensors auf. Beide gedruckten Teile sitzen fest, das Objektiv bleibt frei und die Elektronik unterhalb der weißen Kamerasteckerleiste ist weiterhin sichtbar und zugänglich.</p>
+    <aside><strong>Mechanisch bestätigt:</strong> Adapter und Frontblende wurden gedruckt, zusammengebaut und mit dem realen ESP32-CAM-Modul erfolgreich geprüft.</aside>
+
+    <div class="content-row">
+      <figure class="half-width">
+        <img src="bilder/adapter-v3-front.jpg" alt="ESP32-CAM im Adapter V3 mit aufgeschobener Frontblende V3 von vorn" width="900" height="1200">
+        <figcaption>Frontansicht: Objektivöffnung, stabilisierender Quersteg und freier unterer Modulbereich.</figcaption>
+      </figure>
+      <figure class="half-width">
+        <img src="bilder/adapter-v3-seite.jpg" alt="Seitenansicht des ESP32-CAM-Adapters mit Frontblende und freien Pinreihen" width="900" height="1200" loading="lazy">
+        <figcaption>Seitenansicht: sichere Klemmung der Blende und frei zugängliche Pinreihen.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Konstruktionsmerkmale</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Adapter V3</h3>
+        <ul>
+          <li>13,5 mm schmaler Hals zwischen den Ultraschallzylindern</li>
+          <li>31 mm breite Aufnahme für das CAM-Modul</li>
+          <li>42 mm hohe Seitenführungen mit Rastnasen</li>
+          <li>verstärkte Übergänge zwischen Hals und Aufnahme</li>
+        </ul>
+      </article>
+      <article class="project-card">
+        <h3>Frontblende V3</h3>
+        <ul>
+          <li>8,5 mm große Objektivöffnung</li>
+          <li>leichte Klemmung auf dem Adapter</li>
+          <li>3 mm hoher Quersteg über der Kamerasteckerleiste</li>
+          <li>LED und unterer Platinenbereich bleiben frei</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Parametrischer Kamera-Dummy</h2>
+    <div class="content-row">
+      <figure class="half-width">
+        <img src="bilder/esp32-cam-dummy.png" alt="In Autodesk Fusion erzeugter ESP32-CAM-Dummy mit Kamera, Pinreihen, Steckerleiste und LED" width="592" height="649" loading="lazy">
+        <figcaption>Der Generator erzeugt einen vereinfachten, eindeutig orientierbaren ESP32-CAM-Dummy.</figcaption>
+      </figure>
+      <div>
+        <p>Der Dummy bildet die für die Konstruktion wichtigen Außenmaße und Kollisionsbereiche ab:</p>
+        <ul>
+          <li>27 × 40 × 2 mm große Platine mit 2-mm-Eckradien</li>
+          <li>zwei rückseitige Pinreihen mit je acht Stiften</li>
+          <li>mehrstufiger Kamera- und Objektivaufbau</li>
+          <li>angedeutete Kamerasteckerleiste und Blitz-LED</li>
+          <li>Schriftzug zur eindeutigen Einbaurichtung</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Montage und Druck</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Montage</h3>
+        <ol>
+          <li>Adapter mit zwei M3-Schrauben am mBot befestigen.</li>
+          <li>ESP32-CAM von oben mit der Kamera nach vorn einsetzen.</li>
+          <li>Frontblende über Objektiv und Adapter schieben.</li>
+          <li>Festen Sitz, freien Kamerablick und zugängliche Pins prüfen.</li>
+        </ol>
+      </article>
+      <article class="project-card">
+        <h3>Bewährte Druckparameter</h3>
+        <table>
+          <tbody>
+            <tr><th>Verfahren</th><td>FDM</td></tr>
+            <tr><th>Material</th><td>PETG</td></tr>
+            <tr><th>Düse</th><td>0,4 mm</td></tr>
+            <tr><th>Schichthöhe</th><td>0,2 mm</td></tr>
+            <tr><th>Montagebohrungen</th><td>Ø 3,4 mm, Abstand 16 mm</td></tr>
+          </tbody>
+        </table>
+      </article>
+    </div>
+  </section>
+
+  <section id="downloads">
+    <h2>Downloads und Projektdaten</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Fusion-Generator</h3>
+        <p>Erzeugt wahlweise den ESP32-CAM-Dummy oder den mBot-Adapter mit Frontblende.</p>
+        <p><a href="/tools/code-viewer.html?file=/projekte/fusion-cad/esp32-cam-robocar/fusion/esp32_cam_holder_generator.py&amp;lang=python&amp;title=ESP32-CAM%20Fusion-Generator" target="_blank" rel="noopener noreferrer">Generator anzeigen</a><br>
+        <a href="fusion/esp32_cam_holder_generator.py" download>Python-Datei herunterladen</a></p>
+      </article>
+      <article class="project-card">
+        <h3>Parameter</h3>
+        <p>Enthält Modulmaße, Passungen, Adapterabmessungen und Druckparameter.</p>
+        <p><a href="/tools/json-viewer.html?file=/projekte/fusion-cad/esp32-cam-robocar/fusion/parameter.json&amp;title=ESP32-CAM%20Parameter" target="_blank" rel="noopener noreferrer">Parameter anzeigen</a><br>
+        <a href="fusion/parameter.json" download>JSON-Datei herunterladen</a></p>
+      </article>
+      <article class="project-card">
+        <h3>Konstruktionsbericht</h3>
+        <p>Ausführliche Maße, Entscheidungen und Änderungen vom ersten Entwurf bis V3.</p>
+        <p><a href="/tools/md-viewer.html?file=/projekte/fusion-cad/esp32-cam-robocar/README.md&amp;title=ESP32-CAM%20am%20RoboCar" target="_blank" rel="noopener noreferrer">Dokumentation öffnen</a></p>
+      </article>
+    </div>
+    <p class="note">Druckfertige STL-, 3MF- und neutrale STEP-Dateien werden nach dem abschließenden Export aus Autodesk Fusion ergänzt.</p>
+  </section>
+
+  <section>
+    <h2>Vom Probedruck zu V3</h2>
+    <ul>
+      <li>Der erste Adapter war im langen Hals zu flexibel.</li>
+      <li>Hals, Grundkörper und Übergänge wurden verstärkt.</li>
+      <li>Die Seitenführungen wurden verlängert und mit Rastnasen versehen.</li>
+      <li>Eine zunächst zu lockere Frontblende erhielt ein engeres Klemmmaß.</li>
+      <li>Ein Quersteg auf Höhe der weißen Steckerleiste beseitigt das Kippeln der Blende.</li>
+      <li>Ein kompakter U-Clip wurde nach dem Passungstest verworfen.</li>
+    </ul>
+  </section>
+
+  <section id="ausblick">
+    <h2>Ausblick: modularer Sensor-Turm</h2>
+    <p>Der feste ESP32-CAM-Adapter ist ein erster Baustein für eine spätere schwenkbare Sensorbaugruppe. Ein Servo soll Kamera und weitere richtungsabhängige Sensoren gemeinsam ausrichten können.</p>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Austauschbare Sensormodule</h3>
+        <p>Neben der Kamera sind Ultraschall-, ToF-, IR- und weitere Richtungssensoren denkbar.</p>
+      </article>
+      <article class="project-card">
+        <h3>Gemeinsame Schnittstellen</h3>
+        <p>Kameraaufnahme, Sensorträger und Servoanschluss sollen als wiederverwendbare CAD-Bausteine entstehen.</p>
+      </article>
+      <article class="project-card">
+        <h3>Mehrere Fahrzeuge</h3>
+        <p>Fahrzeugspezifische Adapter sollen dieselbe Sensoreinheit am mBot und an weiteren Roboterfahrzeugen nutzbar machen.</p>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Mitwirkende und Entstehung</h2>
+    <div class="grid">
+      <article class="project-card">
+        <h3>Andreas Sigismund</h3>
+        <p>Idee, Anforderungen, Maßaufnahme, konstruktive Entscheidungen, Probedrucke, Montage und praktische Erprobung. Verantwortlicher Autor und Herausgeber der Projektseite.</p>
+      </article>
+      <article class="project-card">
+        <h3>OpenAI Codex</h3>
+        <p>KI-gestützte Entwicklungsunterstützung bei der parametrischen Fusion-Konstruktion, dem Python-Generator und der Aufbereitung der Projektdokumentation.</p>
+      </article>
+    </div>
+    <p class="note">Die technische Verantwortung, Freigabe und Veröffentlichung des Projekts liegen bei Andreas Sigismund.</p>
+  </section>
+</main>
+
+<footer>
+  AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+  Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+  <script src="/js/script.js"></script>
+</footer>
+</body>
+</html>

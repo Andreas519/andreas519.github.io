@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Viewer</title>
+  <meta name="author" content="OpenAI Codex">
+  <meta name="client" content="Andreas Sigismund">
+  <meta name="description" content="JSON-Dateien laden, prüfen, formatiert anzeigen und herunterladen.">
+  <link rel="stylesheet" href="../css/my.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/themes/prism.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.css">
+  <style>
+    main {
+      max-width: 1400px;
+    }
+
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .json-panel {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    pre.line-numbers {
+      width: 100%;
+      margin: 0;
+      max-height: 75vh;
+      overflow: auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .action-link {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #eef4ff;
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .action-link:hover {
+      text-decoration: none;
+      background: #dce9ff;
+    }
+
+    #status {
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+
+    #error {
+      color: #b91c1c;
+      margin: 0 0 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h3 id="viewer-title">JSON Viewer</h3>
+  </header>
+
+  <main>
+    <section>
+      <div class="viewer-header">
+        <p id="file-info"></p>
+        <div class="actions">
+          <a id="download-link" class="action-link" href="#" download>Datei herunterladen</a>
+        </div>
+      </div>
+      <p id="status">Lade und prüfe JSON-Datei ...</p>
+      <p id="error"></p>
+      <div class="json-panel">
+        <pre class="line-numbers"><code id="json-code" class="language-json">Lade Datei ...</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a href="https://andreas519.github.io">AG Young Engineers</a> · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Auftraggeber und Herausgeber: Andreas Sigismund · Umsetzung mit OpenAI Codex<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../js/script.js"></script>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/prism.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/components/prism-json.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/prismjs/plugins/line-numbers/prism-line-numbers.min.js"></script>
+  <script>
+    (function() {
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get('file') || 'beispiel.json';
+      const title = params.get('title') || file;
+
+      const codeEl = document.getElementById('json-code');
+      const titleEl = document.getElementById('viewer-title');
+      const fileInfoEl = document.getElementById('file-info');
+      const downloadLinkEl = document.getElementById('download-link');
+      const statusEl = document.getElementById('status');
+      const errorEl = document.getElementById('error');
+
+      titleEl.textContent = title;
+      document.title = title + ' · JSON Viewer';
+      fileInfoEl.textContent = 'Datei: ' + file;
+
+      let fileUrl = file;
+      if (!file.startsWith('/') && document.referrer) {
+        const referrerUrl = new URL(document.referrer);
+        const referrerDir = referrerUrl.pathname.substring(
+          0,
+          referrerUrl.pathname.lastIndexOf('/') + 1
+        );
+        fileUrl = referrerDir + file;
+      }
+
+      downloadLinkEl.href = fileUrl;
+      downloadLinkEl.setAttribute('download', file.split('/').pop());
+
+      fetch(fileUrl)
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error('HTTP ' + response.status);
+          }
+          return response.text();
+        })
+        .then(function(text) {
+          let data;
+          try {
+            data = JSON.parse(text);
+          } catch (parseError) {
+            errorEl.textContent = 'Ungültiges JSON: ' + parseError.message;
+            errorEl.style.display = 'block';
+            statusEl.textContent = 'Die unveränderte Datei wird zur Fehlersuche angezeigt.';
+            codeEl.textContent = text;
+            Prism.highlightElement(codeEl);
+            return;
+          }
+
+          const formattedJson = JSON.stringify(data, null, 2);
+          codeEl.textContent = formattedJson;
+          statusEl.textContent = 'JSON ist gültig und wurde formatiert dargestellt.';
+          Prism.highlightElement(codeEl);
+
+          const blob = new Blob([text], { type: 'application/json;charset=utf-8' });
+          downloadLinkEl.href = URL.createObjectURL(blob);
+        })
+        .catch(function(error) {
+          errorEl.textContent = 'Datei konnte nicht geladen werden: ' + error.message;
+          errorEl.style.display = 'block';
+          statusEl.textContent = '';
+          codeEl.textContent = '';
+        });
+    })();
+  </script>
+</body>
+</html>
