@@ -23,6 +23,19 @@ Diese Werte wurden mit der technischen Zeichnung und der bereitgestellten STEP-D
 
 Das Skript verwendet ein vorhandenes Fusion-Design oder legt ein neues Design an. Es erzeugt eine eigene Komponente, einen benannten Körper, Benutzerparameter, das Lochmuster und optional die Längsnuten.
 
+## Praktische Prüfung
+
+Getestet am 9. August 2026 mit Autodesk Fusion 2704.1.36 unter macOS 26.5 (25F71) auf einem iMac21,1.
+
+- `Beam0412-140`: erfolgreich mit 140 mm Gesamtlänge, neun Bohrungen Ø 4,1 mm, 16 mm Lochraster und beidseitigen Längsnuten erzeugt
+- Benutzerparameter: alle neun Werte aus `parameter.json` korrekt in Fusion angelegt
+- `Beam0412-060`: erfolgreich mit 60 mm Gesamtlänge und vier Bohrungen erzeugt
+- `create_grooves: false`: erfolgreich ohne Längsnuten erzeugt
+- ungültige Länge 61 mm: erwartungsgemäß mit einem Hinweis auf das unvollständige Lochraster abgewiesen
+- STEP-Export `exports/Beam0412-140.step`: erfolgreich wieder in Fusion geöffnet und mit 128 mm Abstand der äußeren Lochmittelpunkte, Ø 4,1 mm Bohrungsdurchmesser, 12 mm Gesamtbreite und 4 mm Gesamtdicke geprüft
+
+Nach den Tests wurde `parameter.json` wieder auf `Beam0412-140` mit aktivierten Längsnuten zurückgesetzt.
+
 ## Varianten erzeugen
 
 In `parameter.json` werden `length` und `component_name` geändert. Eine gültige Länge muss zum Raster passen:
