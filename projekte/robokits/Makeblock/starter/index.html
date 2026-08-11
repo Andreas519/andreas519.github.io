@@ -17,15 +17,53 @@
 
   <main>
     <section>
-      <h3>Übersicht</h3>
+      <h3>mBot Starter mit der Arduino IDE programmieren</h3>
       <p>
-        Der mBot Starter ist die Einsteiger-Version des Makeblock-Roboterkits. Die bisherige Beschreibung liegt
-        noch auf der alten mrge.de-Seite; diese lokale Seite dient als Zwischenstand und Verknüpfung.
+        Der mBot Starter ist das Einsteigerkit für die Programmierung mit der Arduino IDE. Dabei wird das
+        Arduino-Board auf dem Roboter als Entwicklungsumgebung für erste Testprogramme genutzt.
+      </p>
+
+      <div>
+        <img src="bilder/starter.gif" alt="mBot Starter im Betrieb" style="max-width: 220px; margin-right: 1rem;">
+        <img src="bilder/orion.png" alt="Orion-Steuerboard des mBot Starter" style="max-width: 220px; margin-right: 1rem;">
+        <img src="bilder/orion-schaltbild.gif" alt="Schaltbild des Orion-Boards" style="max-width: 220px;">
+      </div>
+    </section>
+
+    <section>
+      <h3>Arduino IDE vorbereiten</h3>
+      <p>
+        In der Arduino IDE muss das richtige Board ausgewählt werden. Für den Starter ist dabei das Board
+        <strong>Arduino Uno</strong> einzustellen.
       </p>
       <p>
-        <a href="https://mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter.html" target="_blank">
-          alte Seite auf mrge.de
-        </a>
+        Anschließend kann das passende Beispielprogramm über <strong>Datei → Beispiele → MakeBlockDrive</strong>
+        geöffnet werden. Wenn die Beispielprogramme nicht direkt funktionieren, muss ggf. die Include-Anweisung
+        auf den Orion angepasst werden.
+      </p>
+      <p>
+        Nicht vorhandene Sensoren oder Aktoren müssen nur dann am Starter angeschlossen werden, wenn sie für den
+        Orion geeignet sind.
+      </p>
+    </section>
+
+    <section>
+      <h3>Erstes Testprogramm</h3>
+      <p>
+        Das Beispiel <a href="https://mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter/blinken.ino" target="_blank">blinken.ino</a>
+        kann auf den mBot geladen werden. Danach sollten die beiden Onboard-RGB-LEDs blinken.
+      </p>
+      <p>
+        Funktioniert das nicht, prüfe zuerst die Vorbereitung der Arduino IDE für Makeblock-Roboterkits.
+      </p>
+    </section>
+
+    <section>
+      <h3>Hinweise zur Hardware</h3>
+      <p>
+        In den Beispielen der Arduino IDE müssen bei Bedarf die verwendeten Sensoren und Aktoren passend zum Orion
+        des mBot Starter angeschlossen werden. Die Konfiguration der Erweiterungen muss immer zur vorhandenen
+        Hardware passen.
       </p>
     </section>
 
@@ -34,6 +72,7 @@
       <ul>
         <li><a href="../index.html">Makeblock-Übersicht</a></li>
         <li><a href="../mBot/plan.md">Plan: ESP32 seriell mit mBot koppeln</a></li>
+        <li><a href="https://mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter.html" target="_blank">Originalseite auf mrge.de</a></li>
       </ul>
     </section>
   </main>
