@@ -7,14 +7,14 @@
   <meta name="author" content="Andreas Sigismund">
   <meta name="publisher" content="Andreas Sigismund">
   <meta name="project" content="mBlock, AG Young Engineers">
-  <meta name="description" content="mBlock-Projekte zu Spielen, Schaltern, Tastern, Lampen, Zahlenschlössern und Ampelsteuerungen ohne zusätzliche Hardware.">
+  <meta name="description" content="Übersicht der mBlock-Projekte ohne zusätzliche Hardware.">
 
   <link rel="stylesheet" href="../../css/my.css">
 </head>
 <body>
   <header>
     <h1>mBlock-Projekte ohne Hardware</h1>
-    <p>Programmieren, ausprobieren und technische Abläufe auf dem Bildschirm untersuchen</p>
+    <p>Vorlagen öffnen, Programme untersuchen und eigene Ideen weiterentwickeln</p>
   </header>
 
   <main>
@@ -34,216 +34,77 @@
       </div>
       <p>
         Für diese Projekte benötigst du keinen Roboter und keinen Mikrocontroller. Du
-        arbeitest mit Figuren, Bühnenbildern und Schaltflächen in mBlock. Dabei lernst du,
-        Programme zu untersuchen, Fehler zu finden und eigene Ideen schrittweise umzusetzen.
-      </p>
-      <p>
-        Die ersten Schritte werden in der AG gemeinsam gezeigt und besprochen. Danach
-        bearbeitest du die Aufgaben weitgehend selbstständig. Probiere aus, beobachte genau
-        und ändere immer nur so viel, dass du die Wirkung deiner Änderung noch erklären kannst.
+        arbeitest mit vorbereiteten Cloudprojekten in der mBlock-Browserumgebung,
+        untersuchst vorhandene Figuren und Blockprogramme und entwickelst die Vorlagen
+        schrittweise weiter.
       </p>
     </section>
 
-    <aside aria-labelledby="pruefstatus">
-      <h2 id="pruefstatus">Hinweis zum Prüfstatus</h2>
+    <aside aria-labelledby="hinweis-cloudprojekte">
+      <h2 id="hinweis-cloudprojekte">Hinweis zu den Cloudprojekten</h2>
       <p>
-        Die historischen Projektvorlagen und Cloudprojekte werden derzeit mit der aktuellen
-        mBlock-Umgebung geprüft. Bezeichnungen und einzelne Arbeitsschritte können sich noch
-        ändern. Die folgenden Aufgaben bewahren die bewährte Lernfolge, sind aber noch nicht
-        vollständig als aktuelle Anleitung freigegeben.
+        Die öffentlichen Projektseiten können ohne Anmeldung aufgerufen werden. Dort wird
+        auch die Funktion „Remix“ angezeigt. Ob beim Erstellen oder dauerhaften Speichern
+        einer eigenen Kopie eine Anmeldung erforderlich wird, ist noch nicht abschließend
+        geprüft. Das Laden der mBlock-Projektseiten kann etwas dauern.
       </p>
     </aside>
 
     <section>
-      <h2>Das lernst du</h2>
-      <ul>
-        <li>Ereignisse durch Mausklicks und Tastendrücke auslösen,</li>
-        <li>Figuren bewegen und ihr Aussehen verändern,</li>
-        <li>Wiederholungen, Bedingungen und Zufallswerte einsetzen,</li>
-        <li>Zustände und Ergebnisse in Variablen speichern,</li>
-        <li>Programme systematisch untersuchen, testen und verbessern,</li>
-        <li>technische Abläufe als Modell auf dem Bildschirm darstellen.</li>
-      </ul>
-    </section>
-
-    <nav class="section-nav" aria-label="Projektauswahl">
-      <ul>
-        <li><a href="#panda-rennt">Panda rennt</a></li>
-        <li><a href="#panda-fangen">Panda fangen</a></li>
-        <li><a href="#schalter-taster-lampen">Schalter, Taster und Lampen</a></li>
-        <li><a href="#zahlenschloss">Zahlenschloss</a></li>
-        <li><a href="#fussgaengerampel">Fußgängerampel</a></li>
-      </ul>
-    </nav>
-
-    <section id="panda-rennt">
-      <h2>Panda rennt</h2>
-      <p>
-        In diesem Einstieg steuerst du eine Figur mit der Tastatur und entwickelst aus
-        einem vorhandenen Programm ein kleines Sammelspiel.
-      </p>
-      <ol>
-        <li><strong>Entdecken:</strong> Starte das Projekt und beschreibe, wie sich der Panda und die Nahrungsmittel verhalten.</li>
-        <li>Ergänze eine Rechtsdrehung mit der Pfeiltaste nach rechts.</li>
-        <li>Mit der Pfeiltaste nach unten soll sich der Panda langsamer bewegen. Die Leertaste soll seine Bewegung stoppen.</li>
-        <li><strong>Erweitern:</strong> Füge zwei weitere Nahrungsmittel hinzu, die sich wie der Apfel verhalten.</li>
-        <li>Der Panda soll zu Beginn zwei Sekunden lang einen frei gewählten Namen begrüßen. Erst danach dürfen die Nahrungsmittel auf zufällige Positionen gleiten.</li>
-        <li>Wenn alle Nahrungsmittel eingesammelt sind, soll der Panda wieder seine volle Größe erreichen und sich bedanken.</li>
-        <li><strong>Eigene Idee:</strong> Gestalte eine weitere gut erkennbare Aktion für das Spielende.</li>
-      </ol>
-    </section>
-
-    <section id="panda-fangen">
-      <h2>Panda fangen</h2>
-      <p>
-        Dieses Reaktionsspiel führt Zufallspositionen, Zähler und Zeitmessung zusammen.
-      </p>
-      <ol>
-        <li><strong>Entdecken:</strong> Probiere das vorhandene Programm aus und finde heraus, warum es ohne Ende weiterläuft.</li>
-        <li>Verkürze während der Entwicklung die Wartezeit auf eine Viertelsekunde, damit du Änderungen schneller testen kannst.</li>
-        <li>Nach seinem Auftritt soll der Panda verschwinden und eine Sekunde später an einer zufälligen Position wieder erscheinen.</li>
-        <li>Halbiere die Größenänderung, die beim Anklicken des Pandas ausgeführt wird.</li>
-        <li><strong>Reparieren:</strong> Ein Klick darf nur dann als Treffer gelten, wenn der Panda seinen Auftritt vollständig beendet hat. Entwickle dafür eine geeignete Bedingung.</li>
-        <li>Lege eine Variable für die Trefferzahl an und beende das Spiel nach einer selbst gewählten Anzahl von Treffern.</li>
-        <li><strong>Erweitern:</strong> Miss die Zeit vom Erscheinen bis zum nächsten gültigen Klick und lass den Panda die Reaktionszeit nennen.</li>
-        <li><strong>Eigene Idee:</strong> Ergänze eine weitere Aktion für das Spielende.</li>
-      </ol>
-    </section>
-
-    <section id="schalter-taster-lampen">
-      <h2>Schalter, Taster und Lampen – eine Lernreihe</h2>
-      <p>
-        Die folgenden Aufgaben gehören zusammen und werden in dieser Reihenfolge bearbeitet.
-        Nach einer kurzen gemeinsamen Einführung untersuchst du die Projekte selbstständig,
-        verbesserst vorhandene Programme und überträgst deine Erkenntnisse auf schwierigere
-        Schaltungen. Vollständige Lösungen werden bewusst nicht vorgegeben.
-      </p>
-
-      <article>
-        <h3>1. Schalter und Lampe</h3>
-        <ol>
-          <li>Öffne die vorbereitete Projektvorlage und speichere eine eigene Kopie.</li>
-          <li><strong>Entdecken:</strong> Untersuche das Programm und finde heraus, warum sich die Lampe zwar einschalten, aber nicht wieder ausschalten lässt.</li>
-          <li><strong>Reparieren:</strong> Ändere das Programm so, dass der Schalter die Lampe zuverlässig ein- und ausschaltet.</li>
-          <li>Speichere eine weitere Version und verändere das Projekt nach der gemeinsam gezeigten Vorgabe.</li>
-          <li><strong>Prüfen:</strong> Teste mehrfach, ob Anzeige, Schalterstellung und Lampenzustand immer zusammenpassen.</li>
-        </ol>
-      </article>
-
-      <article>
-        <h3>2. Wechselschaltung mit Schaltern</h3>
-        <p>
-          Bei einer Wechselschaltung kann dieselbe Lampe von zwei Stellen aus geschaltet
-          werden. Den grundsätzlichen Aufbau besprechen wir vor Beginn der Aufgabe gemeinsam.
-        </p>
-        <ol>
-          <li>Erstelle eine eigene Kopie der vorbereiteten Wechselschaltung und untersuche das Zusammenspiel der beiden Schalter.</li>
-          <li>Finde heraus, welche Schalterstellungen die Lampe ein- oder ausschalten.</li>
-          <li><strong>Erweitern:</strong> Füge weitere Wechselschalter hinzu und binde sie sinnvoll in das Programm ein.</li>
-          <li><strong>Prüfen:</strong> Teste alle möglichen Schalterstellungen. Die Lampe muss sich von jeder Schaltstelle aus umschalten lassen.</li>
-        </ol>
-      </article>
-
-      <article>
-        <h3>3. Taster und Lampe</h3>
-        <p>
-          Ein Taster kehrt nach dem Loslassen in seine Ausgangslage zurück. Damit eine Lampe
-          trotzdem eingeschaltet bleibt, muss sich das Programm ihren Zustand merken.
-        </p>
-        <ol>
-          <li>Öffne die vorbereitete Projektvorlage und speichere eine eigene Kopie.</li>
-          <li>Ändere das Programm so, dass jeder gültige Tastendruck die Lampe abwechselnd ein- und ausschaltet.</li>
-          <li><strong>Erweitern:</strong> Füge einen roten Taster und eine rote Lampe hinzu. Der neue Taster soll nur die neue Lampe schalten.</li>
-          <li><strong>Prüfen:</strong> Betätige beide Taster in unterschiedlicher Reihenfolge und kontrolliere, ob die Lampen unabhängig voneinander reagieren.</li>
-        </ol>
-      </article>
-
-      <article>
-        <h3>4. Wechselschaltung mit Tastern</h3>
-        <ol>
-          <li>Erstelle eine Kopie deiner Wechselschaltung mit Schaltern.</li>
-          <li>Ersetze die Schalter durch Taster und passe das Programm an.</li>
-          <li>Überlege, welcher Zustand gespeichert werden muss, damit beide Taster dieselbe Lampe zuverlässig umschalten können.</li>
-          <li><strong>Prüfen:</strong> Die Lampe muss sich mit jedem der beiden Taster ein- und wieder ausschalten lassen.</li>
-        </ol>
-      </article>
-
-      <article>
-        <h3>5. Treppenbeleuchtung mit Zeitschalter</h3>
-        <p>
-          Eine zeitgesteuerte Beleuchtung schaltet sich nach einer festgelegten Dauer
-          selbstständig aus. So lässt sich Energie sparen, wenn das Ausschalten vergessen wird.
-        </p>
-        <ol>
-          <li>Entwickle eine Treppenbeleuchtung mit drei Lampen und vier Tastern.</li>
-          <li>Jeder Taster soll die Beleuchtung einschalten können.</li>
-          <li>Nach einer sinnvoll gewählten Zeit sollen sich alle Lampen selbstständig ausschalten.</li>
-          <li><strong>Erweitern:</strong> Gestalte einen passenden Hintergrund und mache den Zustand der Beleuchtung gut erkennbar.</li>
-          <li><strong>Prüfen:</strong> Betätige während der Leuchtdauer weitere Taster und entscheide, wie sich dein Programm dann verhalten soll.</li>
-        </ol>
-      </article>
-    </section>
-
-    <section id="zahlenschloss">
-      <h2>Zahlenschloss</h2>
-      <p>
-        Beim Zahlenschloss werden mehrere Eingaben gespeichert und anschließend mit einem
-        festgelegten Code verglichen.
-      </p>
-      <ol>
-        <li><strong>Entdecken:</strong> Untersuche, wie die einzelnen Ziffern auf das Anklicken reagieren, und öffne mit dem vorhandenen Code den Zugang.</li>
-        <li>Ändere den Zahlencode auf <code>35735</code>.</li>
-        <li>Füge mindestens zwei weitere Ziffern hinzu und verlängere den Code um mindestens zwei unterschiedliche Ziffern.</li>
-        <li>Zeige die bisher eingegebenen Ziffern auf der Bühne an.</li>
-        <li>Mit der Taste <code>#</code> soll sich eine begonnene Eingabe abbrechen und zurücksetzen lassen.</li>
-        <li>Gib bei einem falschen Code einen verständlichen Hinweis aus.</li>
-        <li><strong>Erweitern:</strong> Zähle wiederholte Fehleingaben und entwickle dafür eine deutlich erkennbare Reaktion.</li>
-      </ol>
-    </section>
-
-    <section id="fussgaengerampel">
-      <h2>Fußgängerampel</h2>
-      <p>
-        Dieses Projekt ist ein vereinfachtes Lernmodell. Es zeigt, wie mehrere Figuren
-        Zustände wechseln und durch Nachrichten zusammenarbeiten. Es bildet keine reale
-        Ampelanlage mit allen vorgeschriebenen Sicherheitszeiten ab.
-      </p>
-      <ol>
-        <li>Zeige beim Programmstart zunächst kurz das Informationsbild und wechsle danach zur Ampelanlage.</li>
-        <li>Bringe Verkehrsampel, Fußgängerampel und Anforderungstaster an ihre festgelegten Ausgangspositionen.</li>
-        <li>Im Ausgangszustand zeigt die Verkehrsampel Grün und die Fußgängerampel Rot.</li>
-        <li>Ein Klick auf den Anforderungstaster soll eine sichere Folge von Ampelzuständen starten. Jeder Zustand muss lange genug sichtbar bleiben, damit du ihn prüfen kannst.</li>
-        <li>Ergänze die vollständigen Phasen der Verkehrsampel und stimme die Fußgängerampel zeitlich darauf ab.</li>
-        <li>Während der Grünphase für Fußgänger soll im Sekundentakt ein Signalton erklingen.</li>
-        <li><strong>Prüfen:</strong> Suche nach Zuständen, in denen beide Verkehrsrichtungen gleichzeitig freigegeben wären, und verhindere sie.</li>
-        <li><strong>Eigene Idee:</strong> Ergänze Fahrzeuge und Fußgänger, die passend auf die Ampeln und den Anforderungstaster reagieren.</li>
-      </ol>
+      <h2>Aufgabengruppe „Schalter, Taster und Lampen“</h2>
+      <div class="grid">
+        <article class="project-card">
+          <h3>Fünf aufeinander aufbauende Aufgaben</h3>
+          <ol>
+            <li>Schalter und Lampe</li>
+            <li>Wechselschaltung mit Schaltern</li>
+            <li>Taster und Lampe</li>
+            <li>Wechselschaltung mit Tastern</li>
+            <li>Zeitschalter für Beleuchtungen – Treppenhaus</li>
+          </ol>
+          <p><a href="schalter-taster-lampen.html">Aufgabengruppe öffnen</a></p>
+        </article>
+      </div>
     </section>
 
     <section>
-      <h2>Programme untersuchen und verbessern</h2>
-      <p>Diese Fragen helfen dir bei allen Projekten:</p>
-      <ul>
-        <li>Welches Ereignis startet einen Programmteil?</li>
-        <li>Welche Eingaben verarbeitet das Programm?</li>
-        <li>Welche Zustände muss es sich merken?</li>
-        <li>Wann endet das Programm oder beginnt von vorn?</li>
-        <li>Welche falschen oder widersprüchlichen Zustände sind möglich?</li>
-        <li>Wie kannst du wiederholte Blöcke vermeiden und das Programm übersichtlicher gestalten?</li>
-      </ul>
+      <h2>Aufgabengruppe „Spiele mit dem Panda“</h2>
+      <div class="grid">
+        <article class="project-card">
+          <div class="section-heading">
+            <h3>Panda rennt</h3>
+            <span class="status">Wird noch geprüft</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="section-heading">
+            <h3>Panda fangen</h3>
+            <span class="status">Wird noch geprüft</span>
+          </div>
+        </article>
+      </div>
     </section>
 
     <section>
-      <h2>Historische Grundlage</h2>
-      <p>
-        Die Aufgaben sind aus der langjährigen Arbeit mit mBlock in der AG Young Engineers
-        entstanden. Die ursprüngliche Reihenfolge und die offenen Arbeitsaufträge bleiben
-        erhalten, während Sprache, Struktur und technische Hinweise schrittweise aktualisiert
-        werden.
-      </p>
-      <p>
-        Quelle: <a href="https://www.mrge.de/lehrer/sigismund/makeblock/" target="_blank" rel="noopener noreferrer">historische mBlock-Seiten bei mrge.de</a>
-      </p>
+      <h2>Einzelprojekte</h2>
+      <div class="grid">
+        <article class="project-card">
+          <div class="section-heading">
+            <h3>Zahlenschloss</h3>
+            <span class="status">Wird noch geprüft</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <div class="section-heading">
+            <h3>Fußgängerampel</h3>
+            <span class="status">Wird noch geprüft</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <h3>Binärzähler – So zählt ein Computer</h3>
+          <p><a href="binaerzaehler.html">Aufgabe „Binärzähler“ öffnen</a></p>
+        </article>
+      </div>
     </section>
   </main>
 
