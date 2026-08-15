@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamerahalterung auf der Lochplatte · Dobot Magician · Young Engineers</title>
+  <meta name="author" content="Andreas Sigismund">
+  <meta name="description" content="Kamerahalterung auf der Lochplatte für die Bilderkennung mit dem Dobot Magician">
+  <link rel="stylesheet" href="../../../../css/my.css">
+</head>
+<body>
+  <header>
+    Dobot Magician · Kamerahalterung auf der Lochplatte
+  </header>
+
+  <main>
+    <section>
+      <h2>Zweck</h2>
+      <p>
+        Für die Bilderkennung mit dem Dobot Magician soll die Kamera sicher und flexibel über der Arbeitsfläche beziehungsweise Lochrasterplatte positioniert werden können.
+      </p>
+      <p>
+        Als Tragsystem wird <a href="https://www.makerbeam.com/makerbeam/" target="_blank" rel="noopener noreferrer">MakerBeam</a> mit 10 × 10 mm Profilquerschnitt verwendet. Die benötigten Halterungen wurden in Autodesk Fusion konstruiert und mit dem 3D-Drucker gefertigt.
+      </p>
+    </section>
+
+    <section>
+      <h2>Aufbau der Halterung</h2>
+      <ul>
+        <li>Lochrasterplatte als Grundplatte</li>
+        <li>3D-gedruckter Fuß</li>
+        <li>in den Fuß integrierte Muffe für MakerBeam 10 × 10 mm</li>
+        <li>Gegenstück zur Befestigung an der Lochrasterplatte</li>
+        <li>M3-Schrauben</li>
+        <li>MakerBeam-Profil als Träger</li>
+        <li>separate Halterung für die ESP32-CAM</li>
+      </ul>
+      <p>
+        Die separate Halterung für die ESP32-CAM wird später auf einer eigenen Seite dokumentiert.
+      </p>
+    </section>
+
+    <section>
+      <h2>Entwicklung der MakerBeam-Muffe</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Merkmal</th>
+            <th>Wert</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>MakerBeam-Profil</td><td>10 × 10 mm</td></tr>
+          <tr><td>Innenmaß der Muffe</td><td>10,3 × 10,3 mm</td></tr>
+          <tr><td>Außenmaß der Muffe</td><td>15,3 × 15,3 mm</td></tr>
+          <tr><td>Länge</td><td>50 mm</td></tr>
+          <tr><td>Wandstärke</td><td>2,5 mm</td></tr>
+          <tr><td>Befestigung</td><td>M3</td></tr>
+          <tr><td>Bohrungsdurchmesser</td><td>2,8 mm</td></tr>
+          <tr><td>Verstärkungen an den Schrauben</td><td>Ø 7 mm</td></tr>
+          <tr><td>Einführfase</td><td>0,6 mm</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Ergebnis des Probedrucks</h3>
+      <ul>
+        <li>Beide MakerBeam-Profile lassen sich gut einschieben.</li>
+        <li>Ohne Schrauben besitzen die eingesteckten Profile nur minimales Spiel.</li>
+        <li>M3-Metallschrauben lassen sich direkt in die gedruckten 2,8-mm-Bohrungen einschrauben.</li>
+        <li>Die Schrauben klemmen die Profile zuverlässig.</li>
+        <li>Die Maße können deshalb zunächst unverändert beibehalten werden.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Fuß für die Lochrasterplatte</h2>
+      <p>
+        Die Muffe wurde mit einem Fuß kombiniert. Muffe und Fuß bilden ein gemeinsames 3D-Druckteil. Der Übergang von der Muffe zum Fuß wurde abgerundet.
+      </p>
+      <p>
+        Auf beziehungsweise unter der Lochrasterplatte wird ein passendes Gegenstück verwendet. Beide Teile werden miteinander verschraubt. Dadurch bleibt die Halterung lösbar und kann auf der Lochrasterplatte versetzt werden.
+      </p>
+    </section>
+
+    <section>
+      <h2>Konstruktion in Autodesk Fusion</h2>
+      <p>
+        Die <a href="https://www.makerbeam.com/technical-drawings/" target="_blank" rel="noopener noreferrer">offiziellen MakerBeam-STP-Dateien</a> wurden als Referenz verwendet. Das originale MakerBeam-Profil wurde in eine Fusion-Baugruppe eingefügt und die Muffe anhand des realen 10 × 10-mm-Profils konstruiert. Anschließend wurde die Passung mit einem Probedruck überprüft.
+      </p>
+    </section>
+
+    <section>
+      <h2>Dokumentation der Entwicklungsstufen</h2>
+      <p>
+        Geeignete Bilder werden ergänzt, sobald sie im Projektordner vorliegen. Vorgesehen sind Aufnahmen beziehungsweise Darstellungen der folgenden Entwicklungsstufen:
+      </p>
+      <ol>
+        <li>MakerBeam-Profil in Autodesk Fusion</li>
+        <li>Konstruktion der Muffe</li>
+        <li>gedruckte Muffe</li>
+        <li>Fuß mit integrierter Muffe</li>
+        <li>Gegenstück für die Lochrasterplatte</li>
+        <li>vollständiger Aufbau</li>
+      </ol>
+    </section>
+
+    <section>
+      <p>
+        Zurück zur Bilderkennung: <a href="../index.html">Bilderkennung mit dem Dobot Magician</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    © Andreas Sigismund · AG Young Engineers · Martin-Rinckart-Gymnasium Eilenburg<br>
+    Letzte Änderung: <span id="lastModified">TT.MM.JJJJ, hh:mm Uhr</span>
+    <script src="../../../../js/script.js"></script>
+  </footer>
+</body>
+</html>
