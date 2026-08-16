@@ -3,76 +3,175 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starter · Makeblock</title>
+  <title>Makeblock Starter mit Me Orion · Young Engineers</title>
   <meta name="author" content="Andreas Sigismund">
   <meta name="publisher" content="AG Young Engineers">
   <meta name="project" content="Young Engineers">
-  <meta name="description" content="mBot Starter von Makeblock: Einsteigerseite mit Verweis auf die bisherige mrge.de-Seite.">
+  <meta name="description" content="Makeblock Starter mit Me Orion über die Arduino IDE programmieren: Einrichtung, Fahrbefehle, Portbelegung, Servo und getestete Software.">
   <link rel="stylesheet" href="../../../../css/my.css">
+  <style>
+    main .grid {
+      grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    }
+    .table-scroll {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+    .table-scroll table {
+      min-width: 520px;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <h3>Makeblock Starter - in Arbeit</h3>
+    <h3>Makeblock Starter mit Me Orion</h3>
   </header>
 
   <main>
     <section>
-      <h3>Makeblock Starter mit der Arduino IDE programmieren</h3>
+      <h3>Projektstand</h3>
       <p>
-        Der Starter ist das Einsteigerkit für die Programmierung mit der Arduino IDE. Dabei wird das
-        Arduino-Board auf dem Roboter als Entwicklungsumgebung für erste Testprogramme genutzt.
+        Der Makeblock Starter wird mit dem Steuerboard <strong>Me Orion</strong> über die Arduino IDE in C++
+        programmiert. Das vorhandene Board verwendet einen ATmega328P, ist Arduino-Uno-kompatibel und wird über
+        Micro-USB angeschlossen. Upload, serielle Kommunikation, Fahrbefehle und Softwareidentifikation wurden am
+        Schulgerät praktisch geprüft.
       </p>
-
-      <div>
-        <a href="bilder/starter.gif" target="_blank"><img src="bilder/starter.gif" alt="mBot Starter im Betrieb" style="max-width: 220px; margin-right: 1rem;"></a>
-        <a href="bilder/orion.png" target="_blank"><img src="bilder/orion.png" alt="Orion-Steuerboard des mBot Starter" style="max-width: 220px; margin-right: 1rem;"></a>
-        <a href="bilder/orion-schaltbild.gif" target="_blank"><img src="bilder/orion-schaltbild.gif" alt="Schaltbild des Orion-Boards" style="max-width: 220px;"></a>
+      <div class="grid">
+        <article class="project-card">
+          <a href="bilder/foto-1.jpeg" target="_blank" rel="noopener noreferrer"><img src="bilder/foto-1.jpeg" alt="Oberseite des vorhandenen Me-Orion-Boards" style="width: 100%; max-height: 320px; object-fit: contain;"></a>
+          <h3>Vorhandenes Board</h3>
+          <p>Me Orion mit Micro-USB, Motorausgängen M1 und M2 sowie acht RJ25-Ports.</p>
+        </article>
+        <article class="project-card">
+          <a href="bilder/foto-2.jpeg" target="_blank" rel="noopener noreferrer"><img src="bilder/foto-2.jpeg" alt="Rückseite des vorhandenen Me-Orion-Boards" style="width: 100%; max-height: 320px; object-fit: contain;"></a>
+          <h3>Rückseite</h3>
+          <p>Beschriftungen, Summer-Schalter und Anschlüsse des konkret getesteten Boards.</p>
+        </article>
+        <article class="project-card">
+          <a href="bilder/orion-schaltbild.gif" target="_blank" rel="noopener noreferrer"><img src="bilder/orion-schaltbild.gif" alt="Schaltbild des Me-Orion-Boards" style="width: 100%; max-height: 320px; object-fit: contain;"></a>
+          <h3>Schaltbild</h3>
+          <p>Grundlage für die Zuordnung der RJ25-Ports zu den Pins des ATmega328P.</p>
+        </article>
       </div>
     </section>
 
     <section>
-      <h3>Arduino IDE vorbereiten</h3>
-      <p>
-        In der Arduino IDE muss das richtige Board ausgewählt werden. Für den Starter ist dabei das Board
-        <strong>Arduino Uno</strong> einzustellen.
-      </p>
-      <p>
-        Anschließend kann das passende Beispielprogramm über <strong>Datei → Beispiele → MakeBlockDrive</strong>
-        geöffnet werden. Wenn die Beispielprogramme nicht direkt funktionieren, muss ggf. die Include-Anweisung
-        auf den Orion angepasst werden.
-      </p>
-      <p>
-        Nicht vorhandene Sensoren oder Aktoren müssen nur dann am Starter angeschlossen werden, wenn sie für den
-        Orion geeignet sind.
+      <h3>Arduino IDE einrichten</h3>
+      <div class="grid">
+        <article class="project-card">
+          <h3>Board und Verbindung</h3>
+          <ul>
+            <li>Boardpaket: Arduino AVR Boards 1.8.7</li>
+            <li>Board: Arduino Uno</li>
+            <li>Controller: ATmega328P</li>
+            <li>Testport unter macOS: <code>/dev/cu.wchusbserial1130</code></li>
+            <li>Serielle Baudrate: 115200</li>
+          </ul>
+        </article>
+        <article class="project-card">
+          <h3>Makeblock-Bibliothek</h3>
+          <p>
+            Verwendet wird <strong>MakeBlockDrive 3.27</strong> mit <code>#include &lt;MeOrion.h&gt;</code>.
+            Die im Arduino-Katalog angebotene Version 3.24.0 ließ sich mit der aktuellen AVR-Toolchain wegen eines
+            Fehlers in <code>MeSuperVariable.cpp</code> nicht kompilieren. Getestet wurde deshalb der offizielle
+            Stand 3.27 aus dem Hersteller-Repository.
+          </p>
+          <p><a href="https://github.com/Makeblock-official/Makeblock-Libraries" target="_blank" rel="noopener noreferrer">Offizielle Makeblock-Libraries auf GitHub</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h3>Programme und Dokumentation</h3>
+      <div class="grid">
+        <article class="project-card">
+          <span class="status">Grundtest</span>
+          <h3>Hello Orion</h3>
+          <p>Minimaler Upload- und Serial-Test mit Textausgabe und Status-LED.</p>
+          <p><a href="/tools/code-viewer.html?file=/projekte/robokits/Makeblock/starter/hello-orion/hello-orion.ino&amp;lang=cpp&amp;title=Hello%20Orion" target="_blank" rel="noopener noreferrer">Programmcode öffnen</a></p>
+        </article>
+        <article class="project-card">
+          <span class="status">Version 1.3.0</span>
+          <h3>Orion-Steuerung</h3>
+          <p>Fahrbefehle, Servo, Sicherheitsstopp, Status-LED und maschinenlesbare Identifikation.</p>
+          <p><a href="/tools/code-viewer.html?file=/projekte/robokits/Makeblock/starter/orion-steuerung/orion-steuerung.ino&amp;lang=cpp&amp;title=Orion-Steuerung%201.3.0" target="_blank" rel="noopener noreferrer">Programmcode öffnen</a></p>
+        </article>
+        <article class="project-card">
+          <span class="status">Dokumentation</span>
+          <h3>Protokoll und Versionen</h3>
+          <p>Befehlsübersicht, Portbelegung, Servoanschluss und Versionshistorie.</p>
+          <p><a href="/tools/md-viewer.html?file=/projekte/robokits/Makeblock/starter/orion-steuerung/README.md&amp;title=Orion-Steuerung%3A%20Dokumentation" target="_blank" rel="noopener noreferrer">Markdown-Dokumentation öffnen</a></p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <h3>Serielle Steuerung</h3>
+      <p>Jeder Befehl wird mit einem Zeilenende übertragen. Motorwerte sind auf den Bereich von -255 bis 255 begrenzt.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Befehl</th><th>Funktion</th></tr></thead>
+          <tbody>
+            <tr><td><code>i</code></td><td>Softwareversion, Build, Board, Bibliothek, Sensoren und erwartete Portbelegung ausgeben</td></tr>
+            <tr><td><code>h</code> oder <code>0</code></td><td>beide Motoren stoppen</td></tr>
+            <tr><td><code>f 150</code></td><td>beide Motoren mit demselben Wert ansteuern</td></tr>
+            <tr><td><code>f 150 100</code></td><td>linken und rechten Motor getrennt ansteuern</td></tr>
+            <tr><td><code>l 120</code></td><td>nur den linken Motor ansteuern</td></tr>
+            <tr><td><code>r 120</code></td><td>nur den rechten Motor ansteuern</td></tr>
+            <tr><td><code>s 90</code></td><td>Servo auf einen Winkel von 0 bis 180 Grad stellen</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">
+        Ein Fahrbefehl gilt höchstens eine Sekunde. Ohne rechtzeitige Wiederholung stoppt das Programm beide Motoren
+        und meldet <code>SAFE,timeout</code>. Motorversuche nur mit frei drehenden Rädern durchführen.
       </p>
     </section>
 
     <section>
-      <h3>Erstes Testprogramm</h3>
+      <h3>Portbelegung des Teststands</h3>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>Funktion</th><th>Anschluss</th><th>Hinweis</th></tr></thead>
+          <tbody>
+            <tr><td>linker Motor</td><td>M1</td><td>Gleichstrommotor des Starter-Fahrzeugs</td></tr>
+            <tr><td>rechter Motor</td><td>M2</td><td>Drehrichtung wird im Programm angeglichen</td></tr>
+            <tr><td>Servo</td><td>PORT_3, SLOT1, D12</td><td>über Me RJ25 Adapter; erst beim ersten gültigen Servobefehl aktiv</td></tr>
+            <tr><td>Status-LED</td><td>D13</td><td>5 Hz vor dem Handshake, 0,5 Hz nach dem Befehl <code>i</code></td></tr>
+            <tr><td>USB-UART</td><td>D0/RX und D1/TX</td><td>Upload und Kommunikation mit dem PC</td></tr>
+          </tbody>
+        </table>
+      </div>
       <p>
-        Das Beispiel <a href="https://mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter/blinken.ino" target="_blank">blinken.ino</a>
-        kann auf den mBot geladen werden. Danach sollten die beiden Onboard-RGB-LEDs blinken.
-      </p>
-      <p>
-        Funktioniert das nicht, prüfe zuerst die Vorbereitung der Arduino IDE für Makeblock-Roboterkits.
+        Der Befehl <code>i</code> liefert diese Belegung als <code>ID,ports=...</code>. Alle Sensoren sind im
+        aktuellen Fahr- und Servotest deaktiviert. Die Software enthält vorbereitete, einzeln aktivierbare Unterstützung
+        für Me Ultrasonic Sensor, Me Line Follower, Me Light Sensor, Me Sound Sensor, Me PIR Motion Sensor,
+        Me Temperature Sensor, Me Gyro und Me Compass.
       </p>
     </section>
 
     <section>
-      <h3>Hinweise zur Hardware</h3>
-      <p>
-        In den Beispielen der Arduino IDE müssen bei Bedarf die verwendeten Sensoren und Aktoren passend zum Orion
-        des mBot Starter angeschlossen werden. Die Konfiguration der Erweiterungen muss immer zur vorhandenen
-        Hardware passen.
-      </p>
+      <h3>Statusanzeige und Servo</h3>
+      <div class="grid">
+        <article class="project-card">
+          <h3>Status-LED</h3>
+          <p>Schnelles Blinken mit 5 Hz bedeutet, dass seit dem Reset noch kein gültiger Handshake empfangen wurde.</p>
+          <p>Nach dem Befehl <code>i</code> blinkt die LED dauerhaft langsam mit 0,5 Hz. Der ATmega328P kann das spätere Schließen eines seriellen Terminals nicht selbst erkennen.</p>
+        </article>
+        <article class="project-card">
+          <h3>Kleiner Servo</h3>
+          <p>Der Servo wird über einen Me RJ25 Adapter an PORT_3, SLOT1 angeschlossen. SLOT2 bleibt frei, weil es D13 und damit die Status-LED verwendet.</p>
+          <p>Vor dem ersten Befehl Signal, 5 V und GND prüfen. Servos mit höherem Strombedarf benötigen eine eigene stabile 5-V-Versorgung mit gemeinsamer Masse.</p>
+        </article>
+      </div>
     </section>
 
     <section>
-      <h3>Verwandte Seiten</h3>
+      <h3>Weiterführend</h3>
       <ul>
-        <li><a href="../index.html">Makeblock-Übersicht</a></li>
-
-        <li><a href="https://mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter.html" target="_blank">Originalseite auf mrge.de</a></li>
+        <li><a href="../index.html">Makeblock-Projektübersicht</a></li>
+        <li><a href="../../../../themen/robotik/fahrende-roboter/makeblock-starter/index.html">Technische Vorstellung des Makeblock Starter</a></li>
+        <li><a href="https://www.mrge.de/lehrer/sigismund/makeblock/arduino-ide/starter.html" target="_blank" rel="noopener noreferrer">Historische Unterrichtsseite</a></li>
       </ul>
     </section>
   </main>
