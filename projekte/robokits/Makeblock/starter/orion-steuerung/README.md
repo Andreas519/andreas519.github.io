@@ -7,7 +7,7 @@ konfigurierbare Sensormesswerte an das Steuerprogramm auf dem PC.
 ## Aktuelle Version
 
 - Programm: `orion-steuerung`
-- Version: `1.3.0`
+- Version: `1.4.0`
 - Protokollversion: `1`
 - Boardprofil: `arduino:avr:uno`
 - Abhängigkeit: MakeBlockDrive `3.27`
@@ -27,11 +27,11 @@ PC-Steuerprogramm Nachrichten anders senden oder auswerten muss.
 Der mit einem Zeilenende gesendete Befehl `i` liefert beispielsweise:
 
 ```text
-ID,programm=orion-steuerung,version=1.3.0,protokoll=1
+ID,programm=orion-steuerung,version=1.4.0,protokoll=1
 ID,board=Me Orion,mcu=ATmega328P,profil=arduino:avr:uno,makeblockdrive=3.27
 ID,build=Aug 16 2026 12:34:56
-ID,ports=motor_links@M1;motor_rechts@M2;servo@PORT_3/SLOT1/D12;status_led@D13;usb_uart@D0_RX+D1_TX;
-ID,sensoren=
+ID,ports=motor_links@M1;motor_rechts@M2;servo@PORT_3/SLOT1/D12;status_led@D13;usb_uart@D0_RX+D1_TX;ultraschall@PORT_4/SLOT2/D2;
+ID,sensoren=ultraschall@PORT_4;
 ```
 
 `build` stammt aus den Compilerwerten `__DATE__` und `__TIME__`. Die
@@ -48,7 +48,8 @@ Jeder Befehl endet mit `\n` oder `\r`. Motorwerte liegen zwischen `-255` und
 | Befehl | Funktion |
 |---|---|
 | `i` | Software, Build und Sensorkonfiguration identifizieren |
-| `h` oder `0` | beide Motoren stoppen |
+| `h` | Liste der möglichen Befehle anzeigen |
+| `0` | beide Motoren stoppen |
 | `f 150` | beide Motoren mit Wert 150 fahren |
 | `f 150 100` | linken und rechten Motor getrennt ansteuern |
 | `l 120` | nur den linken Motor ansteuern |
@@ -72,7 +73,11 @@ Sensoren werden über die `SENSOR_...`-Definitionen am Anfang des Sketches
 aktiviert. Nur tatsächlich angeschlossene Module dürfen aktiviert werden.
 Gyro und Kompass verwenden den gemeinsamen I2C-Bus und benötigen `Wire`.
 
-In Version 1.1.0 sind für den Fahrtest alle Sensoren deaktiviert. Die
+Der Me Ultrasonic Sensor ist an `PORT_4` aktiviert und liefert den Messwert
+`abstand_cm` in den `TEL`-Zeilen. `PORT_3` bleibt für Servo und Status-LED
+reserviert.
+
+Die
 eingebaute LED blinkt nach dem Reset schnell mit 5 Hz. Sobald das
 PC-Steuerprogramm oder der serielle Monitor den Befehl `i` mit Zeilenende
 gesendet hat, blinkt sie dauerhaft langsam mit 0,5 Hz. Beim ATmega328P kann die
@@ -92,6 +97,12 @@ Signal, 5 V und GND am Adapter zu prüfen. Bei Servos mit höherem Strombedarf i
 eine separate 5-V-Versorgung mit gemeinsamer Masse zu verwenden.
 
 ## Versionshistorie
+
+### 1.4.0 - 2026-08-16
+
+- Me Ultrasonic Sensor konfliktfrei an `PORT_4`, `SLOT2`, `D2` aktiviert
+- Befehl `h` zeigt die Liste aller möglichen Befehle
+- Befehl `0` bleibt der eindeutige Motorstopp
 
 ### 1.3.0 - 2026-08-16
 

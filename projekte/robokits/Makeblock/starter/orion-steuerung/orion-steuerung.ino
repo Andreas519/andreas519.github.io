@@ -2,7 +2,7 @@
 #include <MeOrion.h>
 
 const char PROGRAMM_NAME[] = "orion-steuerung";
-const char PROGRAMM_VERSION[] = "1.3.0";
+const char PROGRAMM_VERSION[] = "1.4.0";
 const char PROTOKOLL_VERSION[] = "1";
 const char MAKEBLOCKDRIVE_VERSION[] = "3.27";
 const unsigned long TELEMETRIE_INTERVALL_MS = 250;
@@ -12,7 +12,7 @@ const unsigned long BLINK_INTERVALL_VERBUNDEN_MS = 1000;
 const uint8_t BEFEHL_PUFFER_GROESSE = 48;
 
 // Nur Sensoren aktivieren, die wirklich am angegebenen Port angeschlossen sind.
-// #define SENSOR_ULTRASCHALL
+#define SENSOR_ULTRASCHALL
 // #define SENSOR_LINIENFOLGER
 // #define SENSOR_LICHT
 // #define SENSOR_SCHALL
@@ -28,7 +28,7 @@ Servo servoMotor;
 const uint8_t SERVO_PIN = servoPort.pin1();
 
 #ifdef SENSOR_ULTRASCHALL
-MeUltrasonicSensor ultraschallSensor(PORT_3);
+MeUltrasonicSensor ultraschallSensor(PORT_4);
 #endif
 #ifdef SENSOR_LINIENFOLGER
 MeLineFollower linienSensor(PORT_4);
@@ -125,11 +125,22 @@ void bestaetigeFahrt(int links, int rechts)
   Serial.println(rechts);
 }
 
+void sendeHilfe()
+{
+  Serial.println(F("HELP,i - Software und Portbelegung anzeigen"));
+  Serial.println(F("HELP,h - diese Befehlsliste anzeigen"));
+  Serial.println(F("HELP,0 - beide Motoren stoppen"));
+  Serial.println(F("HELP,f <wert> [rechts] - Motoren fahren, -255..255"));
+  Serial.println(F("HELP,l <wert> - nur linken Motor fahren"));
+  Serial.println(F("HELP,r <wert> - nur rechten Motor fahren"));
+  Serial.println(F("HELP,s <winkel> - Servo stellen, 0..180 Grad"));
+}
+
 void sendeAktiveSensoren()
 {
   Serial.print(F("ID,sensoren="));
 #ifdef SENSOR_ULTRASCHALL
-  Serial.print(F("ultraschall@PORT_3;"));
+  Serial.print(F("ultraschall@PORT_4;"));
 #endif
 #ifdef SENSOR_LINIENFOLGER
   Serial.print(F("linienfolger@PORT_4;"));
@@ -159,7 +170,7 @@ void sendePortbelegung()
 {
   Serial.print(F("ID,ports=motor_links@M1;motor_rechts@M2;servo@PORT_3/SLOT1/D12;status_led@D13;usb_uart@D0_RX+D1_TX;"));
 #ifdef SENSOR_ULTRASCHALL
-  Serial.print(F("ultraschall@PORT_3;"));
+  Serial.print(F("ultraschall@PORT_4/SLOT2/D2;"));
 #endif
 #ifdef SENSOR_LINIENFOLGER
   Serial.print(F("linienfolger@PORT_4;"));
@@ -220,10 +231,16 @@ void verarbeiteBefehl(char *zeile)
     return;
   }
 
-  if (strcmp(befehl, "h") == 0 || strcmp(befehl, "0") == 0)
+  if (strcmp(befehl, "h") == 0)
+  {
+    sendeHilfe();
+    return;
+  }
+
+  if (strcmp(befehl, "0") == 0)
   {
     halt();
-    Serial.println(F("OK,h"));
+    Serial.println(F("OK,0"));
     return;
   }
 
@@ -284,7 +301,7 @@ void verarbeiteBefehl(char *zeile)
     return;
   }
 
-  Serial.println(F("ERR,Befehle: i | h | f <wert> [rechts] | l <wert> | r <wert> | s <winkel>"));
+  Serial.println(F("ERR,Unbekannter Befehl; h zeigt die Hilfe"));
 }
 
 void empfangeBefehle()
@@ -390,7 +407,7 @@ void setup()
   Serial.print(PROGRAMM_NAME);
   Serial.print(',');
   Serial.println(PROGRAMM_VERSION);
-  Serial.println(F("INFO,Befehle: i | h | f <wert> [rechts] | l <wert> | r <wert> | s <winkel>"));
+  Serial.println(F("INFO,h zeigt die Liste der Befehle"));
 }
 
 void loop()

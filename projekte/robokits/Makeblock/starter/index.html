@@ -91,10 +91,10 @@
           <p><a href="/tools/code-viewer.html?file=/projekte/robokits/Makeblock/starter/hello-orion/hello-orion.ino&amp;lang=cpp&amp;title=Hello%20Orion" target="_blank" rel="noopener noreferrer">Programmcode öffnen</a></p>
         </article>
         <article class="project-card">
-          <span class="status">Version 1.3.0</span>
+          <span class="status">Version 1.4.0</span>
           <h3>Orion-Steuerung</h3>
           <p>Fahrbefehle, Servo, Sicherheitsstopp, Status-LED und maschinenlesbare Identifikation.</p>
-          <p><a href="/tools/code-viewer.html?file=/projekte/robokits/Makeblock/starter/orion-steuerung/orion-steuerung.ino&amp;lang=cpp&amp;title=Orion-Steuerung%201.3.0" target="_blank" rel="noopener noreferrer">Programmcode öffnen</a></p>
+          <p><a href="/tools/code-viewer.html?file=/projekte/robokits/Makeblock/starter/orion-steuerung/orion-steuerung.ino&amp;lang=cpp&amp;title=Orion-Steuerung%201.4.0" target="_blank" rel="noopener noreferrer">Programmcode öffnen</a></p>
         </article>
         <article class="project-card">
           <span class="status">Dokumentation</span>
@@ -113,7 +113,8 @@
           <thead><tr><th>Befehl</th><th>Funktion</th></tr></thead>
           <tbody>
             <tr><td><code>i</code></td><td>Softwareversion, Build, Board, Bibliothek, Sensoren und erwartete Portbelegung ausgeben</td></tr>
-            <tr><td><code>h</code> oder <code>0</code></td><td>beide Motoren stoppen</td></tr>
+            <tr><td><code>h</code></td><td>Liste der möglichen Befehle anzeigen</td></tr>
+            <tr><td><code>0</code></td><td>beide Motoren stoppen</td></tr>
             <tr><td><code>f 150</code></td><td>beide Motoren mit demselben Wert ansteuern</td></tr>
             <tr><td><code>f 150 100</code></td><td>linken und rechten Motor getrennt ansteuern</td></tr>
             <tr><td><code>l 120</code></td><td>nur den linken Motor ansteuern</td></tr>
@@ -139,13 +140,14 @@
             <tr><td>Servo</td><td>PORT_3, SLOT1, D12</td><td>über Me RJ25 Adapter; erst beim ersten gültigen Servobefehl aktiv</td></tr>
             <tr><td>Status-LED</td><td>D13</td><td>5 Hz vor dem Handshake, 0,5 Hz nach dem Befehl <code>i</code></td></tr>
             <tr><td>USB-UART</td><td>D0/RX und D1/TX</td><td>Upload und Kommunikation mit dem PC</td></tr>
+            <tr><td>Ultraschallsensor</td><td>PORT_4, SLOT2, D2</td><td>sendet <code>abstand_cm</code> in der Telemetrie</td></tr>
           </tbody>
         </table>
       </div>
       <p>
-        Der Befehl <code>i</code> liefert diese Belegung als <code>ID,ports=...</code>. Alle Sensoren sind im
-        aktuellen Fahr- und Servotest deaktiviert. Die Software enthält vorbereitete, einzeln aktivierbare Unterstützung
-        für Me Ultrasonic Sensor, Me Line Follower, Me Light Sensor, Me Sound Sensor, Me PIR Motion Sensor,
+        Der Befehl <code>i</code> liefert diese Belegung als <code>ID,ports=...</code>. Der Me Ultrasonic Sensor ist
+        an PORT_4 aktiviert. Die Software enthält vorbereitete, einzeln aktivierbare Unterstützung
+        für Me Line Follower, Me Light Sensor, Me Sound Sensor, Me PIR Motion Sensor,
         Me Temperature Sensor, Me Gyro und Me Compass.
       </p>
     </section>
