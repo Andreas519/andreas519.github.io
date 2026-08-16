@@ -1,0 +1,108 @@
+name: Push-Protokoll
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  protokollieren:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: push-protokoll-main
+      cancel-in-progress: false
+
+    steps:
+      - name: Aktuellen main-Branch auschecken
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Protokolleintrag erzeugen
+        env:
+          PUSH_EVENT_PATH: ${{ github.event_path }}
+        run: |
+          python3 - <<'PY'
+          import datetime as dt
+          import html
+          import json
+          import os
+          import pathlib
+          import subprocess
+          import urllib.parse
+          from zoneinfo import ZoneInfo
+
+          log_path = pathlib.Path("PUSH-PROTOKOLL.md")
+          marker = "<!-- PUSH-PROTOKOLL:ENTRY -->"
+
+          with open(os.environ["PUSH_EVENT_PATH"], encoding="utf-8") as event_file:
+              event = json.load(event_file)
+
+          before = event["before"]
+          after = event["after"]
+          if before == "0" * 40:
+              diff_command = ["git", "diff-tree", "--root", "--no-commit-id", "--name-only", "-r", "-z", after]
+          else:
+              diff_command = ["git", "diff", "--name-only", "-z", before, after]
+
+          changed_output = subprocess.run(
+              diff_command,
+              check=True,
+              capture_output=True,
+          ).stdout
+          changed_files = [
+              path.decode("utf-8", errors="replace")
+              for path in changed_output.split(b"\0")
+              if path
+          ]
+
+          actor = event["sender"]["login"]
+          branch = event["ref"].removeprefix("refs/heads/")
+          commit = event["head_commit"] or {}
+          commit_id = commit.get("id", after)
+          commit_url = commit.get("url") or f"{event['repository']['html_url']}/commit/{commit_id}"
+          description = (commit.get("message") or "(keine Commit-Beschreibung)").splitlines()[0]
+          timestamp = dt.datetime.now(ZoneInfo("Europe/Berlin"))
+
+          files_markdown = "\n".join(
+              f"  - <code>{html.escape(path)}</code>" for path in changed_files
+          ) or "  - Keine geänderten Dateien im Vergleich ermittelt."
+          actor_url = f"https://github.com/{urllib.parse.quote(actor, safe='')}"
+          entry_lines = [
+              f"## {timestamp:%d.%m.%Y, %H:%M:%S %Z}",
+              "",
+              f"- **GitHub-Benutzer:** [@{html.escape(actor)}]({actor_url})",
+              f"- **Branch:** <code>{html.escape(branch)}</code>",
+              f"- **Commit:** [`{commit_id[:7]}`]({commit_url})",
+              f"- **Commit-Beschreibung:** {html.escape(description)}",
+              "- **Geänderte Dateien:**",
+              files_markdown,
+          ]
+          entry = "\n".join(entry_lines) + "\n"
+
+          current_log = log_path.read_text(encoding="utf-8")
+          if marker not in current_log:
+              raise RuntimeError(f"Einfüge-Marker fehlt in {log_path}")
+          log_path.write_text(
+              current_log.replace(marker, f"{marker}\n\n{entry}", 1),
+              encoding="utf-8",
+          )
+          PY
+
+      - name: Protokoll committen und pushen
+        run: |
+          if git diff --quiet -- PUSH-PROTOKOLL.md; then
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PUSH-PROTOKOLL.md
+          git commit -m "chore: Push-Protokoll aktualisieren"
+          git pull --rebase origin main
+          git push origin HEAD:main
