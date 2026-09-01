@@ -4,6 +4,16 @@
 
 <!-- PUSH-PROTOKOLL:ENTRY -->
 
+## 01.09.2026, 17:12:46 CEST
+
+- **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
+- **Branch:** <code>main</code>
+- **Commit:** [`f0a4883`](https://github.com/Andreas519/andreas519.github.io/commit/f0a4883b7ca731fbb6e4289c701b1b4f03e8059c)
+- **Commit-Beschreibung:** Delete CNAME
+- **Geänderte Dateien:**
+  - <code>CNAME</code>
+
+
 ## 27.08.2026, 19:14:12 CEST
 
 - **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
