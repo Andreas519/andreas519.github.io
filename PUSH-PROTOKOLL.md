@@ -4,6 +4,38 @@
 
 <!-- PUSH-PROTOKOLL:ENTRY -->
 
+## 01.09.2026, 18:28:40 CEST
+
+- **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
+- **Branch:** <code>main</code>
+- **Commit:** [`8bde5a9`](https://github.com/youngengineers-mrge/youngengineers-mrge.github.io/commit/8bde5a9156df9c56a15fecdbe83976cd949f3673)
+- **Commit-Beschreibung:** chore: GitHub-Pages-Umzug auf Organisation aktualisieren
+- **Geänderte Dateien:**
+  - <code>README.md</code>
+  - <code>docs/bildcollagen-plan.md</code>
+  - <code>projekte/ESP32/esp32-cam/dateien/Fusion-CAD-Dialog-Zusammenfassung.md</code>
+  - <code>projekte/Tools/index.html</code>
+  - <code>projekte/dobot_magician/Dobot-Python/_ablage/zip/readme.md</code>
+  - <code>projekte/dobot_magician/Dobot-Python/api-testen/readme.md</code>
+  - <code>projekte/dobot_magician/Dobot-Python/dobot.py-testen/readme.md</code>
+  - <code>projekte/dobot_magician/chatgpt.md</code>
+  - <code>projekte/dobot_magician/chatgpt.me</code>
+  - <code>projekte/raspberry_pi_zero_cam/notizen/raspberry_pi_zero_cam_prompt_antworten/34_projektpfad.md</code>
+  - <code>projekte/student_projects/florian-allbot-zusammenarbeit.md</code>
+  - <code>themen/github/index.html</code>
+  - <code>themen/robotik/robotiksysteme-und-fahrzeuge-ueberblick.html</code>
+  - <code>tools/code-viewer.html</code>
+  - <code>tools/index-codex.html</code>
+  - <code>tools/index-github-copilot.html</code>
+  - <code>tools/index-markdown.html</code>
+  - <code>tools/index-viewer.html</code>
+  - <code>tools/index-vscode.html</code>
+  - <code>tools/index.html</code>
+  - <code>tools/json-viewer.html</code>
+  - <code>tools/md-viewer.html</code>
+  - <code>tools/test.html</code>
+
+
 ## 01.09.2026, 17:12:46 CEST
 
 - **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
