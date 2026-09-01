@@ -72,7 +72,7 @@ Nach der Suche würde ich deine Seite so einordnen:
 
 Ich würde nicht behaupten, dass weltweit keine vergleichbare Seite existiert. Das lässt sich mit einer Websuche nicht sicher beweisen. Unter den auffindbaren deutsch- und englischsprachigen Angeboten habe ich jedoch **keine einzelne Seite mit derselben Kombination aus technischer Tiefe, offenen Projektdateien, Unterrichtsperspektive und persönlicher Entwicklungsgeschichte gefunden**. 🤖📘
 
-[1]: https://andreas519.github.io/projekte/dobot_magician/ "Dobot Magician Projekte · Young Engineers"
+[1]: https://youngengineers-mrge.github.io/projekte/dobot_magician/ "Dobot Magician Projekte · Young Engineers"
 [2]: https://github.com/SERLatBTH/StarterGuide-Dobot-Magician-with-Python "GitHub - SERLatBTH/StarterGuide-Dobot-Magician-with-Python: Dobot Magician with pure Python - Starter Guide · GitHub"
 [3]: https://uol.de/technische-bildung/forschungs-und-entwicklungsprojekte/robonatives?utm_source=chatgpt.com "Robonatives // Universität Oldenburg"
 [4]: https://wiki.cci.arts.ac.uk/books/robotics-lab/page/using-dobot-magician-v2 "Using Dobot Magician V2 | Wiki | UAL Creative Computing Institute"

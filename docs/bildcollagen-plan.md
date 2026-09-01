@@ -17,7 +17,7 @@ projekte/<projekt>/bilder/<projekt>-quer.png
 
 ## Status
 
-### Themen auf der Startseite `andreas519.github.io/index.html`
+### Themen auf der Startseite `youngengineers-mrge.github.io/index.html`
 - [x] Tinkercad
 - [x] Wokwi
 - [x] Dobot Magician
@@ -33,7 +33,7 @@ Es werden weiteren Bilder benötigt für:
 
 voererst keine
 
-### Projekte auf der Startseite `andreas519.github.io/index.html`
+### Projekte auf der Startseite `youngengineers-mrge.github.io/index.html`
 - [x] Raspberry Pi Zero CAM
 - [x] Vision Systeme
 - [x] Dobot Magician
@@ -41,13 +41,13 @@ voererst keine
 - [x] Schieberegister 74HC595
 - [x] Hausautomation
 
-### Projekte auf der Seite `andreas519.github.io/themen/index.html`
+### Projekte auf der Seite `youngengineers-mrge.github.io/themen/index.html`
 
 
 Es werden weiteren Bilder benötigt für:
 
 - [ ] 3D-Drucker 
-  Grundlage: http://andreas519.github.io/themen/3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png
+  Grundlage: https://youngengineers-mrge.github.io/themen/3d-drucker/bilder/ChatGPT_Image_2xPrusa_MK4-e.png
   Auf das Format 1672 × 941 Pixel anpassen
 - [ ] Bauelemente  
   Eine Collage mit passiven und aktiven elektrischen und elektronischen Bauelementen, auch als Schaltzeichen;

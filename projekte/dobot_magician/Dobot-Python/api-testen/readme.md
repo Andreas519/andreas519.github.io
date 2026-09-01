@@ -71,8 +71,8 @@ test-10-sauger-status.py
 test-11-home.py
 ```
 #### Dobot-Python-API-Dokumentationen
-1. gruppierte Variante: [Dobot-Python-API-Dokumentation.html](https://andreas519.github.io/projekte/dobot_magician/Dobot-Python-API-Dokumentation.html)
-2. alphabetische Variante: [Dobot-Magician-Deutsche-Python-API-Dokumentation.html](https://andreas519.github.io/projekte/dobot_magician/Dobot-Python/Dobot-Magician-Deutsche-Python-API-Dokumentation.html)
+1. gruppierte Variante: [Dobot-Python-API-Dokumentation.html](https://youngengineers-mrge.github.io/projekte/dobot_magician/Dobot-Python-API-Dokumentation.html)
+2. alphabetische Variante: [Dobot-Magician-Deutsche-Python-API-Dokumentation.html](https://youngengineers-mrge.github.io/projekte/dobot_magician/Dobot-Python/Dobot-Magician-Deutsche-Python-API-Dokumentation.html)
 
 #### `DobotDllType` importieren
 ##### eigentlich sollte das funktionieren

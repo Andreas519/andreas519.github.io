@@ -1,4 +1,4 @@
-#  [Weiter auf GitHub Pages](https://andreas519.github.io/) 
+#  [Weiter auf GitHub Pages](https://youngengineers-mrge.github.io/) 
 
 # Andreas Sigismund – Young Engineers Projekte
 
@@ -35,7 +35,7 @@ Die Veröffentlichung über GitHub soll die Materialien langfristig verfügbar m
 ## Empfohlene Struktur
 
 ```text
-andreas519.github.io/
+youngengineers-mrge.github.io/
 ├── README.md
 ├── index.html
 ├── 28byj-48-schrittmotor/
@@ -61,7 +61,7 @@ Bitte die jeweiligen Projektbeschreibungen und mögliche Lizenzhinweise beachten
 Wenn dieses Repository den Namen
 
 ```text
-andreas519.github.io
+youngengineers-mrge.github.io
 ```
 
 trägt und GitHub Pages aktiviert ist, ist die Startseite erreichbar unter:

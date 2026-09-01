@@ -83,7 +83,7 @@ gleichzeitig bearbeitet werden. Für größere F3D-, STEP-, STL- oder
 
 Die CAD-Projekte sollen nicht innerhalb eines einzelnen Elektronikprojekts,
 sondern in einem eigenen Sammelbereich des bestehenden Repositorys
-`Andreas519/andreas519.github.io` abgelegt werden:
+`youngengineers-mrge/youngengineers-mrge.github.io` abgelegt werden:
 
 ```text
 projekte/
