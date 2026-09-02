@@ -4,6 +4,16 @@
 
 <!-- PUSH-PROTOKOLL:ENTRY -->
 
+## 02.09.2026, 06:54:14 CEST
+
+- **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
+- **Branch:** <code>main</code>
+- **Commit:** [`8cf94ec`](https://github.com/youngengineers-mrge/youngengineers-mrge.github.io/commit/8cf94ec7730c654819c2a0518b42ed04e2b3be9a)
+- **Commit-Beschreibung:** docs: Copilot-Projektanweisungen ergänzen
+- **Geänderte Dateien:**
+  - <code>.github/copilot-instructions.md</code>
+
+
 ## 01.09.2026, 18:28:40 CEST
 
 - **GitHub-Benutzer:** [@Andreas519](https://github.com/Andreas519)
